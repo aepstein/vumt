@@ -3,11 +3,13 @@ import React from 'react';
 import 'bootswatch/dist/sketchy/bootstrap.min.css';
 import './App.css';
 import AppNavbar from './components/AppNavbar'
+import VisitsList from './components/VisitsList'
 
 function App() {
   return (
     <div className="App">
       <AppNavbar />
+      <VisitsList />
     </div>
   );
 }
