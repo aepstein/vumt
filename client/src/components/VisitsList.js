@@ -11,18 +11,16 @@ import {
 } from 'react-transition-group';
 // TODO remove UUID after connection to backend is complete
 import uuid from 'uuid';
+import { connect } from 'react-redux';
+import { getVisits } from '../actions/visitActions';
+import { PropTypes } from 'prop-types';
 
 class VisitsList extends Component {
-    state = {
-        visits: [
-            { id: uuid(), name: 'Algonquin' },
-            { id: uuid(), name: 'Pitchoff' },
-            { id: uuid(), name: 'Hadley' },
-            { id: uuid(), name: 'Owl\'s Head' },
-        ]
+    componentDidMount() {
+        this.props.getVisits()
     }
     render() {
-        const { visits } = this.state;
+        const { visits } = this.props.visit;
         return(
             <Container>
                 <Button
@@ -68,4 +66,13 @@ class VisitsList extends Component {
     }
 }
 
-export default VisitsList;
+VisitsList.propTypes = {
+    getVisits: PropTypes.func.isRequired,
+    visit: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    visit: state.visit
+});
+
+export default connect(mapStateToProps,{ getVisits })(VisitsList);
