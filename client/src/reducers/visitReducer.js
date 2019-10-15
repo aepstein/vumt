@@ -17,6 +17,16 @@ export default function( state = initialState, action ) {
             return {
                 ...state
             };
+        case DELETE_VISIT:
+            return {
+                ...state,
+                visits: state.visits.filter(visit => visit.id !== action.payload)
+            };
+        case ADD_VISIT:
+            return {
+                ...state,
+                visits: [action.payload, ...state.visits]
+            }
         default:
             return state;
     }
