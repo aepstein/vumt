@@ -29,9 +29,9 @@ class VisitsList extends Component {
             <Container>
                 <ListGroup>
                     <TransitionGroup className="visits-list">
-                        {visits.map(({ id, name }) => (
+                        {visits.map(({ _id, name }) => (
                             <CSSTransition
-                                key={id}
+                                key={_id}
                                 timeout={500}
                                 classNames="fade"
                             >
@@ -41,7 +41,7 @@ class VisitsList extends Component {
                                         color="danger"
                                         size="sm"
                                         style={{marginRight: '0.5rem'}}
-                                        onClick={this.onDeleteClick.bind(this,id)}
+                                        onClick={this.onDeleteClick.bind(this,_id)}
                                     >&times;</Button>
                                     {name}
                                 </ListGroupItem>

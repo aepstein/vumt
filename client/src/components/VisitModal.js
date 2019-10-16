@@ -11,8 +11,6 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { addVisit } from '../actions/visitActions';
-// TODO remove uuid after hookup to backend
-import uuid from 'uuid';
 
 class VisitModal extends Component {
     state = {
@@ -32,7 +30,6 @@ class VisitModal extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         const newVisit = {
-            id: uuid(),
             name: this.state.name
         }
         this.props.addVisit(newVisit);

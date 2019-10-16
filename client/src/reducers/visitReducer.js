@@ -1,31 +1,37 @@
-// TODO remove UUID after connection to backend is complete
-import uuid from 'uuid';
-import { GET_VISITS, ADD_VISIT, DELETE_VISIT } from '../actions/types'
+import { 
+    GET_VISITS,
+    ADD_VISIT,
+    DELETE_VISIT,
+    VISITS_LOADING
+} from '../actions/types';
 
 const initialState = {
-    visits: [
-        { id: uuid(), name: 'Algonquin' },
-        { id: uuid(), name: 'Pitchoff' },
-        { id: uuid(), name: 'Hadley' },
-        { id: uuid(), name: 'Owl\'s Head' },
-    ]
+    visits: [],
+    loading: false
 }
 
 export default function( state = initialState, action ) {
     switch(action.type) {
         case GET_VISITS:
             return {
-                ...state
+                ...state,
+                visits: action.payload,
+                visitsLoading: false
             };
         case DELETE_VISIT:
             return {
                 ...state,
-                visits: state.visits.filter(visit => visit.id !== action.payload)
+                visits: state.visits.filter(visit => visit._id !== action.payload)
             };
         case ADD_VISIT:
             return {
                 ...state,
                 visits: [action.payload, ...state.visits]
+            }
+        case VISITS_LOADING:
+            return {
+                ...state,
+                visitsLoading: true
             }
         default:
             return state;
