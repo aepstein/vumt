@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 
@@ -8,13 +7,6 @@ const visits = require('./routes/api/visits')
 const app = express();
 
 app.use(bodyParser.json());
-
-const db = process.env.MONGO_URI || require('./config/keys').mongoURI;
-
-mongoose
-    .connect(db)
-    .then(() => console.log('MongoDB connected.'))
-    .catch(err => console.log(err));
 
 app.use('/api/visits', visits);
 
