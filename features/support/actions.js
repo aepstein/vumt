@@ -5,8 +5,8 @@ const {
 const paths = require('./paths');
 const scope = require('./scope');
 
-let headless = false;
-let slowMo = 5;
+let headless = true;
+let slowMo = 0;
 
 const visitExists = async (visitName) => {
     await new Visit({name: visitName}).save();
