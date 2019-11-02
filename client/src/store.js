@@ -6,13 +6,15 @@ const initialState = {};
 
 const middleware = [thunk];
 
+const composeArgs = [applyMiddleware(...middleware)];
+if (window && window.__REDUX_DEVTOOLS_EXTENSION__) {
+    composeArgs.push(window.__REDUX_DEVTOOLS_EXTENSION__());
+}
+
 const store = createStore(
     rootReducer,
     initialState,
-    compose(
-        applyMiddleware(...middleware),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
+    compose(...composeArgs)
 );
 
 export default store;
