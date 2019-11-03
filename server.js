@@ -1,14 +1,11 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
-
-const visits = require('./routes/api/visits')
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-app.use('/api/visits', visits);
+app.use('/api/visits', require('./routes/api/visits'));
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
     app.use(express.static('client/build'));
