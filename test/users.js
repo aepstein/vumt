@@ -26,6 +26,16 @@ let validCredentials = () => {
         password
     }
 }
+let withUser = (cb) => {
+    chai.request(server)
+        .post('/api/users')
+        .send(validUser())
+        .end((err,regRes) => {
+            regRes.should.have.status(201);
+            if(err) throw err;
+            cb(regRes);
+            });
+}
 
 //Our parent block
 describe('Users', () => {
@@ -125,16 +135,6 @@ describe('Users', () => {
         });
     });
     describe('POST /api/auth',() => {
-        let withUser = (cb) => {
-            chai.request(server)
-                .post('/api/users')
-                .send(validUser())
-                .end((err,regRes) => {
-                    regRes.should.have.status(201);
-                    if(err) throw err;
-                    cb(regRes);
-                    });
-        }
         it('should authenticate valid credentials', (done) => {
             let credentials = validCredentials();
             withUser((regRes) => {
@@ -203,6 +203,44 @@ describe('Users', () => {
                 res.body.should.have.a.property('msg').eql('User does not exist');
                 done();
             });
+        });
+    });
+    describe('GET /api/auth/user',() => {
+        it('should return user information for authenticated user', done => {
+            withUser(regRes => {
+                chai.request(server)
+                    .get('/api/auth/user')
+                    .set("x-auth-token", regRes.body.token)
+                    .end((err,res) => {
+                        res.should.have.status(200)
+                        res.body.should.be.a('object');
+                        res.body.should.have.a.property('_id').eql(regRes.body.user.id);
+                        done();
+                    });
+            });
+        });
+        it('should deny for a user with an invalid token', done => {
+            withUser(regRes => {
+                chai.request(server)
+                    .get('/api/auth/user')
+                    .set("x-auth-token", "blahblah")
+                    .end((err,res) => {
+                        res.should.have.status(400)
+                        res.body.should.be.a('object');
+                        res.body.should.have.a.property('msg').eql('Invalid token');
+                        done();
+                    });
+            });
+        });
+        it('should deny for a user without a token', done => {
+            chai.request(server)
+                .get('/api/auth/user')
+                .end((err,res) => {
+                    res.should.have.status(401)
+                    res.body.should.be.a('object');
+                    res.body.should.have.a.property('msg').eql('No token, authorization denied');
+                    done();
+                });
         });
     });
 });

@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
                     newUser.save()
                         .then(user => {
                             jwt.sign(
-                                { userId: user.id },
+                                { id: user.id },
                                 jwtSecret,
                                 { expiresIn: 3600 },
                                 (err,token) => {

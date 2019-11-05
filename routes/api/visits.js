@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../../middleware/auth');
 
 const Visit = require('../../models/Visit');
 
@@ -17,8 +18,8 @@ router.get('/', (req, res) => {
 
 // @route POST api/visits
 // @desc Create a new visit
-// @access Public
-router.post('/', (req, res) => {
+// @access Private
+router.post('/', auth, (req, res) => {
     const newVisit = new Visit({
         name: req.body.name
     })
@@ -31,8 +32,8 @@ router.post('/', (req, res) => {
 
 // @route DELETE api/visits
 // @desc Delete an existing visit
-// @access Public
-router.delete('/:id', (req, res) => {
+// @access Private
+router.delete('/:id', auth, (req, res) => {
     Visit
         .findById(req.params.id)
         .then((visit) => {

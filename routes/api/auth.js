@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwtSecret = config.jwtSecret;
 const jwt = require('jsonwebtoken');
+const auth = require('../../middleware/auth');
 
 const User = require('../../models/User');
 
@@ -38,7 +39,8 @@ router.post('/', (req, res) => {
                   token,
                   user: {
                     id: user.id,
-                    name: user.name,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
                     email: user.email
                   }
                 });
@@ -47,5 +49,16 @@ router.post('/', (req, res) => {
           })
       })
   });
+
+// @route   POST api/auth
+// @desc    Authenticate user
+// @access  Public
+router.get('/user', auth, (req, res) => {
+  User.findById(req.user.id)
+    .select('-password')
+    .then(user => {
+      return res.json(user);
+    });
+});
 
 module.exports = router;
