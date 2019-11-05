@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const config = require('config');
 
 const app = express();
 
@@ -16,7 +17,7 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
     });
 }
 
-const port = process.env.PORT || 5000;
+const port = config.server.port;
 
 const listen = () => {
     return app.listen(port, () => {

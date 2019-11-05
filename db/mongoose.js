@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
-const db = process.env.MONGO_URI || require('../config/keys').mongoURI;
+const config = require('config');
+const db = config.mongoURI;
 
 mongoose
     .connect(db,{

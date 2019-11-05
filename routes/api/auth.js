@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const jwtSecret = process.env.JWT_SECRET || require('../../config/keys').jwtSecret;
+const config = require('config');
+const jwtSecret = config.jwtSecret;
 const jwt = require('jsonwebtoken');
 
 const User = require('../../models/User');
