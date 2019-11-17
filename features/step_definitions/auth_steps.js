@@ -3,7 +3,6 @@ const {
     clickByText,
     fillByLabel,
     shouldSeeText,
-    takeScreenshot,
     waitFor
 } = require('../support/actions');
 
