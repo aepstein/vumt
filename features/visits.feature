@@ -5,5 +5,6 @@ Feature: Manage visits
 
     Scenario: Add visit
         Given I have registered a visit to "Algonquin"
-        When I visit the home page
+        When I visit the "home" page
+        And the page is loaded
         Then I should see my visit to "Algonquin"

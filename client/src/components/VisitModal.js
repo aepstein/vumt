@@ -10,12 +10,16 @@ import {
     Input
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { addVisit } from '../actions/visitActions';
 
 class VisitModal extends Component {
     state = {
         modal: false,
         name: ''
+    }
+    static propTypes = {
+        isAuthenticated: PropTypes.bool
     }
     toggle = () => {
         this.setState({
@@ -78,8 +82,9 @@ class VisitModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    visit: state.visit
-})
+    visit: state.visit,
+    isAuthenticated: state.auth.isAuthenticated
+});
 
 export default connect(
     mapStateToProps,

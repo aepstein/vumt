@@ -2,12 +2,14 @@
 const { After, Before, AfterAll } = require('cucumber');
 const mongoose = require('../db/mongoose');
 const {
+  User,
   Visit
 } = require('../models');
 const scope = require('./support/scope');
 
 Before(async () => {
-  await Visit.remove({});
+  await User.deleteMany({});
+  await Visit.deleteMany({});
 });
 
 After(async () => {
