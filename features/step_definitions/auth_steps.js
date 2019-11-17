@@ -18,7 +18,6 @@ When('I register as a {string}', async (string) => {
 });
 
 Then('I should be logged in as {string}', async (string) => {
-    await takeScreenshot();
     await waitFor("//a[contains(text(),'Logout')]");
     await shouldSeeText(".navbar",false,"Welcome, Bob");
     await shouldSeeText(".navbar",false,"Logout");
