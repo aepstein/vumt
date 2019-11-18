@@ -7,6 +7,7 @@ const {
     validCredentials
 } = require('./support/factories');
 const {
+    withReg,
     withUser
 } = require("./support/patterns");
 
@@ -28,7 +29,7 @@ describe('Auth', () => {
                         res.body.should.be.a('object');
                         res.body.should.have.a.property('token');
                         res.body.should.have.a.property('user');
-                        res.body.user.should.have.a.property('id').eql(regRes.body.user.id);
+                        res.body.user.should.have.a.property('id').eql(regRes.id);
                         done();
                     });
             });
@@ -89,7 +90,7 @@ describe('Auth', () => {
     });
     describe('GET /api/auth/user',() => {
         it('should return user information for authenticated user', done => {
-            withUser(regRes => {
+            withReg(regRes => {
                 chai.request(server)
                     .get('/api/auth/user')
                     .set("x-auth-token", regRes.body.token)

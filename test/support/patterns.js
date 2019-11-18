@@ -1,10 +1,11 @@
 const chai = require('chai');
 const server = require('../../server');
+const User = require('../../models/User');
 const {
     validUser
 } = require('./factories');
 
-const withUser = (cb) => {
+const withReg = (cb) => {
     chai.request(server)
         .post('/api/users')
         .send(validUser())
@@ -15,4 +16,14 @@ const withUser = (cb) => {
             });
 }
 
-module.exports = { withUser };
+const withUser = (cb) => {
+    var newUser = new User(validUser());
+    newUser.save().then((user) => {
+        cb(user);
+    });
+}
+
+module.exports = {
+    withReg,
+    withUser
+};
