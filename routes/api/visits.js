@@ -20,14 +20,25 @@ router.get('/', (req, res) => {
 // @desc Create a new visit
 // @access Private
 router.post('/', auth, (req, res) => {
+    const {
+        name
+    } = req.body;
+    if (!name) {
+        return res.status(400)
+            .json({
+                msg: 'Provide required fields'
+            });
+    }
     const newVisit = new Visit({
-        name: req.body.name
-    })
+        name,
+        userId: req.user.id
+    });
     newVisit
         .save()
         .then( (visit) => {
-            res.json(visit);
-        })
+            res.status(201)
+                .json(visit);
+        });
 });
 
 // @route DELETE api/visits

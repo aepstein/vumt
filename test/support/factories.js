@@ -1,10 +1,3 @@
-const validUser = () => { return {
-    firstName: 'Bob',
-    lastName: 'Marshall',
-    email: 'bmarshall@example.com',
-    password: 'noneofyourbusiness'
-}};
-
 const validCredentials = () => {
     let { email, password } = validUser()
     return {
@@ -13,7 +6,19 @@ const validCredentials = () => {
     }
 }
 
+const validUser = () => { return {
+    firstName: 'Bob',
+    lastName: 'Marshall',
+    email: 'bmarshall@example.com',
+    password: 'noneofyourbusiness'
+}};
+
+const validVisit = () => { return {
+    name: 'Marcy'
+}};
+
 module.exports = {
+    validCredentials,
     validUser,
-    validCredentials
+    validVisit
 }

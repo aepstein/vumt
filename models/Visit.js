@@ -9,6 +9,10 @@ const VisitSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    userId: {
+        type: String,
+        required: true
     }
 });
 
