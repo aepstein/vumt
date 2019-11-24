@@ -13,8 +13,9 @@ const validUser = () => { return {
     password: 'noneofyourbusiness'
 }};
 
-const validVisit = () => { return {
-    name: 'Marcy'
+const validVisit = (attrs={}) => { return {
+    name: 'Marcy',
+    ...attrs
 }};
 
 module.exports = {

@@ -1,25 +1,17 @@
 const assert = require('assert');
 const {
-    Visit
-} = require('../../models');
+    VisitFactory
+} = require('./factories');
 const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
 var sc = 1;
 
-const puppeteerOptions = {
-//	headless: false,
-//	slowMo: 250,
-//	devtools: true
-}
-
 const visitExists = async (visitName) => {
-    await new Visit({name: visitName}).save();
+    scope.context.visit = await VisitFactory({name: visitName});
 }
 
 const visitPage = async (path) => {
-	if (!scope.browser)
-		scope.browser = await scope.driver.launch(puppeteerOptions);
 	scope.context.currentPage = await scope.browser.newPage();
 	scope.context.currentPage.setViewport({ width: 1280, height: 1024 });
 	scope.context.currentPage.on('error', err => {

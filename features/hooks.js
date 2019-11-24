@@ -1,20 +1,38 @@
 // Dependencies
-const { After, Before, AfterAll } = require('cucumber');
+const { After, Before, BeforeAll, AfterAll } = require('cucumber');
 const mongoose = require('../db/mongoose');
 const {
   User,
   Visit
 } = require('../models');
-const scope = require('./support/scope');
-
+const puppeteer = require('puppeteer');
+const puppeteerOptions = {
+  //	headless: false,
+  //	slowMo: 250,
+  //	devtools: true
+}
+const scope = require('./support/scope');  
+  
 Before(async () => {
   await User.deleteMany({});
   await Visit.deleteMany({});
 });
 
+BeforeAll(
+  {
+    wrapperOptions: {
+      timeout: 30000
+    }
+  },
+  async () => {
+    scope.driver = puppeteer;
+    return scope.browser = await scope.driver.launch(puppeteerOptions);
+  }
+);
+
 After(async () => {
   // Here we check if a scenario has instantiated a browser and a current page
-  if (scope.browser && scope.context.currentPage) {
+  if (scope.context.currentPage) {
     // if it has, find all the cookies, and delete them
     const cookies = await scope.context.currentPage.cookies();
     if (cookies && cookies.length > 0) {
