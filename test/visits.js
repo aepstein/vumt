@@ -11,7 +11,8 @@ const {
 } = require('./support/factories');
 const {
     shouldDenyWithoutToken,
-    withAuth
+    withAuth,
+    withVisit
 } = require("./support/patterns");
 
 describe('Visits', () => {
@@ -48,6 +49,20 @@ describe('Visits', () => {
             const visit = validVisit();
             const res = await action(null,visit);
             return await shouldDenyWithoutToken(res);
+        });
+    });
+    describe('DELETE /api/visits', () => {
+        const action = async (auth,visit) => {
+            const req = chai.request(server)
+                .delete('/api/visits/' + visit._id);
+            if ( auth ) { req.set('x-auth-token',auth.body.token); }
+            return req;
+        }
+        it('should delete with authorized user', async () => {
+            const auth = await withAuth();
+            const visit = await withVisit(auth.body.user);
+            res = await action(auth,visit);
+            await res.should.have.status(200);
         });
     });
 });
