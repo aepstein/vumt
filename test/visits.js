@@ -65,4 +65,20 @@ describe('Visits', () => {
             await res.should.have.status(200);
         });
     });
+    describe('GET /api/visits', () => {
+        const action = async () => {
+            const req = chai.request(server)
+                .get('/api/visits');
+            return req;
+        };
+        it('should show all visits', async () => {
+            const auth = await withAuth();
+            const visit = await withVisit(auth.body.user);
+            res = await action();
+            res.should.have.status(200);
+            res.body.should.be.an('array');
+            res.body[0].should.be.a('object');
+            res.body[0].should.have.a.property('_id').eql(visit.id);
+        })
+    });
 });
