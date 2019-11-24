@@ -7,28 +7,23 @@ const {
     validCredentials
 } = require('./factories');
 
-const withReg = (cb) => {
-    chai.request(server)
-        .post('/api/users')
-        .send(validUser())
-        .end((err,regRes) => {
-            regRes.should.have.status(201);
-            if(err) throw err;
-            cb(regRes);
-            });
-}
-
-const withUser = async () => {
-    const newUser = new User(validUser());
-    return newUser.save();
-}
-
 const withAuth = async () => {
     var newUser = new User(validUser());
     await newUser.save();
     return chai.request(server)
         .post('/api/auth')
         .send(validCredentials());
+}
+
+const withReg = async () => {
+    return chai.request(server)
+        .post('/api/users')
+        .send(validUser());
+}
+
+const withUser = async () => {
+    const newUser = new User(validUser());
+    return newUser.save();
 }
 
 const shouldDenyWithoutToken = async (res) => {
