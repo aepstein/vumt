@@ -6,11 +6,12 @@ const validCredentials = () => {
     }
 }
 
-const validUser = () => { return {
+const validUser = (attrs={}) => { return {
     firstName: 'Bob',
     lastName: 'Marshall',
     email: 'bmarshall@example.com',
-    password: 'noneofyourbusiness'
+    password: 'noneofyourbusiness',
+    ...attrs
 }};
 
 const validVisit = (attrs={}) => { return {

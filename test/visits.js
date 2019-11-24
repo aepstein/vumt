@@ -12,6 +12,7 @@ const {
 const {
     shouldDenyWithoutToken,
     withAuth,
+    withUser,
     withVisit
 } = require("./support/patterns");
 
@@ -60,7 +61,7 @@ describe('Visits', () => {
         }
         it('should delete with authorized user', async () => {
             const auth = await withAuth();
-            const visit = await withVisit(auth.body.user);
+            const visit = await withVisit({userId: auth.body.user.id});
             res = await action(auth,visit);
             await res.should.have.status(200);
         });
@@ -73,12 +74,32 @@ describe('Visits', () => {
         };
         it('should show all visits', async () => {
             const auth = await withAuth();
-            const visit = await withVisit(auth.body.user);
+            const visit = await withVisit({userId: auth.body.user.id});
             res = await action();
             res.should.have.status(200);
             res.body.should.be.an('array');
             res.body[0].should.be.a('object');
             res.body[0].should.have.a.property('_id').eql(visit.id);
         })
+    });
+    describe('GET /api/users/:userId/visits', () => {
+        const action = async (auth,userId) => {
+            const req = chai.request(server)
+                .get('/api/users/' + userId + '/visits');
+            if ( auth ) { req.set('x-auth-token',auth.body.token); }
+            return req;
+        }
+        it('should return only visits for the user', async () => {
+            const auth = await withAuth();
+            const visit = await withVisit({userId: auth.body.user.id})
+            const otherUser = await withUser({firstName: 'George', email: 'gmarshall@example.com'});
+            await withVisit({userId: otherUser.id});
+            res = await action(auth,auth.body.user.id);
+            res.should.have.status(200);
+            res.body.should.be.an('array');
+            res.body.should.have.lengthOf(1);
+            res.body[0].should.be.a('object');
+            res.body[0].should.have.a.property('_id').eql(visit.id);
+        });
     });
 });

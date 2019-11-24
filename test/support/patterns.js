@@ -22,16 +22,13 @@ const withReg = async () => {
         .send(validUser());
 }
 
-const withUser = async () => {
-    const newUser = new User(validUser());
+const withUser = async (attrs={}) => {
+    const newUser = new User(validUser(attrs));
     return newUser.save();
 }
 
-const withVisit = async (user) => {
-    const newVisit = new Visit({
-        ...validVisit(),
-        userId: user.id
-    });
+const withVisit = async (attrs={}) => {
+    const newVisit = new Visit(validVisit(attrs));
     return newVisit.save();
 }
 

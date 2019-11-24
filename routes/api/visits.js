@@ -7,9 +7,14 @@ const Visit = require('../../models/Visit');
 // @route GET api/visits
 // @desc Get all visits
 // @access Public
+// @route GET api/users/:userId/visits
+// @desc Get user's visits
+// @access Public
 router.get('/', (req, res) => {
+    let criteria = {};
+    if (req.userId) { criteria.userId = req.userId; }
     Visit
-        .find()
+        .find(criteria)
         .sort({date: -1})
         .then( (visits) => {
             res.json(visits);

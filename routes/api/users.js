@@ -6,6 +6,16 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../../models/User');
 
+// Use visits routes scoped to the user
+router.use(
+    '/:userId/visits',
+    function (req, res, next) {
+        req.userId = req.params.userId;
+        next();
+    },
+    require('./visits')
+);
+
 // @route POST api/users
 // @desc Register a new user
 // @access Public
