@@ -8,10 +8,8 @@ const {
 } = require('./support/factories');
 
 describe('Users', () => {
-    beforeEach((done) => {
-        User.deleteMany({}, (err) => { 
-           done();           
-        });        
+    beforeEach( async () => {
+        await User.deleteMany({});        
     });
     describe('POST /api/users',() => {
         it('should register valid user', (done) => {

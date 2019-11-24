@@ -18,11 +18,9 @@ const withReg = (cb) => {
             });
 }
 
-const withUser = (cb) => {
-    var newUser = new User(validUser());
-    newUser.save().then((user) => {
-        cb(user);
-    });
+const withUser = async () => {
+    const newUser = new User(validUser());
+    return newUser.save();
 }
 
 const withAuth = async () => {

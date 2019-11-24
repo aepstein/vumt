@@ -12,42 +12,32 @@ const {
 } = require("./support/patterns");
 
 describe('Auth', () => {
-    beforeEach((done) => {
-        User.deleteMany({}, (err) => { 
-           done();           
-        });        
+    beforeEach( async () => {
+        await User.deleteMany({});
     });
     describe('POST /api/auth',() => {
-        it('should authenticate valid credentials', (done) => {
+        it('should authenticate valid credentials', async () => {
             let credentials = validCredentials();
-            withUser((regRes) => {
-                    chai.request(server)
-                    .post('/api/auth')
-                    .send(credentials)
-                    .end((err,res) => {
-                        res.should.have.status(201);
-                        res.body.should.be.a('object');
-                        res.body.should.have.a.property('token');
-                        res.body.should.have.a.property('user');
-                        res.body.user.should.have.a.property('id').eql(regRes.id);
-                        done();
-                    });
-            });
+            const user = await withUser();
+            const res = await chai.request(server)
+                .post('/api/auth')
+                .send(credentials);
+            await res.should.have.status(201);
+            await res.body.should.be.a('object');
+            await res.body.should.have.a.property('token');
+            await res.body.should.have.a.property('user');
+            await res.body.user.should.have.a.property('id').eql(user.id);
         });
-        it('should not authenticate bad password', (done) => {
+        it('should not authenticate bad password', async () => {
             let credentials = validCredentials();
             credentials.password = 'badword';
-            withUser((regRes) => {
-                    chai.request(server)
-                    .post('/api/auth')
-                    .send(credentials)
-                    .end((err,res) => {
-                        res.should.have.status(400);
-                        res.body.should.be.a('object');
-                        res.body.should.have.a.property('msg').eql('Invalid credentials');
-                        done();
-                    });
-            });
+            await withUser();
+            const res = await chai.request(server)
+                .post('/api/auth')
+                .send(credentials);
+            await res.should.have.status(400);
+            await res.body.should.be.a('object');
+            await res.body.should.have.a.property('msg').eql('Invalid credentials');
         });
         it('should not authenticate with missing email', (done) => {
             let credentials = validCredentials();
@@ -102,18 +92,14 @@ describe('Auth', () => {
                     });
             });
         });
-        it('should deny for a user with an invalid token', done => {
-            withUser(regRes => {
-                chai.request(server)
-                    .get('/api/auth/user')
-                    .set("x-auth-token", "blahblah")
-                    .end((err,res) => {
-                        res.should.have.status(400)
-                        res.body.should.be.a('object');
-                        res.body.should.have.a.property('msg').eql('Invalid token');
-                        done();
-                    });
-            });
+        it('should deny for a user with an invalid token', async () => {
+            await withUser();
+            res = await chai.request(server)
+                .get('/api/auth/user')
+                .set("x-auth-token", "blahblah");
+            await res.should.have.status(400)
+            await res.body.should.be.a('object');
+            return await res.body.should.have.a.property('msg').eql('Invalid token');
         });
         it('should deny for a user without a token', done => {
             chai.request(server)
