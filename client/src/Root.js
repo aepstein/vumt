@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import App from './App'
+import AppNavbar from './components/AppNavbar';
 
 const Root = ({ store }) => (
     <Provider store={store}>
+        <AppNavbar />
         <Router>
-        <Route path="/" component={App} />
+          <Route path="/" component={App} />
         </Router>
     </Provider>
 )

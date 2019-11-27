@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import RegisterModal from './auth/RegisterModal';
 import LoginModal from './auth/LoginModal';
 import Logout from './auth/Logout';
+import { loadUser } from '../actions/authActions';
 
 class AppNavbar extends Component {
     state = {
@@ -29,6 +30,11 @@ class AppNavbar extends Component {
             isOpen: !this.state.isOpen
         });
     }
+
+    componentDidMount() {
+        this.props.loadUser();
+    }
+    
     render() {
         const { isAuthenticated, user } = this.props.auth;
 
@@ -75,7 +81,8 @@ class AppNavbar extends Component {
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    loadUser
 });
 
 export default connect(mapStateToProps, null)(AppNavbar);
