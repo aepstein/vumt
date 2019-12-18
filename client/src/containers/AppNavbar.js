@@ -8,6 +8,7 @@ import {
     NavItem,
     Container
 } from 'reactstrap';
+import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -46,6 +47,9 @@ class AppNavbar extends Component {
                     </span>
                 </NavItem>
                 <NavItem>
+                    <NavLink to="/" className="nav-link" activeClassName="active">Home</NavLink>
+                </NavItem>
+                <NavItem>
                     <Logout/>
                 </NavItem>
             </Fragment>
@@ -81,8 +85,10 @@ class AppNavbar extends Component {
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth,
-    loadUser
+    auth: state.auth
 });
+const mapDispatchToProps = {
+    loadUser
+};
 
-export default connect(mapStateToProps, null)(AppNavbar);
+export default connect(mapStateToProps, mapDispatchToProps)(AppNavbar);

@@ -8,3 +8,10 @@ Feature: Authentication
         And the page is loaded
         And I register as a "bmarshall@example.com"
         Then I should be logged in as "bmarshall@example.com"
+    
+    Scenario: Log in as registered user
+        Given I am registered as "bmarshall@example.com"
+        When I visit the "home" page
+        And the page is loaded
+        And I log in as "bmarshall@example.com"
+        Then I should be logged in as "bmarshall@example.com"

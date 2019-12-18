@@ -1,5 +1,6 @@
 const assert = require('assert');
 const {
+	UserFactory,
     VisitFactory
 } = require('./factories');
 const paths = require('./paths');
@@ -7,10 +8,18 @@ const scope = require('./scope');
 const selectors = require('./selectors');
 var sc = 1;
 
+const userExists = async (email) => {
+	scope.context.user = await UserFactory({email,password: "secret"});
+}
 const visitExists = async (visitName) => {
     scope.context.visit = await VisitFactory({name: visitName});
 }
-
+const loginAs = async (email) => {
+    await clickByText("Login");
+    await fillByLabel("Email",email);
+    await fillByLabel("Password","secret");
+    await clickByText("Login","//button");
+}
 const visitPage = async (path) => {
 	scope.context.currentPage = await scope.browser.newPage();
 	scope.context.currentPage.setViewport({ width: 1280, height: 1024 });
@@ -33,7 +42,11 @@ const escapeXpathString = str => {
 	const splitedQuotes = str.replace(/'/g, `', "'", '`);
 	return `concat('${splitedQuotes}', '')`;
 };
-
+const shouldBeLoggedInAs = async(email) => {
+	await waitFor("//a[contains(text(),'Logout')]");
+    await shouldSeeText(".navbar",false,"Welcome, Bob");
+    await shouldSeeText(".navbar",false,"Logout");
+}
 const shouldSee = async (selector,context) => {
 	await scope.context.currentPage.waitForXPath(selectors[context][selector]);
 }
@@ -58,6 +71,12 @@ const clickByText = async (text, context = "//a") => {
 	const el = await scope.context.currentPage.$x(selector);
 	await el[0].click();
 };
+const waitForText = async (text, context = "//a") => {
+	const escapedText = escapeXpathString(text);
+	const selector = `${context}[contains(text(), ${escapedText})]`;
+	await scope.context.currentPage.waitForXPath(selector);
+};
+
 
 const fillByLabel = async (label, fill ) => {
 	const escapedText = escapeXpathString(label);
@@ -79,10 +98,14 @@ const takeScreenshot = async () => {
 module.exports = {
 	clickByText,
 	fillByLabel,
+	loginAs,
 	visitExists,
 	visitPage,
+	shouldBeLoggedInAs,
 	shouldSee,
 	shouldSeeText,
 	takeScreenshot,
-	waitFor
+	userExists,
+	waitFor,
+	waitForText
 }

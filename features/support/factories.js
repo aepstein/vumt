@@ -10,7 +10,7 @@ const {
 const UserFactory = async (attrs={}) => {
     return new User({
         ...validUser(),
-        attrs
+        ...attrs
     }).save();
 };
 

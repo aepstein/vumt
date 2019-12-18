@@ -13,6 +13,7 @@
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
     "test-cucumber": "npm run client-build && npm run test-cucumber-nobuild",
     "test-cucumber-nobuild": "NODE_ENV=test npx cucumber-js",
+    "test-cucumber-wip": "NODE_ENV=test npx cucumber-js --tags @wip",
     "test": "NODE_ENV=test mocha --timeout 10000"
   },
   "author": "Ari Epstein",

@@ -7,7 +7,7 @@ const {
 } = require('../models');
 const puppeteer = require('puppeteer');
 const puppeteerOptions = {
-  //	headless: false,
+  // headless: false
   //	slowMo: 250,
   //	devtools: true
 }
@@ -20,9 +20,7 @@ Before(async () => {
 
 BeforeAll(
   {
-    wrapperOptions: {
       timeout: 30000
-    }
   },
   async () => {
     scope.driver = puppeteer;
@@ -38,6 +36,8 @@ After(async () => {
     if (cookies && cookies.length > 0) {
       await scope.context.currentPage.deleteCookie(...cookies);
     }
+    // Clear localStorage
+    await scope.context.currentPage.evaluate('localStorage.clear();');
     // close the web page down
     await scope.context.currentPage.close();
     // wipe the context's currentPage value

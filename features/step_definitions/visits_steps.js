@@ -1,7 +1,7 @@
 const { Given, When, Then } = require('cucumber');
 const {
-    visitExists,
-    shouldSeeText
+    shouldSeeText,
+    visitExists
 } = require('../support/actions');
 
 Given('I have registered a visit to {string}', visitExists);
