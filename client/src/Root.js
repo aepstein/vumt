@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import NeedAuth from './components/NeedAuth'
 import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
+import RegisterUser from './containers/RegisterUser'
 import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
 
@@ -17,6 +18,9 @@ const Root = ({ store }) => (
           <Switch>
             <UnAuthRoute path="/need-auth">
               <NeedAuth />
+            </UnAuthRoute>
+            <UnAuthRoute path="/register">
+              <RegisterUser />
             </UnAuthRoute>
             <AuthRoute exact path="/">
               <UserDashboard />

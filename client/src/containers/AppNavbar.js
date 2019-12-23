@@ -12,7 +12,6 @@ import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import RegisterModal from './auth/RegisterModal';
 import LoginModal from './auth/LoginModal';
 import Logout from './auth/Logout';
 import { loadUser } from '../actions/authActions';
@@ -58,7 +57,7 @@ class AppNavbar extends Component {
         const guestLinks = (
             <Fragment>
                 <NavItem>
-                    <RegisterModal />
+                    <NavLink to="/register" className="nav-link" activeClassName="active">Register</NavLink>
                 </NavItem>
                 <NavItem>
                     <LoginModal />
