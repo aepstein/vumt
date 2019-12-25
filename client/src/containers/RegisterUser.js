@@ -25,21 +25,6 @@ function RegisterUser() {
     const [ password, setPassword ] = useState('')
     const [ msg, setMsg ] = useState(null)
 
-    // componentDidUpdate(prevProps) {
-    //     if (error !== prevProps.error) {
-    //         if (error.id === 'REGISTER_FAIL') {
-    //             setMsg(error.msg.msg);
-    //         } else {
-    //             setMsg(null);
-    //         }
-    //     }
-    //     if (isAuthenticated) {
-    //         this.closeSuccessfully();
-    //     }
-    // }
-    // const closeSuccessfully = () => {
-    //     dispatch(clearErrors())
-    // }
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
