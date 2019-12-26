@@ -11,8 +11,8 @@ var sc = 1;
 const userExists = async (email) => {
 	scope.context.user = await UserFactory({email,password: "secret"});
 }
-const visitExists = async (visitName) => {
-    scope.context.visit = await VisitFactory({name: visitName});
+const visitExists = async (attr={}) => {
+    scope.context.visit = await VisitFactory(attr);
 }
 const loginAs = async (email) => {
     await clickByText("Login");

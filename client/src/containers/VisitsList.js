@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import {
     Container,
     ListGroup,
@@ -9,64 +9,56 @@ import {
     CSSTransition,
     TransitionGroup
 } from 'react-transition-group';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { getVisits, deleteVisit } from '../actions/visitActions';
 import { PropTypes } from 'prop-types';
 
-class VisitsList extends Component {
-    componentDidMount() {
-        this.props.getVisits()
+function VisitsList() {
+    const visits = useSelector(state => state.visit.visits, shallowEqual)
+    const visitsLoaded = useSelector(state => state.visit.visitsLoaded)
+
+    const dispatch = useDispatch()
+    
+    const onDeleteClick = (id) => {
+        dispatch(deleteVisit(id))
     }
 
-    onDeleteClick = (id) => {
-        this.props.deleteVisit(id);
-    }
+    useEffect(() => {
+        if (!visitsLoaded) {
+            dispatch(getVisits())
+        }
+    })
 
-
-    render() {
-        const { visits } = this.props.visit;
-        return(
-            <Container>
-                <ListGroup>
-                    <TransitionGroup className="visits-list">
-                        {visits.map(({ _id, name }) => (
-                            <CSSTransition
-                                key={_id}
-                                timeout={500}
-                                classNames="fade"
-                            >
-                                <ListGroupItem>
-                                    <Button
-                                        className="remove-btn"
-                                        color="danger"
-                                        size="sm"
-                                        style={{marginRight: '0.5rem'}}
-                                        onClick={this.onDeleteClick.bind(this,_id)}
-                                    >&times;</Button>
-                                    {name}
-                                </ListGroupItem>
-                            </CSSTransition>
-                        ))}
-                    </TransitionGroup>
-                </ListGroup>
-            </Container>
-        );
-    }
+    return <div>
+        <Container>
+            <ListGroup>
+                <TransitionGroup className="visits-list">
+                    {visits.map(({ _id, name }) => (
+                        <CSSTransition
+                            key={_id}
+                            timeout={500}
+                            classNames="fade"
+                        >
+                            <ListGroupItem>
+                                <Button
+                                    className="remove-btn"
+                                    color="danger"
+                                    size="sm"
+                                    style={{marginRight: '0.5rem'}}
+                                    onClick={() => onDeleteClick(_id)}
+                                >&times;</Button>
+                                {name}
+                            </ListGroupItem>
+                        </CSSTransition>
+                    ))}
+                </TransitionGroup>
+            </ListGroup>
+        </Container>
+    </div>
 }
 
 VisitsList.propTypes = {
-    getVisits: PropTypes.func.isRequired,
-    visit: PropTypes.object.isRequired
+    visits: PropTypes.array.isRequired
 }
 
-const mapStateToProps = (state) => ({
-    visit: state.visit
-});
-
-export default connect(
-    mapStateToProps,
-    { 
-        getVisits,
-        deleteVisit
-    }
-)(VisitsList);
+export default VisitsList;

@@ -7,7 +7,8 @@ import {
 
 const initialState = {
     visits: [],
-    loading: false
+    visitsLoading: false,
+    visitsLoaded: false
 }
 
 export default function( state = initialState, action ) {
@@ -16,7 +17,8 @@ export default function( state = initialState, action ) {
             return {
                 ...state,
                 visits: action.payload,
-                visitsLoading: false
+                visitsLoading: false,
+                visitsLoaded: true
             };
         case DELETE_VISIT:
             return {

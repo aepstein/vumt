@@ -8,10 +8,11 @@ import {
  import { tokenConfig } from './authActions';
  import { returnErrors } from './errorActions';
 
-export const getVisits = () => dispatch => {
+export const getVisits = () => (dispatch, getState) => {
+    const userId = getState().auth.user._id
     dispatch(setVisitsLoading());
     axios
-        .get('/api/visits')
+        .get('/api/users/' + userId + '/visits',tokenConfig(getState))
         .then(res => {
             dispatch({
                 type: GET_VISITS,
