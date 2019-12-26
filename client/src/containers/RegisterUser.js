@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
     Button,
     Container,
@@ -17,6 +17,8 @@ import { clearErrors } from '../actions/errorActions';
 function RegisterUser() {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
     const error = useSelector(state => state.error)
+
+    const history = useHistory()
 
     const dispatch = useDispatch()
     const [ firstName, setFirstName ] = useState('')
@@ -48,8 +50,13 @@ function RegisterUser() {
         }
     }, [error] )
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            history.push("/")
+        }
+    }, [isAuthenticated])
+
     return <div>
-        { isAuthenticated ? <Redirect to="/" /> : null }
         <Container>
             <h2>Register</h2>
             {msg ? <Alert color="danger">{msg}</Alert> : null }
