@@ -2,6 +2,8 @@ import axios from 'axios';
 import {
     GET_VISITS,
     ADD_VISIT,
+    ADDING_VISIT,
+    ADDING_VISIT_CANCEL,
     DELETE_VISIT,
     VISITS_LOADING
  } from './types';
@@ -39,6 +41,7 @@ export const deleteVisit = id => (dispatch, getState) => {
 };
 
 export const addVisit = newVisit => (dispatch, getState) => {
+    dispatch({ type: ADDING_VISIT })
     axios
         .post('/api/visits', newVisit, tokenConfig(getState))
         .then(res => {
@@ -48,6 +51,7 @@ export const addVisit = newVisit => (dispatch, getState) => {
             });
         })
         .catch(err => {
+            dispatch({type: ADDING_VISIT_CANCEL})
             dispatch(returnErrors(err.response.data,err.response.status));
         });
 };

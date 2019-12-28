@@ -1,6 +1,7 @@
 import { 
     GET_VISITS,
     ADD_VISIT,
+    ADDING_VISIT,
     DELETE_VISIT,
     VISITS_LOADING
 } from '../actions/types';
@@ -8,7 +9,8 @@ import {
 const initialState = {
     visits: [],
     visitsLoading: false,
-    visitsLoaded: false
+    visitsLoaded: false,
+    visitSaving: false
 }
 
 export default function( state = initialState, action ) {
@@ -28,7 +30,13 @@ export default function( state = initialState, action ) {
         case ADD_VISIT:
             return {
                 ...state,
-                visits: [action.payload, ...state.visits]
+                visits: [action.payload, ...state.visits],
+                visitSaving: false
+            }
+        case ADDING_VISIT:
+            return {
+                ...state,
+                visitSaving: true
             }
         case VISITS_LOADING:
             return {

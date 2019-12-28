@@ -10,6 +10,7 @@ import {
     TransitionGroup
 } from 'react-transition-group';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { getVisits, deleteVisit } from '../actions/visitActions';
 import { PropTypes } from 'prop-types';
 
@@ -31,6 +32,9 @@ function VisitsList() {
 
     return <div>
         <Container>
+            <Link to="/visits/new">
+                <Button color="dark" style={{marginBottom: '2rem'}}>Add Visit</Button>
+            </Link>
             <ListGroup>
                 <TransitionGroup className="visits-list">
                     {visits.map(({ _id, name }) => (
