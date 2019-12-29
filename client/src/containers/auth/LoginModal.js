@@ -12,6 +12,7 @@ import {
     Alert
 } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types';
 import { login } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
@@ -27,6 +28,8 @@ function LoginModal() {
  
     const dispatch = useDispatch()
     
+    const { t, i18n } = useTranslation('AppNavbar')
+
     const toggle = () => {
         dispatch(clearErrors())
         setModal(!modal)
@@ -65,14 +68,12 @@ function LoginModal() {
             Login
         </NavLink>
         <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader
-                toggle={toggle}
-            >Login</ModalHeader>
+            <ModalHeader toggle={toggle}>{t('login')}</ModalHeader>
             {msg ? <Alert color="danger">{msg}</Alert> : null }
             <ModalBody>
                 <Form onSubmit={onSubmit}>
                     <FormGroup>
-                        <Label for="email">Email</Label>
+                        <Label for="email">{t('commonForms:email')}</Label>
                         <Input
                             type="email"
                             name="email"
@@ -81,7 +82,7 @@ function LoginModal() {
                             onChange={onChange(setEmail)}
                             className="mb-3"
                         />
-                        <Label for="password">Password</Label>
+                        <Label for="password">{t('commonForms:password')}</Label>
                         <Input
                             type="password"
                             name="password"
@@ -94,7 +95,7 @@ function LoginModal() {
                             color="dark"
                             style={{marginTop: '2rem'}}
                             block
-                        >Login</Button>
+                        >{t('login')}</Button>
                     </FormGroup>
                 </Form>
             </ModalBody>
