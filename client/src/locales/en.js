@@ -9,6 +9,9 @@ const locale = {
         "lastName": "Last Name",
         "password": "Password"
     },
+    "visit": {
+        "addVisit": "Add Visit"
+    },
     "AppNavbar": {
         "brand": "Visitor Use Management Tool",
         "home": "Home",

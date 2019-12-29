@@ -10,6 +10,7 @@ import {
     TransitionGroup
 } from 'react-transition-group';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom';
 import { getVisits, deleteVisit } from '../actions/visitActions';
 import { PropTypes } from 'prop-types';
@@ -21,6 +22,8 @@ function VisitsList() {
 
     const dispatch = useDispatch()
     
+    const { t } = useTranslation('visit')
+
     const onDeleteClick = (id) => {
         dispatch(deleteVisit(id))
     }
@@ -34,7 +37,7 @@ function VisitsList() {
     return <div>
         <Container>
             <Link to="/visits/new">
-                <Button color="dark" style={{marginBottom: '2rem'}}>Add Visit</Button>
+                <Button color="dark" style={{marginBottom: '2rem'}}>{t('addVisit')}</Button>
             </Link>
             <ListGroup>
                 <TransitionGroup className="visits-list">
