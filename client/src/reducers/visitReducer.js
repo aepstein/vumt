@@ -3,7 +3,8 @@ import {
     ADD_VISIT,
     ADDING_VISIT,
     DELETE_VISIT,
-    VISITS_LOADING
+    VISITS_LOADING,
+    LOGOUT_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -15,6 +16,11 @@ const initialState = {
 
 export default function( state = initialState, action ) {
     switch(action.type) {
+        case LOGOUT_SUCCESS:
+            return {
+                ...state,
+                ...initialState
+            }
         case GET_VISITS:
             return {
                 ...state,

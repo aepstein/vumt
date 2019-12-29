@@ -36,7 +36,7 @@ describe('Visits', () => {
             await res.should.have.status(201);
             await res.should.be.a('object');
             await res.body.should.have.a.property('name').eql(visit.name);
-            await res.body.should.have.a.property('userId').eql(auth.body.user.id);
+            await res.body.should.have.a.property('userId').eql(auth.body.user._id);
         });
         it('should not save without name', async () => {
             const auth = await withAuth();
@@ -61,7 +61,7 @@ describe('Visits', () => {
         }
         it('should delete with authorized user', async () => {
             const auth = await withAuth();
-            const visit = await withVisit({userId: auth.body.user.id});
+            const visit = await withVisit({userId: auth.body.user._id});
             res = await action(auth,visit);
             await res.should.have.status(200);
         });
@@ -74,7 +74,7 @@ describe('Visits', () => {
         };
         it('should show all visits', async () => {
             const auth = await withAuth();
-            const visit = await withVisit({userId: auth.body.user.id});
+            const visit = await withVisit({userId: auth.body.user._id});
             res = await action();
             res.should.have.status(200);
             res.body.should.be.an('array');
@@ -91,10 +91,10 @@ describe('Visits', () => {
         }
         it('should return only visits for the user', async () => {
             const auth = await withAuth();
-            const visit = await withVisit({userId: auth.body.user.id})
+            const visit = await withVisit({userId: auth.body.user._id})
             const otherUser = await withUser({firstName: 'George', email: 'gmarshall@example.com'});
             await withVisit({userId: otherUser.id});
-            res = await action(auth,auth.body.user.id);
+            res = await action(auth,auth.body.user._id);
             res.should.have.status(200);
             res.body.should.be.an('array');
             res.body.should.have.lengthOf(1);

@@ -44,7 +44,7 @@ router.post('/', (req, res) => {
                             res.status(201).json({
                                 token,
                                 user: {
-                                    id: user.id,
+                                    _id: user.id,
                                     firstName: user.firstName,
                                     lastName: user.lastName,
                                     email: user.email

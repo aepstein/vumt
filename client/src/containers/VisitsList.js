@@ -16,6 +16,7 @@ import { PropTypes } from 'prop-types';
 
 function VisitsList() {
     const visits = useSelector(state => state.visit.visits, shallowEqual)
+    const visitsLoading = useSelector(state => state.visit.visitsLoading)
     const visitsLoaded = useSelector(state => state.visit.visitsLoaded)
 
     const dispatch = useDispatch()
@@ -25,7 +26,7 @@ function VisitsList() {
     }
 
     useEffect(() => {
-        if (!visitsLoaded) {
+        if (!visitsLoading && !visitsLoaded) {
             dispatch(getVisits())
         }
     })

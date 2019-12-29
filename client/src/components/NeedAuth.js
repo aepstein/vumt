@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react'
 import { Container } from 'reactstrap';
+import { useTranslation } from 'react-i18next'
 
-class NeedAuth extends Component {
-  render() {
-    return (
-      <div className="NeedAuth">
-        <Container>
-          <p>You must log in to use this system</p>
-        </Container>
-      </div>
-    );
-  }
+function NeedAuth() {
+  const { t } = useTranslation()
+  return <div className="NeedAuth">
+      <Container>
+        <p>{t('mustBeLoggedIn')}</p>
+      </Container>
+  </div>
 }
 
 export default NeedAuth

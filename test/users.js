@@ -23,7 +23,7 @@ describe('Users', () => {
             res.should.have.status(201);
             res.body.should.be.a('object');
             res.body.should.have.property('user');
-            res.body.user.should.have.property('id');
+            res.body.user.should.have.property('_id');
             res.body.user.should.have.property('firstName').eql(user.firstName);
             res.body.user.should.have.property('lastName').eql(user.lastName);
             res.body.should.have.property('token');

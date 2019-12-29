@@ -1,6 +1,7 @@
 import {
     GET_ERRORS,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    LOGOUT_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -11,6 +12,11 @@ const initialState = {
 
 export default function(state = initialState, action) {
     switch(action.type) {
+        case LOGOUT_SUCCESS:
+            return {
+                ...state,
+                ...initialState
+            }
         case GET_ERRORS:
             return {
                 msg: action.payload.msg,

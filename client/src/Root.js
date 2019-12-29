@@ -1,6 +1,6 @@
 // import 'bootstrap/dist/css/boostrap.min.css';
 import 'bootswatch/dist/sketchy/bootstrap.min.css';
-import React from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
@@ -11,14 +11,24 @@ import NewVisit from './containers/NewVisit'
 import RegisterUser from './containers/RegisterUser'
 import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
+import './i18n'
+
+// loading component for suspense fallback
+const Loader = () => (
+  <div className="App">
+    <div>loading...</div>
+  </div>
+);
+
 
 const Root = ({ store }) => (
     <Provider store={store}>
-        <Router>
+        <Suspense fallback={<Loader />}>
+          <Router>
           <AppNavbar />
           <Switch>
             <UnAuthRoute path="/need-auth">
-              <NeedAuth />
+            <NeedAuth />
             </UnAuthRoute>
             <UnAuthRoute path="/register">
               <RegisterUser />
@@ -31,6 +41,7 @@ const Root = ({ store }) => (
             </AuthRoute>
           </Switch>
         </Router>
+      </Suspense>
     </Provider>
 )
 

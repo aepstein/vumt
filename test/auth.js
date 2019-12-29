@@ -29,7 +29,7 @@ describe('Auth', () => {
             await res.body.should.be.a('object');
             await res.body.should.have.a.property('token');
             await res.body.should.have.a.property('user');
-            await res.body.user.should.have.a.property('id').eql(user.id);
+            await res.body.user.should.have.a.property('_id').eql(user.id);
         });
         it('should not authenticate bad password', async () => {
             let credentials = validCredentials();
@@ -76,7 +76,7 @@ describe('Auth', () => {
             const res = await action(regRes);
             await res.should.have.status(200)
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('_id').eql(regRes.body.user.id);
+            await res.body.should.have.a.property('_id').eql(regRes.body.user._id);
         });
         it('should deny for a user with an invalid token', async () => {
             await withUser();
