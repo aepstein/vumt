@@ -10,6 +10,7 @@ import {
     Alert
 } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types';
 import { register } from '../actions/authActions';
 import { clearErrors } from '../actions/errorActions';
@@ -19,6 +20,8 @@ function RegisterUser() {
     const error = useSelector(state => state.error)
 
     const history = useHistory()
+
+    const { t } = useTranslation('commonForms')
 
     const dispatch = useDispatch()
     const [ firstName, setFirstName ] = useState('')
@@ -58,45 +61,45 @@ function RegisterUser() {
 
     return <div>
         <Container>
-            <h2>Register</h2>
+            <h2>{t('AppNavbar:register')}</h2>
             {msg ? <Alert color="danger">{msg}</Alert> : null }
             <Form
                 onSubmit={onSubmit}
             >
                 <FormGroup>
-                    <Label for="firstName">First Name</Label>
+                    <Label for="firstName">{t('firstName')}</Label>
                     <Input
                         type="text"
                         name="firstName"
                         id="firstName"
-                        placeholder="First Name"
+                        placeholder={t('firstName')}
                         onChange={onChange(setFirstName)}
                         className="mb-3"
                     />
-                    <Label for="lastName">Last Name</Label>
+                    <Label for="lastName">{t('lastName')}</Label>
                     <Input
                         type="text"
                         name="lastName"
                         id="lastName"
-                        placeholder="Last Name"
+                        placeholder={t('lastName')}
                         onChange={onChange(setLastName)}
                         className="mb-3"
                     />
-                    <Label for="email">Email</Label>
+                    <Label for="email">{t('email')}</Label>
                     <Input
                         type="email"
                         name="email"
                         id="email"
-                        placeholder="address@example.com"
+                        placeholder={t('emailPlaceholder')}
                         onChange={onChange(setEmail)}
                         className="mb-3"
                     />
-                    <Label for="password">Password</Label>
+                    <Label for="password">{t('password')}</Label>
                     <Input
                         type="password"
                         name="password"
                         id="password"
-                        placeholder="Password"
+                        placeholder={t('password')}
                         onChange={onChange(setPassword)}
                         className="mb-3"
                     />
@@ -104,7 +107,7 @@ function RegisterUser() {
                         color="dark"
                         style={{marginTop: '2rem'}}
                         block
-                    >Register</Button>
+                    >{t('AppNavbar:register')}</Button>
                 </FormGroup>
             </Form>
         </Container>

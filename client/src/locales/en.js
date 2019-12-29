@@ -4,6 +4,9 @@ const locale = {
     },
     "commonForms": {
         "email": "Email",
+        "emailPlaceholder": "me@example.com",
+        "firstName": "First Name",
+        "lastName": "Last Name",
         "password": "Password"
     },
     "AppNavbar": {
