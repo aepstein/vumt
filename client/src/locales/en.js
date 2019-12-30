@@ -18,6 +18,7 @@ const locale = {
     "AppNavbar": {
         "brand": "Visitor Use Management Tool",
         "home": "Home",
+        "language": "Language",
         "login": "Login",
         "logout": "Logout",
         "register": "Register",
