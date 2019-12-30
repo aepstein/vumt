@@ -16,7 +16,8 @@ i18n
     debug: true,
     resources: {
         en: require('./locales/en').default,
-        fr: require('./locales/fr').default
+        fr: require('./locales/fr').default,
+        he: require('./locales/he').default
     },
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default

@@ -29,6 +29,7 @@ function LanguageSelector() {
             <DropdownMenu>
                 <DropdownItem onClick={setLanguage('en-US')}>English</DropdownItem>
                 <DropdownItem onClick={setLanguage('fr')}>Français</DropdownItem>
+                <DropdownItem onClick={setLanguage('he')}>עברית</DropdownItem>
             </DropdownMenu>
         </Dropdown>
     </div>
