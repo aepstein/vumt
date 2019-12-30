@@ -65,7 +65,7 @@ function LoginModal() {
 
     return <div>
         <NavLink onClick={toggle} href="#">
-            Login
+            {t('login')}
         </NavLink>
         <Modal isOpen={modal} toggle={toggle}>
             <ModalHeader toggle={toggle}>{t('login')}</ModalHeader>
@@ -78,7 +78,7 @@ function LoginModal() {
                             type="email"
                             name="email"
                             id="email"
-                            placeholder="address@example.com"
+                            placeholder={t('commonForms:emailPlaceholder')}
                             onChange={onChange(setEmail)}
                             className="mb-3"
                         />
@@ -87,7 +87,7 @@ function LoginModal() {
                             type="password"
                             name="password"
                             id="password"
-                            placeholder="Password"
+                            placeholder={t('commonForms:password')}
                             onChange={onChange(setPassword)}
                             className="mb-3"
                         />

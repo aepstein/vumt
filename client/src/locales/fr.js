@@ -16,7 +16,7 @@ const locale = {
     },
     "AppNavbar": {
         "brand": "Outil de Gestion de l'Utilisation des Visiteurs",
-        "home": "Home",
+        "home": "Accueil",
         "login": "S'identifier",
         "logout": "Se déconnecter",
         "register": "S'inscrire",
