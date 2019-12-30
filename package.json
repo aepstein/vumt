@@ -6,10 +6,10 @@
   "scripts": {
     "client-install": "npm install --prefix client",
     "client-build": "npm run build --prefix client",
-    "start": "NODE_ENV=development node server.js",
-    "server": "NODE_ENV=development nodemon server.js",
+    "start": "node server.js",
+    "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"NODE_ENV=development npm run server\" \"NODE_ENV=development npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
     "test-cucumber": "npm run client-build && npm run test-cucumber-nobuild",
     "test-cucumber-nobuild": "NODE_ENV=test npx cucumber-js",
