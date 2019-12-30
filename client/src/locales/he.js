@@ -19,9 +19,9 @@ const locale = {
         "brand": "ניהול אורחים",
         "home": "בית",
         "language": "עברית",
-        "login": "יומן",
-        "logout": "להתנתק",
-        "register": "הרשמה",
+        "login": "התחבר",
+        "logout": "התנתק",
+        "register": "הרשם",
         "welcome": "ברוך הבא, {{name}}"
     }
 }
