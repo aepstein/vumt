@@ -21,7 +21,7 @@ const locale = {
         "language": "עברית",
         "login": "יומן",
         "logout": "להתנתק",
-        "register": "להירשם",
+        "register": "הרשמה",
         "welcome": "ברוך הבא, {{name}}"
     }
 }
