@@ -9,6 +9,7 @@ import {
     Input
 } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types';
 import { addVisit } from '../actions/visitActions';
 
@@ -21,6 +22,8 @@ function NewVisit() {
 
     const history = useHistory()
     const dispatch = useDispatch()
+
+    const { t } = useTranslation('visit')
 
     const onChange = (setter) => (e) => {
         setter(e.target.value)
@@ -43,24 +46,24 @@ function NewVisit() {
 
     return <div>
         <Container>
-            <h2>Add visit</h2>
+            <h2>{t('addVisit')}</h2>
             <Form
                 onSubmit={onSubmit}
             >
                 <FormGroup>
-                    <Label for="name">Visit</Label>
+                    <Label for="name">{t('visit')}</Label>
                     <Input
                         type="text"
                         name="name"
                         id="visit"
-                        placeholder="Specify name"
+                        placeholder={t('visitPlaceholder')}
                         onChange={onChange(setName)}
                     />
                     <Button
                         color="dark"
                         style={{marginTop: '2rem'}}
                         block
-                    >Add Visit</Button>
+                    >{t('addVisit')}</Button>
                 </FormGroup>
             </Form>
         </Container>

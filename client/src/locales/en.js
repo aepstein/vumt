@@ -7,10 +7,13 @@ const locale = {
         "emailPlaceholder": "me@example.com",
         "firstName": "First Name",
         "lastName": "Last Name",
-        "password": "Password"
+        "password": "Password",
+        "specifyName": "Specify name"
     },
     "visit": {
-        "addVisit": "Add Visit"
+        "addVisit": "Add visit",
+        "visit": "Visit",
+        "visitPlaceholder": "Visit name"
     },
     "AppNavbar": {
         "brand": "Visitor Use Management Tool",
