@@ -6,6 +6,7 @@ import {
     DropdownItem
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next'
+import locales from '../locales'
 
 function LanguageSelector() {
     const [ dropdownOpen, setDropdownOpen ] = useState(false)
@@ -27,9 +28,9 @@ function LanguageSelector() {
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle caret>{t('language')}</DropdownToggle>
             <DropdownMenu>
-                <DropdownItem onClick={setLanguage('en-US')}>English</DropdownItem>
-                <DropdownItem onClick={setLanguage('fr')}>Français</DropdownItem>
-                <DropdownItem onClick={setLanguage('he')}>עברית</DropdownItem>
+                {locales.map((language) => {
+                    return <DropdownItem onClick={setLanguage(language.code)}>{language.name}</DropdownItem>    
+                })}
             </DropdownMenu>
         </Dropdown>
     </div>
