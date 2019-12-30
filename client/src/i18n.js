@@ -15,7 +15,8 @@ i18n
     fallbackLng: 'en',
     debug: true,
     resources: {
-        en: require('./locales/en').default
+        en: require('./locales/en').default,
+        fr: require('./locales/fr').default
     },
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default

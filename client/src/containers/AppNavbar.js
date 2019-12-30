@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types';
 
+import LanguageSelector from '../components/LanguageSelector'
 import LoginModal from './auth/LoginModal';
 import Logout from './auth/Logout';
 import { loadUser } from '../actions/authActions';
@@ -23,7 +24,7 @@ function AppNavbar() {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
     const user = useSelector(state => state.auth.user)
 
-    const { t, i18n } = useTranslation('AppNavbar')
+    const { t } = useTranslation('AppNavbar')
 
     const dispatch = useDispatch()
 
@@ -71,6 +72,7 @@ function AppNavbar() {
                 <NavbarToggler onClick={toggle}/>
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="ml-auto" navbar>
+                        <LanguageSelector />
                         { isAuthenticated ? authLinks : guestLinks }
                     </Nav>
                 </Collapse>
