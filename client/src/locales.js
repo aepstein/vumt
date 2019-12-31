@@ -1,7 +1,7 @@
 const locales = [
-    { code: 'en-US', name: 'English', rtl: false },
-    { code: 'fr', name: 'Français', rtl: false },
-    { code: 'he', name: 'עברית', rtl: true }
+    { code: 'en-US', name: 'English'},
+    { code: 'fr', name: 'Français' },
+    { code: 'he', name: 'עברית' }
 ]
 
 export default locales
