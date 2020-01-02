@@ -33,6 +33,7 @@ const visitPage = async (path) => {
 	const visit = await scope.context.currentPage.goto(url, {
 		waitUntil: 'networkidle2'
 	});
+	await waitFor('.navbar')
 	return visit;
 };
 
@@ -57,7 +58,7 @@ const shouldSeeText = async (selector, not, expectedText) => {
     const shouldContainText = not ? false : true;
 
 	assert.strictEqual(
-		containsText,
+		containsText ? containsText : false,
 		shouldContainText,
 		`Expected "${selector}" to ${shouldContainText ? 'contain' : 'not contain'} "${expectedText}" but had "${elementText}" instead`
 	);
@@ -68,9 +69,12 @@ const shouldSeeText = async (selector, not, expectedText) => {
 const clickByText = async (text, context = "//a") => {
 	const escapedText = escapeXpathString(text);
 	const selector = `${context}[contains(text(), ${escapedText})]`;
+	await clickByXPath(selector)
+};
+const clickByXPath = async (selector) => {
 	const el = await scope.context.currentPage.$x(selector);
 	await el[0].click();
-};
+}
 const waitForText = async (text, context = "//a") => {
 	const escapedText = escapeXpathString(text);
 	const selector = `${context}[contains(text(), ${escapedText})]`;
@@ -97,6 +101,7 @@ const takeScreenshot = async () => {
 
 module.exports = {
 	clickByText,
+	clickByXPath,
 	fillByLabel,
 	loginAs,
 	visitExists,

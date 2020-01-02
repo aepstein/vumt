@@ -3,10 +3,17 @@ Feature: Manage visits
     As a visitor to the forest preserve
     I want to be able to create, modify, and delete visits
     
-    Scenario: Add visit
+    Scenario: See visits
         Given I am registered as "bmarshall@example.com"
         And I have registered a visit to "Algonquin"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
-        And the page is loaded
         Then I should see my visit to "Algonquin"
+    
+    Scenario: Remove visit
+        Given I am registered as "bmarshall@example.com"
+        And I have registered a visit to "Algonquin"
+        And I logged in as "bmarshall@example.com"
+        When I visit the "home" page
+        And I delete the visit to "Algonquin"
+        Then I should not see my visit to "Algonquin"
