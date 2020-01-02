@@ -1,5 +1,6 @@
 const paths = {
-    home: '/'
+    home: '/',
+    "add visit": '/visits/new'
 }
 
 module.exports = paths;

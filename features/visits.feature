@@ -9,6 +9,12 @@ Feature: Manage visits
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         Then I should see my visit to "Algonquin"
+
+    Scenario: Add visit
+        Given I am registered as "bmarshall@example.com"
+        And I logged in as "bmarshall@example.com"
+        When I add a visit to "Algonquin"
+        Then I should see my visit to "Algonquin"
     
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
