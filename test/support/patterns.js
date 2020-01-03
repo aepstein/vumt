@@ -1,9 +1,11 @@
 const chai = require('chai');
 should = chai.should();
 const server = require('../../server');
+const Place = require('../../models/Place')
 const User = require('../../models/User');
 const {
     validCredentials,
+    validPlaceOrigin,
     validUser,
     validVisit
 } = require('./factories');
@@ -14,6 +16,14 @@ const withAuth = async () => {
     return chai.request(server)
         .post('/api/auth')
         .send(validCredentials());
+}
+
+const withPlace = async (attrs={}) => {
+    const newPlace = new Place({
+        ...validPlaceOrigin(),
+        ...attrs
+    })
+    return newPlace.save()
 }
 
 const withReg = async () => {
@@ -40,6 +50,7 @@ const shouldDenyWithoutToken = async (res) => {
 module.exports = {
     shouldDenyWithoutToken,
     withAuth,
+    withPlace,
     withReg,
     withUser,
     withVisit
