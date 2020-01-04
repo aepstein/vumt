@@ -10,11 +10,15 @@ const FactoryBot = require('factory-bot');
 const factory = FactoryBot.factory;
 factory.setAdapter(new FactoryBot.MongooseAdapter());
 
+const User = require('../models/User');
+
 after(async () => {
     server.shutdown();
     mongoose.disconnect();
 });
 afterEach(async () => {
+    // Need to specifically delete users because they may not have been created by factories
+    await User.deleteMany({})
     return factory.cleanUp()
 })
 

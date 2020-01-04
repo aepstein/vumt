@@ -11,9 +11,6 @@ describe('/api/places',() => {
         const req = chai.request(server).get(path);
         return req;
     };
-    beforeEach(async () => {
-        await Place.deleteMany({})
-    })
     describe('GET /api/places', () => {
         it('should show all places',async () => {
             const places = await genPlaces()

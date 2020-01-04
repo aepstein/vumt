@@ -1,8 +1,4 @@
-const User = require('../../models/User');
-const chai = require('chai');
-should = chai.should();
-const server = require('../../server');
-
+const { chai, factory, server } = require('../setup')
 const {
     validUser
 } = require('../support/factories');

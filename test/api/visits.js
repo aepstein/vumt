@@ -1,26 +1,13 @@
-const {
-    User,
-    Visit
-} = require('../../models/');
-const chai = require('chai');
-should = chai.should();
-const server = require('../../server');
-
+const { chai, factory, server } = require('../setup')
 const {
     validVisit
 } = require('../support/factories');
 const {
     shouldDenyWithoutToken,
-    withAuth,
-    withUser,
-    withVisit
+    withAuth
 } = require("../support/patterns");
 
-describe('Visits', () => {
-    beforeEach(async () => {
-        await User.deleteMany({});
-        await Visit.deleteMany({});
-    });
+describe('/api/visits', () => {
     describe('POST /api/visits',() => {
         let action = async (auth,visit) => {
             const res = chai.request(server)
@@ -61,7 +48,7 @@ describe('Visits', () => {
         }
         it('should delete with authorized user', async () => {
             const auth = await withAuth();
-            const visit = await withVisit({userId: auth.body.user._id});
+            const visit = await factory.create('visit',{userId: auth.body.user._id});
             res = await action(auth,visit);
             await res.should.have.status(200);
         });
@@ -74,7 +61,7 @@ describe('Visits', () => {
         };
         it('should show all visits', async () => {
             const auth = await withAuth();
-            const visit = await withVisit({userId: auth.body.user._id});
+            const visit = await factory.create('visit',{userId: auth.body.user._id});
             res = await action();
             res.should.have.status(200);
             res.body.should.be.an('array');
@@ -91,9 +78,9 @@ describe('Visits', () => {
         }
         it('should return only visits for the user', async () => {
             const auth = await withAuth();
-            const visit = await withVisit({userId: auth.body.user._id})
-            const otherUser = await withUser({firstName: 'George', email: 'gmarshall@example.com'});
-            await withVisit({userId: otherUser.id});
+            const visit = await factory.create('visit',{userId: auth.body.user._id})
+            const otherUser = await factory.create('user',{firstName: 'George', email: 'gmarshall@example.com'});
+            await factory.create('visit',{userId: otherUser.id});
             res = await action(auth,auth.body.user._id);
             res.should.have.status(200);
             res.body.should.be.an('array');

@@ -1,20 +1,12 @@
-const User = require('../../models/User');
-const chai = require('chai');
-should = chai.should();
-const server = require('../../server');
-
+const { chai, factory, server } = require('../setup')
 const {
     validCredentials
 } = require('../support/factories');
 const {
-    withReg,
-    withUser
+    withReg
 } = require("../support/patterns");
 
-describe('Auth', () => {
-    beforeEach( async () => {
-        await User.deleteMany({});
-    });
+describe('/api/auth', () => {
     describe('POST /api/auth',() => {
         let action = async (credentials) => {
             return chai.request(server)
@@ -22,9 +14,8 @@ describe('Auth', () => {
                 .send(credentials);
         }
         it('should authenticate valid credentials', async () => {
-            let credentials = validCredentials();
-            const user = await withUser();
-            const res = await action(credentials);
+            const user = await factory.create('user');
+            const res = await action(validCredentials(user));
             await res.should.have.status(201);
             await res.body.should.be.a('object');
             await res.body.should.have.a.property('token');
@@ -32,9 +23,8 @@ describe('Auth', () => {
             await res.body.user.should.have.a.property('_id').eql(user.id);
         });
         it('should not authenticate bad password', async () => {
-            let credentials = validCredentials();
+            let credentials = validCredentials(await factory.create('user'));
             credentials.password = 'badword';
-            await withUser();
             const res = await action(credentials);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
@@ -79,7 +69,7 @@ describe('Auth', () => {
             await res.body.should.have.a.property('_id').eql(regRes.body.user._id);
         });
         it('should deny for a user with an invalid token', async () => {
-            await withUser();
+            await factory.create('user')
             res = await chai.request(server)
                 .get('/api/auth/user')
                 .set("x-auth-token", "blahblah");
