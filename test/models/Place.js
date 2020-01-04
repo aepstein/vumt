@@ -1,5 +1,5 @@
 const { factory } = require('../setup')
-require('../factories/Place')
+require('../factories/place')
 
 describe('Place', () => {
     it('creates a valid place', () => {
