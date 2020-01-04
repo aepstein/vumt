@@ -1,29 +1,16 @@
-const chai = require('chai');
-should = chai.should();
-const server = require('../../server');
-const Place = require('../../models/Place')
+const { chai, server, factory } = require('../setup')
 const User = require('../../models/User');
 const {
     validCredentials,
-    validPlaceOrigin,
     validUser,
     validVisit
 } = require('./factories');
 
 const withAuth = async () => {
-    var newUser = new User(validUser());
-    await newUser.save();
+    const newUser = await factory.create('user')
     return chai.request(server)
         .post('/api/auth')
-        .send(validCredentials());
-}
-
-const withPlace = async (attrs={}) => {
-    const newPlace = new Place({
-        ...validPlaceOrigin(),
-        ...attrs
-    })
-    return newPlace.save()
+        .send(validCredentials(newUser));
 }
 
 const withReg = async () => {
@@ -50,7 +37,6 @@ const shouldDenyWithoutToken = async (res) => {
 module.exports = {
     shouldDenyWithoutToken,
     withAuth,
-    withPlace,
     withReg,
     withUser,
     withVisit

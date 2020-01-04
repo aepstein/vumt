@@ -1,23 +1,10 @@
-const { 
-    Place
-} = require('../../models')
-const chai = require('chai')
-should = chai.should()
-const server = require('../../server')
+const { chai, factory, server } = require('../setup')
 
-const {
-    withPlace
-} = require('../support/patterns')
-const {
-    validPlaceDestination,
-    validPlaceOrigin
-} = require('../support/factories')
-
-describe('Place',() => {
+describe('/api/places',() => {
     const genPlaces = async () => {
         return {
-            origin: await withPlace(validPlaceOrigin()),
-            destination: await withPlace(validPlaceDestination())
+            origin: await factory.create('originPlace'),
+            destination: await factory.create('destinationPlace')
         }
     }
     const action = async (path) => {

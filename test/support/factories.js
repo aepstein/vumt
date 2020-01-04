@@ -1,30 +1,10 @@
-const validCredentials = () => {
+const validCredentials = (user={}) => {
     let { email, password } = validUser()
     return {
-        email,
+        email: user.email ? user.email : email,
         password
     }
 }
-
-const validPlaceOrigin = (attrs={}) => { return {
-    name: "Adirondack Loj",
-    location: {
-        type: 'Point',
-        coordinates: [44.183102,-73.963584]
-    },
-    isOrigin: true,
-    parkingCapacity: 100
-}}
-
-const validPlaceDestination = (attrs={}) => { return {
-    name: "Marcy Summit",
-    location: {
-        type: 'Point',
-        coordinates: [44.112744,-73.923267]
-    },
-    isOrigin: false,
-    parkingCapacity: 0
-}}
 
 const validUser = (attrs={}) => { return {
     firstName: 'Bob',
@@ -41,8 +21,6 @@ const validVisit = (attrs={}) => { return {
 
 module.exports = {
     validCredentials,
-    validPlaceOrigin,
-    validPlaceDestination,
     validUser,
     validVisit
 }
