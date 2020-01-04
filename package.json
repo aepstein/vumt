@@ -14,7 +14,7 @@
     "test-cucumber": "npm run client-build && npm run test-cucumber-nobuild",
     "test-cucumber-nobuild": "NODE_ENV=test npx cucumber-js",
     "test-cucumber-wip": "NODE_ENV=test npx cucumber-js --tags @wip",
-    "test": "NODE_ENV=test mocha --timeout 10000"
+    "test": "NODE_ENV=test mocha --timeout 10000 \"./test/*.js\" \"./test/models/*.js\""
   },
   "author": "Ari Epstein",
   "license": "GPL-3.0-or-later",
@@ -23,6 +23,7 @@
     "concurrently": "^5.0.0",
     "config": "^3.2.4",
     "express": "^4.17.1",
+    "factory-bot": "^6.1.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.3"
   },
