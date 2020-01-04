@@ -1,15 +1,15 @@
-const User = require('../models/User');
+const User = require('../../models/User');
 const chai = require('chai');
 should = chai.should();
-const server = require('../server');
+const server = require('../../server');
 
 const {
     validCredentials
-} = require('./support/factories');
+} = require('../support/factories');
 const {
     withReg,
     withUser
-} = require("./support/patterns");
+} = require("../support/patterns");
 
 describe('Auth', () => {
     beforeEach( async () => {

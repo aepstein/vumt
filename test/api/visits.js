@@ -1,20 +1,20 @@
 const {
     User,
     Visit
-} = require('../models/');
+} = require('../../models/');
 const chai = require('chai');
 should = chai.should();
-const server = require('../server');
+const server = require('../../server');
 
 const {
     validVisit
-} = require('./support/factories');
+} = require('../support/factories');
 const {
     shouldDenyWithoutToken,
     withAuth,
     withUser,
     withVisit
-} = require("./support/patterns");
+} = require("../support/patterns");
 
 describe('Visits', () => {
     beforeEach(async () => {

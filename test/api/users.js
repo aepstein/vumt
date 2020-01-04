@@ -1,11 +1,11 @@
-const User = require('../models/User');
+const User = require('../../models/User');
 const chai = require('chai');
 should = chai.should();
-const server = require('../server');
+const server = require('../../server');
 
 const {
     validUser
-} = require('./support/factories');
+} = require('../support/factories');
 
 describe('Users', () => {
     beforeEach( async () => {

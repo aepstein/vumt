@@ -1,17 +1,17 @@
 const { 
     Place
-} = require('../models')
+} = require('../../models')
 const chai = require('chai')
 should = chai.should()
-const server = require('../server')
+const server = require('../../server')
 
 const {
     withPlace
-} = require('./support/patterns')
+} = require('../support/patterns')
 const {
     validPlaceDestination,
     validPlaceOrigin
-} = require('./support/factories')
+} = require('../support/factories')
 
 describe('Place',() => {
     const genPlaces = async () => {
