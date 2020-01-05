@@ -3,7 +3,7 @@ const {
     clickByText,
     clickByXPath,
     fillByLabel,
-    fillByPlaceholder,
+    fillTypeaheadByPlaceholder,
     shouldSeeText,
     takeScreenshot,
     visitExists,
@@ -24,14 +24,7 @@ When('I add a visit from {string} to {string}', async (origin,destination) => {
     await clickByText("Add visit",'//button')
     await waitFor('form')
     await fillByLabel("Visit",destination)
-    await fillByPlaceholder("Select your starting point",origin.substring(0,1))
-    await new Promise(r => setTimeout(r, 200))
-    await fillByPlaceholder("Select your starting point",origin.substring(1,2))
-    await new Promise(r => setTimeout(r, 200))
-    await fillByPlaceholder("Select your starting point",origin.substring(2,origin.length-1))
-    const choice = `//a[contains(@class,'dropdown-item') and contains(.,'${origin}')]`
-    await waitFor(choice)
-    await clickByXPath(choice)
+    await fillTypeaheadByPlaceholder("Select your starting point",origin)
     await clickByText("Add visit",'//button')
     await waitFor('.visits-list')
 });
