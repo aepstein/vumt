@@ -8,10 +8,6 @@ const {
 
 When(/^I visit the "([^"]+)" page$/, visitPage);
 
-When("the page is loaded",async () => {
-    await waitFor('.navbar');
-});
-
 Given('I logged in as {string}', async (email) => {
     await visitPage("home");
     await waitFor('.navbar');
