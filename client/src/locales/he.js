@@ -13,7 +13,9 @@ const locale = {
     "visit": {
         "addVisit": "הוסף ביקור",
         "visit": "ביקור",
-        "visitPlaceholder": "שם ביקור"
+        "visitPlaceholder": "שם ביקור",
+        "origin": "שביל",
+        "originPlaceholder": "בחר את ראש השביל שלך"
     },
     "AppNavbar": {
         "brand": "ניהול אורחים",

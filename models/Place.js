@@ -15,7 +15,12 @@ const PlaceSchema = new Schema({
     // Visits can originate from this place
     isOrigin: {
         type: Boolean,
-        default: true
+        default: false
+    },
+    // Visits may list this place as a destination
+    isDestination: {
+        type: Boolean,
+        default: false
     },
     // Number of parking spots
     parkingCapacity: {

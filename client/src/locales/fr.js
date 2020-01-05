@@ -12,7 +12,9 @@ const locale = {
     "visit": {
         "addVisit": "Ajouter une visite",
         "visit": "Visite",
-        "visitPlaceholder": "Nom de visite"
+        "visitPlaceholder": "Nom de visite",
+        "origin": "Point de départ",
+        "originPlaceholder": "Choisissez votre point de départ"
     },
     "AppNavbar": {
         "brand": "Outil de Gestion de l'Utilisation des Visiteurs",

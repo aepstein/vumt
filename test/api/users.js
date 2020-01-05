@@ -1,9 +1,9 @@
-const { chai, factory, server } = require('../setup')
+const { chai, server } = require('../setup')
 const {
     validUser
-} = require('../support/factories');
+} = require('../support/validProps');
 
-describe('Users', () => {
+describe('/api/users', () => {
     beforeEach( async () => {
         await User.deleteMany({});        
     });

@@ -3,7 +3,7 @@ const {
     validCredentials,
     validUser,
     validVisit
-} = require('./factories');
+} = require('./validProps');
 
 const withAuth = async () => {
     const newUser = await factory.create('user')

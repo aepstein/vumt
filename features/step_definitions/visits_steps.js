@@ -17,11 +17,13 @@ When('I delete the visit to {string}', async (visit) => {
      await waitFor(`//div[contains(@class,'visits-list') and not(contains(.//li,'${visit}'))]`)
 });
 
-When('I add a visit to {string}', async (string) => {
+When('I add a visit from {string} to {string}', async (origin,destination) => {
     await waitFor('.visits-list')
     await clickByText("Add visit",'//button')
     await waitFor('form')
-    await fillByLabel("Visit",string)
+    await fillByLabel("Visit",destination)
+    // await fillByLabel("Starting point",origin)
+    // await clickByText(destination,'//a[contains(@class="dropdown-item")]')
     await clickByText("Add visit",'//button')
     await waitFor('.visits-list')
 });

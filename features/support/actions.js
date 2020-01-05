@@ -1,18 +1,14 @@
 const assert = require('assert');
-const {
-	UserFactory,
-    VisitFactory
-} = require('./factories');
 const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
 var sc = 1;
 
 const userExists = async (email) => {
-	scope.context.user = await UserFactory({email,password: "secret"});
+	scope.context.user = await scope.factory.create('user',{email,password: "secret"});
 }
 const visitExists = async (attr={}) => {
-    scope.context.visit = await VisitFactory(attr);
+    scope.context.visit = await scope.factory.create('visit',attr);
 }
 const loginAs = async (email) => {
     await clickByText("Login");

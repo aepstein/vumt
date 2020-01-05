@@ -1,6 +1,4 @@
-// Dependencies
 const { After, Before, BeforeAll, AfterAll } = require('cucumber');
-const mongoose = require('../db/mongoose');
 const {
   User,
   Visit
@@ -42,6 +40,7 @@ After(async () => {
     await scope.context.currentPage.close();
     // wipe the context's currentPage value
     scope.context.currentPage = null;
+    await scope.factory.cleanUp()
   }
 });
 
@@ -49,5 +48,5 @@ AfterAll(async () => {
   // If there is a browser window open, then close it
   if (scope.browser) await scope.browser.close();
   scope.server.shutdown(() => console.log('\nServer is shut down'));
-  mongoose.disconnect();
+  scope.mongoose.disconnect()
 });

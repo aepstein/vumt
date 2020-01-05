@@ -1,6 +1,8 @@
 // import 'bootstrap/dist/css/boostrap.min.css'
 // import 'bootstrap-v4-rtl/dist/css/bootstrap.min.css'
 import 'bootswatch/dist/sketchy/bootstrap.min.css'
+import 'react-bootstrap-typeahead/css/Typeahead.css'
+import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
 import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'

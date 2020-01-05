@@ -1,7 +1,7 @@
 const { chai, factory, server } = require('../setup')
 const {
     validVisit
-} = require('../support/factories');
+} = require('../support/validProps');
 const {
     shouldDenyWithoutToken,
     withAuth

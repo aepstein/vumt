@@ -6,7 +6,7 @@ const {
     should
 } = require('./support/setup')
 
-const User = require('../models/User');
+require('./support/factories')
 
 after(async () => {
     server.shutdown();

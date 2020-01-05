@@ -1,7 +1,7 @@
 const { chai, factory, server } = require('../setup')
 const {
     validCredentials
-} = require('../support/factories');
+} = require('../support/validProps');
 const {
     withReg
 } = require("../support/patterns");

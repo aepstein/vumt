@@ -13,7 +13,9 @@ const locale = {
     "visit": {
         "addVisit": "Add visit",
         "visit": "Visit",
-        "visitPlaceholder": "Visit name"
+        "visitPlaceholder": "Visit name",
+        "origin": "Starting point",
+        "originPlaceholder": "Select your starting point"
     },
     "AppNavbar": {
         "brand": "Visitor Use Management Tool",

@@ -8,9 +8,13 @@ import {
     Label,
     Input
 } from 'reactstrap';
+import {
+    AsyncTypeahead
+} from 'react-bootstrap-typeahead'
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types';
+import axios from 'axios'
 import { addVisit } from '../actions/visitActions';
 
 function NewVisit() {
@@ -18,6 +22,22 @@ function NewVisit() {
     const visitSaving = useSelector( state => state.visit.visitSaving )
 
     const [ name, setName ] = useState('')
+    const [ origin, setOrigin ] = useState('')
+    const [ originOptions, setOriginOptions ] = useState([
+        { id: "1", label: "Adirondack Loj" }
+    ])
+    const [ originLoading, setOriginLoading ] = useState(false)
+    const originSearch = (query) => {
+        setOriginLoading(true)
+        axios
+            .get('/api/places/origins')
+            .then((res) => {
+                setOriginLoading(false)
+                setOriginOptions(res.data.map((place) => {
+                    return {id: place._id, label: place.name}
+                }))
+            })
+    }
     const [ isSaving, setIsSaving ] = useState(false)
 
     const history = useHistory()
@@ -58,6 +78,16 @@ function NewVisit() {
                         id="visit"
                         placeholder={t('visitPlaceholder')}
                         onChange={onChange(setName)}
+                    />
+                    <Label for="origin">{t('origin')}</Label>
+                    <AsyncTypeahead 
+                        id="origin"
+                        selected={origin}
+                        placeholder={t('originPlaceholder')}
+                        options={originOptions}
+                        isLoading={originLoading}
+                        onSearch={originSearch}
+                        onChange={setOrigin}
                     />
                     <Button
                         color="dark"
