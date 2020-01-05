@@ -18,7 +18,7 @@ describe('/api/visits', () => {
         }
         it('should save a valid visit',async () => {
             const auth = await withAuth();
-            const visit = validVisit();
+            const visit = await validVisit();
             const res = await action(auth,visit);
             await res.should.have.status(201);
             await res.should.be.a('object');
@@ -27,14 +27,22 @@ describe('/api/visits', () => {
         });
         it('should not save without name', async () => {
             const auth = await withAuth();
-            let visit = validVisit();
+            let visit = await validVisit();
             delete visit.name;
             const res = await action(auth,visit);
             await res.should.have.status(400);
             await res.body.should.have.a.property('msg').eql('Provide required fields');
         });
+        it('should not save without origin', async () => {
+            const auth = await withAuth();
+            let visit = await validVisit();
+            delete visit.originPlaceId;
+            const res = await action(auth,visit);
+            await res.should.have.status(400);
+            await res.body.should.have.a.property('msg').eql('Provide required fields');
+        });
         it('should deny unauthenticated user',async () => {
-            const visit = validVisit();
+            const visit = await validVisit();
             const res = await action(null,visit);
             return await shouldDenyWithoutToken(res);
         });

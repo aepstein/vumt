@@ -4,6 +4,14 @@ const scope = require('./scope');
 const selectors = require('./selectors');
 var sc = 1;
 
+const create = async (template, attrs={}) => {
+	if (!(template in scope.models)) {
+		scope.models[template] = []
+	}
+	const created = await scope.factory.create(template,attrs)
+	scope.models[template].push(created)
+	return created
+}
 const userExists = async (email) => {
 	scope.context.user = await scope.factory.create('user',{email,password: "secret"});
 }
@@ -87,6 +95,15 @@ const fillByLabel = async (label, fill ) => {
 	await el[0].type(fill);
 };
 
+const fillByPlaceholder = async (label, fill ) => {
+	const escapedText = escapeXpathString(label);
+	const selector = `//input[contains(@placeholder,${escapedText})]`;
+	const page = scope.context.currentPage
+	const el = await page.$x(selector);
+	await el[0].click();
+	await el[0].type(fill);
+};
+
 const waitFor = async (selector) => {
 	await scope.context.currentPage.waitFor(selector);
 };
@@ -98,7 +115,9 @@ const takeScreenshot = async () => {
 module.exports = {
 	clickByText,
 	clickByXPath,
+	create,
 	fillByLabel,
+	fillByPlaceholder,
 	loginAs,
 	visitExists,
 	visitPage,

@@ -1,4 +1,4 @@
-const { factory, mongoose, server } = require('../test/support/setup')
+const { factory, mongoose, purgeDb, server } = require('../test/support/setup')
 require('../test/support/factories')
 const { setWorldConstructor } = require('cucumber');
 const scope = require('./support/scope');
@@ -8,6 +8,7 @@ const World = function() {
   scope.context = {};
   scope.factory = factory
   scope.mongoose = mongoose
+  scope.purgeDb = purgeDb
   scope.server = server;
 };
 

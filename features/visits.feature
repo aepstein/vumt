@@ -9,12 +9,14 @@ Feature: Manage visits
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         Then I should see my visit to "Algonquin"
-
+@wip
     Scenario: Add visit
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
-        When I add a visit from "Adirondack Loj" to "Algonquin"
-        Then I should see my visit to "Algonquin"
+        And an origin "Adirondack Loj" exists
+        And a destination "Algonquin Summit" exists
+        When I add a visit from "Adirondack Loj" to "Algonquin Summit"
+        Then I should see my visit to "Algonquin Summit"
     
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"

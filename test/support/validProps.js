@@ -1,3 +1,5 @@
+const { factory } = require('./setup')
+
 const validCredentials = (user={}) => {
     let { email, password } = validUser()
     return {
@@ -14,10 +16,16 @@ const validUser = (attrs={}) => { return {
     ...attrs
 }};
 
-const validVisit = (attrs={}) => { return {
-    name: 'Marcy',
-    ...attrs
-}};
+const validVisit = async (attrs={}) => {
+    const {
+        name,
+        originPlaceId
+    } = await factory.attrs('visit',attrs)
+    return {
+        name,
+        originPlaceId
+    }
+};
 
 module.exports = {
     validCredentials,

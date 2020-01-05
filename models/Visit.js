@@ -16,9 +16,10 @@ const VisitSchema = new Schema({
         required: true
     },
     // Starting place for the visit
-    origin: {
+    originPlaceId: {
         type: Schema.Types.ObjectId,
-        ref: 'place'
+        ref: 'place',
+        required: true
     }
 },
 {

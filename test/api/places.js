@@ -21,7 +21,7 @@ describe('/api/places',() => {
         })
     })
     describe('GET /api/places/origins', () => {
-        it('should show all places',async () => {
+        it('should show all places that are origins',async () => {
             const places = await genPlaces()
             const res = await action('/api/places/origins')
             res.should.have.status(200)

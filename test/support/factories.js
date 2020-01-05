@@ -40,5 +40,6 @@ factory.define('user', User, {
 
 factory.define('visit', Visit, {
     name: 'Marcy',
-    userId: factory.assoc('user','_id')
+    userId: factory.assoc('user','_id'),
+    originPlaceId: factory.assoc('originPlace','_id')
 })

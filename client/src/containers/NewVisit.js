@@ -23,9 +23,7 @@ function NewVisit() {
 
     const [ name, setName ] = useState('')
     const [ origin, setOrigin ] = useState('')
-    const [ originOptions, setOriginOptions ] = useState([
-        { id: "1", label: "Adirondack Loj" }
-    ])
+    const [ originOptions, setOriginOptions ] = useState([])
     const [ originLoading, setOriginLoading ] = useState(false)
     const originSearch = (query) => {
         setOriginLoading(true)
@@ -51,7 +49,8 @@ function NewVisit() {
     const onSubmit = (e) => {
         e.preventDefault()
         const newVisit = {
-            name
+            name,
+            originPlaceId: origin && origin[0] ? origin[0].id : ''
         }
         setIsSaving(true)
         dispatch(addVisit(newVisit))
@@ -82,12 +81,13 @@ function NewVisit() {
                     <Label for="origin">{t('origin')}</Label>
                     <AsyncTypeahead 
                         id="origin"
+                        name="origin"
                         selected={origin}
                         placeholder={t('originPlaceholder')}
                         options={originOptions}
                         isLoading={originLoading}
                         onSearch={originSearch}
-                        onChange={setOrigin}
+                        onChange={(selected) => setOrigin(selected)}
                     />
                     <Button
                         color="dark"

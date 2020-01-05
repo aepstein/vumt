@@ -1,8 +1,4 @@
 const { After, Before, BeforeAll, AfterAll } = require('cucumber');
-const {
-  User,
-  Visit
-} = require('../models');
 const puppeteer = require('puppeteer');
 const puppeteerOptions = {
   // headless: false
@@ -12,8 +8,7 @@ const puppeteerOptions = {
 const scope = require('./support/scope');  
   
 Before(async () => {
-  await User.deleteMany({});
-  await Visit.deleteMany({});
+  scope.models = {}
 });
 
 BeforeAll(
@@ -41,6 +36,7 @@ After(async () => {
     // wipe the context's currentPage value
     scope.context.currentPage = null;
     await scope.factory.cleanUp()
+    await scope.purgeDb()
   }
 });
 
