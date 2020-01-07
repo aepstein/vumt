@@ -1,6 +1,7 @@
 const paths = {
     home: '/',
-    "add visit": '/visits/new'
+    "new visit": '/visits/new',
+    "registration": '/register'
 }
 
 module.exports = paths;

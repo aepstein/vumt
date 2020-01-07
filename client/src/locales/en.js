@@ -8,7 +8,7 @@ const locale = {
         "firstName": "First Name",
         "lastName": "Last Name",
         "password": "Password",
-        "specifyName": "Specify name"
+        "invalidRequired": "Cannot be blank"
     },
     "visit": {
         "addVisit": "Add visit",

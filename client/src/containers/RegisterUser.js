@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
     Button,
+    ButtonGroup,
     Container,
     Form,
+    FormFeedback,
     FormGroup,
     Label,
     Input,
     Alert
 } from 'reactstrap';
+import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types';
-import { register } from '../actions/authActions';
+import { register as registerUser } from '../actions/authActions';
 import { clearErrors } from '../actions/errorActions';
 
 function RegisterUser() {
@@ -24,17 +27,19 @@ function RegisterUser() {
     const { t } = useTranslation('commonForms')
 
     const dispatch = useDispatch()
+
     const [ firstName, setFirstName ] = useState('')
     const [ lastName, setLastName ] = useState('')
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
     const [ msg, setMsg ] = useState(null)
 
+    const { register, handleSubmit, watch, errors } = useForm()
+
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
     const onSubmit = (e) => {
-        e.preventDefault();
         const newUser = {
             firstName,
             lastName,
@@ -42,7 +47,7 @@ function RegisterUser() {
             password
         }
         dispatch(clearErrors())
-        dispatch(register(newUser))
+        dispatch(registerUser(newUser))
     }
 
     useEffect(() => {
@@ -64,7 +69,7 @@ function RegisterUser() {
             <h2>{t('AppNavbar:register')}</h2>
             {msg ? <Alert color="danger">{msg}</Alert> : null }
             <Form
-                onSubmit={onSubmit}
+                onSubmit={handleSubmit(onSubmit)}
             >
                 <FormGroup>
                     <Label for="firstName">{t('firstName')}</Label>
@@ -73,42 +78,61 @@ function RegisterUser() {
                         name="firstName"
                         id="firstName"
                         placeholder={t('firstName')}
+                        innerRef={register({required: true})}
                         onChange={onChange(setFirstName)}
-                        className="mb-3"
+                        invalid={errors.firstName}
                     />
+                    {errors.firstName && errors.firstName.type === 'required' &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
                     <Label for="lastName">{t('lastName')}</Label>
                     <Input
                         type="text"
                         name="lastName"
                         id="lastName"
                         placeholder={t('lastName')}
+                        innerRef={register({required: true})}
                         onChange={onChange(setLastName)}
-                        className="mb-3"
+                        invalid={errors.lastName}
                     />
+                    {errors.lastName && errors.lastName.type === 'required' &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
                     <Label for="email">{t('email')}</Label>
                     <Input
                         type="email"
                         name="email"
                         id="email"
                         placeholder={t('emailPlaceholder')}
+                        innerRef={register({required: true})}
                         onChange={onChange(setEmail)}
-                        className="mb-3"
+                        invalid={errors.email}
                     />
+                    {errors.email && errors.email.type === 'required' &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
                     <Label for="password">{t('password')}</Label>
                     <Input
                         type="password"
                         name="password"
                         id="password"
                         placeholder={t('password')}
+                        innerRef={register({required: true})}
                         onChange={onChange(setPassword)}
-                        className="mb-3"
+                        invalid={errors.password}
                     />
+                    {errors.password && errors.password &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
+                <ButtonGroup>
                     <Button
-                        color="dark"
-                        style={{marginTop: '2rem'}}
+                        color="primary"
                         block
                     >{t('AppNavbar:register')}</Button>
-                </FormGroup>
+                </ButtonGroup>
             </Form>
         </Container>
     </div>

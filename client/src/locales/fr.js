@@ -8,6 +8,7 @@ const locale = {
         "firstName": "Prénom",
         "lastName": "Nom de famille",
         "password": "Mot de passe",
+        "invalidRequired": "Ne peut être vide"
     },
     "visit": {
         "addVisit": "Ajouter une visite",

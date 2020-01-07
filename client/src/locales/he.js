@@ -8,7 +8,7 @@ const locale = {
         "firstName": "שם פרטי",
         "lastName": "שם המשפחה",
         "password": "סיסמה",
-        "specifyName": "Specify name"
+        "invalidRequired": "לא ריק"
     },
     "visit": {
         "addVisit": "הוסף ביקור",

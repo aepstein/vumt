@@ -18,6 +18,12 @@ Feature: Manage visits
         When I add a visit from "Adirondack Loj" to "Algonquin Summit"
         Then I should see my visit to "Algonquin Summit"
     
+    Scenario: Try to add invalid visit
+        Given I am registered as "bmarshall@example.com"
+        And I logged in as "bmarshall@example.com"
+        And I visit the "new visit" page
+        And I click the "Add visit" button
+    
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
         And I have registered a visit to "Algonquin"

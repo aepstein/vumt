@@ -118,6 +118,11 @@ const waitFor = async (selector) => {
 	await scope.context.currentPage.waitFor(selector);
 };
 
+const shouldSeeErrorWithLabel = async (error,label) => {
+	await waitFor(`//div[contains(@class,'invalid-feedback') and contains(.,'${error}') and ` +
+		`ancestor::div[contains(@class,'form-group') and contains(.//label,'${label}')]]`)
+}
+
 const takeScreenshot = async () => {
 	await scope.context.currentPage.screenshot({path: `sc${sc++}.png`});
 }
@@ -134,6 +139,7 @@ module.exports = {
 	visitPage,
 	shouldBeLoggedInAs,
 	shouldSee,
+	shouldSeeErrorWithLabel,
 	shouldSeeText,
 	takeScreenshot,
 	userExists,

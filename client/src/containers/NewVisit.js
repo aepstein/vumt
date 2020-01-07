@@ -4,6 +4,7 @@ import {
     Button,
     Container,
     Form,
+    FormFeedback,
     FormGroup,
     Label,
     Input
@@ -11,6 +12,7 @@ import {
 import {
     AsyncTypeahead
 } from 'react-bootstrap-typeahead'
+import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types';
@@ -43,11 +45,12 @@ function NewVisit() {
 
     const { t } = useTranslation('visit')
 
+    const { register, handleSubmit, watch, errors } = useForm()
+
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
     const onSubmit = (e) => {
-        e.preventDefault()
         const newVisit = {
             name,
             originPlaceId: origin && origin[0] ? origin[0].id : ''
@@ -67,7 +70,7 @@ function NewVisit() {
         <Container>
             <h2>{t('addVisit')}</h2>
             <Form
-                onSubmit={onSubmit}
+                onSubmit={handleSubmit(onSubmit)}
             >
                 <FormGroup>
                     <Label for="name">{t('visit')}</Label>
@@ -76,8 +79,13 @@ function NewVisit() {
                         name="name"
                         id="visit"
                         placeholder={t('visitPlaceholder')}
+                        innerRef={register({required: true})}
                         onChange={onChange(setName)}
+                        invalid={errors.name}
                     />
+                    {errors.name && errors.name && <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
                     <Label for="origin">{t('origin')}</Label>
                     <AsyncTypeahead 
                         id="origin"
@@ -88,6 +96,7 @@ function NewVisit() {
                         isLoading={originLoading}
                         onSearch={originSearch}
                         onChange={(selected) => setOrigin(selected)}
+                        inputRef={register}
                     />
                     <Button
                         color="dark"
