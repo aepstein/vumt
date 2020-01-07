@@ -3,6 +3,7 @@ const locale = {
         "mustBeLoggedIn": "עליך להתחבר כדי להשתמש במערכת זו."
     },
     "commonForms": {
+        "cancel": "Cancel",
         "email": "אימייל",
         "emailPlaceholder": "me@example.com",
         "firstName": "שם פרטי",

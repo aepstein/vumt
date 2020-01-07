@@ -3,10 +3,11 @@ const locale = {
         "mustBeLoggedIn": "You must log in to use this system."
     },
     "commonForms": {
+        "cancel": "Cancel",
         "email": "Email",
         "emailPlaceholder": "me@example.com",
-        "firstName": "First Name",
-        "lastName": "Last Name",
+        "firstName": "First name",
+        "lastName": "Last name",
         "password": "Password",
         "invalidRequired": "Cannot be blank"
     },

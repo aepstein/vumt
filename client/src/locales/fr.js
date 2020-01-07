@@ -3,6 +3,7 @@ const locale = {
         "mustBeLoggedIn": "Vous devez être connecté pour utiliser ce système."
     },
     "commonForms": {
+        "cancel": "Cancel",
         "email": "Email",
         "emailPlaceholder": "moi@example.com",
         "firstName": "Prénom",
