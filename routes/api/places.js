@@ -12,8 +12,13 @@ const Place = require('../../models/Place');
 // @access Public
 router.get('/:type?', (req, res) => {
     let criteria = {}
-    if (req.params.type) {
-        if (req.params.type == 'origins') { criteria.isOrigin = true }
+    switch(req.params.type) {
+        case 'origins':
+            criteria.isOrigin = true
+            break
+        case 'destinations':
+            criteria.isDestination = true
+            break
     }
     Place
         .find(criteria)

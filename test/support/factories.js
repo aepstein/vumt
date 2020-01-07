@@ -27,7 +27,7 @@ factory.extend('place','destinationPlace',{
         type: 'Point',
         coordinates: [44.112744,-73.923267]
     },
-    isOrigin: false,
+    isDestination: true,
     parkingCapacity: 0
 })
 

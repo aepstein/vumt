@@ -29,4 +29,13 @@ describe('/api/places',() => {
             res.body.map(place => place._id).should.have.members([places.origin.id])
         })
     })
+    describe('GET /api/places/destinations', () => {
+        it('should show all places that are destinations',async () => {
+            const places = await genPlaces()
+            const res = await action('/api/places/destinations')
+            res.should.have.status(200)
+            res.body.should.be.an('array')
+            res.body.map(place => place._id).should.have.members([places.destination.id])
+        })
+    })
 })
