@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
     Button,
+    ButtonGroup,
     Container,
     Form,
     FormFeedback,
@@ -15,7 +16,6 @@ import {
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import PropTypes from 'prop-types';
 import axios from 'axios'
 import { addVisit } from '../actions/visitActions';
 
@@ -38,7 +38,21 @@ function NewVisit() {
                 }))
             })
     }
+    const [ destinations, setDestinations ] = useState([])
+    const [ destinationOptions, setDestinationOptions ] = useState([])
+    const [ destinationLoading, setDestinationLoading ] = useState(false)
     const [ isSaving, setIsSaving ] = useState(false)
+    const destinationSearch = (query) => {
+        setDestinationLoading(true)
+        axios
+            .get('/api/places/destinations')
+            .then((res) => {
+                setDestinationLoading(false)
+                setDestinationOptions(res.data.map((place) => {
+                    return {id: place._id, label: place.name}
+                }))
+            })
+    }
 
     const history = useHistory()
     const dispatch = useDispatch()
@@ -53,7 +67,12 @@ function NewVisit() {
     const onSubmit = (e) => {
         const newVisit = {
             name,
-            originPlaceId: origin && origin[0] ? origin[0].id : ''
+            originPlaceId: (origin && origin[0] ? origin[0].id : ''),
+            destinations: destinations.map((d) => {
+                return {
+                    "_id": d.id
+                }
+            })
         }
         setIsSaving(true)
         dispatch(addVisit(newVisit))
@@ -98,19 +117,32 @@ function NewVisit() {
                         onChange={(selected) => setOrigin(selected)}
                         inputRef={register}
                     />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="destinations">{t('destinations')}</Label>
+                    <AsyncTypeahead 
+                        id="destinations"
+                        name="destinations"
+                        multiple
+                        selected={destinations}
+                        placeholder={t('destinationsPlaceholder')}
+                        options={destinationOptions}
+                        isLoading={destinationLoading}
+                        onSearch={destinationSearch}
+                        onChange={(selected) => setDestinations(selected)}
+                        inputRef={register}
+                    />
+                </FormGroup>
+                <ButtonGroup>
                     <Button
                         color="dark"
                         style={{marginTop: '2rem'}}
                         block
                     >{t('addVisit')}</Button>
-                </FormGroup>
+                </ButtonGroup>
             </Form>
         </Container>
     </div>
-}
-
-NewVisit.propTypes = {
-    isAuthenticated: PropTypes.bool
 }
 
 export default NewVisit;

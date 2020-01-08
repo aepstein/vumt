@@ -25,6 +25,8 @@ When('I add a visit from {string} to {string}', async (origin,destination) => {
     await waitFor('form')
     await fillByLabel("Visit",destination)
     await fillTypeaheadByPlaceholder("Select your starting point",origin)
+    await fillTypeaheadByPlaceholder("Select your destination(s)",destination)
+    await takeScreenshot()
     await clickByText("Add visit",'//button')
     await waitFor('.visits-list')
 });

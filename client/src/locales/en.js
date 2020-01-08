@@ -13,6 +13,8 @@ const locale = {
     },
     "visit": {
         "addVisit": "Add visit",
+        "destinations": "Destinations",
+        "destinationsPlaceholder": "Select your destination(s)",
         "visit": "Visit",
         "visitPlaceholder": "Visit name",
         "origin": "Starting point",

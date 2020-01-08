@@ -25,6 +25,12 @@ describe('/api/visits', () => {
             await res.body.should.have.a.property('name').eql(visit.name);
             await res.body.should.have.a.property('userId').eql(auth.body.user._id);
         });
+        it('should save a provided destination',async () => {
+            const destination = await factory.create('destinationPlace')
+            const res = await action(await withAuth(),await validVisit({destinations: [{"_id": destination.id}]}))
+            await res.should.have.status(201)
+            res.body.destinations.should.have.members([destination.id])
+        })
         it('should not save without name', async () => {
             const auth = await withAuth();
             let visit = await validVisit();

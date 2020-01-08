@@ -23,7 +23,8 @@ const validVisit = async (attrs={}) => {
     } = await factory.attrs('visit',attrs)
     return {
         name,
-        originPlaceId
+        originPlaceId,
+        ...attrs
     }
 };
 

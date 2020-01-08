@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
@@ -27,7 +28,8 @@ router.get('/', (req, res) => {
 router.post('/', auth, (req, res) => {
     const {
         name,
-        originPlaceId
+        originPlaceId,
+        destinations
     } = req.body;
     if (!name || !originPlaceId) {
         return res.status(400)
@@ -38,7 +40,8 @@ router.post('/', auth, (req, res) => {
     const newVisit = new Visit({
         name,
         userId: req.user.id,
-        originPlaceId
+        originPlaceId,
+        destinations
     });
     newVisit
         .save()

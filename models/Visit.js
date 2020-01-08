@@ -12,15 +12,18 @@ const VisitSchema = new Schema({
     },
     // User responsible for the visit
     userId: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     // Starting place for the visit
     originPlaceId: {
         type: Schema.Types.ObjectId,
-        ref: 'place',
+        ref: 'Place',
         required: true
-    }
+    },
+    // Destinations that will be included in visit
+    destinations: [{type: Schema.Types.ObjectId, ref: 'Place'}]
 },
 {
     timestamps: true
