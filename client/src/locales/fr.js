@@ -14,7 +14,7 @@ const locale = {
     "visit": {
         "addVisit": "Ajouter une visite",
         "destinations": "Destinations",
-        "destinationsPlaceholder": "Select your destination(s)",
+        "destinationsPlaceholder": "Sélectionnez vos destinations",
         "visit": "Visite",
         "visitPlaceholder": "Nom de visite",
         "origin": "Point de départ",

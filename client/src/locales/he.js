@@ -13,8 +13,8 @@ const locale = {
     },
     "visit": {
         "addVisit": "הוסף ביקור",
-        "destinations": "Destinations",
-        "destinationsPlaceholder": "Select your destination(s)",
+        "destinations": "יעדים",
+        "destinationsPlaceholder": "בחר את היעדים שלך",
         "visit": "ביקור",
         "visitPlaceholder": "שם ביקור",
         "origin": "שביל",
