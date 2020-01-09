@@ -6,7 +6,7 @@ describe('Visit', () => {
         return factory.create('visit')
     })
     it('should not save without an origin', async () => {
-        const visit = await factory.build('visit',{originPlaceId: null})
+        const visit = await factory.build('visit',{origin: null})
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
     })
 })

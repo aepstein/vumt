@@ -15,6 +15,8 @@ const locale = {
         "addVisit": "הוסף ביקור",
         "destinations": "יעדים",
         "destinationsPlaceholder": "בחר את היעדים שלך",
+        "From": "מ",
+        "To": "ל",
         "visit": "ביקור",
         "visitPlaceholder": "שם ביקור",
         "origin": "שביל",

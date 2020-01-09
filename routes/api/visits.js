@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
@@ -13,9 +12,11 @@ const Visit = require('../../models/Visit');
 // @access Public
 router.get('/', (req, res) => {
     let criteria = {};
-    if (req.userId) { criteria.userId = req.userId; }
+    if (req.userId) { criteria.user = req.userId }
     Visit
         .find(criteria)
+        .populate('origin')
+        .populate('destinations')
         .sort({date: -1})
         .then( (visits) => {
             res.json(visits);
@@ -27,27 +28,31 @@ router.get('/', (req, res) => {
 // @access Private
 router.post('/', auth, (req, res) => {
     const {
-        name,
-        originPlaceId,
+        origin,
         destinations
     } = req.body;
-    if (!name || !originPlaceId) {
+    if (!origin) {
         return res.status(400)
             .json({
                 msg: 'Provide required fields'
             });
     }
     const newVisit = new Visit({
-        name,
-        userId: req.user.id,
-        originPlaceId,
+        user: req.user.id,
+        origin,
         destinations
     });
     newVisit
         .save()
         .then( (visit) => {
-            res.status(201)
-                .json(visit);
+            visit
+                .populate('origin')
+                .populate('destinations')
+                .execPopulate()
+                .then((visit) => {
+                    res.status(201)
+                    .json(visit);
+            })
         });
 });
 

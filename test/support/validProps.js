@@ -18,12 +18,10 @@ const validUser = (attrs={}) => { return {
 
 const validVisit = async (attrs={}) => {
     const {
-        name,
-        originPlaceId
+        origin
     } = await factory.attrs('visit',attrs)
     return {
-        name,
-        originPlaceId,
+        origin,
         ...attrs
     }
 };

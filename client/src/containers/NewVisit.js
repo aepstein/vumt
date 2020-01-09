@@ -66,8 +66,7 @@ function NewVisit() {
     }
     const onSubmit = (e) => {
         const newVisit = {
-            name,
-            originPlaceId: (origin && origin[0] ? origin[0].id : ''),
+            origin: (origin && origin[0] ? origin[0].id : ''),
             destinations: destinations.map((d) => {
                 return {
                     "_id": d.id
@@ -92,19 +91,6 @@ function NewVisit() {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <FormGroup>
-                    <Label for="name">{t('visit')}</Label>
-                    <Input
-                        type="text"
-                        name="name"
-                        id="visit"
-                        placeholder={t('visitPlaceholder')}
-                        innerRef={register({required: true})}
-                        onChange={onChange(setName)}
-                        invalid={errors.name}
-                    />
-                    {errors.name && errors.name && <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
-                </FormGroup>
-                <FormGroup>
                     <Label for="origin">{t('origin')}</Label>
                     <AsyncTypeahead 
                         id="origin"
@@ -115,8 +101,11 @@ function NewVisit() {
                         isLoading={originLoading}
                         onSearch={originSearch}
                         onChange={(selected) => setOrigin(selected)}
-                        inputRef={register}
+                        inputRef={register({required: true})}
+                        invalid={errors.origin}
                     />
+                    {errors.origin && errors.origin.required &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="destinations">{t('destinations')}</Label>

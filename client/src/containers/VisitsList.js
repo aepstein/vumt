@@ -41,7 +41,7 @@ function VisitsList() {
             </Link>
             <ListGroup>
                 <TransitionGroup className="visits-list">
-                    {visits.map(({ _id, name }) => (
+                    {visits.map(({ _id, origin, destinations }) => (
                         <CSSTransition
                             key={_id}
                             timeout={500}
@@ -55,7 +55,7 @@ function VisitsList() {
                                     style={{marginRight: '0.5rem'}}
                                     onClick={() => onDeleteClick(_id)}
                                 >&times;</Button>
-                                {name}
+                                <em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>
                             </ListGroupItem>
                         </CSSTransition>
                     ))}
