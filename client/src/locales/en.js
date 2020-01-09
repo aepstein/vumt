@@ -12,15 +12,16 @@ const locale = {
         "invalidRequired": "Cannot be blank"
     },
     "visit": {
+        "From": "From",
+        "To": "To",
         "addVisit": "Add visit",
         "destinations": "Destinations",
         "destinationsPlaceholder": "Select your destination(s)",
-        "From": "From",
-        "To": "To",
-        "visit": "Visit",
-        "visitPlaceholder": "Visit name",
         "origin": "Starting point",
-        "originPlaceholder": "Select your starting point"
+        "originPlaceholder": "Select your starting point",
+        "startOn": "Date of visit",
+        "visit": "Visit",
+        "visitPlaceholder": "Visit name"
     },
     "AppNavbar": {
         "brand": "Visitor Use Management Tool",

@@ -12,11 +12,12 @@ const locale = {
         "invalidRequired": "Ne peut être vide"
     },
     "visit": {
+        "From": "De",
+        "To": "À",
         "addVisit": "Ajouter une visite",
         "destinations": "Destinations",
         "destinationsPlaceholder": "Sélectionnez vos destinations",
-        "From": "De",
-        "To": "À",
+        "startOn": "Date of visit",
         "visit": "Visite",
         "visitPlaceholder": "Nom de visite",
         "origin": "Point de départ",

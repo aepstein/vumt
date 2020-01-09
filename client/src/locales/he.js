@@ -17,6 +17,7 @@ const locale = {
         "destinationsPlaceholder": "בחר את היעדים שלך",
         "From": "מ",
         "To": "ל",
+        "startOn": "Date of visit",
         "visit": "ביקור",
         "visitPlaceholder": "שם ביקור",
         "origin": "שביל",

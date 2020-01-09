@@ -23,7 +23,7 @@ function NewVisit() {
     const error = useSelector( state => state.error )
     const visitSaving = useSelector( state => state.visit.visitSaving )
 
-    const [ name, setName ] = useState('')
+    const [ startOn, setStartOn ] = useState('')
     const [ origin, setOrigin ] = useState('')
     const [ originOptions, setOriginOptions ] = useState([])
     const [ originLoading, setOriginLoading ] = useState(false)
@@ -66,6 +66,7 @@ function NewVisit() {
     }
     const onSubmit = (e) => {
         const newVisit = {
+            startOn,
             origin: (origin && origin[0] ? origin[0].id : ''),
             destinations: destinations.map((d) => {
                 return {
@@ -73,6 +74,7 @@ function NewVisit() {
                 }
             })
         }
+        console.log(newVisit)
         setIsSaving(true)
         dispatch(addVisit(newVisit))
     }
@@ -90,6 +92,19 @@ function NewVisit() {
             <Form
                 onSubmit={handleSubmit(onSubmit)}
             >
+                <FormGroup>
+                    <Label for="startOn">{t('startOn')}</Label>
+                    <Input
+                        id="startOn"
+                        name="startOn"
+                        value={startOn}
+                        onChange={onChange(setStartOn)}
+                        innerRef={register({required: true})}
+                        invalid={errors.origin}
+                    />
+                    {errors.startOn && errors.startOn.required &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
                 <FormGroup>
                     <Label for="origin">{t('origin')}</Label>
                     <AsyncTypeahead 

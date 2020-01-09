@@ -58,7 +58,7 @@ const shouldSee = async (selector,context) => {
   
 const shouldSeeText = async (selector, not, expectedText) => {
 	const elementText = await scope.context.currentPage.$eval(selector, el => el.textContent);
-    const containsText = elementText && elementText.includes(expectedText);
+    const containsText = elementText && elementText.replace(/\s+/,' ').includes(expectedText);
     const shouldContainText = not ? false : true;
 
 	assert.strictEqual(
@@ -118,6 +118,16 @@ const waitFor = async (selector) => {
 	await scope.context.currentPage.waitFor(selector);
 };
 
+const relativeDate = (description) => {
+    const relativeDate = new Date()
+    switch(relativeDate) {
+        case 'tomorrow':
+            relativeDate.setDate(relativeDate.getDate() + 1)
+            break
+	}
+	return relativeDate
+}
+
 const shouldSeeErrorWithLabel = async (error,label) => {
 	await waitFor(`//div[contains(@class,'invalid-feedback') and contains(.,'${error}') and ` +
 		`ancestor::div[contains(@class,'form-group') and contains(.//label,'${label}')]]`)
@@ -137,6 +147,7 @@ module.exports = {
 	loginAs,
 	visitExists,
 	visitPage,
+	relativeDate,
 	shouldBeLoggedInAs,
 	shouldSee,
 	shouldSeeErrorWithLabel,

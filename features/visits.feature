@@ -9,16 +9,16 @@ Feature: Manage visits
 
     Scenario: See visits
         Given I am registered as "bmarshall@example.com"
-        And I have registered a visit from "Adirondack Loj" to "Algonquin Summit"
+        And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
-        Then I should see my visit to "Algonquin Summit"
+        Then I should see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
 
     Scenario: Add visit
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
-        When I add a visit from "Adirondack Loj" to "Algonquin Summit"
-        Then I should see my visit to "Algonquin Summit"
+        When I add a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        Then I should see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
     
     Scenario: Try to add invalid visit
         Given I am registered as "bmarshall@example.com"
@@ -28,8 +28,8 @@ Feature: Manage visits
     
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
-        And I have registered a visit from "Adirondack Loj" to "Algonquin Summit"
+        And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         And I delete the visit to "Algonquin Summit"
-        Then I should not see my visit to "Algonquin Summit"
+        Then I should not see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"

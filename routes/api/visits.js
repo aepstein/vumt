@@ -28,10 +28,11 @@ router.get('/', (req, res) => {
 // @access Private
 router.post('/', auth, (req, res) => {
     const {
+        startOn,
         origin,
         destinations
     } = req.body;
-    if (!origin) {
+    if (!origin || !startOn) {
         return res.status(400)
             .json({
                 msg: 'Provide required fields'
@@ -39,6 +40,7 @@ router.post('/', auth, (req, res) => {
     }
     const newVisit = new Visit({
         user: req.user.id,
+        startOn,
         origin,
         destinations
     });

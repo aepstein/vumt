@@ -17,13 +17,8 @@ const validUser = (attrs={}) => { return {
 }};
 
 const validVisit = async (attrs={}) => {
-    const {
-        origin
-    } = await factory.attrs('visit',attrs)
-    return {
-        origin,
-        ...attrs
-    }
+    attrs.user = null
+    return await factory.attrs('visit',attrs)
 };
 
 module.exports = {

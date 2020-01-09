@@ -8,6 +8,11 @@ const VisitSchema = new Schema({
         ref: 'user',
         required: true
     },
+    // Start date
+    startOn: {
+        type: Date,
+        required: true
+    },
     // Starting place for the visit
     origin: {
         type: Schema.Types.ObjectId,

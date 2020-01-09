@@ -32,6 +32,13 @@ describe('/api/visits', () => {
             await res.should.have.status(201)
             res.body.destinations.map(d => d._id).should.have.members([destination.id])
         })
+        it('should not save without startOn', async () => {
+            const auth = await withAuth();
+            let visit = await validVisit({startOn: null});
+            const res = await action(auth,visit);
+            await res.should.have.status(400);
+            await res.body.should.have.a.property('msg').eql('Provide required fields');
+        });
         it('should not save without origin', async () => {
             const auth = await withAuth();
             let visit = await validVisit();

@@ -40,6 +40,7 @@ factory.define('user', User, {
 
 factory.define('visit', Visit, {
     user: factory.assoc('user','_id'),
+    startOn: Date.now(),
     origin: factory.assoc('originPlace','_id'),
     destinations: []
 })

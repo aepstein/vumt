@@ -18,7 +18,12 @@ export const getVisits = () => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: GET_VISITS,
-                payload: res.data
+                payload: res.data.map((visit) => {
+                    return {
+                        ...visit,
+                        startOn: Date.parse(visit.startOn)
+                    }
+                })
             });
         })
     .catch(err => {
@@ -47,7 +52,10 @@ export const addVisit = newVisit => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: ADD_VISIT,
-                payload: res.data
+                payload: {
+                    ...res.data,
+                    startOn: Date.parse(res.data.startOn)
+                }
             });
         })
         .catch(err => {
