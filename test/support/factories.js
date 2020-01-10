@@ -35,7 +35,8 @@ factory.define('user', User, {
     firstName: 'Bob',
     lastName: 'Marshall',
     email: factory.sequence('User.email', (n) => `bmarshall${n}@example.com`),
-    password: 'noneofyourbusiness'
+    password: 'noneofyourbusiness',
+    country: 'US'
 })
 
 factory.define('visit', Visit, {

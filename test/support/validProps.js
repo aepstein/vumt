@@ -13,6 +13,7 @@ const validUser = (attrs={}) => { return {
     lastName: 'Marshall',
     email: 'bmarshall@example.com',
     password: 'noneofyourbusiness',
+    country: 'US',
     ...attrs
 }};
 

@@ -65,5 +65,13 @@ describe('/api/users', () => {
             await res.body.should.be.a('object');
             await res.body.should.have.a.property('msg').eql('User already exists with that email');
         });
+        it('should not register without country', async () => {
+            let user = validUser();
+            delete user.country;
+            res = await action(user);
+            await res.should.have.status(400);
+            await res.body.should.be.a('object');
+            await res.body.should.have.a.property('msg').eql('Please enter required fields');
+        });
     });
 });

@@ -74,7 +74,6 @@ function NewVisit() {
                 }
             })
         }
-        console.log(newVisit)
         setIsSaving(true)
         dispatch(addVisit(newVisit))
     }

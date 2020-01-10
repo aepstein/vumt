@@ -2,8 +2,10 @@ const { Given, When, Then } = require('cucumber');
 const {
     clickByText,
     fillByLabel,
+    fillTypeaheadByPlaceholder,
     loginAs,
     shouldBeLoggedInAs,
+    takeScreenshot,
     userExists,
     waitFor
 } = require('../support/actions');
@@ -24,6 +26,7 @@ When('I fill in a new registration for {string}', async (email) => {
     await fillByLabel("Last name","Marshall");
     await fillByLabel("Email",email);
     await fillByLabel("Password","secret");
+    await fillTypeaheadByPlaceholder("Select country","United States of America")
 })
 
 When('I register as a {string}', async (email) => {

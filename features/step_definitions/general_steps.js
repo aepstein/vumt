@@ -5,6 +5,7 @@ const {
     loginAs,
     shouldBeLoggedInAs,
     shouldSeeErrorWithLabel,
+    takeScreenshot,
     visitPage,
     waitFor
 } = require('../support/actions');
@@ -32,4 +33,5 @@ When('I click the {string} button', async (label) => {
 
 Then('the {string} field should have an error {string}', async (label, error) => {
     await shouldSeeErrorWithLabel(error,label)
+    await takeScreenshot()
 })

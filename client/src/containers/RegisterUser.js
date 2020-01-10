@@ -11,10 +11,14 @@ import {
     Input,
     Alert
 } from 'reactstrap';
+import {
+    Typeahead
+} from 'react-bootstrap-typeahead'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import PropTypes from 'prop-types';
+import countries from '../lib/countries'
+
 import { register as registerUser } from '../actions/authActions';
 import { clearErrors } from '../actions/errorActions';
 
@@ -24,7 +28,7 @@ function RegisterUser() {
 
     const history = useHistory()
 
-    const { t } = useTranslation('commonForms')
+    const { t, i18n } = useTranslation('commonForms')
 
     const dispatch = useDispatch()
 
@@ -32,7 +36,10 @@ function RegisterUser() {
     const [ lastName, setLastName ] = useState('')
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
+    const [ country, setCountry ] = useState('')
+    const [ countryOptions, setCountryOptions ] = useState([])
     const [ msg, setMsg ] = useState(null)
+    const [ language, setLanguage ] = useState('en')
 
     const { register, handleSubmit, watch, errors } = useForm()
 
@@ -44,11 +51,29 @@ function RegisterUser() {
             firstName,
             lastName,
             email,
-            password
+            password,
+            country: country[0].id
         }
         dispatch(clearErrors())
         dispatch(registerUser(newUser))
     }
+
+    useEffect(() => {
+        const newLanguage = i18n.language ? i18n.language.substring(0,2) : 'en'
+        if ( newLanguage != language ) {
+            setLanguage(newLanguage)
+        }
+    })
+
+    useEffect(() => {
+        const newOptions = countries.getNames(language)
+        setCountryOptions(Object.keys(newOptions).map((code) => {
+            return { 
+                id: code,
+                label: newOptions[code]
+            }
+        }))
+    }, [language,setCountryOptions])
 
     useEffect(() => {
         if (error.id === 'REGISTER_FAIL') {
@@ -127,6 +152,21 @@ function RegisterUser() {
                     {errors.password && errors.password &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
+                <FormGroup>
+                    <Label for="country">{t('country')}</Label>
+                    <Typeahead
+                        id="country"
+                        name="country"
+                        selected={country}
+                        placeholder={t('countryPlaceholder')}
+                        options={countryOptions}
+                        onChange={(selected) => setCountry(selected)}
+                        inputRef={register({required: true})}
+                        invalid={errors.country}
+                    />
+                    {errors.country && errors.country.type === 'required' &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
                 <ButtonGroup>
                     <Button
                         color="primary"
@@ -136,13 +176,6 @@ function RegisterUser() {
             </Form>
         </Container>
     </div>
-}
-
-RegisterUser.propTypes = {
-    isAuthenticated: PropTypes.bool,
-    error: PropTypes.object.isRequired,
-    register: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
 }
 
 export default RegisterUser;

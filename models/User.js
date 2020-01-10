@@ -1,29 +1,36 @@
 const mongoose = require('../db/mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcryptjs');
+const countries = require('i18n-iso-countries')
 
-const UserSchema = new Schema({
-    firstName: {
-        type: String,
-        required: true
+const UserSchema = new Schema(
+    {
+        firstName: {
+            type: String,
+            required: true
+        },
+        lastName: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        password: {
+            type: String,
+            required: true
+        },
+        country: {
+            type: String,
+            required: true,
+            enum: Object.keys(countries.getAlpha2Codes())
+        }
     },
-    lastName: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    createdOn: {
-        type: Date,
-        default: () => { Date.now }
+    {
+            timestamps: true
     }
-});
+);
 
 UserSchema.pre('save',async function() {
     var user = this;

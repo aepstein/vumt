@@ -19,7 +19,7 @@ function LanguageSelector() {
     }
 
     useEffect(() => {
-        if (i18n.lng != lang) {
+        if (i18n.lng !== lang) {
             i18n.changeLanguage(lang)
         }
     },[lang])

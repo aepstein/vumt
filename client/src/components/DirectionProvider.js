@@ -6,12 +6,12 @@ const DirectionProvider = ({children}) => {
     const { i18n } = useTranslation()
 
     useEffect(()=>{
-        if (i18n && i18n.dir() != dir) {
+        if (i18n && i18n.dir() !== dir) {
             setDir(i18n.dir())
         }   
-    })
+    },[i18n])
 
-    return <div dir={dir} class={dir}>
+    return <div dir={dir} className={dir}>
         {children}
     </div>
 }

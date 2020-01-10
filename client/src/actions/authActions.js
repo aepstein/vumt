@@ -27,7 +27,7 @@ export const tokenConfig = getState => {
     return config;
 }
 
-export const register = ({firstName, lastName, email, password}) => dispatch => {
+export const register = ({firstName, lastName, email, password, country}) => dispatch => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -37,7 +37,8 @@ export const register = ({firstName, lastName, email, password}) => dispatch => 
         firstName,
         lastName,
         email,
-        password
+        password,
+        country
     });
     axios.post('/api/users', body, config)
         .then(res => {

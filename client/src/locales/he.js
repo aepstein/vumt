@@ -4,6 +4,8 @@ const locale = {
     },
     "commonForms": {
         "cancel": "Cancel",
+        "country": "Country",
+        "countryPlaceholder": "Select country",
         "email": "אימייל",
         "emailPlaceholder": "me@example.com",
         "firstName": "שם פרטי",

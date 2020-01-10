@@ -20,8 +20,8 @@ router.use(
 // @desc Register a new user
 // @access Public
 router.post('/', (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-    if (!firstName || !lastName || !email || !password) {
+    const { firstName, lastName, email, password, country } = req.body;
+    if (!firstName || !lastName || !email || !password || !country) {
         return res.status(400).json({msg: 'Please enter required fields'});
     }
     User.findOne({email})
@@ -31,7 +31,8 @@ router.post('/', (req, res) => {
                 firstName,
                 lastName,
                 email,
-                password
+                password,
+                country
             });
             newUser.save()
                 .then(user => {
@@ -47,7 +48,8 @@ router.post('/', (req, res) => {
                                     _id: user.id,
                                     firstName: user.firstName,
                                     lastName: user.lastName,
-                                    email: user.email
+                                    email: user.email,
+                                    country: user.country
                                 }
                             });
                         }
