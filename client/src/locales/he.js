@@ -3,9 +3,9 @@ const locale = {
         "mustBeLoggedIn": "עליך להתחבר כדי להשתמש במערכת זו."
     },
     "commonForms": {
-        "cancel": "Cancel",
-        "country": "Country",
-        "countryPlaceholder": "Select country",
+        "cancel": "בטל",
+        "country": "מדינה בה אתה מתגורר",
+        "countryPlaceholder": "בחר מדינה",
         "email": "אימייל",
         "emailPlaceholder": "me@example.com",
         "firstName": "שם פרטי",
@@ -19,7 +19,7 @@ const locale = {
         "destinationsPlaceholder": "בחר את היעדים שלך",
         "From": "מ",
         "To": "ל",
-        "startOn": "Date of visit",
+        "startOn": "תאריך הביקור",
         "visit": "ביקור",
         "visitPlaceholder": "שם ביקור",
         "origin": "שביל",
