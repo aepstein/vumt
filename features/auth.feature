@@ -8,15 +8,19 @@ Feature: Authentication
         And I fill in a new registration for "bmarshall@example.com"
         And I click the "Register" button
         Then I should be logged in as "bmarshall@example.com"
-
-    Scenario: Try to register a user
-        When I visit the "registration" page
+    
+    Scenario Outline: Register a user with required field missing
+        When I visit the "home" page
+        And I fill in a new registration for "bmarshall@example.com" except "<field>"
         And I click the "Register" button
-        Then the "First name" field should have an error "Cannot be blank"
-        And the "Last name" field should have an error "Cannot be blank"
-        And the "Email" field should have an error "Cannot be blank"
-        And the "Password" field should have an error "Cannot be blank"
-        # And the "Country of residence" field should have an error "Cannot be blank"
+        Then the "<field>" field should have an error "Cannot be blank"
+        Examples:
+            | field              |
+            | First name         |
+            | Last name          |
+            | Email              |
+            | Password           |
+            | Country            |
 
     Scenario: Log in as registered user
         Given I am registered as "bmarshall@example.com"

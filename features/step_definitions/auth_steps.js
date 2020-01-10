@@ -19,14 +19,14 @@ When('I log in as {string}', async (email) => {
     return await loginAs(email);
 });
 
-When('I fill in a new registration for {string}', async (email) => {
+When(/I fill in a new registration for "([^"]+)"(?: except "([^"]+)")?/, async (email,except) => {
     await waitFor('.navbar');
     await clickByText("Register");
-    await fillByLabel("First name","Bob");
-    await fillByLabel("Last name","Marshall");
-    await fillByLabel("Email",email);
-    await fillByLabel("Password","secret");
-    await fillTypeaheadByPlaceholder("Select country","United States of America")
+    if (except != "First name" ) await fillByLabel("First name","Bob");
+    if (except != "Last name" ) await fillByLabel("Last name","Marshall");
+    if (except != "Email" ) await fillByLabel("Email",email);
+    if (except != "Password" ) await fillByLabel("Password","secret");
+    if (except != "Country" ) await fillTypeaheadByPlaceholder("Select country","United States of America")
 })
 
 When('I register as a {string}', async (email) => {

@@ -41,12 +41,17 @@ function RegisterUser() {
     const [ msg, setMsg ] = useState(null)
     const [ language, setLanguage ] = useState('en')
 
-    const { register, handleSubmit, watch, errors } = useForm()
+    const { register, handleSubmit, setError, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
     const onSubmit = (e) => {
+        dispatch(clearErrors())
+        if (country.length === 0) {
+            setError("country","required",t('invalidRequired'))
+            return
+        }
         const newUser = {
             firstName,
             lastName,
@@ -54,7 +59,6 @@ function RegisterUser() {
             password,
             country: country[0].id
         }
-        dispatch(clearErrors())
         dispatch(registerUser(newUser))
     }
 
@@ -105,7 +109,7 @@ function RegisterUser() {
                         placeholder={t('firstName')}
                         innerRef={register({required: true})}
                         onChange={onChange(setFirstName)}
-                        invalid={errors.firstName}
+                        invalid={errors.firstName ? true : false}
                     />
                     {errors.firstName && errors.firstName.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
@@ -119,7 +123,7 @@ function RegisterUser() {
                         placeholder={t('lastName')}
                         innerRef={register({required: true})}
                         onChange={onChange(setLastName)}
-                        invalid={errors.lastName}
+                        invalid={errors.lastName ? true : false}
                     />
                     {errors.lastName && errors.lastName.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
@@ -133,7 +137,7 @@ function RegisterUser() {
                         placeholder={t('emailPlaceholder')}
                         innerRef={register({required: true})}
                         onChange={onChange(setEmail)}
-                        invalid={errors.email}
+                        invalid={errors.email ? true : false}
                     />
                     {errors.email && errors.email.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
@@ -147,7 +151,7 @@ function RegisterUser() {
                         placeholder={t('password')}
                         innerRef={register({required: true})}
                         onChange={onChange(setPassword)}
-                        invalid={errors.password}
+                        invalid={errors.password ? true : false}
                     />
                     {errors.password && errors.password &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
@@ -161,10 +165,10 @@ function RegisterUser() {
                         placeholder={t('countryPlaceholder')}
                         options={countryOptions}
                         onChange={(selected) => setCountry(selected)}
-                        inputRef={register({required: true})}
-                        invalid={errors.country}
+                        isInvalid={errors.country ? true : false}
                     />
-                    {errors.country && errors.country.type === 'required' &&
+                    {errors.country && <Input type="hidden" invalid />}
+                    {errors.country && errors.country.type == 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>
