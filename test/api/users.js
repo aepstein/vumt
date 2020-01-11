@@ -73,5 +73,12 @@ describe('/api/users', () => {
             await res.body.should.be.a('object');
             await res.body.should.have.a.property('msg').eql('Please enter required fields');
         });
+        it('should accept a valid province', async () => {
+            let user = validUser({province: 'New York'});
+            res = await action(user);
+            await res.should.have.status(201);
+            await res.body.should.be.a('object');
+            await res.body.user.should.have.a.property('province').eql('New York');
+        })
     });
 });

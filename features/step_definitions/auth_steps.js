@@ -26,7 +26,12 @@ When(/I fill in a new registration for "([^"]+)"(?: except "([^"]+)")?/, async (
     if (except != "Last name" ) await fillByLabel("Last name","Marshall");
     if (except != "Email" ) await fillByLabel("Email",email);
     if (except != "Password" ) await fillByLabel("Password","secret");
-    if (except != "Country" ) await fillTypeaheadByPlaceholder("Select country","United States of America")
+    if (except != "Country" ) {
+        await fillTypeaheadByPlaceholder("Select country","United States of America")
+        if (except != "State, province, or territory") {
+            await fillTypeaheadByPlaceholder("Select state, province, or territory","New York")
+        }
+    }
 })
 
 When('I register as a {string}', async (email) => {

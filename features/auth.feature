@@ -8,19 +8,20 @@ Feature: Authentication
         And I fill in a new registration for "bmarshall@example.com"
         And I click the "Register" button
         Then I should be logged in as "bmarshall@example.com"
-    
+
     Scenario Outline: Register a user with required field missing
         When I visit the "home" page
         And I fill in a new registration for "bmarshall@example.com" except "<field>"
         And I click the "Register" button
         Then the "<field>" field should have an error "Cannot be blank"
         Examples:
-            | field              |
-            | First name         |
-            | Last name          |
-            | Email              |
-            | Password           |
-            | Country            |
+            | field                         |
+            | First name                    |
+            | Last name                     |
+            | Email                         |
+            | Password                      |
+            | Country                       |
+            | State, province, or territory |
 
     Scenario: Log in as registered user
         Given I am registered as "bmarshall@example.com"

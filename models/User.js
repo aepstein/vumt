@@ -25,6 +25,9 @@ const UserSchema = new Schema(
             type: String,
             required: true,
             enum: Object.keys(countries.getAlpha2Codes())
+        },
+        province: {
+            type: String
         }
     },
     {

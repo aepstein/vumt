@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import countries from '../lib/countries'
+import provinces from 'provinces'
 
 import { register as registerUser } from '../actions/authActions';
 import { clearErrors } from '../actions/errorActions';
@@ -38,6 +39,8 @@ function RegisterUser() {
     const [ password, setPassword ] = useState('')
     const [ country, setCountry ] = useState('')
     const [ countryOptions, setCountryOptions ] = useState([])
+    const [ province, setProvince ] = useState([])
+    const [ provinceOptions, setProvinceOptions ] = useState([])
     const [ msg, setMsg ] = useState(null)
     const [ language, setLanguage ] = useState('en')
 
@@ -52,12 +55,17 @@ function RegisterUser() {
             setError("country","required",t('invalidRequired'))
             return
         }
+        if (provinceOptions.length > 0 && province.length === 0) {
+            setError("province","required",t('invalidRequired'))
+            return
+        }
         const newUser = {
             firstName,
             lastName,
             email,
             password,
-            country: country[0].id
+            country: country[0].id,
+            province: province[0] ? province[0].id : ''
         }
         dispatch(registerUser(newUser))
     }
@@ -78,6 +86,16 @@ function RegisterUser() {
             }
         }))
     }, [language,setCountryOptions])
+
+    useEffect(() => {
+        const newOptions = country.length > 0 ? provinces.filter((p) => p.country === country[0].id) : []
+        setProvinceOptions(newOptions.map((p) => {
+            return {
+                id: p.name,
+                label: p.name
+            }
+        }))
+    },[country])
 
     useEffect(() => {
         if (error.id === 'REGISTER_FAIL') {
@@ -171,6 +189,23 @@ function RegisterUser() {
                     {errors.country && errors.country.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
+                { (provinceOptions.length > 0) ?
+                    <FormGroup>
+                        <Label for="province">{t('province')}</Label>
+                        <Typeahead
+                            id="province"
+                            name="province"
+                            selected={province}
+                            placeholder={t('provincePlaceholder')}
+                            options={provinceOptions}
+                            onChange={(selected) => setProvince(selected)}
+                            isInvalid={errors.province ? true : false}
+                        />
+                        {errors.province && <Input type="hidden" invalid />}
+                        {errors.province && errors.province.type === 'required' &&
+                            <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                    </FormGroup>
+                : '' }
                 <ButtonGroup>
                     <Button
                         color="primary"

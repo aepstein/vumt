@@ -11,6 +11,8 @@ const locale = {
         "firstName": "שם פרטי",
         "lastName": "שם המשפחה",
         "password": "סיסמה",
+        "province": "מדינה, מחוז או טריטוריה",
+        "provincePlaceholder": "בחר את המדינה, המחוז או הטריטוריה",
         "invalidRequired": "לא ריק"
     },
     "visit": {

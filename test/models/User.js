@@ -13,4 +13,9 @@ describe('User', () => {
         const user = await factory.build('user',{country: 'ZZ'})
         await user.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    it('should save with a valid province', async () => {
+        const user = await factory.build('user',{province: 'New York'})
+        const savedUser = await user.save()
+        savedUser.province.should.be.a('string').eql('New York')
+    })
 })

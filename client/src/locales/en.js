@@ -11,6 +11,8 @@ const locale = {
         "firstName": "First name",
         "lastName": "Last name",
         "password": "Password",
+        "province": "State, province, or territory",
+        "provincePlaceholder": "Select state, province, or territory",
         "invalidRequired": "Cannot be blank"
     },
     "visit": {
