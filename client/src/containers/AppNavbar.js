@@ -11,7 +11,6 @@ import {
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import PropTypes from 'prop-types';
 
 import LanguageSelector from '../components/LanguageSelector'
 import LoginModal from './auth/LoginModal';
@@ -70,10 +69,6 @@ function AppNavbar() {
             </Container>
         </Navbar>
     </div>
-}
-
-AppNavbar.propTypes = {
-    auth: PropTypes.object.isRequired
 }
 
 export default AppNavbar

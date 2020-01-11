@@ -104,8 +104,7 @@ function LoginModal() {
 }
 
 LoginModal.propTypes = {
-    isAuthenticated: PropTypes.bool,
-    error: PropTypes.object.isRequired,
+    isAuthenticated: PropTypes.bool
 }
 
 export default LoginModal;

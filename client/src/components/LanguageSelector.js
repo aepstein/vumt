@@ -29,7 +29,8 @@ function LanguageSelector() {
             <DropdownToggle caret>{t('language')}</DropdownToggle>
             <DropdownMenu>
                 {locales.map((language) => {
-                    return <DropdownItem onClick={setLanguage(language.code)}>{language.name}</DropdownItem>    
+                    return <DropdownItem key={language.code}
+                        onClick={setLanguage(language.code)}>{language.name}</DropdownItem>    
                 })}
             </DropdownMenu>
         </Dropdown>
