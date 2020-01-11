@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
     Collapse,
     Navbar,
@@ -9,14 +9,13 @@ import {
     Container
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types';
 
 import LanguageSelector from '../components/LanguageSelector'
 import LoginModal from './auth/LoginModal';
 import Logout from './auth/Logout';
-import { loadUser } from '../actions/authActions';
 
 function AppNavbar() {
     const [isOpen, setIsOpen] = useState(false)
@@ -25,8 +24,6 @@ function AppNavbar() {
     const user = useSelector(state => state.auth.user)
 
     const { t } = useTranslation('AppNavbar')
-
-    const dispatch = useDispatch()
 
     const toggle = () => {
         setIsOpen(!isOpen)
@@ -58,12 +55,6 @@ function AppNavbar() {
             </NavItem>
         </Fragment>
     );
-
-    useEffect(() => {
-        if (!user) {
-            dispatch(loadUser())
-        }
-    },[])
 
     return <div>
         <Navbar color="dark" dark expand="sm" className="mb-5">

@@ -1,37 +1,25 @@
-import React from 'react'
-import { Redirect, Route } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { PropTypes } from 'prop-types'
+import React, { useEffect } from 'react'
+import { useHistory, Route } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import Spinner from './Spinner'
 
-function UnAuthRoute({ children, auth, ...rest }) {
-    return (
-      <Route
-        {...rest}
-        render={({ location }) =>
-          !auth.isAuthenticated ? (
-            children
-          ) : (
-            <Redirect
-              to={{
-                pathname: "/",
-                state: { from: location }
-              }}
-            />
-          )
+function UnAuthRoute({ children, ...rest }) {
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+    const isLoading = useSelector(state => state.auth.isLoading)
+
+    const history = useHistory()
+
+    useEffect(() => {
+        if (isAuthenticated && !isLoading) {
+            history.push('/')
         }
-      />
+    },[isAuthenticated,isLoading])
+
+    return (
+        <Route
+            {...rest}
+            render={() => isAuthenticated ? <Spinner/> : children}
+        />
     );
-  }
-
-UnAuthRoute.propTypes = {
-    auth: PropTypes.object
 }
-
-const mapStateToProps = (state) => ({
-    auth: state.auth
-});
-
-export default connect(
-    mapStateToProps,
-    null
-)(UnAuthRoute);
+export default UnAuthRoute

@@ -24,7 +24,9 @@ const loginAs = async (email) => {
     await fillByLabel("Password","secret");
     await clickByText("Login","//button");
 }
-const visitPage = async (path) => {
+
+const initPage = async () => {
+	if ( scope.context.currentPage ) return
 	scope.context.currentPage = await scope.browser.newPage();
 	scope.context.currentPage.setViewport({ width: 1280, height: 1024 });
 	scope.context.currentPage.on('error', err => {
@@ -33,6 +35,10 @@ const visitPage = async (path) => {
 	scope.context.currentPage.on('pageerror', err => {
 		console.log("browser pageerror: ",err);
 	});
+}
+
+const visitPage = async (path) => {
+	await initPage()
 	const url = scope.host + paths[path];
 	const visit = await scope.context.currentPage.goto(url, {
 		waitUntil: 'networkidle2'

@@ -59,12 +59,16 @@ function NewVisit() {
 
     const { t } = useTranslation('visit')
 
-    const { register, handleSubmit, watch, errors } = useForm()
+    const { register, handleSubmit, setError, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
     const onSubmit = (e) => {
+        if (origin.length === 0) {
+            setError("origin","required",t('invalidRequired'))
+            return
+        }
         const newVisit = {
             startOn,
             origin: (origin && origin[0] ? origin[0].id : ''),
@@ -99,9 +103,9 @@ function NewVisit() {
                         value={startOn}
                         onChange={onChange(setStartOn)}
                         innerRef={register({required: true})}
-                        invalid={errors.origin}
+                        invalid={errors.startOn ? true : false}
                     />
-                    {errors.startOn && errors.startOn.required &&
+                    {errors.startOn && errors.startOn.type == 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
@@ -115,10 +119,10 @@ function NewVisit() {
                         isLoading={originLoading}
                         onSearch={originSearch}
                         onChange={(selected) => setOrigin(selected)}
-                        inputRef={register({required: true})}
-                        invalid={errors.origin}
+                        isInvalid={errors.origin}
                     />
-                    {errors.origin && errors.origin.required &&
+                    {errors.origin && <Input type="hidden" invalid />}
+                    {errors.origin && errors.origin.type == 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>

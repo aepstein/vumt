@@ -16,24 +16,17 @@ import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
 import './i18n'
 import DirectionProvider from './components/DirectionProvider'
-
-// loading component for suspense fallback
-const Loader = () => (
-  <div className="App">
-    <div>loading...</div>
-  </div>
-);
-
+import Spinner from './components/Spinner'
 
 const Root = ({ store }) => (
     <Provider store={store}>
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<Spinner />}>
           <DirectionProvider>
             <Router>
             <AppNavbar />
             <Switch>
               <UnAuthRoute path="/need-auth">
-              <NeedAuth />
+                <NeedAuth />
               </UnAuthRoute>
               <UnAuthRoute path="/register">
                 <RegisterUser />

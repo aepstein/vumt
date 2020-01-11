@@ -17,14 +17,22 @@ Feature: Manage visits
     Scenario: Add visit
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
-        When I add a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        And I visit the "new visit" page
+        When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        And I click the "Add visit" button
         Then I should see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
-    
-    Scenario: Try to add invalid visit
+    @wip
+    Scenario Outline: Try to add invalid visit
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
-        And I visit the "new visit" page
+        When I visit the "new visit" page
+        When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit" except "<field>"
         And I click the "Add visit" button
+        Then the "<field>" field should have an error "Cannot be blank"
+        Examples:
+            | field          |
+            | Date of visit  |
+            # | Starting point |
     
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"

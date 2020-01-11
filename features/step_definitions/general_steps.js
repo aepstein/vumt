@@ -12,6 +12,10 @@ const {
 
 When(/^I visit the "([^"]+)" page$/, visitPage);
 
+When('I take a screenshot', async () => {
+    await takeScreenshot()
+})
+
 Given('I logged in as {string}', async (email) => {
     await visitPage("home");
     await waitFor('.navbar');
@@ -32,6 +36,7 @@ When('I click the {string} button', async (label) => {
 })
 
 Then('the {string} field should have an error {string}', async (label, error) => {
-    await shouldSeeErrorWithLabel(error,label)
+    await new Promise(r => setTimeout(r, 200))
     await takeScreenshot()
+    await shouldSeeErrorWithLabel(error,label)
 })
