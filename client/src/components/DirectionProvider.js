@@ -13,7 +13,7 @@ const DirectionProvider = ({children}) => {
         if (i18n && i18n.dir() !== dir) {
             setDir(i18n.dir())
         }   
-    },[i18n,dir])
+    },[i18n,dir,i18n.language])
 
     useEffect(() => {
         dispatch(loadUser())

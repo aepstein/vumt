@@ -1,6 +1,6 @@
 const locale = {
     "translation": {
-        "mustBeLoggedIn": "עליך להתחבר כדי להשתמש במערכת זו."
+        "mustBeLoggedIn": ("\u202bעליך להתחבר כדי להשתמש במערכת זו.")
     },
     "commonForms": {
         "cancel": "בטל",
@@ -34,7 +34,7 @@ const locale = {
         "login": "התחבר",
         "logout": "התנתק",
         "register": "הרשם",
-        "welcome": "ברוך הבא, {{name}}"
+        "welcome": "\u202bברוך הבא, \u202a{{name}}"
     }
 }
 
