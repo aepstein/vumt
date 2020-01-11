@@ -19,43 +19,40 @@ router.use(
 // @route POST api/users
 // @desc Register a new user
 // @access Public
-router.post('/', (req, res) => {
-    const { firstName, lastName, email, password, country } = req.body;
+router.post('/', async (req, res) => {
+    const { firstName, lastName, email, password, country } = req.body
     if (!firstName || !lastName || !email || !password || !country) {
-        return res.status(400).json({msg: 'Please enter required fields'});
+        return res.status(400).json({msg: 'Please enter required fields'})
     }
-    User.findOne({email})
-        .then(user => {
-            if (user) return res.status(400).json({msg: 'User already exists with that email'});
-            const newUser = new User({
-                firstName,
-                lastName,
-                email,
-                password,
-                country
-            });
-            newUser.save()
-                .then(user => {
-                    jwt.sign(
-                        { id: user.id },
-                        jwtSecret,
-                        { expiresIn: 3600 },
-                        (err,token) => {
-                            if(err) throw err;
-                            res.status(201).json({
-                                token,
-                                user: {
-                                    _id: user.id,
-                                    firstName: user.firstName,
-                                    lastName: user.lastName,
-                                    email: user.email,
-                                    country: user.country
-                                }
-                            });
-                        }
-                    );
-                });
-        });
+    const user = await User.findOne({email})
+    if (user) return res.status(400).json({msg: 'User already exists with that email'})
+
+    const newUser = new User({
+        firstName,
+        lastName,
+        email,
+        password,
+        country
+    })
+    const savedUser = await newUser.save()
+    try {
+        const token = await jwt.sign(
+            { id: savedUser.id },
+            jwtSecret,
+            { expiresIn: 3600 }
+        )
+        return res.status(201).json({
+            token,
+            user: {
+                _id: savedUser.id,
+                firstName: savedUser.firstName,
+                lastName: savedUser.lastName,
+                email: savedUser.email,
+                country: savedUser.country
+            }
+        })
+    }
+    catch(err) { throw err }
 });
 
 module.exports = router;

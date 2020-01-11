@@ -10,7 +10,7 @@ const Place = require('../../models/Place');
 // @route GET api/places/origins
 // @desc Get places that can be starting points for visits
 // @access Public
-router.get('/:type?', (req, res) => {
+router.get('/:type?', async (req, res) => {
     let criteria = {}
     switch(req.params.type) {
         case 'origins':
@@ -20,13 +20,15 @@ router.get('/:type?', (req, res) => {
             criteria.isDestination = true
             break
     }
-    Place
-        .find(criteria)
-        .sort({name: 1})
-        .then( (places) => {
-            res.json(places);
-        })
-        .catch(err => console.log(err));
+    try {
+        const places = await Place
+            .find(criteria)
+            .sort({name: 1})
+        return res.json(places)
+    }
+    catch(err) {
+        console.log(err)
+    }
 });
 
 module.exports = router;
