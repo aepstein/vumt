@@ -87,7 +87,7 @@ function NewVisit() {
             setIsSaving(true)
             history.push("/")
         }
-    })
+    },[isSaving,visitSaving,history,error.id])
 
     return <div>
         <Container>
@@ -105,7 +105,7 @@ function NewVisit() {
                         innerRef={register({required: true})}
                         invalid={errors.startOn ? true : false}
                     />
-                    {errors.startOn && errors.startOn.type == 'required' &&
+                    {errors.startOn && errors.startOn.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
@@ -122,7 +122,7 @@ function NewVisit() {
                         isInvalid={errors.origin}
                     />
                     {errors.origin && <Input type="hidden" invalid />}
-                    {errors.origin && errors.origin.type == 'required' &&
+                    {errors.origin && errors.origin.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>

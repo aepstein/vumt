@@ -64,10 +64,10 @@ function RegisterUser() {
 
     useEffect(() => {
         const newLanguage = i18n.language ? i18n.language.substring(0,2) : 'en'
-        if ( newLanguage != language ) {
+        if ( newLanguage !== language ) {
             setLanguage(newLanguage)
         }
-    })
+    },[setLanguage,i18n,language])
 
     useEffect(() => {
         const newOptions = countries.getNames(language)
@@ -91,7 +91,7 @@ function RegisterUser() {
         if (isAuthenticated) {
             history.push("/")
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated,history])
 
     return <div>
         <Container>
@@ -153,7 +153,7 @@ function RegisterUser() {
                         onChange={onChange(setPassword)}
                         invalid={errors.password ? true : false}
                     />
-                    {errors.password && errors.password &&
+                    {errors.password && errors.password.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
@@ -168,7 +168,7 @@ function RegisterUser() {
                         isInvalid={errors.country ? true : false}
                     />
                     {errors.country && <Input type="hidden" invalid />}
-                    {errors.country && errors.country.type == 'required' &&
+                    {errors.country && errors.country.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>

@@ -22,7 +22,7 @@ function LanguageSelector() {
         if (i18n.lng !== lang) {
             i18n.changeLanguage(lang)
         }
-    },[lang])
+    },[lang,i18n])
 
     return <div>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>

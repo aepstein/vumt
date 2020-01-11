@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     Button,
     Modal,
@@ -28,12 +28,12 @@ function LoginModal() {
  
     const dispatch = useDispatch()
     
-    const { t, i18n } = useTranslation('AppNavbar')
+    const { t } = useTranslation('AppNavbar')
 
-    const toggle = () => {
+    const toggle = useCallback(() => {
         dispatch(clearErrors())
         setModal(!modal)
-    }
+    }, [dispatch,modal])
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
@@ -61,7 +61,7 @@ function LoginModal() {
                 toggle()
             }
         }
-    },[modal,isAuthenticated])
+    },[modal,isAuthenticated,toggle])
 
     return <div>
         <NavLink onClick={toggle} href="#">

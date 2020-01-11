@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { loadUser } from '../actions/authActions'
 
@@ -13,11 +13,11 @@ const DirectionProvider = ({children}) => {
         if (i18n && i18n.dir() !== dir) {
             setDir(i18n.dir())
         }   
-    },[i18n])
+    },[i18n,dir])
 
     useEffect(() => {
         dispatch(loadUser())
-    },[])
+    },[dispatch])
 
     return <div dir={dir} className={dir}>
         {children}

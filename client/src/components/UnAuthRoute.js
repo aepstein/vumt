@@ -13,7 +13,7 @@ function UnAuthRoute({ children, ...rest }) {
         if (isAuthenticated && !isLoading) {
             history.push('/')
         }
-    },[isAuthenticated,isLoading])
+    },[isAuthenticated,isLoading,history])
 
     return (
         <Route

@@ -14,7 +14,7 @@ function AuthRoute({ children, ...rest }) {
       if (!isAuthenticated && !isLoading && !token) {
         history.push('/need-auth')
       }
-    },[isAuthenticated,isLoading,token])
+    },[isAuthenticated,isLoading,token,history])
 
     return ( 
       <Route
