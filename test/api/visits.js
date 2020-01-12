@@ -47,6 +47,13 @@ describe('/api/visits', () => {
             await res.should.have.status(400);
             await res.body.should.have.a.property('msg').eql('Provide required fields');
         });
+        it('should not save without groupSize', async () => {
+            const auth = await withAuth()
+            let visit = await validVisit({groupSize: null})
+            const res = await action(auth,visit)
+            await res.should.have.status(400)
+            await res.body.should.have.a.property('msg').eql('Provide required fields')
+        });
         it('should deny unauthenticated user',async () => {
             const visit = await validVisit();
             const res = await action(null,visit);

@@ -41,6 +41,7 @@ function NewVisit() {
     const [ destinations, setDestinations ] = useState([])
     const [ destinationOptions, setDestinationOptions ] = useState([])
     const [ destinationLoading, setDestinationLoading ] = useState(false)
+    const [ groupSize, setGroupSize ] = useState('')
     const [ isSaving, setIsSaving ] = useState(false)
     const destinationSearch = (query) => {
         setDestinationLoading(true)
@@ -76,7 +77,8 @@ function NewVisit() {
                 return {
                     "_id": d.id
                 }
-            })
+            }),
+            groupSize
         }
         setIsSaving(true)
         dispatch(addVisit(newVisit))
@@ -139,6 +141,28 @@ function NewVisit() {
                         onChange={(selected) => setDestinations(selected)}
                         inputRef={register}
                     />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="groupSize">{t('groupSize')}</Label>
+                    <Input
+                        type="number"
+                        id="groupSize"
+                        name="groupSize"
+                        value={groupSize}
+                        onChange={onChange(setGroupSize)}
+                        innerRef={register({required: true, min: 1, validate: (groupSize) => {
+                            if (!groupSize || !Number(groupSize)) return true
+                            return Number.isInteger(Number(groupSize))
+                        }})}
+                        invalid={errors.groupSize ? true : false}
+                    />
+                    {console.log(errors)}
+                    {errors.groupSize && errors.groupSize.type === 'required' &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                    {errors.groupSize && errors.groupSize.type === 'min' &&
+                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 1})}</FormFeedback>}
+                    {errors.groupSize && errors.groupSize.type === 'validate' &&
+                        <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>
                     <Button

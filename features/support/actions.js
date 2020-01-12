@@ -96,6 +96,13 @@ const fillByLabel = async (label, fill ) => {
 	const selector = `//input[@name=(//label[contains(text(),${escapedText})][1]/@for)]`;
 	const page = scope.context.currentPage
 	const el = await page.$x(selector);
+	// Clear out any existing value
+	const inputValue = await el[0].evaluate((input) => {
+		return input.value
+	})
+	for (let i = 0; i < inputValue.length; i++) {
+		await el[0].press('Backspace');
+	}
 	await el[0].click();
 	await el[0].type(fill);
 };

@@ -20,7 +20,12 @@ const VisitSchema = new Schema({
         required: true
     },
     // Destinations that will be included in visit
-    destinations: [{type: Schema.Types.ObjectId, ref: 'place'}]
+    destinations: [{type: Schema.Types.ObjectId, ref: 'place'}],
+    groupSize: {
+        type: Number,
+        required: true,
+        min: 1
+    }
 },
 {
     timestamps: true

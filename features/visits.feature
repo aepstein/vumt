@@ -21,7 +21,7 @@ Feature: Manage visits
         When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I click the "Add visit" button
         Then I should see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
-    @wip
+
     Scenario Outline: Try to add invalid visit
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
@@ -30,9 +30,23 @@ Feature: Manage visits
         And I click the "Add visit" button
         Then the "<field>" field should have an error "Cannot be blank"
         Examples:
-            | field          |
-            | Date of visit  |
-            # | Starting point |
+            | field                     |
+            | Date of visit             |
+            | Starting point            |
+            | Number of people in group |
+@wip
+    Scenario Outline: Try to add visit with invalid group size
+        Given I am registered as "bmarshall@example.com"
+        And I logged in as "bmarshall@example.com"
+        When I visit the "new visit" page
+        When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        And I fill in "Number of people in group" with "<value>"
+        And I click the "Add visit" button
+        Then the "Number of people in group" field should have an error "<message>"
+        Examples:
+            | value | message                |
+            | -1    | Must be at least 1     |
+            | 2.5   | Must be a whole number |
     
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"

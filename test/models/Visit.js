@@ -13,4 +13,12 @@ describe('Visit', () => {
         const visit = await factory.build('visit',{startOn: null})
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    it('should not save without groupSize', async () => {
+        const visit = await factory.build('visit',{groupSize: null})
+        await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should not save with groupSize less than 1', async () => {
+        const visit = await factory.build('visit',{groupSize: 0})
+        await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
 })

@@ -28,9 +28,10 @@ router.post('/', auth, async (req, res) => {
     const {
         startOn,
         origin,
-        destinations
+        destinations,
+        groupSize
     } = req.body;
-    if (!origin || !startOn) {
+    if (!origin || !startOn || !groupSize) {
         return res.status(400)
             .json({
                 msg: 'Provide required fields'
@@ -40,7 +41,8 @@ router.post('/', auth, async (req, res) => {
         user: req.user.id,
         startOn,
         origin,
-        destinations
+        destinations,
+        groupSize
     });
     const savedVisit = await newVisit.save()
     const populatedVisit = await savedVisit
