@@ -15,14 +15,17 @@ const locale = {
         "postalCodeInvalid": "Le code postal doit être correctement formaté pour {{country}}",
         "province": "État, province ou territoire",
         "provincePlaceholder": "Choisissez l'état, province ou territoire",
-        "invalidRequired": "Ne peut être vide"
-    },
+        "invalidRequired": "Ne peut être vide",
+        "mustBeWholeNumber": "Doit être un nombre entier",
+        "mustBeAtLeast": "Doit être au moins {{min}}"
+   },
     "visit": {
         "From": "De",
         "To": "À",
         "addVisit": "Ajouter une visite",
         "destinations": "Destinations",
         "destinationsPlaceholder": "Sélectionnez vos destinations",
+        "groupSize": "Nombre de personnes dans le groupe",
         "startOn": "Date de visite",
         "visit": "Visite",
         "visitPlaceholder": "Nom de visite",

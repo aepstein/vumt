@@ -15,14 +15,17 @@ const locale = {
         "postalCodeInvalid": "חובה להיות מעוצב כנקודת מיקוד עבור\u202b {{country}}",
         "province": "מדינה, מחוז או טריטוריה",
         "provincePlaceholder": "בחר את המדינה, המחוז או הטריטוריה",
-        "invalidRequired": "לא ריק"
+        "invalidRequired": "לא ריק",
+        "mustBeWholeNumber": "חייב להיות מספר שלם",
+        "mustBeAtLeast": "חייב להיות לפחות\u202b {{min}}"
     },
     "visit": {
+        "From": "מ",
+        "To": "ל",
         "addVisit": "הוסף ביקור",
         "destinations": "יעדים",
         "destinationsPlaceholder": "בחר את היעדים שלך",
-        "From": "מ",
-        "To": "ל",
+        "groupSize": "מספר האנשים בקבוצה",
         "startOn": "תאריך הביקור",
         "visit": "ביקור",
         "visitPlaceholder": "שם ביקור",
