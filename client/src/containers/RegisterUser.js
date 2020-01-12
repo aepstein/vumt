@@ -38,7 +38,7 @@ function RegisterUser() {
     const [ lastName, setLastName ] = useState('')
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
-    const [ country, setCountry ] = useState('')
+    const [ country, setCountry ] = useState([])
     const [ countryOptions, setCountryOptions ] = useState([])
     const [ province, setProvince ] = useState([])
     const [ provinceOptions, setProvinceOptions ] = useState([])
