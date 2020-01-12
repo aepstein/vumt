@@ -78,7 +78,7 @@ function RegisterUser() {
         if ( newLanguage !== language ) {
             setLanguage(newLanguage)
         }
-    },[setLanguage,i18n,language])
+    },[setLanguage,i18n.language,language])
 
     useEffect(() => {
         const newOptions = countries.getNames(language)
@@ -220,6 +220,7 @@ function RegisterUser() {
                             innerRef={register({
                                 required: postalCodeRequired.includes(country[0].id),
                                 validate: ((postalCode) => {
+                                    if (!postalCode) return true
                                     return postalCodes.validate(country[0].id,postalCode) === true
                                 })
                             })}
