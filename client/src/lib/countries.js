@@ -5,4 +5,9 @@ locales.forEach((locale) => {
     countries.registerLocale(require(`i18n-iso-countries/langs/${locale.code.substring(0,2)}.json`))
 })
 
+export const postalCodeRequired = [
+    'CA',
+    'US'
+]
+
 export default countries

@@ -18,4 +18,9 @@ describe('User', () => {
         const savedUser = await user.save()
         savedUser.province.should.be.a('string').eql('New York')
     })
+    it('should save with a valid postal code', async () => {
+        const user = await factory.build('user',{postalCode: '12943'})
+        const savedUser = await user.save()
+        savedUser.postalCode.should.be.a('string').eql('12943')
+    })
 })

@@ -28,6 +28,9 @@ const UserSchema = new Schema(
         },
         province: {
             type: String
+        },
+        postalCode: {
+            type: String
         }
     },
     {

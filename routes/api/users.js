@@ -20,7 +20,7 @@ router.use(
 // @desc Register a new user
 // @access Public
 router.post('/', async (req, res) => {
-    const { firstName, lastName, email, password, country, province } = req.body
+    const { firstName, lastName, email, password, country, province, postalCode } = req.body
     if (!firstName || !lastName || !email || !password || !country) {
         return res.status(400).json({msg: 'Please enter required fields'})
     }
@@ -33,7 +33,8 @@ router.post('/', async (req, res) => {
         email,
         password,
         country,
-        province
+        province,
+        postalCode
     })
     const savedUser = await newUser.save()
     try {
@@ -50,7 +51,8 @@ router.post('/', async (req, res) => {
                 lastName: savedUser.lastName,
                 email: savedUser.email,
                 country: savedUser.country,
-                province: savedUser.province
+                province: savedUser.province,
+                postalCode: savedUser.postalCode
             }
         })
     }

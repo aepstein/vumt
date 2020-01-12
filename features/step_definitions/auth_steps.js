@@ -31,6 +31,9 @@ When(/I fill in a new registration for "([^"]+)"(?: except "([^"]+)")?/, async (
         if (except != "State, province, or territory") {
             await fillTypeaheadByPlaceholder("Select state, province, or territory","New York")
         }
+        if (except != "Postal code") {
+            await fillByLabel("Postal code","12943")
+        }
     }
 })
 

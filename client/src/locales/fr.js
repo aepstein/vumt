@@ -11,6 +11,8 @@ const locale = {
         "firstName": "Prénom",
         "lastName": "Nom de famille",
         "password": "Mot de passe",
+        "postalCode": "Code postal",
+        "postalCodeInvalid": "Le code postal doit être correctement formaté pour {{country}}",
         "province": "État, province ou territoire",
         "provincePlaceholder": "Choisissez l'état, province ou territoire",
         "invalidRequired": "Ne peut être vide"

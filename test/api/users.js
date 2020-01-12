@@ -80,5 +80,12 @@ describe('/api/users', () => {
             await res.body.should.be.a('object');
             await res.body.user.should.have.a.property('province').eql('New York');
         })
+        it('should accept a valid postal code', async () => {
+            let user = validUser({postalCode: '12943'});
+            res = await action(user);
+            await res.should.have.status(201);
+            await res.body.should.be.a('object');
+            await res.body.user.should.have.a.property('postalCode').eql('12943');
+        })
     });
 });

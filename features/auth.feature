@@ -22,6 +22,14 @@ Feature: Authentication
             | Password                      |
             | Country                       |
             | State, province, or territory |
+            | Postal code                   |
+
+    Scenario: Register a user with invalid zip code
+        When I visit the "home" page
+        And I fill in a new registration for "bmarshall@example.com"
+        And I fill in "Postal code" with "1"
+        And I click the "Register" button
+        Then the "Postal code" field should have an error "Must be correctly formatted postal code for United States of America"
 
     Scenario: Log in as registered user
         Given I am registered as "bmarshall@example.com"

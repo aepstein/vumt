@@ -17,8 +17,9 @@ import {
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import countries from '../lib/countries'
+import countries, { postalCodeRequired } from '../lib/countries'
 import provinces from 'provinces'
+import postalCodes from 'postal-codes-js'
 
 import { register as registerUser } from '../actions/authActions';
 import { clearErrors } from '../actions/errorActions';
@@ -41,6 +42,7 @@ function RegisterUser() {
     const [ countryOptions, setCountryOptions ] = useState([])
     const [ province, setProvince ] = useState([])
     const [ provinceOptions, setProvinceOptions ] = useState([])
+    const [ postalCode, setPostalCode ] = useState('')
     const [ msg, setMsg ] = useState(null)
     const [ language, setLanguage ] = useState('en')
 
@@ -65,7 +67,8 @@ function RegisterUser() {
             email,
             password,
             country: country[0].id,
-            province: province[0] ? province[0].id : ''
+            province: province[0] ? province[0].id : '',
+            postalCode
         }
         dispatch(registerUser(newUser))
     }
@@ -206,6 +209,29 @@ function RegisterUser() {
                             <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                     </FormGroup>
                 : '' }
+                { country[0] ?
+                    <FormGroup>
+                        <Label for="postalCode">{t('postalCode')}</Label>
+                        <Input
+                            type="text"
+                            name="postalCode"
+                            id="postalCode"
+                            placeholder={t('postalCode')}
+                            innerRef={register({
+                                required: postalCodeRequired.includes(country[0].id),
+                                validate: ((postalCode) => {
+                                    return postalCodes.validate(country[0].id,postalCode) === true
+                                })
+                            })}
+                            onChange={onChange(setPostalCode)}
+                            invalid={errors.postalCode ? true : false}
+                        />
+                        {errors.postalCode && errors.postalCode.type === 'required' &&
+                            <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        {errors.postalCode && errors.postalCode.type === 'validate' &&
+                            <FormFeedback>{t('commonForms:postalCodeInvalid',{country: country[0].label})}</FormFeedback>}
+                    </FormGroup>
+                    : '' }
                 <ButtonGroup>
                     <Button
                         color="primary"
