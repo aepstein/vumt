@@ -34,7 +34,7 @@ Feature: Manage visits
             | Date of visit             |
             | Starting point            |
             | Number of people in group |
-@wip
+
     Scenario Outline: Try to add visit with invalid group size
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
