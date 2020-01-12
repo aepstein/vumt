@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -14,15 +13,10 @@ import {
     AsyncTypeahead
 } from 'react-bootstrap-typeahead'
 import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
-import { addVisit } from '../actions/visitActions';
 
-function NewVisit() {
-    const error = useSelector( state => state.error )
-    const visitSaving = useSelector( state => state.visit.visitSaving )
-
+export default function VisitEditor({visit,onSave,saving}) {
     const [ startOn, setStartOn ] = useState('')
     const [ origin, setOrigin ] = useState('')
     const [ originOptions, setOriginOptions ] = useState([])
@@ -42,7 +36,6 @@ function NewVisit() {
     const [ destinationOptions, setDestinationOptions ] = useState([])
     const [ destinationLoading, setDestinationLoading ] = useState(false)
     const [ groupSize, setGroupSize ] = useState('')
-    const [ isSaving, setIsSaving ] = useState(false)
     const destinationSearch = (query) => {
         setDestinationLoading(true)
         axios
@@ -55,9 +48,6 @@ function NewVisit() {
             })
     }
 
-    const history = useHistory()
-    const dispatch = useDispatch()
-
     const { t } = useTranslation('visit')
 
     const { register, handleSubmit, setError, errors } = useForm()
@@ -65,7 +55,8 @@ function NewVisit() {
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
+        if (saving) return
         if (origin.length === 0) {
             setError("origin","required",t('invalidRequired'))
             return
@@ -80,16 +71,8 @@ function NewVisit() {
             }),
             groupSize
         }
-        setIsSaving(true)
-        dispatch(addVisit(newVisit))
+        onSave(newVisit)
     }
-
-    useEffect(() => {
-        if (isSaving && !visitSaving && !error.id) {
-            setIsSaving(true)
-            history.push("/")
-        }
-    },[isSaving,visitSaving,history,error.id])
 
     return <div>
         <Container>
@@ -175,5 +158,3 @@ function NewVisit() {
         </Container>
     </div>
 }
-
-export default NewVisit;

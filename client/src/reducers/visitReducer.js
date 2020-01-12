@@ -4,7 +4,8 @@ import {
     ADDING_VISIT,
     DELETE_VISIT,
     VISITS_LOADING,
-    LOGOUT_SUCCESS
+    LOGOUT_SUCCESS,
+    ADDING_VISIT_CANCEL
 } from '../actions/types';
 
 const initialState = {
@@ -43,6 +44,11 @@ export default function( state = initialState, action ) {
             return {
                 ...state,
                 visitSaving: true
+            }
+        case ADDING_VISIT_CANCEL:
+            return {
+                ...state,
+                visitSaving: false
             }
         case VISITS_LOADING:
             return {

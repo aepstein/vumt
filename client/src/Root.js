@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import NeedAuth from './components/NeedAuth'
 import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
-import NewVisit from './containers/NewVisit'
+import VisitManager from './containers/visits/VisitManager'
 import RegisterUser from './containers/RegisterUser'
 import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
@@ -30,8 +30,8 @@ const Root = ({ store }) => (
               <UnAuthRoute path="/register">
                 <RegisterUser />
               </UnAuthRoute>
-              <AuthRoute exact path="/visits/new">
-                <NewVisit />
+              <AuthRoute path="/visits/new">
+                <VisitManager action='new'/>
               </AuthRoute>
               <AuthRoute exact path="/">
                 <UserDashboard />

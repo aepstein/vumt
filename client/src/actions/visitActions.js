@@ -45,7 +45,7 @@ export const deleteVisit = id => (dispatch, getState) => {
         });
 };
 
-export const addVisit = newVisit => (dispatch, getState) => {
+export const addVisit = (newVisit, history) => (dispatch, getState) => {
     dispatch({ type: ADDING_VISIT })
     axios
         .post('/api/visits', newVisit, tokenConfig(getState))
@@ -56,7 +56,8 @@ export const addVisit = newVisit => (dispatch, getState) => {
                     ...res.data,
                     startOn: Date.parse(res.data.startOn)
                 }
-            });
+            })
+            history.push('/')
         })
         .catch(err => {
             dispatch({type: ADDING_VISIT_CANCEL})

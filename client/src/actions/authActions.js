@@ -1,4 +1,5 @@
 import axios from 'axios';
+import prepareTokenConfig from '../lib/prepareTokenConfig'
 import { 
     returnErrors
 } from './errorActions';
@@ -15,16 +16,7 @@ import {
 } from './types';
 
 export const tokenConfig = getState => {
-    const token = getState().auth.token;
-    const config = {
-        headers: {
-            'Content-type': 'application/json'
-        }
-    }
-    if (token) {
-        config.headers['x-auth-token'] = token;
-    }
-    return config;
+    return prepareTokenConfig(getState().auth.token)
 }
 
 export const register = ({firstName, lastName, email, password, country}) => dispatch => {
