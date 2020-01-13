@@ -1,12 +1,12 @@
 import React from 'react';
 import { Container } from 'reactstrap';
 import './UserDashboard.css';
-import VisitsList from './VisitsList';
+import VisitsManager from '../containers/visits/VisitsManager';
 
 function UserDashboard() {
   return <div className="UserDashboard">
     <Container>
-        <VisitsList />
+        <VisitsManager />
     </Container>
   </div>
 }

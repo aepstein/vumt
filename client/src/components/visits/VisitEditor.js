@@ -139,7 +139,6 @@ export default function VisitEditor({visit,onSave,saving}) {
                         }})}
                         invalid={errors.groupSize ? true : false}
                     />
-                    {console.log(errors)}
                     {errors.groupSize && errors.groupSize.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                     {errors.groupSize && errors.groupSize.type === 'min' &&

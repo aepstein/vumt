@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
     Container,
     ListGroup,
@@ -9,16 +9,12 @@ import {
     CSSTransition,
     TransitionGroup
 } from 'react-transition-group';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom';
-import { getVisits, deleteVisit } from '../actions/visitActions';
+import { deleteVisit } from '../../actions/visitActions';
 
-function VisitsList() {
-    const visits = useSelector(state => state.visit.visits, shallowEqual)
-    const visitsLoading = useSelector(state => state.visit.visitsLoading)
-    const visitsLoaded = useSelector(state => state.visit.visitsLoaded)
-
+export default function VisitsList({visits}) {
     const dispatch = useDispatch()
     
     const { t, i18n } = useTranslation('visit')
@@ -26,12 +22,6 @@ function VisitsList() {
     const onDeleteClick = (id) => {
         dispatch(deleteVisit(id))
     }
-
-    useEffect(() => {
-        if (!visitsLoading && !visitsLoaded) {
-            dispatch(getVisits())
-        }
-    })
 
     return <div>
         <Container>
@@ -64,5 +54,3 @@ function VisitsList() {
         </Container>
     </div>
 }
-
-export default VisitsList;
