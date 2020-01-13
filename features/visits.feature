@@ -13,6 +13,11 @@ Feature: Manage visits
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         Then I should see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        When I click the "Detail" button
+        Then I should see "Date of visit" defined as tomorrow
+        And I should see "Starting point" defined as "Adirondack Loj"
+        And I should see "Destinations" defined as "Algonquin Summit"
+        And I should see "Number of people in group" defined as "4"
 
     Scenario: Add visit
         Given I am registered as "bmarshall@example.com"
@@ -47,7 +52,7 @@ Feature: Manage visits
             | value | message                |
             | -1    | Must be at least 1     |
             | 2.5   | Must be a whole number |
-    
+
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"

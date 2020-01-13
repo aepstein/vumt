@@ -23,7 +23,7 @@ Given(/I have registered a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)
 )
 
 When('I delete the visit to {string}', async (visit) => {
-     await clickByXPath(`//button[contains(..,'${visit}')]`)
+     await clickByXPath(`//button[contains(..,'${visit}') and contains(.,"Remove")]`)
      await waitFor(`//div[contains(@class,'visits-list') and not(contains(.//li,'${visit}'))]`)
 });
 

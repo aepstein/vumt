@@ -3,8 +3,10 @@ const {
     clickByText,
     fillByLabel,
     loginAs,
+    parseInput,
     shouldBeLoggedInAs,
     shouldSeeErrorWithLabel,
+    shouldSeeDefinition,
     takeScreenshot,
     visitPage,
     waitFor
@@ -39,3 +41,7 @@ Then('the {string} field should have an error {string}', async (label, error) =>
     await new Promise(r => setTimeout(r, 200))
     await shouldSeeErrorWithLabel(error,label)
 })
+
+Then(/I should see "([^"]+)" defined as ("[^"]+"|today|tomorrow)/, async (dt, dd) => {
+    await shouldSeeDefinition(dt,parseInput(dd))
+});

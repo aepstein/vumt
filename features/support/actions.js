@@ -133,10 +133,12 @@ const waitFor = async (selector) => {
 
 const relativeDate = (description) => {
     const relativeDate = new Date()
-    switch(relativeDate) {
+    switch(description) {
         case 'tomorrow':
             relativeDate.setDate(relativeDate.getDate() + 1)
-            break
+			break
+		default:
+			relativeDate.setDate(relativeDate.getDate())
 	}
 	return relativeDate
 }
@@ -146,7 +148,23 @@ const shouldSeeErrorWithLabel = async (error,label) => {
 		`ancestor::div[contains(@class,'form-group') and contains(.//label,'${label}')]]`)
 }
 
+const parseInput = (input) => {
+	switch (input) {
+		case 'tomorrow':
+		case 'today':
+			return Intl.DateTimeFormat('en-US').format(relativeDate(input))
+		default:
+			return input.replace(/"/g,'')
+	}
+}
+
+const shouldSeeDefinition = async (dt,dd) => {
+	const q = `//dl/dt[contains(text(),'${dt}')]/following-sibling::dd[contains(text(),'${dd}')]`
+	await waitFor(q)
+}
+
 const takeScreenshot = async () => {
+	await new Promise(r => setTimeout(r, 200))
 	await scope.context.currentPage.screenshot({path: `sc${sc++}.png`});
 }
 
@@ -158,11 +176,13 @@ module.exports = {
 	fillByPlaceholder,
 	fillTypeaheadByPlaceholder,
 	loginAs,
+	parseInput,
 	visitExists,
 	visitPage,
 	relativeDate,
 	shouldBeLoggedInAs,
 	shouldSee,
+	shouldSeeDefinition,
 	shouldSeeErrorWithLabel,
 	shouldSeeText,
 	takeScreenshot,

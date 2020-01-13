@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom'
 import {
     Container,
     ListGroup,
@@ -16,6 +17,7 @@ import { deleteVisit } from '../../actions/visitActions';
 
 export default function VisitsList({visits}) {
     const dispatch = useDispatch()
+    const history = useHistory()
     
     const { t, i18n } = useTranslation('visit')
 
@@ -39,11 +41,18 @@ export default function VisitsList({visits}) {
                             <ListGroupItem>
                                 <Button
                                     className="remove-btn"
+                                    color="info"
+                                    size="sm"
+                                    style={{marginRight: '0.5rem'}}
+                                    onClick={() => history.push('/visits/' + _id)}
+                                >{t('commonForms:detail')}</Button>
+                                <Button
+                                    className="remove-btn"
                                     color="danger"
                                     size="sm"
                                     style={{marginRight: '0.5rem'}}
                                     onClick={() => onDeleteClick(_id)}
-                                >&times;</Button>
+                                >{t('commonForms:remove')}</Button>
                                 <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language).format(startOn) : ''}</strong>:&nbsp;
                                 <em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>
                             </ListGroupItem>

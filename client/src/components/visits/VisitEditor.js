@@ -18,7 +18,7 @@ import axios from 'axios'
 
 export default function VisitEditor({visit,onSave,saving}) {
     const [ startOn, setStartOn ] = useState('')
-    const [ origin, setOrigin ] = useState('')
+    const [ origin, setOrigin ] = useState([])
     const [ originOptions, setOriginOptions ] = useState([])
     const [ originLoading, setOriginLoading ] = useState(false)
     const originSearch = (query) => {

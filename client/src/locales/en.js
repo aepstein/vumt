@@ -6,6 +6,7 @@ const locale = {
         "cancel": "Cancel",
         "country": "Country of residence",
         "countryPlaceholder": "Select country",
+        "detail": "Detail",
         "email": "Email",
         "emailPlaceholder": "me@example.com",
         "firstName": "First name",
@@ -15,6 +16,7 @@ const locale = {
         "postalCodeInvalid": "Must be correctly formatted postal code for {{country}}",
         "province": "State, province, or territory",
         "provincePlaceholder": "Select state, province, or territory",
+        "remove": "Remove",
         "invalidRequired": "Cannot be blank",
         "mustBeWholeNumber": "Must be a whole number",
         "mustBeAtLeast": "Must be at least {{min}}"
@@ -25,6 +27,7 @@ const locale = {
         "addVisit": "Add visit",
         "destinations": "Destinations",
         "destinationsPlaceholder": "Select your destination(s)",
+        "detailHeading": "Visit detail",
         "groupSize": "Number of people in group",
         "origin": "Starting point",
         "originPlaceholder": "Select your starting point",
