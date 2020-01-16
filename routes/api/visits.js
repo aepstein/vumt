@@ -1,8 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
-
 const Visit = require('../../models/Visit');
+const visit = require('../../middleware/visit')
+const handleValidationError = require('../../lib/handleValidationError')
+const attrAccessible = (req) => {
+    const attrAccessible = req.visit ? req.visit : {}
+    const allowed = ['startOn','origin','destinations','groupSize']
+    allowed.filter((key) => Object.keys(req.body).includes(key)).
+        forEach((key) => {
+            attrAccessible[key] = req.body[key]
+        })
+    return attrAccessible
+}
 
 // @route GET api/visits
 // @desc Get all visits
@@ -21,44 +31,63 @@ router.get('/', async (req, res) => {
     return res.json(visits)
 });
 
+// @route GET api/visits/:visitId
+// @desc Load a single visit
+// @access Private
+router.get('/:visitId', auth, visit(), async (req, res) => {
+    return res.status(200).json(req.visit)
+})
+
+// @route PUT api/visits/:visitId
+// @desc Update an existing visit
+// @access Private
+router.put('/:visitId', auth, visit(), async (req, res) => {
+    attrAccessible(req)
+    try {
+        return res.status(200).json(await req.visit.save())
+    }
+    catch(err) {
+        if (err.name === 'ValidationError') {
+            return handleValidationError(err,res)
+        }
+        else {
+            throw err
+        }
+    }
+})
+
 // @route POST api/visits
 // @desc Create a new visit
 // @access Private
 router.post('/', auth, async (req, res) => {
-    const {
-        startOn,
-        origin,
-        destinations,
-        groupSize
-    } = req.body;
-    if (!origin || !startOn || !groupSize) {
-        return res.status(400)
-            .json({
-                msg: 'Provide required fields'
-            })
-    }
     const newVisit = new Visit({
-        user: req.user.id,
-        startOn,
-        origin,
-        destinations,
-        groupSize
+        ...attrAccessible(req),
+        user: req.user.id
     });
-    const savedVisit = await newVisit.save()
-    const populatedVisit = await savedVisit
-        .populate('origin')
-        .populate('destinations')
-        .execPopulate()
-    return res.status(201).json(populatedVisit);
+    try {
+        const savedVisit = await newVisit.save()
+        const populatedVisit = await savedVisit
+            .populate('origin')
+            .populate('destinations')
+            .execPopulate()
+        return res.status(201).json(populatedVisit);
+    }
+    catch(err) {
+        if (err.name === 'ValidationError') {
+            return handleValidationError(err,res)
+        }
+        else {
+            throw err
+        }
+    }
 });
 
 // @route DELETE api/visits
 // @desc Delete an existing visit
 // @access Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:visitId', auth, visit(), async (req, res) => {
     try {
-        const visit = Visit.findById(req.params.id)
-        await visit.deleteOne()
+        await req.visit.deleteOne()
         return res.json({success: true})
     }
     catch(err) {
