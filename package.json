@@ -32,7 +32,7 @@
     "i18n-iso-countries": "^4.3.1",
     "jsonwebtoken": "^8.5.1",
     "migrate-mongo": "^7.0.1",
-    "mongoose": "^5.7.3",
+    "mongoose": "^5.7.5",
     "postal-codes-js": "^2.2.5",
     "provinces": "^1.11.0"
   },
