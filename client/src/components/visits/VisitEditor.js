@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -17,8 +17,20 @@ import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 
 export default function VisitEditor({visit,onSave,saving}) {
+    const { t, i18n } = useTranslation('visit')
+
     const [ startOn, setStartOn ] = useState('')
+    useEffect(() => {
+        if (visit.startOn === '') return setStartOn('')
+        setStartOn(Intl.DateTimeFormat(i18n.lng).format(visit.startOn))
+    },[visit.startOn,i18n,setStartOn])
     const [ origin, setOrigin ] = useState([])
+    useEffect(() => {
+        const vOrigin = visit.origin._id ? [{id: visit.origin._id, label: visit.origin.name}] : []
+        setOriginOptions(vOrigin)
+        setOrigin(vOrigin)
+    },[visit.origin])
+    const originRef = useRef()
     const [ originOptions, setOriginOptions ] = useState([])
     const [ originLoading, setOriginLoading ] = useState(false)
     const originSearch = (query) => {
@@ -33,9 +45,20 @@ export default function VisitEditor({visit,onSave,saving}) {
             })
     }
     const [ destinations, setDestinations ] = useState([])
+    useEffect(() => {
+        const vDestinations = visit.destinations.map((d) => {
+            return {id: d._id, label: d.name}
+        })
+        setDestinationOptions(vDestinations)
+        setDestinations(vDestinations)
+    },[visit.destinations])
+    const destinationsRef = useRef()
     const [ destinationOptions, setDestinationOptions ] = useState([])
     const [ destinationLoading, setDestinationLoading ] = useState(false)
     const [ groupSize, setGroupSize ] = useState('')
+    useEffect(() => {
+        setGroupSize(visit.groupSize)
+    },[visit.groupSize])
     const destinationSearch = (query) => {
         setDestinationLoading(true)
         axios
@@ -47,8 +70,6 @@ export default function VisitEditor({visit,onSave,saving}) {
                 }))
             })
     }
-
-    const { t } = useTranslation('visit')
 
     const { register, handleSubmit, setError, errors } = useForm()
 
@@ -62,6 +83,7 @@ export default function VisitEditor({visit,onSave,saving}) {
             return
         }
         const newVisit = {
+            _id: visit._id,
             startOn,
             origin: (origin && origin[0] ? origin[0].id : ''),
             destinations: destinations.map((d) => {
@@ -76,7 +98,7 @@ export default function VisitEditor({visit,onSave,saving}) {
 
     return <div>
         <Container>
-            <h2>{t('addVisit')}</h2>
+            <h2>{visit._id ? t('editVisit') : t('addVisit')}</h2>
             <Form
                 onSubmit={handleSubmit(onSubmit)}
             >
@@ -105,6 +127,8 @@ export default function VisitEditor({visit,onSave,saving}) {
                         onSearch={originSearch}
                         onChange={(selected) => setOrigin(selected)}
                         isInvalid={errors.origin}
+                        ref={originRef}
+                        clearButton={true}
                     />
                     {errors.origin && <Input type="hidden" invalid />}
                     {errors.origin && errors.origin.type === 'required' &&
@@ -122,7 +146,8 @@ export default function VisitEditor({visit,onSave,saving}) {
                         isLoading={destinationLoading}
                         onSearch={destinationSearch}
                         onChange={(selected) => setDestinations(selected)}
-                        inputRef={register}
+                        ref={destinationsRef}
+                        clearButton={true}
                     />
                 </FormGroup>
                 <FormGroup>
@@ -151,7 +176,7 @@ export default function VisitEditor({visit,onSave,saving}) {
                         color="dark"
                         style={{marginTop: '2rem'}}
                         block
-                    >{t('addVisit')}</Button>
+                    >{visit._id ? t('editVisit') : t('addVisit')}</Button>
                 </ButtonGroup>
             </Form>
         </Container>

@@ -1,8 +1,9 @@
 export const GET_VISITS = 'GET_VISITS';
-export const ADD_VISIT = 'ADD_VISIT';
-export const ADDING_VISIT = 'ADDING_VISIT';
-export const ADDING_VISIT_CANCEL = 'ADDING_VISIT_CANCEL';
 export const DELETE_VISIT = 'DELETE_VISIT';
+export const ADD_VISIT = 'ADD_VISIT'
+export const UPDATE_VISIT = 'UPDATE_VISIT'
+export const SAVING_VISIT = 'SAVING_VISIT';
+export const SAVING_VISIT_CANCEL = 'SAVING_VISIT_CANCEL';
 export const VISITS_LOADING = 'VISITS_LOADING';
 export const USER_LOADING = "USER_LOADING";
 export const USER_LOADED = "USER_LOADED";

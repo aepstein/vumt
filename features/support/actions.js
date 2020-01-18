@@ -91,23 +91,53 @@ const waitForText = async (text, context = "//a") => {
 	await scope.context.currentPage.waitForXPath(selector);
 };
 
+const clearInput = async (el) => {
+	// Clear out any existing value
+	await el.evaluate((input) => input.value = "")
+	// const inputValue = await el.evaluate((input) => {
+	// 	return input.value
+	// })
+	// for (let i = 0; i < inputValue.length; i++) {
+	// 	await el.press('Backspace');
+	// }
+}
+
 const fillByLabel = async (label, fill ) => {
 	const escapedText = escapeXpathString(label);
 	const selector = `//input[@name=(//label[contains(text(),${escapedText})][1]/@for)]`;
 	const page = scope.context.currentPage
-	const el = await page.$x(selector);
-	// Clear out any existing value
-	const inputValue = await el[0].evaluate((input) => {
-		return input.value
-	})
-	for (let i = 0; i < inputValue.length; i++) {
-		await el[0].press('Backspace');
-	}
+	const el = await page.$x(selector)
+	clearInput(el[0])
 	await el[0].click();
 	await el[0].type(fill);
 };
 
-const fillByPlaceholder = async (label, fill ) => {
+const selectFormGroupByLabel = async (label) => {
+	const escapedText = escapeXpathString(label);
+	const selector = `//div[contains(@class,'form-group') and contains(.//label,${escapedText})]`
+	const el = await scope.context.currentPage.$x(selector)
+	return el[0]
+}
+
+const selectTypeaheadCloseByLabel = async (label) => {
+	const formGroup = await selectFormGroupByLabel(label)
+	const el = await formGroup.$x(`.//button[contains(@class,'rbt-close')]`)
+	return el[0]
+}
+
+const selectTypeaheadInputByLabel = async (label) => {
+	const formGroup = await selectFormGroupByLabel(label)
+	const el = await formGroup.$x(`.//input[contains(@class,'rbt-input-main')]`)
+	return el[0]
+}
+
+const fillElement = async (el, fill, clear = false ) => {
+	if (clear) await clearInput(el)
+	await el.click()
+	await el.type(fill)
+};
+
+const fillByPlaceholder = async (label, fill, clear = false ) => {
 	const escapedText = escapeXpathString(label);
 	const selector = `//input[contains(@placeholder,${escapedText})]`;
 	const page = scope.context.currentPage
@@ -116,9 +146,23 @@ const fillByPlaceholder = async (label, fill ) => {
 	await el[0].type(fill);
 };
 
+const fillTypeaheadByLabel = async (label, fill) => {
+	const closeButton = await selectTypeaheadCloseByLabel(label)
+	if (closeButton) await closeButton.click()
+	const el = await selectTypeaheadInputByLabel(label)
+    await fillElement(el,fill.substring(0,1))
+    await new Promise(r => setTimeout(r, 200))
+    await fillElement(el,fill.substring(1,2))
+    await new Promise(r => setTimeout(r, 200))
+	await fillElement(el,fill.substring(2,fill.length-1))
+    const choice = `//a[contains(@class,'dropdown-item') and contains(.,'${fill}')]`
+    await waitFor(choice)
+    await clickByXPath(choice)
+}
+
 const fillTypeaheadByPlaceholder = async (placeholder, fill) => {
     const choice = `//a[contains(@class,'dropdown-item') and contains(.,'${fill}')]`
-    await fillByPlaceholder(placeholder,fill.substring(0,1))
+    await fillByPlaceholder(placeholder,fill.substring(0,1),true)
     await new Promise(r => setTimeout(r, 200))
     await fillByPlaceholder(placeholder,fill.substring(1,2))
     await new Promise(r => setTimeout(r, 200))
@@ -140,6 +184,7 @@ const relativeDate = (description) => {
 		default:
 			relativeDate.setDate(relativeDate.getDate())
 	}
+	relativeDate.setHours(0,0,0,0)
 	return relativeDate
 }
 
@@ -174,6 +219,7 @@ module.exports = {
 	create,
 	fillByLabel,
 	fillByPlaceholder,
+	fillTypeaheadByLabel,
 	fillTypeaheadByPlaceholder,
 	loginAs,
 	parseInput,

@@ -2,8 +2,9 @@ import axios from 'axios';
 import {
     GET_VISITS,
     ADD_VISIT,
-    ADDING_VISIT,
-    ADDING_VISIT_CANCEL,
+    UPDATE_VISIT,
+    SAVING_VISIT,
+    SAVING_VISIT_CANCEL,
     DELETE_VISIT,
     VISITS_LOADING
  } from './types';
@@ -45,25 +46,27 @@ export const deleteVisit = id => (dispatch, getState) => {
         });
 };
 
-export const addVisit = (newVisit, history) => (dispatch, getState) => {
-    dispatch({ type: ADDING_VISIT })
-    axios
-        .post('/api/visits', newVisit, tokenConfig(getState))
-        .then(res => {
-            dispatch({
-                type: ADD_VISIT,
-                payload: {
-                    ...res.data,
-                    startOn: Date.parse(res.data.startOn)
-                }
-            })
-            history.push('/')
+export const saveVisit = (visit, history) => async (dispatch, getState) => {
+    dispatch({ type: SAVING_VISIT })
+    const res = visit._id ? await axios
+            .put('/api/visits/' + visit._id, visit, tokenConfig(getState)) : 
+        await axios
+            .post('/api/visits', visit, tokenConfig(getState))
+    try {
+        dispatch({
+            type: visit._id ? UPDATE_VISIT : ADD_VISIT,
+            payload: {
+                ...res.data,
+                startOn: Date.parse(res.data.startOn)
+            }
         })
-        .catch(err => {
-            dispatch({type: ADDING_VISIT_CANCEL})
-            dispatch(returnErrors(err.response.data,err.response.status));
-        });
-};
+        history.push('/')
+    }
+    catch(err) {
+        dispatch({type: SAVING_VISIT_CANCEL})
+        dispatch(returnErrors(err.response.data,err.response.status))
+    }
+}
 
 export const setVisitsLoading = () => {
     return {

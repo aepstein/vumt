@@ -9,7 +9,6 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import NeedAuth from './components/NeedAuth'
 import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
-import VisitManager from './containers/visits/VisitManager'
 import VisitsManager from './containers/visits/VisitsManager'
 import RegisterUser from './containers/RegisterUser'
 import UserDashboard from './containers/UserDashboard'
@@ -32,7 +31,10 @@ const Root = ({ store }) => (
                 <RegisterUser />
               </UnAuthRoute>
               <AuthRoute path="/visits/new">
-                <VisitManager action='new'/>
+                <VisitsManager action='new'/>
+              </AuthRoute>
+              <AuthRoute path="/visits/:visitId/edit">
+                <VisitsManager action='edit'/>
               </AuthRoute>
               <AuthRoute path="/visits/:visitId">
                 <VisitsManager action='show'/>

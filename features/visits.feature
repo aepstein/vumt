@@ -19,6 +19,22 @@ Feature: Manage visits
         And I should see "Destinations" defined as "Algonquin Summit"
         And I should see "Number of people in group" defined as "4"
 
+    Scenario: Edit a visit
+        Given an origin "Johns Brook Garden" exists
+        And a destination "Marcy Summit" exists
+        And I am registered as "bmarshall@example.com"
+        And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        And I logged in as "bmarshall@example.com"
+        When I visit the "home" page
+        And I click "Edit" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        When I fill in a visit for today from "Johns Brook Garden" to "Marcy Summit"
+        And I click the "Edit visit" button
+        Then I should see my visit for today from "Johns Brook Garden" to "Marcy Summit"
+        When I click the "Detail" button
+        Then I should see "Date of visit" defined as today
+        And I should see "Starting point" defined as "Johns Brook Garden"
+        And I should see "Destinations" defined as "Marcy Summit"
+
     Scenario: Add visit
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"

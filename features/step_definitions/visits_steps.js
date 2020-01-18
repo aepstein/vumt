@@ -2,7 +2,7 @@ const { Given, When, Then } = require('cucumber');
 const {
     clickByXPath,
     fillByLabel,
-    fillTypeaheadByPlaceholder,
+    fillTypeaheadByLabel,
     relativeDate,
     shouldSeeText,
     takeScreenshot,
@@ -10,6 +10,12 @@ const {
     waitFor
 } = require('../support/actions');
 const scope = require('../support/scope');
+const visitRowSelector = (startOn,origin,destination) => {
+    return `//li[contains(.,'${Intl.DateTimeFormat('en-US').format(relativeDate(startOn))}') and contains(.,'${origin}') and contains(.,'${destination}')]`
+}
+const visitRowText = (startOn,origin,destination) => {
+    return `${Intl.DateTimeFormat('en-US').format(relativeDate(startOn))}: From ${origin} To ${destination}`
+}
 
 Given(/I have registered a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"/,
     async (startOn, originName, destinationName) => {
@@ -32,15 +38,22 @@ When(/I fill in a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"(?: exce
         const startOnDate = relativeDate(startOn)
         await waitFor('form')
         if ( except != "Date of visit" ) await fillByLabel("Date of visit",Intl.DateTimeFormat('en-US').format(startOnDate))
-        if ( except != "Starting point" ) await fillTypeaheadByPlaceholder("Select your starting point",origin)
+        if ( except != "Starting point" ) await fillTypeaheadByLabel("Starting point",origin)
         if ( except != "Number of people in group" ) await fillByLabel("Number of people in group",'4')
-        await fillTypeaheadByPlaceholder("Select your destination(s)",destination)
+        await fillTypeaheadByLabel("Destinations",destination)
 });
+
+When(
+    /^I click "([^"]+)" for my visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"$/,
+    async (button,when,from,to) => {
+        await waitFor('.visits-list')
+        await clickByXPath(visitRowSelector(when,from,to)+`//button[contains(text(),'${button}')]`)
+    }
+)
 
 Then(
     /^I should( not)? see my visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"$/,
     async (not,startOn,origin,destination) => {
-        const visit = `${Intl.DateTimeFormat('en-US').format(relativeDate(startOn))}: From ${origin} To ${destination}`
         await waitFor('.visits-list')
-        await shouldSeeText(".visits-list", not, visit);
+        await shouldSeeText(".visits-list", not, visitRowText(startOn,origin,destination));
 });

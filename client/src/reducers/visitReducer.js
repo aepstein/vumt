@@ -1,11 +1,12 @@
 import { 
     GET_VISITS,
     ADD_VISIT,
-    ADDING_VISIT,
+    UPDATE_VISIT,
+    SAVING_VISIT,
     DELETE_VISIT,
     VISITS_LOADING,
     LOGOUT_SUCCESS,
-    ADDING_VISIT_CANCEL
+    SAVING_VISIT_CANCEL
 } from '../actions/types';
 
 const initialState = {
@@ -13,6 +14,16 @@ const initialState = {
     visitsLoading: false,
     visitsLoaded: false,
     visitSaving: false
+}
+
+const reduceUpdatedVisits = (visits,payload) => {
+    const i = visits.reduce((pre,cur,i) => {
+        if (cur._id === payload._id) return i
+        return pre
+    },-1)
+    const reducedVisits = [...visits]
+    reducedVisits[i] = payload
+    return reducedVisits
 }
 
 export default function( state = initialState, action ) {
@@ -40,12 +51,18 @@ export default function( state = initialState, action ) {
                 visits: [action.payload, ...state.visits],
                 visitSaving: false
             }
-        case ADDING_VISIT:
+        case UPDATE_VISIT:
+            return {
+                ...state,
+                visits: reduceUpdatedVisits(state.visits,action.payload),
+                visitSaving: false
+            }
+        case SAVING_VISIT:
             return {
                 ...state,
                 visitSaving: true
             }
-        case ADDING_VISIT_CANCEL:
+        case SAVING_VISIT_CANCEL:
             return {
                 ...state,
                 visitSaving: false

@@ -44,7 +44,12 @@ router.get('/:visitId', auth, visit(), async (req, res) => {
 router.put('/:visitId', auth, visit(), async (req, res) => {
     attrAccessible(req)
     try {
-        return res.status(200).json(await req.visit.save())
+        const savedVisit = await req.visit.save()
+        const populatedVisit = await savedVisit
+            .populate('origin')
+            .populate('destinations')
+            .execPopulate()
+        return res.status(200).json(populatedVisit)
     }
     catch(err) {
         if (err.name === 'ValidationError') {

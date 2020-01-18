@@ -40,12 +40,19 @@ export default function VisitsList({visits}) {
                         >
                             <ListGroupItem>
                                 <Button
-                                    className="remove-btn"
+                                    className="info-btn"
                                     color="info"
                                     size="sm"
                                     style={{marginRight: '0.5rem'}}
                                     onClick={() => history.push('/visits/' + _id)}
                                 >{t('commonForms:detail')}</Button>
+                                <Button
+                                    className="warn-btn"
+                                    color="warn"
+                                    size="sm"
+                                    style={{marginRight: '0.5rem'}}
+                                    onClick={() => history.push('/visits/' + _id + '/edit')}
+                                >{t('commonForms:edit')}</Button>
                                 <Button
                                     className="remove-btn"
                                     color="danger"
