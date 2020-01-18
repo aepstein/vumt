@@ -1,0 +1,27 @@
+= Visitor Use Management Tool
+
+== About
+
+This is a prototypal tool intended to illustrate how the visitor registration process for many preserves in New York State, such as the public forest preserve lands in the Adirondack Park, could be conducted online.
+Currently, most preserves in New York feature paper-based registers at popular access points where visitors are expected to sign in and provide a limited amount of information.
+This tool seeks to provide an online alternative where visitors can register online using mobile devices.
+
+This is an experimental application provided without warranty.
+Use at your own risk.
+
+== Structure of Project
+
+Key folders:
+* client: Contains client application assets. Client is a React javascript application that speaks to the server API.
+* features: End-to-end tests.
+* routes: Controller and route definitions for the server, which is mainly an expressJS backend that serves a REST-ful JSON API.
+* test: Unit tests.
+
+== Acknowledgments
+
+The initial design of this project was made possible in part by tutorials provided by link:https://www.traversymedia.com/[Traversy Media].
+
+== Copyright
+
+Copyright 2019, 2020 Adirondack Wilderness Advocates, Inc.
+See LICENSE file for terms of use.
