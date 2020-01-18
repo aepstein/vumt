@@ -6,6 +6,7 @@ const locale = {
         "cancel": "Cancel",
         "country": "Pays où vous résidez",
         "countryPlaceholder": "Choisissez le pays",
+        "detail": "Détail",
         "edit": "Éditer",
         "email": "Email",
         "emailPlaceholder": "moi@example.com",
@@ -16,6 +17,7 @@ const locale = {
         "postalCodeInvalid": "Le code postal doit être correctement formaté pour {{country}}",
         "province": "État, province ou territoire",
         "provincePlaceholder": "Choisissez l'état, province ou territoire",
+        "remove": "Retirer",
         "invalidRequired": "Ne peut être vide",
         "mustBeWholeNumber": "Doit être un nombre entier",
         "mustBeAtLeast": "Doit être au moins {{min}}"

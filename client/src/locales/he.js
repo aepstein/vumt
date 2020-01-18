@@ -6,6 +6,7 @@ const locale = {
         "cancel": "בטל",
         "country": "מדינה בה אתה מתגורר",
         "countryPlaceholder": "בחר מדינה",
+        "detail": "פרט",
         "edit": "ערוך",
         "email": "אימייל",
         "emailPlaceholder": "me@example.com",
@@ -16,6 +17,7 @@ const locale = {
         "postalCodeInvalid": "חובה להיות מעוצב כנקודת מיקוד עבור\u202b {{country}}",
         "province": "מדינה, מחוז או טריטוריה",
         "provincePlaceholder": "בחר את המדינה, המחוז או הטריטוריה",
+        "remove": "תמחוק",
         "invalidRequired": "לא ריק",
         "mustBeWholeNumber": "חייב להיות מספר שלם",
         "mustBeAtLeast": "חייב להיות לפחות\u202b {{min}}"
