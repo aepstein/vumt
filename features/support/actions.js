@@ -92,14 +92,7 @@ const waitForText = async (text, context = "//a") => {
 };
 
 const clearInput = async (el) => {
-	// Clear out any existing value
 	await el.evaluate((input) => input.value = "")
-	// const inputValue = await el.evaluate((input) => {
-	// 	return input.value
-	// })
-	// for (let i = 0; i < inputValue.length; i++) {
-	// 	await el.press('Backspace');
-	// }
 }
 
 const fillByLabel = async (label, fill ) => {
@@ -160,17 +153,6 @@ const fillTypeaheadByLabel = async (label, fill) => {
     await clickByXPath(choice)
 }
 
-const fillTypeaheadByPlaceholder = async (placeholder, fill) => {
-    const choice = `//a[contains(@class,'dropdown-item') and contains(.,'${fill}')]`
-    await fillByPlaceholder(placeholder,fill.substring(0,1),true)
-    await new Promise(r => setTimeout(r, 200))
-    await fillByPlaceholder(placeholder,fill.substring(1,2))
-    await new Promise(r => setTimeout(r, 200))
-    await fillByPlaceholder(placeholder,fill.substring(2,fill.length-1))
-    await waitFor(choice)
-    await clickByXPath(choice)
-}
-
 const waitFor = async (selector) => {
 	await scope.context.currentPage.waitFor(selector);
 };
@@ -220,7 +202,6 @@ module.exports = {
 	fillByLabel,
 	fillByPlaceholder,
 	fillTypeaheadByLabel,
-	fillTypeaheadByPlaceholder,
 	loginAs,
 	parseInput,
 	visitExists,
