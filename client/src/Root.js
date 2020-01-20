@@ -15,11 +15,11 @@ import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
 import './i18n'
 import DirectionProvider from './components/DirectionProvider'
-import Spinner from './components/Spinner'
+import { Spinner } from 'reactstrap'
 
 const Root = ({ store }) => (
     <Provider store={store}>
-        <Suspense fallback={<Spinner />}>
+        <Suspense fallback={<Spinner color="primary" />}>
           <DirectionProvider>
             <Router>
             <AppNavbar />

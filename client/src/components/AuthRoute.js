@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useHistory, Route } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import Spinner from './Spinner'
+import { Spinner } from 'reactstrap'
 
 function AuthRoute({ children, ...rest }) {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
@@ -19,7 +19,7 @@ function AuthRoute({ children, ...rest }) {
     return ( 
       <Route
         {...rest}
-        render={() => isAuthenticated ? children : <Spinner />}
+        render={() => isAuthenticated ? children : <Spinner color="primary" />}
       />
     );
   }

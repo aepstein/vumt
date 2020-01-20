@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { getVisits, saveVisit } from '../../actions/visitActions';
-import Spinner from '../../components/Spinner'
+import { Spinner } from 'reactstrap'
 import VisitsList from '../../components/visits/VisitsList'
 import VisitDetail from '../../components/visits/VisitDetail'
 import VisitEditor from '../../components/visits/VisitEditor'
@@ -46,7 +46,7 @@ export default function VisitsManager({action}) {
         }
     },[visit,visitId,loaded,visits])
 
-    if (loading) return <Spinner />
+    if (loading) return <Spinner color="secondary" />
 
     switch (action ? action : defaultAction) {
         case 'new':
