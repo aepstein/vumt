@@ -59,6 +59,13 @@ describe('/api/visits', () => {
             await res.should.have.status(400)
             await res.body.should.have.a.property('msg').eql('Path `groupSize` is required.')
         });
+        it('should not save without durationNights', async () => {
+            const auth = await withAuth()
+            let visit = await validVisit({durationNights: null})
+            const res = await action(auth,visit)
+            await res.should.have.status(400)
+            await res.body.should.have.a.property('msg').eql('Path `durationNights` is required.')
+        })
         it('should deny unauthenticated user',async () => {
             const visit = await validVisit();
             const res = await action(null,visit);

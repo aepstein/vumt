@@ -28,6 +28,7 @@ const locale = {
         "addVisit": "הוסף ביקור",
         "destinations": "יעדים",
         "destinationsPlaceholder": "בחר את היעדים שלך",
+        "durationNights": "משך בלילות",
         "editVisit": "ערוך את הביקור",
         "groupSize": "מספר האנשים בקבוצה",
         "startOn": "תאריך הביקור",

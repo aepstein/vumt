@@ -21,4 +21,12 @@ describe('Visit', () => {
         const visit = await factory.build('visit',{groupSize: 0})
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    it('should not save without durationNights', async () => {
+        const visit = await factory.build('visit',{durationNights: null})
+        await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should not save with durationNights less than 0', async () => {
+        const visit = await factory.build('visit',{durationNights: -1})
+        await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
 })

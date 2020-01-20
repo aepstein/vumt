@@ -29,6 +29,7 @@ const locale = {
         "destinations": "Destinations",
         "destinationsPlaceholder": "Select your destination(s)",
         "detailHeading": "Visit detail",
+        "durationNights": "Duration in nights",
         "editVisit": "Edit visit",
         "groupSize": "Number of people in group",
         "origin": "Starting point",

@@ -18,6 +18,8 @@ export default function VisitDetail({visit}) {
             <dd>{visit.destinations.map(d => d.name).join(', ')}</dd>
             <dt>{t('groupSize')}</dt>
             <dd>{visit.groupSize}</dd>
+            <dt>{t('durationNights')}</dt>
+            <dd>{visit.durationNights}</dd>
         </dl>
     </Container>
 }

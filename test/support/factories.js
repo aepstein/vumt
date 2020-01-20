@@ -44,5 +44,6 @@ factory.define('visit', Visit, {
     startOn: Date.now(),
     origin: factory.assoc('originPlace','_id'),
     destinations: [],
+    durationNights: 0,
     groupSize: 4
 })

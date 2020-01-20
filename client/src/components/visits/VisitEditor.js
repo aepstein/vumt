@@ -15,6 +15,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
+import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 
 export default function VisitEditor({visit,onSave,saving}) {
     const { t, i18n } = useTranslation('visit')
@@ -55,6 +56,10 @@ export default function VisitEditor({visit,onSave,saving}) {
     const destinationsRef = useRef()
     const [ destinationOptions, setDestinationOptions ] = useState([])
     const [ destinationLoading, setDestinationLoading ] = useState(false)
+    const [ durationNights, setDurationNights ] = useState('')
+    useEffect(() => {
+        setDurationNights(visit.durationNights)
+    },[visit.durationNights])
     const [ groupSize, setGroupSize ] = useState('')
     useEffect(() => {
         setGroupSize(visit.groupSize)
@@ -91,6 +96,7 @@ export default function VisitEditor({visit,onSave,saving}) {
                     "_id": d.id
                 }
             }),
+            durationNights,
             groupSize
         }
         onSave(newVisit)
@@ -158,9 +164,8 @@ export default function VisitEditor({visit,onSave,saving}) {
                         name="groupSize"
                         value={groupSize}
                         onChange={onChange(setGroupSize)}
-                        innerRef={register({required: true, min: 1, validate: (groupSize) => {
-                            if (!groupSize || !Number(groupSize)) return true
-                            return Number.isInteger(Number(groupSize))
+                        innerRef={register({required: true, min: 1, validate: {
+                            mustBeWholeNumber
                         }})}
                         invalid={errors.groupSize ? true : false}
                     />
@@ -168,7 +173,28 @@ export default function VisitEditor({visit,onSave,saving}) {
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                     {errors.groupSize && errors.groupSize.type === 'min' &&
                         <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 1})}</FormFeedback>}
-                    {errors.groupSize && errors.groupSize.type === 'validate' &&
+                    {errors.groupSize && errors.groupSize.type === 'mustBeWholeNumber' &&
+                        <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
+                    <Label for="durationNights">{t('durationNights')}</Label>
+                    <Input
+                        type="number"
+                        id="durationNights"
+                        name="durationNights"
+                        value={durationNights}
+                        onChange={onChange(setDurationNights)}
+                        innerRef={register({required: true, min: 0, validate: {
+                            min: mustBeAtLeast(0),
+                            mustBeWholeNumber
+                        }})}
+                        invalid={errors.durationNights ? true : false}
+                    />
+                    {errors.durationNights && errors.durationNights.type === 'required' &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                    {errors.durationNights && errors.durationNights.type === 'min' &&
+                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 0})}</FormFeedback>}
+                    {errors.durationNights && errors.durationNights.type === 'mustBeWholeNumber' &&
                         <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>

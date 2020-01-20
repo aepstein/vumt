@@ -18,6 +18,7 @@ Feature: Manage visits
         And I should see "Starting point" defined as "Adirondack Loj"
         And I should see "Destinations" defined as "Algonquin Summit"
         And I should see "Number of people in group" defined as "4"
+        And I should see "Duration in nights" defined as "0"
 
     Scenario: Edit a visit
         Given an origin "Johns Brook Garden" exists
@@ -55,19 +56,22 @@ Feature: Manage visits
             | Date of visit             |
             | Starting point            |
             | Number of people in group |
+            | Duration in nights        |
 
-    Scenario Outline: Try to add visit with invalid group size
+    Scenario Outline: Try to add visit with invalid values
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
         When I visit the "new visit" page
         When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
-        And I fill in "Number of people in group" with "<value>"
+        And I fill in "<field>" with "<value>"
         And I click the "Add visit" button
-        Then the "Number of people in group" field should have an error "<message>"
+        Then the "<field>" field should have an error "<message>"
         Examples:
-            | value | message                |
-            | -1    | Must be at least 1     |
-            | 2.5   | Must be a whole number |
+            | field                     | value | message                |
+            | Number of people in group | -1    | Must be at least 1     |
+            | Number of people in group | 2.5   | Must be a whole number |
+            | Duration in nights        | -1    | Must be at least 0     |
+            | Duration in nights        | 0.5   | Must be a whole number |
 
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"

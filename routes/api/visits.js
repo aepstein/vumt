@@ -6,7 +6,7 @@ const visit = require('../../middleware/visit')
 const handleValidationError = require('../../lib/handleValidationError')
 const attrAccessible = (req) => {
     const attrAccessible = req.visit ? req.visit : {}
-    const allowed = ['startOn','origin','destinations','groupSize']
+    const allowed = ['startOn','origin','destinations','durationNights','groupSize']
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
             attrAccessible[key] = req.body[key]

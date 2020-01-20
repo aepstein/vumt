@@ -21,6 +21,11 @@ const VisitSchema = new Schema({
     },
     // Destinations that will be included in visit
     destinations: [{type: Schema.Types.ObjectId, ref: 'place'}],
+    durationNights: {
+        type: Number,
+        required: true,
+        min: 0
+    },
     groupSize: {
         type: Number,
         required: true,

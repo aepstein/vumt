@@ -40,6 +40,7 @@ When(/I fill in a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"(?: exce
         if ( except != "Date of visit" ) await fillByLabel("Date of visit",Intl.DateTimeFormat('en-US').format(startOnDate))
         if ( except != "Starting point" ) await fillTypeaheadByLabel("Starting point",origin)
         if ( except != "Number of people in group" ) await fillByLabel("Number of people in group",'4')
+        if ( except != "Duration in nights" ) await fillByLabel("Duration in nights",'0')
         await fillTypeaheadByLabel("Destinations",destination)
 });
 

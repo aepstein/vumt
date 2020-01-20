@@ -28,6 +28,7 @@ const locale = {
         "addVisit": "Ajouter une visite",
         "destinations": "Destinations",
         "destinationsPlaceholder": "Sélectionnez vos destinations",
+        "durationNights": "Durée en nuits",
         "editVisit": "Éditer la visite",
         "groupSize": "Nombre de personnes dans le groupe",
         "startOn": "Date de visite",
