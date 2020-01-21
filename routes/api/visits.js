@@ -67,7 +67,7 @@ router.put('/:visitId', auth, visit(), async (req, res) => {
 router.post('/', auth, async (req, res) => {
     const newVisit = new Visit({
         ...attrAccessible(req),
-        user: req.user.id
+        user: req.authUser.id
     });
     try {
         const savedVisit = await newVisit.save()

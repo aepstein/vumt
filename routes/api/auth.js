@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
 // @desc    Get information of authenticated user
 // @access  Public
 router.get('/user', auth, async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password')
+  const user = await User.findById(req.authUser.id).select('-password')
   return res.json(user);
 })
 
