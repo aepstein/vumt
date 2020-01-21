@@ -1,5 +1,7 @@
 = Visitor Use Management Tool
 
+image::https://travis-ci.org/aepstein/vumt.svg?branch=master[]
+
 == About
 
 This is a prototypal tool intended to illustrate how the visitor registration process for many preserves in New York State, such as the public forest preserve lands in the Adirondack Park, could be conducted online.
