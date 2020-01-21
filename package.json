@@ -11,10 +11,10 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"NODE_ENV=development npm run server\" \"NODE_ENV=development npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
-    "test": "npm run test-unit && npm run test-cucumber",
-    "test-cucumber": "npm run client-build && npm run test-cucumber-nobuild",
+    "test": "NODE_ENV=test npm run test-unit && npm run test-cucumber",
+    "test-cucumber": "NODE_ENV=test npm run client-build && npm run test-cucumber-nobuild",
     "test-cucumber-nobuild": "NODE_ENV=test npx cucumber-js",
-    "test-cucumber-wip": "npm run client-build && npm run test-cucumber-wip-nobuild",
+    "test-cucumber-wip": "NODE_ENV=test npm run client-build && npm run test-cucumber-wip-nobuild",
     "test-cucumber-wip-nobuild": "NODE_ENV=test npx cucumber-js --tags @wip",
     "test-unit": "NODE_ENV=test mocha --timeout 10000 \"./test/*.js\" \"./test/api/*.js\" \"./test/models/*.js\"",
     "test-unit-wip": "NODE_ENV=test mocha --grep @wip --timeout 10000 \"./test/*.js\" \"./test/api/*.js\" \"./test/models/*.js\""
