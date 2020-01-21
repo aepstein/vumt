@@ -4,5 +4,7 @@ node_js:
 before_install:
  - npm i
  - npm i --prefix client
+services:
+ - mongodb
 script:
  - npm run test
