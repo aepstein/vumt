@@ -1,4 +1,7 @@
-const { chai, server } = require('../setup')
+const { chai, server, factory } = require('../setup')
+const {
+    withAuth
+} = require('../support/patterns')
 const {
     validUser
 } = require('../support/validProps');
@@ -88,4 +91,68 @@ describe('/api/users', () => {
             await res.body.user.should.have.a.property('postalCode').eql('12943');
         })
     });
+    describe.only('PUT /api/users/:userId',() => {
+        const action = async (auth,userProps,dUser) => {
+            const user = dUser ? dUser : auth.body.user
+            const res = chai.request(server)
+                .put('/api/users/' + user._id)
+                .send(userProps);
+            if ( auth ) { res.set('x-auth-token',auth.body.token); }
+            return res;
+        }
+        const loadUser = async (userId) => {
+            return User
+                .findOne({_id: userId})
+        }
+        it('should save with valid attributes',async () => {
+            const auth = await withAuth()
+            const newProps = {
+                firstName: 'Herbert',
+                lastName: 'Clark',
+                email: 'hclark@example.com',
+                password: 'adifferentpassword',
+                country: 'CA',
+                province: 'Quebec',
+                postalCode: 'H2T 2M2'
+            }
+            const res = await action(auth,newProps)
+            res.should.have.status(200)
+            const user = await loadUser(auth.body.user._id)
+            user.firstName.should.eql(newProps.firstName)
+            user.lastName.should.eql(newProps.lastName)
+            user.email.should.eql(newProps.email)
+            user.country.should.eql(newProps.country)
+            user.province.should.eql(newProps.province)
+            user.postalCode.should.eql(newProps.postalCode)
+        })
+        it('should fail with an invalid attribute',async () => {
+            const auth = await withAuth()
+            const newProps = {
+                firstName: null,
+                lastName: 'Clark',
+                email: 'hclark@example.com',
+                password: 'adifferentpassword',
+                country: 'CA',
+                province: 'Quebec',
+                postalCode: 'H2T 2M2'
+            }
+            const res = await action(auth,newProps)
+            res.should.have.status(400)
+        })
+        it('should deny with unauthorized user',async () => {
+            const auth = await withAuth()
+            const user = await factory.create('user')
+            const res = await action(auth,{},user)
+            res.should.have.status(401)
+            res.body.should.have.a.property('msg').eql('User not authorized to access user')
+        })
+        it('should deny without authentication',async () => {
+            const user = await factory.create('user')
+            const res = await chai.request(server)
+                .put('/api/users/' + user._id)
+                .send({})
+            res.should.have.status(401)
+            res.body.should.have.a.property('msg').eql('No token, authorization denied')
+        })
+    })
 });
