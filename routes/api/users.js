@@ -32,24 +32,11 @@ router.use(
 // @desc Register a new user
 // @access Public
 router.post('/', async (req, res) => {
-    const { firstName, lastName, email, password, country, province, postalCode } = req.body
-    if (!firstName || !lastName || !email || !password || !country) {
-        return res.status(400).json({msg: 'Please enter required fields'})
-    }
-    const user = await User.findOne({email})
-    if (user) return res.status(400).json({msg: 'User already exists with that email'})
-
     const newUser = new User({
-        firstName,
-        lastName,
-        email,
-        password,
-        country,
-        province,
-        postalCode
+        ...attrAccessible(req)
     })
-    const savedUser = await newUser.save()
     try {
+        const savedUser = await newUser.save()
         const token = await jwt.sign(
             { id: savedUser.id },
             jwtSecret,
@@ -68,7 +55,14 @@ router.post('/', async (req, res) => {
             }
         })
     }
-    catch(err) { throw err }
+    catch(err) {
+        if (err.name === 'ValidationError') {
+            return handleValidationError(err,res)
+        }
+        else {
+            throw err
+        }
+    }
 });
 
 // @route PUT api/users

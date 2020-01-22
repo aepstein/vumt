@@ -33,7 +33,7 @@ describe('/api/users', () => {
             res = await action(user);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Please enter required fields');
+            await res.body.should.have.a.property('msg').eql('Path `firstName` is required.');
         });
         it('should not register without lastName', async () => {
             let user = validUser();
@@ -41,7 +41,7 @@ describe('/api/users', () => {
             res = await action(user);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Please enter required fields');
+            await res.body.should.have.a.property('msg').eql('Path `lastName` is required.');
         });
         it('should not register without email', async () => {
             let user = validUser();
@@ -49,7 +49,7 @@ describe('/api/users', () => {
             res = await action(user);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Please enter required fields');
+            await res.body.should.have.a.property('msg').eql('Path `email` is required.');
         });
         it('should not register without password', async () => {
             let user = validUser();
@@ -57,7 +57,7 @@ describe('/api/users', () => {
             res = await action(user);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Please enter required fields');
+            await res.body.should.have.a.property('msg').eql('Path `password` is required.');
         });
         it('should not register with duplicate email', async () => {
             let user = validUser();
@@ -66,7 +66,7 @@ describe('/api/users', () => {
             res = await action(user);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('User already exists with that email');
+            await res.body.should.have.a.property('msg').eql(`Error, expected \`email\` to be unique. Value: \`${user.email}\``);
         });
         it('should not register without country', async () => {
             let user = validUser();
@@ -74,7 +74,7 @@ describe('/api/users', () => {
             res = await action(user);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Please enter required fields');
+            await res.body.should.have.a.property('msg').eql('Path `country` is required.');
         });
         it('should accept a valid province', async () => {
             let user = validUser({province: 'New York'});
@@ -91,7 +91,7 @@ describe('/api/users', () => {
             await res.body.user.should.have.a.property('postalCode').eql('12943');
         })
     });
-    describe.only('PUT /api/users/:userId',() => {
+    describe('PUT /api/users/:userId',() => {
         const action = async (auth,userProps,dUser) => {
             const user = dUser ? dUser : auth.body.user
             const res = chai.request(server)

@@ -5,6 +5,17 @@ describe('User', () => {
     it('creates a valid user', () => {
         return factory.create('user')
     })
+    it('should not save with a duplicate email', async () => {
+        const oUser = await factory.create('user')
+        const user = await factory.build('user',{email: oUser.email})
+        await user.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should not save with a duplicate email on update', async () => {
+        const oUser = await factory.create('user')
+        const user = await factory.create('user')
+        user.email = oUser.email
+        await user.save().should.eventually.be.rejectedWith(ValidationError)
+    })
     it('should not save without a country', async () => {
         const user = await factory.build('user',{country: null})
         await user.save().should.eventually.be.rejectedWith(ValidationError)
