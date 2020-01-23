@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import {
     Button,
     ButtonGroup,
@@ -8,51 +7,77 @@ import {
     FormFeedback,
     FormGroup,
     Label,
-    Input,
-    Alert
+    Input
 } from 'reactstrap';
 import {
     Typeahead
 } from 'react-bootstrap-typeahead'
 import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import countries, { postalCodeRequired } from '../lib/countries'
+import countries, { postalCodeRequired } from '../../lib/countries'
 import provinces from 'provinces'
 import postalCodes from 'postal-codes-js'
 
-import { register as registerUser } from '../actions/authActions';
-import { clearErrors } from '../actions/errorActions';
-
-function RegisterUser() {
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-    const error = useSelector(state => state.error)
-
-    const history = useHistory()
-
+export default function UserEditor({action,user,onSave,saving}) {
     const { t, i18n } = useTranslation('commonForms')
 
-    const dispatch = useDispatch()
-
     const [ firstName, setFirstName ] = useState('')
+    useEffect(() => {
+        setFirstName(user.firstName)
+    },[user.firstName,setFirstName])
     const [ lastName, setLastName ] = useState('')
+    useEffect(() => {
+        setLastName(user.lastName)
+    },[user.lastName,setLastName])
     const [ email, setEmail ] = useState('')
+    useEffect(() => {
+        setEmail(user.email)
+    },[user.email,setEmail])
     const [ password, setPassword ] = useState('')
+    useEffect(() => {
+        setPassword(user.password)
+    },[user.password,setPassword])
     const [ country, setCountry ] = useState([])
     const [ countryOptions, setCountryOptions ] = useState([])
+    useEffect(() => {
+        const language = i18n.language ? i18n.language.substring(0,2) : 'en'
+        const newOptions = countries.getNames(language)
+        setCountryOptions(Object.keys(newOptions).map((code) => {
+            return { 
+                id: code,
+                label: newOptions[code]
+            }
+        }))
+    }, [i18n.language,setCountryOptions])
+    useEffect(() => {
+        if (user.country) setCountry(countryOptions.filter(o => o.id === user.country))
+    },[user.country,countryOptions,setCountry])
     const [ province, setProvince ] = useState([])
     const [ provinceOptions, setProvinceOptions ] = useState([])
+    useEffect(() => {
+        const newOptions = country.length > 0 ? provinces.filter((p) => p.country === country[0].id) : []
+        setProvinceOptions(newOptions.map((p) => {
+            return {
+                id: p.name,
+                label: p.name
+            }
+        }))
+    },[country,setProvinceOptions])
+    useEffect(() => {
+        if (user.province) setProvince(provinceOptions.filter(o => o.id === user.province))
+    },[user.province,setProvince,provinceOptions])
     const [ postalCode, setPostalCode ] = useState('')
-    const [ msg, setMsg ] = useState(null)
-    const [ language, setLanguage ] = useState('en')
+    useEffect(() => {
+        setPostalCode(user.postalCode)
+    },[user.postalCode,setPostalCode])
 
     const { register, handleSubmit, setError, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
-    const onSubmit = (e) => {
-        dispatch(clearErrors())
+    const onSubmit = () => {
+        if (saving) return
         if (country.length === 0) {
             setError("country","required",t('invalidRequired'))
             return
@@ -70,54 +95,12 @@ function RegisterUser() {
             province: province[0] ? province[0].id : '',
             postalCode
         }
-        dispatch(registerUser(newUser))
+        onSave(newUser)
     }
-
-    useEffect(() => {
-        const newLanguage = i18n.language ? i18n.language.substring(0,2) : 'en'
-        if ( newLanguage !== language ) {
-            setLanguage(newLanguage)
-        }
-    },[setLanguage,i18n.language,language])
-
-    useEffect(() => {
-        const newOptions = countries.getNames(language)
-        setCountryOptions(Object.keys(newOptions).map((code) => {
-            return { 
-                id: code,
-                label: newOptions[code]
-            }
-        }))
-    }, [language,setCountryOptions])
-
-    useEffect(() => {
-        const newOptions = country.length > 0 ? provinces.filter((p) => p.country === country[0].id) : []
-        setProvinceOptions(newOptions.map((p) => {
-            return {
-                id: p.name,
-                label: p.name
-            }
-        }))
-    },[country])
-
-    useEffect(() => {
-        if (error.id === 'REGISTER_FAIL') {
-            setMsg(error.msg.msg)
-        } else {
-            setMsg(null)
-        }
-    }, [error] )
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            history.push("/")
-        }
-    }, [isAuthenticated,history])
 
     return <div>
         <Container>
             <h2>{t('AppNavbar:register')}</h2>
-            {msg ? <Alert color="danger">{msg}</Alert> : null }
             <Form
                 onSubmit={handleSubmit(onSubmit)}
             >
@@ -243,5 +226,3 @@ function RegisterUser() {
         </Container>
     </div>
 }
-
-export default RegisterUser;

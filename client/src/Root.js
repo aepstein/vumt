@@ -10,9 +10,10 @@ import NeedAuth from './components/NeedAuth'
 import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
 import VisitsManager from './containers/visits/VisitsManager'
-import RegisterUser from './containers/RegisterUser'
+import UsersManager from './containers/auth/UsersManager'
 import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
+import AlertsManager from './containers/AlertsManager'
 import './i18n'
 import DirectionProvider from './components/DirectionProvider'
 import { Spinner } from 'reactstrap'
@@ -23,12 +24,13 @@ const Root = ({ store }) => (
           <DirectionProvider>
             <Router>
             <AppNavbar />
+            <AlertsManager />
             <Switch>
               <UnAuthRoute path="/need-auth">
                 <NeedAuth />
               </UnAuthRoute>
               <UnAuthRoute path="/register">
-                <RegisterUser />
+                <UsersManager action="register" />
               </UnAuthRoute>
               <AuthRoute path="/visits/new">
                 <VisitsManager action='new'/>
