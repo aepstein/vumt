@@ -22,6 +22,11 @@ const locale = {
         "mustBeWholeNumber": "חייב להיות מספר שלם",
         "mustBeAtLeast": "חייב להיות לפחות\u202b {{min}}"
     },
+    "user": {
+        "editUser": "ערוך את הפרופיל שלך",
+        "updateUser": "עדכן את הפרופיל שלך",
+        "profile": "פרופיל"
+    },
     "visit": {
         "From": "מ",
         "To": "ל",

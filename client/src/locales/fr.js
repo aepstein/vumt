@@ -21,7 +21,12 @@ const locale = {
         "invalidRequired": "Ne peut être vide",
         "mustBeWholeNumber": "Doit être un nombre entier",
         "mustBeAtLeast": "Doit être au moins {{min}}"
-   },
+    },
+    "user": {
+        "editUser": "Modifier votre profil",
+        "updateUser": "Modifiez votre profil",
+        "profile": "Profil"
+    },
     "visit": {
         "From": "De",
         "To": "À",
