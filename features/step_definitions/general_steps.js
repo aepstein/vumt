@@ -37,6 +37,10 @@ When('I click the {string} button', async (label) => {
     await clickByText(label,"//button");
 })
 
+When('I click the {string} link', async (label) => {
+    await clickByText(label,"//a");
+})
+
 Then('the {string} field should have an error {string}', async (label, error) => {
     await new Promise(r => setTimeout(r, 200))
     await shouldSeeErrorWithLabel(error,label)

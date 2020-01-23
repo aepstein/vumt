@@ -9,5 +9,4 @@ export const postalCodeRequired = [
     'CA',
     'US'
 ]
-
 export default countries

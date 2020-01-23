@@ -12,6 +12,7 @@ import {
 import {
     Typeahead
 } from 'react-bootstrap-typeahead'
+import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import countries, { postalCodeRequired } from '../../lib/countries'
@@ -20,6 +21,7 @@ import postalCodes from 'postal-codes-js'
 
 export default function UserEditor({action,user,onSave,saving}) {
     const { t, i18n } = useTranslation('commonForms')
+    const history = useHistory()
 
     const [ firstName, setFirstName ] = useState('')
     useEffect(() => {
@@ -100,7 +102,7 @@ export default function UserEditor({action,user,onSave,saving}) {
 
     return <div>
         <Container>
-            <h2>{t('AppNavbar:register')}</h2>
+            <h2>{action ? t(`user:${action}User`) : t('AppNavbar:register')}</h2>
             <Form
                 onSubmit={handleSubmit(onSubmit)}
             >
@@ -112,6 +114,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         id="firstName"
                         placeholder={t('firstName')}
                         innerRef={register({required: true})}
+                        value={firstName}
                         onChange={onChange(setFirstName)}
                         invalid={errors.firstName ? true : false}
                     />
@@ -126,6 +129,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         id="lastName"
                         placeholder={t('lastName')}
                         innerRef={register({required: true})}
+                        value={lastName}
                         onChange={onChange(setLastName)}
                         invalid={errors.lastName ? true : false}
                     />
@@ -139,6 +143,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         name="email"
                         id="email"
                         placeholder={t('emailPlaceholder')}
+                        value={email}
                         innerRef={register({required: true})}
                         onChange={onChange(setEmail)}
                         invalid={errors.email ? true : false}
@@ -146,7 +151,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                     {errors.email && errors.email.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
-                <FormGroup>
+                { (action === 'edit') ? null : <FormGroup>
                     <Label for="password">{t('password')}</Label>
                     <Input
                         type="password"
@@ -159,7 +164,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                     />
                     {errors.password && errors.password.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
-                </FormGroup>
+                </FormGroup> }
                 <FormGroup>
                     <Label for="country">{t('country')}</Label>
                     <Typeahead
@@ -170,6 +175,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         options={countryOptions}
                         onChange={(selected) => setCountry(selected)}
                         isInvalid={errors.country ? true : false}
+                        clearButton={true}
                     />
                     {errors.country && <Input type="hidden" invalid />}
                     {errors.country && errors.country.type === 'required' &&
@@ -186,6 +192,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                             options={provinceOptions}
                             onChange={(selected) => setProvince(selected)}
                             isInvalid={errors.province ? true : false}
+                            clearButton={true}
                         />
                         {errors.province && <Input type="hidden" invalid />}
                         {errors.province && errors.province.type === 'required' &&
@@ -199,6 +206,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                             type="text"
                             name="postalCode"
                             id="postalCode"
+                            value={postalCode}
                             placeholder={t('postalCode')}
                             innerRef={register({
                                 required: postalCodeRequired.includes(country[0].id),
@@ -220,7 +228,10 @@ export default function UserEditor({action,user,onSave,saving}) {
                     <Button
                         color="primary"
                         block
-                    >{t('AppNavbar:register')}</Button>
+                    >{(action === 'edit') ? t('user:updateUser') : t('AppNavbar:register')}</Button>
+                    <Button color="secondary"
+                        onClick={() => history.goBack()}
+                    >{t('cancel')}</Button>
                 </ButtonGroup>
             </Form>
         </Container>

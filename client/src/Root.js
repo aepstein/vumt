@@ -32,6 +32,12 @@ const Root = ({ store }) => (
               <UnAuthRoute path="/register">
                 <AuthUserManager action="register" />
               </UnAuthRoute>
+              <AuthRoute path="/profile/edit">
+                <AuthUserManager action="edit" />
+              </AuthRoute>
+              <AuthRoute path="/profile">
+                <AuthUserManager action="show" />
+              </AuthRoute>
               <AuthRoute path="/visits/new">
                 <VisitsManager action='new'/>
               </AuthRoute>

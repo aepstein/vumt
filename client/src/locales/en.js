@@ -22,6 +22,11 @@ const locale = {
         "mustBeWholeNumber": "Must be a whole number",
         "mustBeAtLeast": "Must be at least {{min}}"
     },
+    "user": {
+        "editUser": "Edit profile",
+        "updateUser": "Update profile",
+        "profile": "Profile"
+    },
     "visit": {
         "From": "From",
         "To": "To",

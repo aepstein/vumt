@@ -36,3 +36,17 @@ Feature: Authentication
         When I visit the "home" page
         And I log in as "bmarshall@example.com"
         Then I should be logged in as "bmarshall@example.com"
+
+    Scenario: Update registration of authenticated user
+        Given I am registered as "bmarshall@example.com"
+        And I logged in as "bmarshall@example.com"
+        When I visit the "profile" page
+        And I click the "Edit" button
+        And I fill in a modified profile
+        And I click the "Update profile" button
+        Then I should see "First name" defined as "Herbert"
+        And I should see "Last name" defined as "Clark"
+        And I should see "Email" defined as "hclark@example.com"
+        And I should see "Country" defined as "Canada"
+        And I should see "State, province, or territory" defined as "Quebec"
+        And I should see "Postal code" defined as "H2T 2M2"

@@ -37,6 +37,21 @@ When(/I fill in a new registration for "([^"]+)"(?: except "([^"]+)")?/, async (
     }
 })
 
+When('I fill in a modified profile', async () => {
+    await fillByLabel("First name","Herbert")
+    await takeScreenshot()
+    await fillByLabel("Last name","Clark")
+    await takeScreenshot()
+    await fillByLabel("Email","hclark@example.com")
+    await takeScreenshot()
+    await fillTypeaheadByLabel("Country of residence","Canada")
+    await takeScreenshot()
+    await fillTypeaheadByLabel("State, province, or territory","Quebec")
+    await takeScreenshot()
+    await fillByLabel("Postal code","H2T 2M2")
+    await takeScreenshot()
+})
+
 When('I register as a {string}', async (email) => {
     await fillInRegistration(email)
     await clickByText("Register","//button");

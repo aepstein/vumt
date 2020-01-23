@@ -12,14 +12,17 @@ import {
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    SAVING_AUTHUSER,
+    UPDATE_AUTHUSER_SUCCESS,
+    UPDATE_AUTHUSER_FAIL
 } from './types';
 
 export const tokenConfig = getState => {
     return prepareTokenConfig(getState().auth.token)
 }
 
-export const register = (attrs) => async (dispatch) => {
+export const register = (attrs,history) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -27,11 +30,13 @@ export const register = (attrs) => async (dispatch) => {
     }
     const body = JSON.stringify(attrs)
     try {
+        dispatch({type: SAVING_AUTHUSER})
         const res = await axios.post('/api/users', body, config)
         dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data
         })
+        history.push('/')
     }
     catch(err) {
         dispatch(
@@ -39,6 +44,27 @@ export const register = (attrs) => async (dispatch) => {
         )
         dispatch({
             type: REGISTER_FAIL
+        })
+    }
+}
+
+export const update = (user,attrs,history) => async (dispatch,getState) => {
+    const body = JSON.stringify(attrs)
+    try {
+        dispatch({type: SAVING_AUTHUSER})
+        const res = await axios.put('/api/users/' + user._id, body, tokenConfig(getState))
+        dispatch({
+            type: UPDATE_AUTHUSER_SUCCESS,
+            payload: res.data
+        })
+        history.push('/profile')
+    }
+    catch(err) {
+        dispatch(
+            returnErrors(err.response.data,err.response.status,'UPDATE_AUTHUSER_FAIL')
+        )
+        dispatch({
+            type: UPDATE_AUTHUSER_FAIL
         })
     }
 }

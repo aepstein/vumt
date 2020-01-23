@@ -7,13 +7,17 @@ import {
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    SAVING_AUTHUSER,
+    UPDATE_AUTHUSER_SUCCESS,
+    UPDATE_AUTHUSER_FAIL
 } from '../actions/types';
 
 const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     isLoading: false,
+    saving: false,
     user: null
 };
 
@@ -24,6 +28,22 @@ export default function (state = initialState, action) {
                 ...state,
                 isLoading: true
             };
+        case SAVING_AUTHUSER:
+            return {
+                ...state,
+                saving: true
+            }
+        case UPDATE_AUTHUSER_SUCCESS:
+            return {
+                ...state,
+                saving: false,
+                user: action.payload
+            }
+        case UPDATE_AUTHUSER_FAIL:
+            return {
+                ...state,
+                saving: false
+            }
         case USER_LOADED:
             return {
                 ...state,
@@ -38,7 +58,8 @@ export default function (state = initialState, action) {
                 ...state,
                 ...action.payload,
                 isAuthenticated: true,
-                isLoading: false
+                isLoading: false,
+                saving: false
             };
         case AUTH_ERROR:
         case LOGIN_FAIL:
@@ -49,7 +70,8 @@ export default function (state = initialState, action) {
                 ...state,
                 token: null,
                 user: null,
-                isAuthenticated: false
+                isAuthenticated: false,
+                saving: false
             };
         default:
             return state;

@@ -1,12 +1,16 @@
 import React, { Fragment, useState } from 'react';
 import {
     Collapse,
+    Container,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
     Navbar,
     NavbarToggler,
     NavbarBrand,
     Nav,
     NavItem,
-    Container
+    UncontrolledDropdown
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux';
@@ -30,11 +34,18 @@ function AppNavbar() {
 
     const authLinks = (
         <Fragment>
-            <NavItem>
-                <span className="navbar-text mr-3">
-                    <strong>{user ? t('welcome',{name: user.firstName}) : ''}</strong>
-                </span>
-            </NavItem>
+            <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                    {user ? t('welcome',{name: user.firstName}) : ''}
+                </DropdownToggle>
+                <DropdownMenu>
+                    <DropdownItem>
+                        <NavLink to="/profile" activeClassName="active">
+                            {t('user:profile')}
+                        </NavLink>
+                    </DropdownItem>
+                </DropdownMenu>
+            </UncontrolledDropdown>
             <NavItem>
                 <NavLink to="/" className="nav-link" activeClassName="active">{t('home')}</NavLink>
             </NavItem>
