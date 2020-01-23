@@ -6,8 +6,9 @@ import { register as registerUser } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import UserEditor from '../../components/users/UserEditor'
 
-function RegisterUser({action}) {
-    const { defaultAction, userId } = useParams()
+export default function AuthUserManager({action}) {
+    const { defaultAction } = useParams()
+    const authUser = useSelector(state => state.auth.user)
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
     const dispatch = useDispatch()
@@ -31,7 +32,11 @@ function RegisterUser({action}) {
             setSaving(false)
             history.push('/')
         }
-    },[isAuthenticated,saving])
+    },[isAuthenticated,saving,history])
+
+    useEffect(() => {
+        if (authUser) setUser(authUser)
+    },[authUser,setUser])
 
     const onSave = (newProps) => {
         if (saving) return
@@ -45,5 +50,3 @@ function RegisterUser({action}) {
             return <UserEditor user={user} onSave={onSave} saving={saving} />
     }
 }
-
-export default RegisterUser;

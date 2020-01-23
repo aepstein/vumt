@@ -10,7 +10,7 @@ import NeedAuth from './components/NeedAuth'
 import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
 import VisitsManager from './containers/visits/VisitsManager'
-import UsersManager from './containers/auth/UsersManager'
+import AuthUserManager from './containers/auth/AuthUserManager'
 import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
 import AlertsManager from './containers/AlertsManager'
@@ -30,7 +30,7 @@ const Root = ({ store }) => (
                 <NeedAuth />
               </UnAuthRoute>
               <UnAuthRoute path="/register">
-                <UsersManager action="register" />
+                <AuthUserManager action="register" />
               </UnAuthRoute>
               <AuthRoute path="/visits/new">
                 <VisitsManager action='new'/>
