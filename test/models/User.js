@@ -34,4 +34,13 @@ describe('User', () => {
         const savedUser = await user.save()
         savedUser.postalCode.should.be.a('string').eql('12943')
     })
+    it('should save with a valid phone', async () => {
+        const user = await factory.build('user',{phone: '518 555 1212'})
+        const savedUser = await user.save()
+        savedUser.phone.should.be.a('string').eql('+15185551212')
+    })
+    it('should not save with an invalid phone', async () => {
+        const user = await factory.build('user',{phone: '555-1212'})
+        await user.save().should.eventually.be.rejectedWith(ValidationError)
+    })
 })

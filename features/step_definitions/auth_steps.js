@@ -35,21 +35,17 @@ When(/I fill in a new registration for "([^"]+)"(?: except "([^"]+)")?/, async (
             await fillByLabel("Postal code","12943")
         }
     }
+    if (except != "Phone") await fillByLabel("Phone",'518-555-1212')
 })
 
 When('I fill in a modified profile', async () => {
     await fillByLabel("First name","Herbert")
-    await takeScreenshot()
     await fillByLabel("Last name","Clark")
-    await takeScreenshot()
     await fillByLabel("Email","hclark@example.com")
-    await takeScreenshot()
     await fillTypeaheadByLabel("Country of residence","Canada")
-    await takeScreenshot()
     await fillTypeaheadByLabel("State, province, or territory","Quebec")
-    await takeScreenshot()
     await fillByLabel("Postal code","H2T 2M2")
-    await takeScreenshot()
+    await fillByLabel("Phone",'(514) 272-0667')
 })
 
 When('I register as a {string}', async (email) => {

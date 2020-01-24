@@ -24,12 +24,16 @@ Feature: Authentication
             | State, province, or territory |
             | Postal code                   |
 
-    Scenario: Register a user with invalid zip code
+    Scenario Outline: Register a user with invalid field
         When I visit the "home" page
         And I fill in a new registration for "bmarshall@example.com"
-        And I fill in "Postal code" with "1"
+        And I fill in "<field>" with "<value>"
         And I click the "Register" button
-        Then the "Postal code" field should have an error "Must be correctly formatted postal code for United States of America"
+        Then the "<field>" field should have an error "<message>"
+        Examples:
+            | field       | value | message                                                              |
+            | Postal code | 1     | Must be correctly formatted postal code for United States of America |
+            | Phone       | 555   | Must be correctly formatted phone number                             |
 
     Scenario: Log in as registered user
         Given I am registered as "bmarshall@example.com"
@@ -50,3 +54,4 @@ Feature: Authentication
         And I should see "Country" defined as "Canada"
         And I should see "State, province, or territory" defined as "Quebec"
         And I should see "Postal code" defined as "H2T 2M2"
+        And I should see "Phone" defined as "+15142720667"
