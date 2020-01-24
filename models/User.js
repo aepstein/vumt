@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator')
 const bcrypt = require('bcryptjs');
 const countries = require('i18n-iso-countries')
+const phone = require('phone')
 
 const UserSchema = new Schema(
     {
@@ -33,6 +34,12 @@ const UserSchema = new Schema(
         },
         postalCode: {
             type: String
+        },
+        phone: {
+            type: String,
+            validate: (val) => {
+                return phone(val,'',true).length > 0
+            }
         }
     },
     {
@@ -46,6 +53,9 @@ UserSchema.pre('save',async function() {
     if (user.isModified('password')) {
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password,salt);
+    }
+    if (user.phone) {
+        user.phone = phone(user.phone,'',true)[0]
     }
 });
 

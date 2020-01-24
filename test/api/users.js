@@ -90,6 +90,13 @@ describe('/api/users', () => {
             await res.body.should.be.a('object');
             await res.body.user.should.have.a.property('postalCode').eql('12943');
         })
+        it('should accept a valid phone', async () => {
+            let user = validUser({phone: '518 555 1212'});
+            res = await action(user);
+            await res.should.have.status(201);
+            await res.body.should.be.a('object');
+            await res.body.user.should.have.a.property('phone').eql('+15185551212');
+        })
     });
     describe('PUT /api/users/:userId',() => {
         const action = async (auth,userProps,dUser) => {

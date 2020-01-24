@@ -11,7 +11,7 @@ const User = require('../../models/User');
 
 const attrAccessible = (req) => {
     const attrAccessible = req.user ? req.user : {}
-    const allowed = ['firstName','lastName','email','password','country','province','postalCode']
+    const allowed = ['firstName','lastName','email','password','country','province','postalCode','phone']
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
             attrAccessible[key] = req.body[key]
@@ -51,7 +51,8 @@ router.post('/', async (req, res) => {
                 email: savedUser.email,
                 country: savedUser.country,
                 province: savedUser.province,
-                postalCode: savedUser.postalCode
+                postalCode: savedUser.postalCode,
+                phone: savedUser.phone
             }
         })
     }
@@ -72,6 +73,7 @@ router.put('/:userId',auth,user(),async (req,res) => {
     attrAccessible(req)
     try {
         const savedUser = await req.user.save()
+        delete savedUser.password
         return res.status(200).json(savedUser)
     }
     catch(err) {
