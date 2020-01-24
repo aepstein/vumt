@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import countries, { postalCodeRequired } from '../../lib/countries'
 import provinces from 'provinces'
 import postalCodes from 'postal-codes-js'
+import phoneValidator from 'phone'
 
 export default function UserEditor({action,user,onSave,saving}) {
     const { t, i18n } = useTranslation('commonForms')
@@ -72,6 +73,10 @@ export default function UserEditor({action,user,onSave,saving}) {
     useEffect(() => {
         setPostalCode(user.postalCode)
     },[user.postalCode,setPostalCode])
+    const [ phone, setPhone ] = useState('')
+    useEffect(() => {
+        setPhone(user.phone)
+    },[user.phone,setPhone])
 
     const { register, handleSubmit, setError, errors } = useForm()
 
@@ -88,6 +93,9 @@ export default function UserEditor({action,user,onSave,saving}) {
             setError("province","required",t('invalidRequired'))
             return
         }
+        if (phone && phoneValidator(phone,'',true).length === 0) {
+            setError("phone","format",t('mustBePhone'))
+        }
         const newUser = {
             firstName,
             lastName,
@@ -95,7 +103,8 @@ export default function UserEditor({action,user,onSave,saving}) {
             password,
             country: country[0].id,
             province: province[0] ? province[0].id : '',
-            postalCode
+            postalCode,
+            phone
         }
         onSave(newUser)
     }
@@ -224,6 +233,20 @@ export default function UserEditor({action,user,onSave,saving}) {
                             <FormFeedback>{t('commonForms:postalCodeInvalid',{country: country[0].label})}</FormFeedback>}
                     </FormGroup>
                     : '' }
+                <FormGroup>
+                    <Label for="phone">{t('phone')}</Label>
+                    <Input
+                        type="tel"
+                        name="phone"
+                        id="phone"
+                        placeholder={t('phone')}
+                        value={phone}
+                        onChange={onChange(setPhone)}
+                        invalid={errors.phone ? true : false}
+                    />
+                    {errors.phone &&
+                        <FormFeedback>{t('commonForms:mustBePhone')}</FormFeedback>}
+                </FormGroup>
                 <ButtonGroup>
                     <Button
                         color="primary"

@@ -37,6 +37,8 @@ export default function UserDetail({user}) {
             <dd>{user.province}</dd>
             <dt>{t('postalCode')}</dt>
             <dd>{user.postalCode}</dd>
+            <dt>{t('phone')}</dt>
+            <dd>{user.phone}</dd>
         </dl>
     </Container>
 }
