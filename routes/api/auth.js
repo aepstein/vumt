@@ -35,10 +35,7 @@ router.post('/', async (req, res) => {
     return res.status(201).json({
       token,
       user: {
-        _id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email
+        ...user.pubProps()
       }
     })
   }
@@ -49,8 +46,8 @@ router.post('/', async (req, res) => {
 // @desc    Get information of authenticated user
 // @access  Public
 router.get('/user', auth, async (req, res) => {
-  const user = await User.findById(req.authUser.id).select('-password')
-  return res.json(user);
+  const user = await User.findById(req.authUser.id)
+  return res.json(user.pubProps());
 })
 
 module.exports = router;

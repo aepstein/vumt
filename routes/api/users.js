@@ -45,14 +45,7 @@ router.post('/', async (req, res) => {
         return res.status(201).json({
             token,
             user: {
-                _id: savedUser.id,
-                firstName: savedUser.firstName,
-                lastName: savedUser.lastName,
-                email: savedUser.email,
-                country: savedUser.country,
-                province: savedUser.province,
-                postalCode: savedUser.postalCode,
-                phone: savedUser.phone
+                ...savedUser.pubProps()
             }
         })
     }

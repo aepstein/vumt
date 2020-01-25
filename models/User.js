@@ -59,6 +59,19 @@ UserSchema.pre('save',async function() {
     }
 });
 
+UserSchema.methods.pubProps = function() {
+    return {
+        _id: this.id,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        country: this.country,
+        province: this.province,
+        postalCode: this.postalCode,
+        phone: this.phone
+    }
+}
+
 UserSchema.methods.comparePassword = async function(candidate) {
     return bcrypt.compare(candidate,this.password);
 }
