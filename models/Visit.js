@@ -30,6 +30,12 @@ const VisitSchema = new Schema({
         type: Number,
         required: true,
         min: 1
+    },
+    checkedIn: {
+        type: Date
+    },
+    checkedOut: {
+        type: Date
     }
 },
 {

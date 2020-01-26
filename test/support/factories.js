@@ -47,3 +47,16 @@ factory.define('visit', Visit, {
     durationNights: 0,
     groupSize: 4
 })
+
+factory.extend('visit','checkedInVisit',{
+    checkedIn: Date.now()
+})
+
+factory.extend('checkedInVisit','checkedOutVisit',{
+    checkedOut: () => {
+        const checkedOut = new Date()
+        checkedOut.setHours(checkedOut.getHours() + 4)
+        return checkedOut
+    }
+})
+
