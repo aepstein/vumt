@@ -53,7 +53,32 @@ const VisitSchema = new Schema({
 },
 {
     timestamps: true
-});
+})
+
+VisitSchema.pre('validate', function(next) {
+    const { checkedIn, checkedOut, startOn, durationNights } = this
+    if (checkedIn && startOn) {
+        const startOnLeft = new Date(startOn)
+        startOnLeft.setDate(startOnLeft.getDate()-1)
+        if (checkedIn < startOnLeft) {
+            this.invalidate('checkedIn','May be no earlier than one day before the scheduled start of the visit.')
+        }
+        const startOnRight = new Date(startOn)
+        startOnRight.setDate(startOnRight.getDate() + durationNights + 1)
+        if (checkedIn > startOnRight) {
+            this.invalidate('checkedIn','May be no later than one day after the scheduled end of the visit.')
+        }
+    }
+    if (checkedOut) {
+        if (!checkedIn) {
+            this.invalidate('checkedOut','May not be filled in unless visit is checked in.')
+        }
+        else if (checkedOut < checkedIn) {
+            this.invalidate('checkedOut','May not be earlier than check in')
+        }
+    }
+    next()
+})
 
 VisitSchema.pre('save', async function () {
     const origin = ((this.origin instanceof Object) && this.origin.timezone) ? 

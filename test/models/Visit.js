@@ -49,25 +49,32 @@ describe('Visit', () => {
         const visit = await factory.create('checkedInVisit')
         visit.should.have.a.property('checkedIn')
     })
-    xit('should not accept a checkedIn before the start date', async() => {
+    it('should not accept a checkedIn more than one day before the start date', async() => {
         const visit = await factory.create('visit')
-        const earlyCheckIn = new Date()
-        earlyCheckIn.setDate(earlyCheckIn.getDate()-1)
-        visit.checkedIn = earlyCheckIn
+        const earlyCheckIn = new Date(visit.startOn)
+        earlyCheckIn.setHours(earlyCheckIn.getHours()-25)
+        visit.set({checkedIn: earlyCheckIn})
+        await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should not accept a checkIn more than a day after the scheduled end', async() => {
+        const visit = await factory.create('visit')
+        const lateCheckIn = new Date(visit.startOn)
+        lateCheckIn.setHours(lateCheckIn.getHours()+25)
+        visit.set({checkedIn: lateCheckIn})
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
     })
     it('should accept a valid checkedOut date', async() => {
         const visit = await factory.create('checkedOutVisit')
         visit.should.have.a.property('checkedOut')
     })
-    xit('should not accept a checkedOut before checkedIn', async() => {
+    it('should not accept a checkedOut before checkedIn', async() => {
         const visit = await factory.create('checkedInVisit')
         const earlyCheckOut = new Date(visit.checkedIn)
-        earlyCheckOut.setHours(earlyCheckout.getHours()-1)
+        earlyCheckOut.setHours(earlyCheckOut.getHours()-1)
         visit.checkedOut = earlyCheckOut
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
     })
-    xit('should not accept a checkedOut without a checkedIn', async () => {
+    it('should not accept a checkedOut without a checkedIn', async () => {
         const visit = await factory.create('visit')
         visit.checkedOut = new Date()
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
