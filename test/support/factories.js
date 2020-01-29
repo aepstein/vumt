@@ -2,6 +2,7 @@ const { factory } = require('./setup')
 const Place = require('../../models/Place')
 const User = require('../../models/User')
 const Visit = require('../../models/Visit')
+const { toLocalDate } = require('./util')
 
 factory.define('place', Place, {
     name: "Algonquin",
@@ -41,7 +42,8 @@ factory.define('user', User, {
 
 factory.define('visit', Visit, {
     user: factory.assoc('user','_id'),
-    startOn: Date.now(),
+    startOnDate: () => toLocalDate(new Date()),
+    startOnTime: '08:00',
     origin: factory.assoc('originPlace','_id'),
     destinations: [],
     durationNights: 0,

@@ -6,7 +6,7 @@ const visit = require('../../middleware/visit')
 const handleValidationError = require('../../lib/handleValidationError')
 const attrAccessible = (req) => {
     const attrAccessible = req.visit ? req.visit : {}
-    const allowed = ['startOn','origin','destinations','durationNights','groupSize']
+    const allowed = ['startOnDate','startOnTime','origin','destinations','durationNights','groupSize']
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
             attrAccessible[key] = req.body[key]
@@ -25,8 +25,6 @@ router.get('/', async (req, res) => {
     if (req.userId) { criteria.user = req.userId }
     const visits = await Visit
         .find(criteria)
-        .populate('origin')
-        .populate('destinations')
         .sort({date: -1})
     return res.json(visits)
 });
@@ -44,12 +42,7 @@ router.get('/:visitId', auth, visit(), async (req, res) => {
 router.put('/:visitId', auth, visit(), async (req, res) => {
     attrAccessible(req)
     try {
-        const savedVisit = await req.visit.save()
-        const populatedVisit = await savedVisit
-            .populate('origin')
-            .populate('destinations')
-            .execPopulate()
-        return res.status(200).json(populatedVisit)
+        return res.status(200).json(await req.visit.save())
     }
     catch(err) {
         if (err.name === 'ValidationError') {
@@ -70,12 +63,7 @@ router.post('/', auth, async (req, res) => {
         user: req.authUser.id
     });
     try {
-        const savedVisit = await newVisit.save()
-        const populatedVisit = await savedVisit
-            .populate('origin')
-            .populate('destinations')
-            .execPopulate()
-        return res.status(201).json(populatedVisit);
+        return res.status(201).json(await newVisit.save())
     }
     catch(err) {
         if (err.name === 'ValidationError') {

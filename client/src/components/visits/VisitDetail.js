@@ -10,8 +10,10 @@ export default function VisitDetail({visit}) {
     return <Container>
         <h1>{t('detailHeading')}</h1>
         <dl>
-            <dt>{t('startOn')}</dt>
+            <dt>{t('startOnDate')}</dt>
             <dd>{Intl.DateTimeFormat(i18n.language).format(visit.startOn)}</dd>
+            <dt>{t('startOnTime')}</dt>
+            <dd>{(new Date(visit.startOn)).toLocaleTimeString()}</dd>
             <dt>{t('origin')}</dt>
             <dd>{visit.origin.name}</dd>
             <dt>{t('destinations')}</dt>

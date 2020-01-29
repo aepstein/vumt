@@ -27,6 +27,11 @@ const PlaceSchema = new Schema({
         type: Number,
         default: 0,
         required: true
+    },
+    timezone: {
+        type: String,
+        default: 'America/New_York',
+        required: true
     }
 },
 {

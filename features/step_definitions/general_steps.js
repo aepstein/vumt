@@ -47,5 +47,5 @@ Then('the {string} field should have an error {string}', async (label, error) =>
 })
 
 Then(/I should see "([^"]+)" defined as ("[^"]+"|today|tomorrow)/, async (dt, dd) => {
-    await shouldSeeDefinition(dt,parseInput(dd))
+    await shouldSeeDefinition(dt,parseInput(dd,true))
 });

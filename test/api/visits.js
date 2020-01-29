@@ -11,6 +11,7 @@ const shouldDenyUnauthorizedUser = async (res) => {
     await res.body.should.have.a.property('msg').eql('User not authorized to access visit')
 }
 const Visit = require('../../models/Visit')
+const { toLocalDate } = require('../support/util')
 
 describe('/api/visits', () => {
     describe('POST /api/visits',() => {
@@ -37,12 +38,12 @@ describe('/api/visits', () => {
             await res.should.have.status(201)
             res.body.destinations.map(d => d._id).should.have.members([destination.id])
         })
-        it('should not save without startOn', async () => {
+        it('should not save without startOnDate', async () => {
             const auth = await withAuth();
-            let visit = await validVisit({startOn: null});
+            let visit = await validVisit({startOnDate: null});
             const res = await action(auth,visit);
             await res.should.have.status(400);
-            await res.body.should.have.a.property('msg').eql('Path `startOn` is required.');
+            await res.body.should.have.a.property('msg').eql('Path `startOnDate` is required.');
         });
         it('should not save without origin', async () => {
             const auth = await withAuth();
@@ -99,7 +100,8 @@ describe('/api/visits', () => {
             const newProps = {
                 origin: newOrigin.id,
                 destinations: [ newDestination.id ],
-                startOn: tomorrow(),
+                startOnDate: toLocalDate(tomorrow()),
+                startOnTime: '07:00',
                 groupSize: 5
             }
             const [res, oVisit] = await action(auth,newProps)
@@ -107,18 +109,19 @@ describe('/api/visits', () => {
             const visit = await loadVisit(oVisit)
             visit.origin.name.should.eql(newOrigin.name)
             visit.destinations.map(d => d.name).should.have.members([newDestination.name])
-            visit.startOn.should.eql(newProps.startOn)
+            visit.startOnDate.should.eql(newProps.startOnDate)
+            visit.startOnTime.should.eql(newProps.startOnTime)
             visit.groupSize.should.eql(5)
         })
         it('should not update with invalid submission', async () => {
             const auth = await withAuth()
             const newProps = {
-                startOn: ''
+                startOnDate: ''
             }
             const [ res, visit ] = await action(auth,newProps)
             res.should.have.status(400)
             res.body.should.be.an('object')
-            res.body.should.have.a.property('msg').eql('Path `startOn` is required.')
+            res.body.should.have.a.property('msg').eql('Path `startOnDate` is required.')
         })
         it('should not update if authenticated user is not visit owner', async () => {
             const auth = await withAuth()

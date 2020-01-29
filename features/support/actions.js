@@ -2,6 +2,7 @@ const assert = require('assert');
 const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
+const { toLocalDate } = require('../../test/support/util')
 var sc = 1;
 
 const create = async (template, attrs={}) => {
@@ -170,16 +171,27 @@ const relativeDate = (description) => {
 	return relativeDate
 }
 
+const formatDateForFill = (date) => {
+	const str = toLocalDate(date)
+	return `${str.substring(5,7)}/${str.substring(8,10)}/${str.substring(0,4)}`
+}
+
+const formatDateForDisplay = (date) => {
+	const str = toLocalDate(date)
+	return `${parseInt(str.substring(5,7))}/${parseInt(str.substring(8,10))}/${str.substring(0,4)}`
+}
+
 const shouldSeeErrorWithLabel = async (error,label) => {
 	await waitFor(`//div[contains(@class,'invalid-feedback') and contains(.,'${error}') and ` +
 		`ancestor::div[contains(@class,'form-group') and contains(.//label,'${label}')]]`)
 }
 
-const parseInput = (input) => {
+const parseInput = (input,display=false) => {
 	switch (input) {
 		case 'tomorrow':
 		case 'today':
-			return Intl.DateTimeFormat('en-US').format(relativeDate(input))
+			if (display) return formatDateForDisplay(relativeDate(input))
+			return formatDateForFill(relativeDate(input))
 		default:
 			return input.replace(/"/g,'')
 	}
@@ -202,6 +214,8 @@ module.exports = {
 	fillByLabel,
 	fillByPlaceholder,
 	fillTypeaheadByLabel,
+	formatDateForFill,
+	formatDateForDisplay,
 	loginAs,
 	parseInput,
 	visitExists,

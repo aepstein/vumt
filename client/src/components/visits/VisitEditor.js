@@ -18,13 +18,16 @@ import axios from 'axios'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 
 export default function VisitEditor({visit,onSave,saving}) {
-    const { t, i18n } = useTranslation('visit')
+    const { t } = useTranslation('visit')
 
-    const [ startOn, setStartOn ] = useState('')
+    const [ startOnDate, setStartOnDate ] = useState('')
     useEffect(() => {
-        if (visit.startOn === '') return setStartOn('')
-        setStartOn(Intl.DateTimeFormat(i18n.lng).format(visit.startOn))
-    },[visit.startOn,i18n,setStartOn])
+        setStartOnDate(visit.startOnDate)
+    },[visit.startOnDate])
+    const [ startOnTime, setStartOnTime ] = useState('')
+    useEffect(() => {
+        setStartOnTime(visit.startOnTime)
+    },[visit.startOnTime])
     const [ origin, setOrigin ] = useState([])
     useEffect(() => {
         const vOrigin = visit.origin._id ? [{id: visit.origin._id, label: visit.origin.name}] : []
@@ -89,7 +92,8 @@ export default function VisitEditor({visit,onSave,saving}) {
         }
         const newVisit = {
             _id: visit._id,
-            startOn,
+            startOnDate,
+            startOnTime,
             origin: (origin && origin[0] ? origin[0].id : ''),
             destinations: destinations.map((d) => {
                 return {
@@ -109,16 +113,31 @@ export default function VisitEditor({visit,onSave,saving}) {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <FormGroup>
-                    <Label for="startOn">{t('startOn')}</Label>
+                    <Label for="startOnDate">{t('startOnDate')}</Label>
                     <Input
-                        id="startOn"
-                        name="startOn"
-                        value={startOn}
-                        onChange={onChange(setStartOn)}
+                        id="startOnDate"
+                        name="startOnDate"
+                        type="date"
+                        value={startOnDate}
+                        onChange={onChange(setStartOnDate)}
                         innerRef={register({required: true})}
-                        invalid={errors.startOn ? true : false}
+                        invalid={errors.startOnDate ? true : false}
                     />
-                    {errors.startOn && errors.startOn.type === 'required' &&
+                    {errors.startOnDate && errors.startOnDate.type === 'required' &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
+                    <Label for="startOnTime">{t('startOnTime')}</Label>
+                    <Input
+                        id="startOnTime"
+                        name="startOnTime"
+                        type="time"
+                        value={startOnTime}
+                        onChange={onChange(setStartOnTime)}
+                        innerRef={register({required: true})}
+                        invalid={errors.startOnTime ? true : false}
+                    />
+                    {errors.startOnTime && errors.startOnTime.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
