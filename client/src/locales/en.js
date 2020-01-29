@@ -1,6 +1,7 @@
 const locale = {
     "translation": {
-        "mustBeLoggedIn": "You must log in to use this system."
+        "mustBeLoggedIn": "You must log in to use this system.",
+        "timesAreLocal": "Times are in local {{timezone}} time."
     },
     "commonForms": {
         "cancel": "Cancel",

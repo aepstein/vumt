@@ -60,7 +60,7 @@ export default function VisitsList({visits}) {
                                     style={{marginRight: '0.5rem'}}
                                     onClick={() => onDeleteClick(_id)}
                                 >{t('commonForms:remove')}</Button>
-                                <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language).format(startOn) : ''}</strong>:&nbsp;
+                                <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: origin.timezone}).format(startOn) : ''}</strong>:&nbsp;
                                 <em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>
                             </ListGroupItem>
                         </CSSTransition>

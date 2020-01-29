@@ -1,6 +1,7 @@
 const locale = {
     "translation": {
-        "mustBeLoggedIn": ("\u202bעליך להתחבר כדי להשתמש במערכת זו.")
+        "mustBeLoggedIn": ("\u202bעליך להתחבר כדי להשתמש במערכת זו."),
+        "timesAreLocal": "\u202bהזמנים הם בזמן המקומי ל{{timezone}}."
     },
     "commonForms": {
         "cancel": "בטל",
