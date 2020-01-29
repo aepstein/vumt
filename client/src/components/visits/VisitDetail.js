@@ -9,11 +9,12 @@ export default function VisitDetail({visit}) {
 
     return <Container>
         <h1>{t('detailHeading')}</h1>
+        <p>{t('translation:timesAreLocal',{timezone: visit.origin.timezone})}</p>
         <dl>
             <dt>{t('startOnDate')}</dt>
-            <dd>{Intl.DateTimeFormat(i18n.language).format(visit.startOn)}</dd>
+            <dd>{Intl.DateTimeFormat(i18n.language,{timeZone: visit.origin.timezone}).format(visit.startOn)}</dd>
             <dt>{t('startOnTime')}</dt>
-            <dd>{(new Date(visit.startOn)).toLocaleTimeString()}</dd>
+            <dd>{(new Date(visit.startOn)).toLocaleTimeString(i18n.language,{timeZone: visit.origin.timezone})}</dd>
             <dt>{t('origin')}</dt>
             <dd>{visit.origin.name}</dd>
             <dt>{t('destinations')}</dt>
