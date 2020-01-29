@@ -15,6 +15,7 @@ Feature: Manage visits
         Then I should see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         When I click the "Detail" button
         Then I should see "Date of visit" defined as tomorrow
+        And I should see "Start time" defined as "8:00:00 AM"
         And I should see "Starting point" defined as "Adirondack Loj"
         And I should see "Destinations" defined as "Algonquin Summit"
         And I should see "Number of people in group" defined as "4"
@@ -29,10 +30,13 @@ Feature: Manage visits
         When I visit the "home" page
         And I click "Edit" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         When I fill in a visit for today from "Johns Brook Garden" to "Marcy Summit"
+        And I fill in "Start time" with "09:00AM"
         And I click the "Edit visit" button
         Then I should see my visit for today from "Johns Brook Garden" to "Marcy Summit"
         When I click the "Detail" button
         Then I should see "Date of visit" defined as today
+        And I take a screenshot
+        And I should see "Start time" defined as "9:00:00 AM"
         And I should see "Starting point" defined as "Johns Brook Garden"
         And I should see "Destinations" defined as "Marcy Summit"
 
@@ -54,6 +58,7 @@ Feature: Manage visits
         Examples:
             | field                     |
             | Date of visit             |
+            | Start time                |
             | Starting point            |
             | Number of people in group |
             | Duration in nights        |
