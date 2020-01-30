@@ -15,10 +15,12 @@ export default function VisitsManager({action}) {
     const saving = useSelector(state => state.visit.visitSaving)
 
     const [visit,setVisit] = useState({
-        startOn: '',
+        startOnDate: '',
+        startOnTime: '',
         origin: {},
         destinations: [],
-        groupSize: ''
+        groupSize: '',
+        durationNights: ''
     })
 
     const dispatch = useDispatch()
