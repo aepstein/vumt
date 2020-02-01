@@ -2,15 +2,14 @@ language: node_js
 node_js:
 - node
 before_install:
+- export TZ=America/New_York
 - npm i
 - npm i --prefix client
 services:
 - mongodb
 before_script:
-- echo 'America/New_York' | sudo tee /etc/timezone
-- sudo dpkg-reconfigure --frontend noninteractive tzdata
+- date
 script:
-- echo $(date)
 - npm run test
 deploy:
   provider: heroku
