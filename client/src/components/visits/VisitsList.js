@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom';
 import { deleteVisit } from '../../actions/visitActions';
+import VisitCheckButton from './VisitCheckButton'
 
 export default function VisitsList({visits}) {
     const dispatch = useDispatch()
@@ -33,7 +34,7 @@ export default function VisitsList({visits}) {
             </Link>
             <ListGroup>
                 <TransitionGroup className="visits-list">
-                    {visits.map(({ _id, startOn, origin, destinations }) => (
+                    {visits.map(({ _id, startOn, origin, destinations, checkedIn, checkedOut }) => (
                         <CSSTransition
                             key={_id}
                             timeout={500}
@@ -41,11 +42,7 @@ export default function VisitsList({visits}) {
                         >
                             <ListGroupItem>
                                 <ButtonGroup>
-                                    <Button
-                                        color="primary"
-                                        size="sm"
-                                        onClick={() => history.push('/visits/' + _id + '/checkIn')}
-                                    >{t('checkIn')}</Button>
+                                    <VisitCheckButton visitId={_id} checkedIn={checkedIn} checkedOut={checkedOut} />
                                     <Button
                                         color="info"
                                         size="sm"

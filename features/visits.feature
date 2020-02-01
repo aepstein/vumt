@@ -77,7 +77,7 @@ Feature: Manage visits
             | Duration in nights        | -1    | Must be at least 0     |
             | Duration in nights        | 0.5   | Must be a whole number |
 
-    Scenario: Check in to a visit
+    Scenario: Check in/out of a visit
         Given I am registered as "bmarshall@example.com"
         And I have registered a visit for today from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
@@ -86,10 +86,17 @@ Feature: Manage visits
         And I fill in "Check in date" with today
         And I fill in "Check in time" with "805A"
         And I click the "Check in" button
-        And I take a screenshot
-        And I click the "Detail" button
+        And I click "Detail" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
         Then I should see "Check in date" defined as today
         And I should see "Check in time" defined as "8:05:00 AM"
+        When I visit the "home" page
+        And I click "Check out" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
+        And I fill in "Check out date" with today
+        And I fill in "Check out time" with "855A"
+        And I click the "Check out" button
+        And I click "Detail" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
+        Then I should see "Check out date" defined as today
+        And I should see "Check out time" defined as "8:55:00 AM"
 
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"

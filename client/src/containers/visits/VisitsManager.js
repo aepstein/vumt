@@ -7,6 +7,7 @@ import VisitsList from '../../components/visits/VisitsList'
 import VisitDetail from '../../components/visits/VisitDetail'
 import VisitEditor from '../../components/visits/VisitEditor'
 import VisitCheckIn from '../../components/visits/VisitCheckIn'
+import VisitCheckOut from '../../components/visits/VisitCheckOut'
 
 export default function VisitsManager({action}) {
     const { defaultAction, visitId } = useParams()
@@ -22,7 +23,8 @@ export default function VisitsManager({action}) {
         destinations: [],
         groupSize: '',
         durationNights: '',
-        checkedIn: ''
+        checkedIn: '',
+        checkedOut: ''
     })
 
     const dispatch = useDispatch()
@@ -58,6 +60,8 @@ export default function VisitsManager({action}) {
             return <VisitEditor visit={visit} onSave={onSave} saving={saving} />
         case 'checkIn':
             return <VisitCheckIn visit={visit} onSave={onSave} saving={saving} />
+        case 'checkOut':
+            return <VisitCheckOut visit={visit} onSave={onSave} saving={saving} />
         case 'show':
             return <VisitDetail visit={visit} />
         default:
