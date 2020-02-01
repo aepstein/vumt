@@ -65,14 +65,14 @@ const shouldSee = async (selector,context) => {
   
 const shouldSeeText = async (selector, not, expectedText) => {
 	const elementText = await scope.context.currentPage.$eval(selector, el => el.textContent);
-    const containsText = elementText && elementText.replace(/\s+/,' ').includes(expectedText);
-    const shouldContainText = not ? false : true;
-
-	assert.strictEqual(
-		containsText ? containsText : false,
-		shouldContainText,
-		`Expected "${selector}" to ${shouldContainText ? 'contain' : 'not contain'} "${expectedText}" but had "${elementText}" instead`
-	);
+    const containsText = elementText && elementText.replace(/\s+/,' ')
+	const shouldContainText = not ? false : true;
+	if (shouldContainText) {
+		containsText.should.have.string(expectedText)
+	}
+	else {
+		containsText.should.not.have.string(expectedText)
+	}
 }
 
 // credit: https://gist.github.com/tokland/d3bae3b6d3c1576d8700405829bbdb52

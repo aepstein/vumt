@@ -1,10 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom'
 import {
+    Button,
+    ButtonGroup,
     Container,
     ListGroup,
-    ListGroupItem,
-    Button
+    ListGroupItem
 } from 'reactstrap';
 import {
     CSSTransition,
@@ -39,29 +40,31 @@ export default function VisitsList({visits}) {
                             classNames="fade"
                         >
                             <ListGroupItem>
-                                <Button
-                                    className="info-btn"
-                                    color="info"
-                                    size="sm"
-                                    style={{marginRight: '0.5rem'}}
-                                    onClick={() => history.push('/visits/' + _id)}
-                                >{t('commonForms:detail')}</Button>
-                                <Button
-                                    className="warn-btn"
-                                    color="warn"
-                                    size="sm"
-                                    style={{marginRight: '0.5rem'}}
-                                    onClick={() => history.push('/visits/' + _id + '/edit')}
-                                >{t('commonForms:edit')}</Button>
-                                <Button
-                                    className="remove-btn"
-                                    color="danger"
-                                    size="sm"
-                                    style={{marginRight: '0.5rem'}}
-                                    onClick={() => onDeleteClick(_id)}
-                                >{t('commonForms:remove')}</Button>
-                                <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: origin.timezone}).format(startOn) : ''}</strong>:&nbsp;
-                                <em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>
+                                <ButtonGroup>
+                                    <Button
+                                        color="primary"
+                                        size="sm"
+                                        onClick={() => history.push('/visits/' + _id + '/checkIn')}
+                                    >{t('checkIn')}</Button>
+                                    <Button
+                                        color="info"
+                                        size="sm"
+                                        onClick={() => history.push('/visits/' + _id)}
+                                    >{t('commonForms:detail')}</Button>
+                                    <Button
+                                        color="warn"
+                                        size="sm"
+                                        onClick={() => history.push('/visits/' + _id + '/edit')}
+                                    >{t('commonForms:edit')}</Button>
+                                    <Button
+                                        color="danger"
+                                        size="sm"
+                                        onClick={() => onDeleteClick(_id)}
+                                    >{t('commonForms:remove')}</Button>
+                                </ButtonGroup>
+                                <span class="visit-label">
+                                <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: origin.timezone}).format(startOn) : ''}</strong>:&nbsp;<em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>
+                                </span>
                             </ListGroupItem>
                         </CSSTransition>
                     ))}

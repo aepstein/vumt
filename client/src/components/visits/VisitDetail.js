@@ -3,6 +3,7 @@ import {
     Container
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next'
+import VisitCheckedInDetail from './VisitCheckedInDetail';
 
 export default function VisitDetail({visit}) {
     const { t, i18n } = useTranslation('visit')
@@ -23,6 +24,7 @@ export default function VisitDetail({visit}) {
             <dd>{visit.groupSize}</dd>
             <dt>{t('durationNights')}</dt>
             <dd>{visit.durationNights}</dd>
+            <VisitCheckedInDetail visit={visit}/>
         </dl>
     </Container>
 }

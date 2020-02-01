@@ -44,6 +44,9 @@ const Root = ({ store }) => (
               <AuthRoute path="/visits/:visitId/edit">
                 <VisitsManager action='edit'/>
               </AuthRoute>
+              <AuthRoute path="/visits/:visitId/checkIn">
+                <VisitsManager action='checkIn'/>
+              </AuthRoute>
               <AuthRoute path="/visits/:visitId">
                 <VisitsManager action='show'/>
               </AuthRoute>

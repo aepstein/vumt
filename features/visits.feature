@@ -35,7 +35,6 @@ Feature: Manage visits
         Then I should see my visit for today from "Johns Brook Garden" to "Marcy Summit"
         When I click the "Detail" button
         Then I should see "Date of visit" defined as today
-        And I take a screenshot
         And I should see "Start time" defined as "9:00:00 AM"
         And I should see "Starting point" defined as "Johns Brook Garden"
         And I should see "Destinations" defined as "Marcy Summit"
@@ -78,10 +77,24 @@ Feature: Manage visits
             | Duration in nights        | -1    | Must be at least 0     |
             | Duration in nights        | 0.5   | Must be a whole number |
 
+    Scenario: Check in to a visit
+        Given I am registered as "bmarshall@example.com"
+        And I have registered a visit for today from "Adirondack Loj" to "Algonquin Summit"
+        And I logged in as "bmarshall@example.com"
+        When I visit the "home" page
+        And I click "Check in" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
+        And I fill in "Check in date" with today
+        And I fill in "Check in time" with "805A"
+        And I click the "Check in" button
+        And I take a screenshot
+        And I click the "Detail" button
+        Then I should see "Check in date" defined as today
+        And I should see "Check in time" defined as "8:05:00 AM"
+
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
-        And I delete the visit to "Algonquin Summit"
-        Then I should not see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        And I click "Remove" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        Then I wait for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit" to disappear

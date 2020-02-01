@@ -6,6 +6,7 @@ import { Spinner } from 'reactstrap'
 import VisitsList from '../../components/visits/VisitsList'
 import VisitDetail from '../../components/visits/VisitDetail'
 import VisitEditor from '../../components/visits/VisitEditor'
+import VisitCheckIn from '../../components/visits/VisitCheckIn'
 
 export default function VisitsManager({action}) {
     const { defaultAction, visitId } = useParams()
@@ -20,7 +21,8 @@ export default function VisitsManager({action}) {
         origin: {},
         destinations: [],
         groupSize: '',
-        durationNights: ''
+        durationNights: '',
+        checkedIn: ''
     })
 
     const dispatch = useDispatch()
@@ -54,6 +56,8 @@ export default function VisitsManager({action}) {
         case 'new':
         case 'edit':
             return <VisitEditor visit={visit} onSave={onSave} saving={saving} />
+        case 'checkIn':
+            return <VisitCheckIn visit={visit} onSave={onSave} saving={saving} />
         case 'show':
             return <VisitDetail visit={visit} />
         default:

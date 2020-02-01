@@ -14,7 +14,8 @@ const {
 const scope = require('../support/scope');
 const { toLocalDate } = require('../../test/support/util')
 const visitRowSelector = (startOn,origin,destination) => {
-    return `//li[contains(.,'${formatDateForDisplay(relativeDate(startOn))}') and contains(.,'${origin}') and contains(.,'${destination}')]`
+    return `//li[contains(.,'${formatDateForDisplay(relativeDate(startOn))}') and contains(.,'${origin}') ` +
+        `and contains(.,'${destination}')]`
 }
 const visitRowText = (startOn,origin,destination) => {
     return `${formatDateForDisplay(relativeDate(startOn))}: From ${origin} To ${destination}`
@@ -28,6 +29,14 @@ Given(/I have registered a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)
             destinations: scope.models.destinationPlace.filter(p => p.name == destinationName),
             user: scope.context.user.id
         })
+    }
+)
+
+When(
+    /^I wait for my visit for (today|tomorrow) from "([^"]+)" to "([^"]+)" to disappear$/,
+    async (when,from,to) => {
+        const selector = `//div[contains(@class,'visits-list') and not(.${visitRowSelector(when,from,to)})]`
+        await waitFor(selector)
     }
 )
 
@@ -60,5 +69,5 @@ Then(
     /^I should( not)? see my visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"$/,
     async (not,startOn,origin,destination) => {
         await waitFor('.visits-list')
-        await shouldSeeText(".visits-list", not, visitRowText(startOn,origin,destination));
+        await shouldSeeText(".visit-label", not, visitRowText(startOn,origin,destination));
 });
