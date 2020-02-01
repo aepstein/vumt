@@ -123,6 +123,22 @@ describe('/api/visits', () => {
             res.body.should.be.an('object')
             res.body.should.have.a.property('msg').eql('Path `startOnDate` is required.')
         })
+        it('should update with valid checkedIn/checkedOut', async () => {
+            const auth = await withAuth()
+            const checkedIn = new Date()
+            const checkedOut = new Date()
+            checkedOut.setHours(checkedOut.getHours()+4)
+            const newProps = {
+                checkedIn,
+                checkedOut
+            }
+            const [res, oVisit] = await action(auth,newProps)
+            res.should.have.status(200)
+            const visit = await loadVisit(oVisit)
+            visit.should.have.a.property('checkedIn')
+            visit.checkedIn.toJSON().should.eql(checkedIn.toJSON())
+            visit.checkedOut.toJSON().should.eql(checkedOut.toJSON())
+        })
         it('should not update if authenticated user is not visit owner', async () => {
             const auth = await withAuth()
             const user = await factory.create('user')

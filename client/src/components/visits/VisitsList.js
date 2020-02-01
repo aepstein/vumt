@@ -1,10 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom'
 import {
+    Button,
+    ButtonGroup,
     Container,
     ListGroup,
-    ListGroupItem,
-    Button
+    ListGroupItem
 } from 'reactstrap';
 import {
     CSSTransition,
@@ -14,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom';
 import { deleteVisit } from '../../actions/visitActions';
+import VisitCheckButton from './VisitCheckButton'
 
 export default function VisitsList({visits}) {
     const dispatch = useDispatch()
@@ -32,36 +34,34 @@ export default function VisitsList({visits}) {
             </Link>
             <ListGroup>
                 <TransitionGroup className="visits-list">
-                    {visits.map(({ _id, startOn, origin, destinations }) => (
+                    {visits.map(({ _id, startOn, origin, destinations, checkedIn, checkedOut }) => (
                         <CSSTransition
                             key={_id}
                             timeout={500}
                             classNames="fade"
                         >
                             <ListGroupItem>
-                                <Button
-                                    className="info-btn"
-                                    color="info"
-                                    size="sm"
-                                    style={{marginRight: '0.5rem'}}
-                                    onClick={() => history.push('/visits/' + _id)}
-                                >{t('commonForms:detail')}</Button>
-                                <Button
-                                    className="warn-btn"
-                                    color="warn"
-                                    size="sm"
-                                    style={{marginRight: '0.5rem'}}
-                                    onClick={() => history.push('/visits/' + _id + '/edit')}
-                                >{t('commonForms:edit')}</Button>
-                                <Button
-                                    className="remove-btn"
-                                    color="danger"
-                                    size="sm"
-                                    style={{marginRight: '0.5rem'}}
-                                    onClick={() => onDeleteClick(_id)}
-                                >{t('commonForms:remove')}</Button>
-                                <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: origin.timezone}).format(startOn) : ''}</strong>:&nbsp;
-                                <em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>
+                                <ButtonGroup>
+                                    <VisitCheckButton visitId={_id} checkedIn={checkedIn} checkedOut={checkedOut} />
+                                    <Button
+                                        color="info"
+                                        size="sm"
+                                        onClick={() => history.push('/visits/' + _id)}
+                                    >{t('commonForms:detail')}</Button>
+                                    <Button
+                                        color="warn"
+                                        size="sm"
+                                        onClick={() => history.push('/visits/' + _id + '/edit')}
+                                    >{t('commonForms:edit')}</Button>
+                                    <Button
+                                        color="danger"
+                                        size="sm"
+                                        onClick={() => onDeleteClick(_id)}
+                                    >{t('commonForms:remove')}</Button>
+                                </ButtonGroup>
+                                <span class="visit-label">
+                                <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: origin.timezone}).format(startOn) : ''}</strong>:&nbsp;<em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>
+                                </span>
                             </ListGroupItem>
                         </CSSTransition>
                     ))}

@@ -22,6 +22,8 @@ export const getVisits = () => (dispatch, getState) => {
                 payload: res.data.map((visit) => {
                     return {
                         ...visit,
+                        checkedIn: visit.checkedIn ? Date.parse(visit.checkedIn) : '',
+                        checkedOut: visit.checkedOut ? Date.parse(visit.checkedOut) : '',
                         startOn: Date.parse(visit.startOn)
                     }
                 })
@@ -57,7 +59,9 @@ export const saveVisit = (visit, history) => async (dispatch, getState) => {
             type: visit._id ? UPDATE_VISIT : ADD_VISIT,
             payload: {
                 ...res.data,
-                startOn: Date.parse(res.data.startOn)
+                checkedIn: res.data.checkedIn ? Date.parse(res.data.checkedIn) : '',
+                checkedOut: res.data.checkedOut ? Date.parse(res.data.checkedOut) : '',
+                startOn: Date.parse(res.data.startOn),
             }
         })
         history.push('/')

@@ -2,10 +2,13 @@ language: node_js
 node_js:
 - node
 before_install:
+- export TZ=America/New_York
 - npm i
 - npm i --prefix client
 services:
 - mongodb
+before_script:
+- date
 script:
 - npm run test
 deploy:

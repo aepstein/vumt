@@ -25,8 +25,8 @@ Given('I logged in as {string}', async (email) => {
     await shouldBeLoggedInAs(email);
 });
 
-When('I fill in {string} with {string}', async (label, value) => {
-    await fillByLabel(label,value)
+When(/^I fill in "([^"]+)" with ("[^"]+"|today|tomorrow)$/, async (label, value) => {
+    await fillByLabel(label,parseInput(value))
 })
 
 When('I fill in {string} with nothing', async (label) => {

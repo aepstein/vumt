@@ -2,7 +2,10 @@ const { factory } = require('./setup')
 const Place = require('../../models/Place')
 const User = require('../../models/User')
 const Visit = require('../../models/Visit')
-const { toLocalDate } = require('./util')
+const { 
+    toLocalDate,
+    fromLocalDateTimeToDate
+} = require('./util')
 
 factory.define('place', Place, {
     name: "Algonquin",
@@ -49,3 +52,16 @@ factory.define('visit', Visit, {
     durationNights: 0,
     groupSize: 4
 })
+
+factory.extend('visit','checkedInVisit',{
+    checkedIn: () => {
+        return fromLocalDateTimeToDate(`${toLocalDate(new Date())} 08:05`)
+    }
+})
+
+factory.extend('checkedInVisit','checkedOutVisit',{
+    checkedOut: () => {
+        return fromLocalDateTimeToDate(`${toLocalDate(new Date())} 12:05`)
+    }
+})
+
