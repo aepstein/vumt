@@ -14,10 +14,20 @@ Use at your own risk.
 == Structure of Project
 
 Key folders:
+
 * client: Contains client application assets. Client is a React javascript application that speaks to the server API.
 * features: End-to-end tests.
 * routes: Controller and route definitions for the server, which is mainly an expressJS backend that serves a REST-ful JSON API.
 * test: Unit tests.
+
+== Contribution Guidelines
+
+Contributions are welcome.
+Please see the issues page for this project and contact the project maintainer for guidance on where to focus.
+Accepted contributions will be incorporated into the project and licensed under the same terms by which this project is made available.
+Do not contribute code or other intellectual property unless you have ownership or license to release it under the terms of this project's license.
+
+Contributions must be robust, well-formed, and accompanied by a comprehensive suite of unit and end-to-end tests.
 
 == Acknowledgments
 
