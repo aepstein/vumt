@@ -12,7 +12,6 @@ const {
     waitFor
 } = require('../support/actions');
 const scope = require('../support/scope');
-const { toLocalDate } = require('../../test/support/util')
 const visitRowSelector = (startOn,origin,destination) => {
     return `//li[contains(.,'${formatDateForDisplay(relativeDate(startOn))}') and contains(.,'${origin}') ` +
         `and contains(.,'${destination}')]`
@@ -24,7 +23,7 @@ const visitRowText = (startOn,origin,destination) => {
 Given(/I have registered a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"/,
     async (startOn, originName, destinationName) => {
         await visitExists({
-            startOnDate: toLocalDate(relativeDate(startOn)),
+            startOn: relativeDate(startOn),
             origin: (scope.models.originPlace.filter(p => p.name == originName)[0]._id),
             destinations: scope.models.destinationPlace.filter(p => p.name == destinationName),
             user: scope.context.user.id

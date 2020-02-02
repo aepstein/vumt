@@ -1,4 +1,3 @@
-const assert = require('assert');
 const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
@@ -167,7 +166,7 @@ const relativeDate = (description) => {
 		default:
 			relativeDate.setDate(relativeDate.getDate())
 	}
-	relativeDate.setHours(0,0,0,0)
+	relativeDate.setHours(8,0,0,0)
 	return relativeDate
 }
 
