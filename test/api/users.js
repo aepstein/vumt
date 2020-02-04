@@ -5,11 +5,39 @@ const {
 const {
     validUser
 } = require('../support/validProps');
-
+const {
+    errorMustHaveRoles,
+    errorNoToken,
+    errorPathRequired
+} = require('../support/middlewareErrors')
 describe('/api/users', () => {
     beforeEach( async () => {
         await User.deleteMany({});        
     });
+    describe('GET /api/users', () => {
+        let action = async (q,auth) => {
+            const res = chai.request(server)
+                .get('/api/users')
+            if ( auth ) { res.set('x-auth-token',auth.body.token) }
+            return res
+        }
+        it('should retrieve users for a user with admin role', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const res = await action(null,auth)
+            res.should.have.a.status(200)
+            res.body.should.be.an('array')
+            res.body.map(u => u._id).should.have.members([auth.body.user._id])
+        })
+        it('should deny an unprivileged user',async () => {
+            const auth = await withAuth()
+            const res = await action(null,auth)
+            errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny an unauthenticated user', async () => {
+            const res = await action()
+            errorNoToken(res)
+        })
+    })
     describe('POST /api/users',() => {
         let action = async (user,auth) => {
             const res = chai.request(server)
@@ -33,33 +61,25 @@ describe('/api/users', () => {
             let user = validUser();
             delete user.firstName;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `firstName` is required.');
+            errorPathRequired('firstName')
         });
         it('should not register without lastName', async () => {
             let user = validUser();
             delete user.lastName;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `lastName` is required.');
+            errorPathRequired('lastName')
         });
         it('should not register without email', async () => {
             let user = validUser();
             delete user.email;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `email` is required.');
+            errorPathRequired('email')
         });
         it('should not register without password', async () => {
             let user = validUser();
             delete user.password;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `password` is required.');
+            errorPathRequired('password')
         });
         it('should not register with duplicate email', async () => {
             let user = validUser();
@@ -74,9 +94,7 @@ describe('/api/users', () => {
             let user = validUser();
             delete user.country;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `country` is required.');
+            errorPathRequired('country')
         });
         it('should accept a valid province', async () => {
             let user = validUser({province: 'New York'});
@@ -102,9 +120,7 @@ describe('/api/users', () => {
         it('should deny an unprivileged user who is logged in', async () => {
             const auth = await withAuth()
             res = await action(validUser(),auth)
-            await res.should.have.status(401)
-            await res.body.should.be.an('object')
-            await res.body.should.have.a.property('msg').eql('Insufficient privileges. User must have one of these roles: admin')
+            errorMustHaveRoles(res,['admin'])
         })
         it('should allow an admin user', async () => {
             const auth = await withAuth({roles:['admin']})
@@ -192,8 +208,7 @@ describe('/api/users', () => {
             const res = await chai.request(server)
                 .put('/api/users/' + user._id)
                 .send({})
-            res.should.have.status(401)
-            res.body.should.have.a.property('msg').eql('No token, authorization denied')
+            errorNoToken(res)
         })
     })
 });

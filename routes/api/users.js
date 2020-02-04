@@ -85,4 +85,15 @@ router.put('/:userId',auth(),user({self:true,roles:['admin']}),async (req,res) =
     }
 })
 
+// @route GET api/users
+// @desc Get listing of users
+// @access Private
+router.get('/',auth({roles:['admin']}),async (req,res) => {
+    let criteria = {}
+    const users = await User
+        .find(criteria)
+        .sort({lastName: 1, firstName: 1, middleName: 1, email: 1})
+    return res.json(users.map(u => u.pubProps()))
+})
+
 module.exports = router;
