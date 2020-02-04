@@ -45,8 +45,8 @@ router.post('/', async (req, res) => {
 // @route   GET api/auth
 // @desc    Get information of authenticated user
 // @access  Public
-router.get('/user', auth, async (req, res) => {
-  const user = await User.findById(req.authUser.id)
+router.get('/user', auth(), async (req, res) => {
+  const user = await User.findById(req.authUser._id)
   return res.json(user.pubProps());
 })
 

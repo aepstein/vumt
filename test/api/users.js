@@ -11,10 +11,12 @@ describe('/api/users', () => {
         await User.deleteMany({});        
     });
     describe('POST /api/users',() => {
-        let action = async (user) => {
-            return chai.request(server)
+        let action = async (user,auth) => {
+            const res = chai.request(server)
                 .post('/api/users')
-                .send(user);            
+                .send(user)
+            if ( auth ) { res.set('x-auth-token',auth.body.token); }
+            return res
         }
         it('should register valid user', async () => {
             const user = validUser();
@@ -97,6 +99,32 @@ describe('/api/users', () => {
             await res.body.should.be.a('object');
             await res.body.user.should.have.a.property('phone').eql('+15185551212');
         })
+        it('should deny an unprivileged user who is logged in', async () => {
+            const auth = await withAuth()
+            res = await action(validUser(),auth)
+            await res.should.have.status(401)
+            await res.body.should.be.an('object')
+            await res.body.should.have.a.property('msg').eql('Insufficient privileges. User must have one of these roles: admin')
+        })
+        it('should allow an admin user', async () => {
+            const auth = await withAuth({roles:['admin']})
+            res = await action(validUser(),auth)
+            await res.should.have.status(201)
+            await res.body.should.be.an('object')
+        })
+        it('should not allow a new user to set roles', async () => {
+            res = await action(validUser({roles: ['admin']}))
+            await res.should.have.status(201)
+            await res.body.user.should.be.an('object')
+            await res.body.user.should.have.a.property('roles').an('array').empty
+        })
+        it('should allow an admin user to set roles', async () => {
+            const auth = await withAuth({roles:['admin']})
+            res = await action(validUser({roles: ['admin']}),auth)
+            await res.should.have.status(201)
+            await res.body.should.be.an('object')
+            await res.body.should.have.a.property('roles').members(['admin'])
+        })
     });
     describe('PUT /api/users/:userId',() => {
         const action = async (auth,userProps,dUser) => {
@@ -146,12 +174,18 @@ describe('/api/users', () => {
             const res = await action(auth,newProps)
             res.should.have.status(400)
         })
-        it('should deny with unauthorized user',async () => {
+        it('should deny with unprivileged user who is not the owner',async () => {
             const auth = await withAuth()
             const user = await factory.create('user')
             const res = await action(auth,{},user)
             res.should.have.status(401)
             res.body.should.have.a.property('msg').eql('User not authorized to access user')
+        })
+        it('should allow an admin user who is not the owner', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const user = await factory.create('user')
+            const res = await action(auth,{},user)
+            res.should.have.status(200)
         })
         it('should deny without authentication',async () => {
             const user = await factory.create('user')

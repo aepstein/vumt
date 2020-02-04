@@ -5,8 +5,8 @@ const {
     validVisit
 } = require('./validProps');
 
-const withAuth = async () => {
-    const newUser = await factory.create('user')
+const withAuth = async (attrs={}) => {
+    const newUser = await factory.create('user',attrs)
     return chai.request(server)
         .post('/api/auth')
         .send(validCredentials(newUser));

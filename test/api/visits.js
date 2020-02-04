@@ -11,7 +11,6 @@ const shouldDenyUnauthorizedUser = async (res) => {
     await res.body.should.have.a.property('msg').eql('User not authorized to access visit')
 }
 const Visit = require('../../models/Visit')
-const { toLocalDate } = require('../support/util')
 
 describe('/api/visits', () => {
     describe('POST /api/visits',() => {

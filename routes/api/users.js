@@ -11,7 +11,10 @@ const User = require('../../models/User');
 
 const attrAccessible = (req) => {
     const attrAccessible = req.user ? req.user : {}
-    const allowed = ['firstName','lastName','email','password','country','province','postalCode','phone']
+    let allowed = ['firstName','lastName','email','password','country','province','postalCode','phone']
+    if (req.authUser && req.authUser.roles.includes('admin')) {
+        allowed = allowed.concat(['roles'])
+    }
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
             attrAccessible[key] = req.body[key]
@@ -31,12 +34,15 @@ router.use(
 // @route POST api/users
 // @desc Register a new user
 // @access Public
-router.post('/', async (req, res) => {
+router.post('/',auth({isOptional: true, roles:['admin']}), async (req, res) => {
     const newUser = new User({
         ...attrAccessible(req)
     })
     try {
         const savedUser = await newUser.save()
+        if (req.authUser) {
+            return res.status(201).json(savedUser.pubProps())
+        }
         const token = await jwt.sign(
             { id: savedUser.id },
             jwtSecret,
@@ -62,7 +68,7 @@ router.post('/', async (req, res) => {
 // @route PUT api/users
 // @desc Update an existing user
 // @access Public
-router.put('/:userId',auth,user(),async (req,res) => {
+router.put('/:userId',auth(),user({self:true,roles:['admin']}),async (req,res) => {
     attrAccessible(req)
     try {
         const savedUser = await req.user.save()
