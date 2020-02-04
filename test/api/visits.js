@@ -3,13 +3,16 @@ const {
     validVisit
 } = require('../support/validProps');
 const {
-    shouldDenyWithoutToken,
     withAuth
 } = require("../support/patterns");
 const shouldDenyUnauthorizedUser = async (res) => {
     await res.should.have.status(401);
     await res.body.should.have.a.property('msg').eql('User not authorized to access visit')
 }
+const {
+    errorNoToken,
+    errorPathRequired
+} = require('../support/middlewareErrors')
 const Visit = require('../../models/Visit')
 
 describe('/api/visits', () => {
@@ -41,8 +44,7 @@ describe('/api/visits', () => {
             const auth = await withAuth();
             let visit = await validVisit({startOn: null});
             const res = await action(auth,visit);
-            await res.should.have.status(400);
-            await res.body.should.have.a.property('msg').eql('Path `startOn` is required.');
+            errorPathRequired(res,'startOn')
         });
         it('should not save without origin', async () => {
             const auth = await withAuth();
@@ -69,7 +71,7 @@ describe('/api/visits', () => {
         it('should deny unauthenticated user',async () => {
             const visit = await validVisit();
             const res = await action(null,visit);
-            return await shouldDenyWithoutToken(res);
+            return  errorNoToken(res)
         });
     });
     describe('PUT /api/visits/:visitId', () => {
@@ -147,7 +149,7 @@ describe('/api/visits', () => {
             const res = await chai.request(server)
                 .put('/api/visits/' + visit._id)
                 .send({});
-            return await shouldDenyWithoutToken(res)
+            return errorNoToken(res)
         })
     })
     describe('DELETE /api/visits', () => {
@@ -173,7 +175,7 @@ describe('/api/visits', () => {
             const visit = await factory.create('visit')
             const res = await chai.request(server)
                 .delete('/api/visits/' + visit._id)
-            return await shouldDenyWithoutToken(res)
+            return errorNoToken(res)
         })
     });
     describe('GET /api/visits', () => {
@@ -236,7 +238,7 @@ describe('/api/visits', () => {
             const visit = await factory.create('visit')
             const res = await chai.request(server)
                 .get('/api/visits/' + visit._id)
-            return await shouldDenyWithoutToken(res)
+            return errorNoToken(res)
         })
     })
 });

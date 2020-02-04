@@ -61,25 +61,25 @@ describe('/api/users', () => {
             let user = validUser();
             delete user.firstName;
             res = await action(user);
-            errorPathRequired('firstName')
+            errorPathRequired(res,'firstName')
         });
         it('should not register without lastName', async () => {
             let user = validUser();
             delete user.lastName;
             res = await action(user);
-            errorPathRequired('lastName')
+            errorPathRequired(res,'lastName')
         });
         it('should not register without email', async () => {
             let user = validUser();
             delete user.email;
             res = await action(user);
-            errorPathRequired('email')
+            errorPathRequired(res,'email')
         });
         it('should not register without password', async () => {
             let user = validUser();
             delete user.password;
             res = await action(user);
-            errorPathRequired('password')
+            errorPathRequired(res,'password')
         });
         it('should not register with duplicate email', async () => {
             let user = validUser();
@@ -94,7 +94,7 @@ describe('/api/users', () => {
             let user = validUser();
             delete user.country;
             res = await action(user);
-            errorPathRequired('country')
+            errorPathRequired(res,'country')
         });
         it('should accept a valid province', async () => {
             let user = validUser({province: 'New York'});

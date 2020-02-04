@@ -5,6 +5,9 @@ const {
 const {
     withReg
 } = require("../support/patterns");
+const {
+    errorNoToken
+} = require('../support/middlewareErrors')
 
 describe('/api/auth', () => {
     describe('POST /api/auth',() => {
@@ -79,9 +82,7 @@ describe('/api/auth', () => {
         });
         it('should deny for a user without a token', async () => {
             res = await action(null);
-            await res.should.have.status(401)
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('No token, authorization denied');
+            errorNoToken(res)
         });
     });
 });
