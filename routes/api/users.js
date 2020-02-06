@@ -96,4 +96,17 @@ router.get('/',auth({roles:['admin']}),async (req,res) => {
     return res.json(users.map(u => u.pubProps()))
 })
 
+// @route DELETE api/users/:userId
+// @desc Delete a user
+// @access Private
+router.delete('/:userId',auth(),user({roles:['admin']}),async (req,res) => {
+    try {
+        req.user.deleteOne()
+        return res.json({success: true})
+    }
+    catch(err) {
+        return res.status(404).json({success: false})
+    }
+})
+
 module.exports = router;

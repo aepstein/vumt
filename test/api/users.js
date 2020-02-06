@@ -1,4 +1,4 @@
-const { chai, server, factory } = require('../setup')
+const { chai, server, factory, should } = require('../setup')
 const {
     withAuth
 } = require('../support/patterns')
@@ -209,6 +209,34 @@ describe('/api/users', () => {
                 .put('/api/users/' + user._id)
                 .send({})
             errorNoToken(res)
+        })
+    })
+    describe('DELETE /api/users/:userId', async () => {
+        let action = async (user,auth) => {
+            const res = chai.request(server)
+                .delete('/api/users/' + user._id)
+                .send({})
+            if ( auth ) { res.set('x-auth-token',auth.body.token) }
+            return res
+        }
+        it('should delete the user for an authorized user', async () => {
+            const auth = await withAuth({roles: ['admin']})
+            const user = await factory.create('user')
+            const res = await action(user,auth)
+            res.should.have.status(200)
+            const fUser = await User.findById(user._id)
+            should.not.exist(fUser)
+        })
+        it('should deny for unprivileged user', async () => {
+            const auth = await withAuth()
+            const user = await factory.create('user')
+            const res = await action(user,auth)
+            res.should.have.status(401)
+        })
+        it('should deny for unauthenticated user', async () => {
+            const user = await factory.create('user')
+            const res = await action(user)
+            res.should.have.status(401)
         })
     })
 });
