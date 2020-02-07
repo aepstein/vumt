@@ -26,9 +26,12 @@ const locale = {
         "mustBeAtLeast": "Must be at least {{min}}"
     },
     "user": {
+        "addUser": "Add user",
+        "newUser": "New user",
         "editUser": "Edit profile",
         "updateUser": "Update profile",
-        "profile": "Profile"
+        "profile": "Profile",
+        "yourProfile": "Your profile"
     },
     "visit": {
         "From": "From",
@@ -58,12 +61,14 @@ const locale = {
         "visitPlaceholder": "Visit name"
     },
     "AppNavbar": {
+        "admin": "Administration",
         "brand": "Visitor Use Management Tool",
         "home": "Home",
         "language": "Language",
         "login": "Login",
         "logout": "Logout",
         "register": "Register",
+        "users": "Users",
         "welcome": "Welcome, {{name}}"
     }
 }

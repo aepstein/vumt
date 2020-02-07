@@ -2,6 +2,7 @@ const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
 const { toLocalDate } = require('../../test/support/util')
+const User = require('../../models/User')
 var sc = 1;
 
 const create = async (template, attrs={}) => {
@@ -12,8 +13,8 @@ const create = async (template, attrs={}) => {
 	scope.models[template].push(created)
 	return created
 }
-const userExists = async (email) => {
-	scope.context.user = await scope.factory.create('user',{email,password: "secret"});
+const userExists = async (attr) => {
+	scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
 }
 const visitExists = async (attr={}) => {
     scope.context.visit = await scope.factory.create('visit',attr);
@@ -55,7 +56,8 @@ const escapeXpathString = str => {
 };
 const shouldBeLoggedInAs = async(email) => {
 	await waitFor("//a[contains(text(),'Logout')]");
-    await shouldSeeText(".navbar",false,"Welcome, Bob");
+	const user = await User.findOne({email})
+    await shouldSeeText(".navbar",false,`Welcome, ${user.firstName}`);
     await shouldSeeText(".navbar",false,"Logout");
 }
 const shouldSee = async (selector,context) => {

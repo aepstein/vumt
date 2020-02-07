@@ -78,6 +78,20 @@ export default function UserEditor({action,user,onSave,saving}) {
         setPhone(user.phone)
     },[user.phone,setPhone])
 
+    const [ saveButtonText, setSaveButtonText ] = useState('')
+    useEffect(() => {
+        switch(action) {
+            case 'edit':
+                setSaveButtonText(t('user:updateUser'))
+                break
+            case 'new':
+                setSaveButtonText(t('user:addUser'))
+                break
+            default:
+                setSaveButtonText(t('AppNavbar:register'))
+        }
+    },[action,setSaveButtonText,t])
+
     const { register, handleSubmit, setError, errors } = useForm()
 
     const onChange = (setter) => (e) => {
@@ -97,6 +111,7 @@ export default function UserEditor({action,user,onSave,saving}) {
             setError("phone","format",t('mustBePhone'))
         }
         const newUser = {
+            _id: user._id,
             firstName,
             lastName,
             email,
@@ -251,7 +266,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                     <Button
                         color="primary"
                         block
-                    >{(action === 'edit') ? t('user:updateUser') : t('AppNavbar:register')}</Button>
+                    >{saveButtonText}</Button>
                     <Button color="secondary"
                         onClick={() => history.goBack()}
                     >{t('cancel')}</Button>

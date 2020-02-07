@@ -26,9 +26,12 @@ const locale = {
         "mustBeAtLeast": "Doit être au moins {{min}}"
     },
     "user": {
+        "addUser": "Ajouter un utilisateur",
+        "newUser": "Nouvel utilisateur",
         "editUser": "Modifier votre profil",
         "updateUser": "Modifiez votre profil",
-        "profile": "Profil"
+        "profile": "Profil",
+        "yourProfile": "Votre profil"
     },
     "visit": {
         "From": "De",
@@ -57,12 +60,14 @@ const locale = {
         "originPlaceholder": "Choisissez votre point de départ"
     },
     "AppNavbar": {
+        "admin": "Administration",
         "brand": "Outil de Gestion de l'Utilisation des Visiteurs",
         "home": "Accueil",
         "language": "Langue",
         "login": "S'identifier",
         "logout": "Se déconnecter",
         "register": "S'inscrire",
+        "users": "Utilisateurs",
         "welcome": "Bienvenue, {{name}}"
     }
 }
