@@ -59,7 +59,8 @@ const locale = {
         "visit": "ביקור",
         "visitPlaceholder": "שם ביקור",
         "origin": "שביל",
-        "originPlaceholder": "בחר את ראש השביל שלך"
+        "originPlaceholder": "בחר את ראש השביל שלך",
+        "parkedVehicles": "מספר הרכבים שחונים בנקודת ההתחלה"
     },
     "AppNavbar": {
         "admin": "מינהל",

@@ -31,6 +31,11 @@ const VisitSchema = new Schema({
         required: true,
         min: 1
     },
+    parkedVehicles: {
+        type: Number,
+        required: true,
+        min: 0
+    },
     checkedIn: {
         type: Date
     },

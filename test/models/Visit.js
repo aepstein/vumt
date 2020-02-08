@@ -29,6 +29,14 @@ describe('Visit', () => {
         const visit = await factory.build('visit',{durationNights: -1})
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    it('should not save without number of parked vehicles', async () => {
+        const visit = await factory.build('visit',{parkedVehicles: null})
+        await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should not save with invalid number of parked vehicles', async () => {
+        const visit = await factory.build('visit',{parkedVehicles: -1})
+        await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
     it('should accept a valid checkedIn date', async() => {
         const visit = await factory.create('checkedInVisit')
         visit.should.have.a.property('checkedIn')

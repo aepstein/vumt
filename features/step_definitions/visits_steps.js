@@ -53,6 +53,9 @@ When(/I fill in a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"(?: exce
         if ( except != "Starting point" ) await fillTypeaheadByLabel("Starting point",origin)
         if ( except != "Number of people in group" ) await fillByLabel("Number of people in group",'4')
         if ( except != "Duration in nights" ) await fillByLabel("Duration in nights",'0')
+        if ( except != "Number of vehicles parked at starting point" ) {
+            await fillByLabel("Number of vehicles parked at starting point",'1')
+        }
         await fillTypeaheadByLabel("Destinations",destination)
 });
 
