@@ -25,6 +25,8 @@ export default function VisitDetail({visit}) {
             <dd>{visit.groupSize}</dd>
             <dt>{t('durationNights')}</dt>
             <dd>{visit.durationNights}</dd>
+            <dt>{t('parkedVehicles')}</dt>
+            <dd>{visit.parkedVehicles}</dd>
             <VisitCheckedInDetail visit={visit}/>
             <VisitCheckedOutDetail visit={visit}/>
         </dl>

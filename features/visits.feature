@@ -20,6 +20,7 @@ Feature: Manage visits
         And I should see "Destinations" defined as "Algonquin Summit"
         And I should see "Number of people in group" defined as "4"
         And I should see "Duration in nights" defined as "0"
+        And I should see "Number of vehicles parked at starting point" defined as "1"
 
     Scenario: Edit a visit
         Given an origin "Johns Brook Garden" exists
@@ -31,6 +32,7 @@ Feature: Manage visits
         And I click "Edit" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         When I fill in a visit for today from "Johns Brook Garden" to "Marcy Summit"
         And I fill in "Start time" with "09:00AM"
+        And I fill in "Number of vehicles parked at starting point" with "0"
         And I click the "Edit visit" button
         Then I should see my visit for today from "Johns Brook Garden" to "Marcy Summit"
         When I click the "Detail" button
@@ -38,6 +40,7 @@ Feature: Manage visits
         And I should see "Start time" defined as "9:00:00 AM"
         And I should see "Starting point" defined as "Johns Brook Garden"
         And I should see "Destinations" defined as "Marcy Summit"
+        And I should see "Number of vehicles parked at starting point" defined as "0"
 
     Scenario: Add visit
         Given I am registered as "bmarshall@example.com"
@@ -55,12 +58,13 @@ Feature: Manage visits
         And I click the "Add visit" button
         Then the "<field>" field should have an error "Cannot be blank"
         Examples:
-            | field                     |
-            | Date of visit             |
-            | Start time                |
-            | Starting point            |
-            | Number of people in group |
-            | Duration in nights        |
+            | field                                       |
+            | Date of visit                               |
+            | Start time                                  |
+            | Starting point                              |
+            | Number of people in group                   |
+            | Duration in nights                          |
+            | Number of vehicles parked at starting point |
 
     Scenario Outline: Try to add visit with invalid values
         Given I am registered as "bmarshall@example.com"
@@ -71,11 +75,13 @@ Feature: Manage visits
         And I click the "Add visit" button
         Then the "<field>" field should have an error "<message>"
         Examples:
-            | field                     | value | message                |
-            | Number of people in group | -1    | Must be at least 1     |
-            | Number of people in group | 2.5   | Must be a whole number |
-            | Duration in nights        | -1    | Must be at least 0     |
-            | Duration in nights        | 0.5   | Must be a whole number |
+            | field                                       | value | message                |
+            | Number of people in group                   | -1    | Must be at least 1     |
+            | Number of people in group                   | 2.5   | Must be a whole number |
+            | Duration in nights                          | -1    | Must be at least 0     |
+            | Duration in nights                          | 0.5   | Must be a whole number |
+            | Number of vehicles parked at starting point | -1    | Must be at least 0     |
+            | Number of vehicles parked at starting point | 0.5   | Must be a whole number |
 
     Scenario: Check in/out of a visit
         Given I am registered as "bmarshall@example.com"

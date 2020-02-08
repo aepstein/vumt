@@ -57,6 +57,7 @@ const locale = {
         "groupSize": "Number of people in group",
         "origin": "Starting point",
         "originPlaceholder": "Select your starting point",
+        "parkedVehicles": "Number of vehicles parked at starting point",
         "startOnDate": "Date of visit",
         "startOnTime": "Start time",
         "visit": "Visit",

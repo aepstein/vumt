@@ -92,6 +92,10 @@ export default function VisitEditor({visit,onSave,saving}) {
     useEffect(() => {
         setGroupSize(visit.groupSize)
     },[visit.groupSize])
+    const [ parkedVehicles, setParkedVehicles ] = useState('')
+    useEffect(() => {
+        setParkedVehicles(visit.parkedVehicles)
+    },[visit.parkedVehicles])
     const destinationSearch = (query) => {
         setDestinationLoading(true)
         axios
@@ -125,7 +129,8 @@ export default function VisitEditor({visit,onSave,saving}) {
                 }
             }),
             durationNights,
-            groupSize
+            groupSize,
+            parkedVehicles
         }
         onSave(newVisit)
     }
@@ -217,6 +222,27 @@ export default function VisitEditor({visit,onSave,saving}) {
                     {errors.groupSize && errors.groupSize.type === 'min' &&
                         <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 1})}</FormFeedback>}
                     {errors.groupSize && errors.groupSize.type === 'mustBeWholeNumber' &&
+                        <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
+                    <Label for="parkedVehicles">{t('parkedVehicles')}</Label>
+                    <Input
+                        type="number"
+                        id="parkedVehicles"
+                        name="parkedVehicles"
+                        value={parkedVehicles}
+                        onChange={onChange(setParkedVehicles)}
+                        innerRef={register({required: true, min: 0, validate: {
+                            min: mustBeAtLeast(0),
+                            mustBeWholeNumber
+                        }})}
+                        invalid={errors.parkedVehicles ? true : false}
+                    />
+                    {errors.parkedVehicles && errors.parkedVehicles.type === 'required' &&
+                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                    {errors.parkedVehicles && errors.parkedVehicles.type === 'min' &&
+                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 0})}</FormFeedback>}
+                    {errors.parkedVehicles && errors.parkedVehicles.type === 'mustBeWholeNumber' &&
                         <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>

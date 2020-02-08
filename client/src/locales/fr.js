@@ -59,7 +59,8 @@ const locale = {
         "visit": "Visite",
         "visitPlaceholder": "Nom de visite",
         "origin": "Point de départ",
-        "originPlaceholder": "Choisissez votre point de départ"
+        "originPlaceholder": "Choisissez votre point de départ",
+        "parkedVehicles": "Nombre de véhicules stationnés au point de départ"
     },
     "AppNavbar": {
         "admin": "Administration",
