@@ -49,7 +49,8 @@ factory.define('visit', Visit, {
     origin: factory.assoc('originPlace','_id'),
     destinations: [],
     durationNights: 0,
-    groupSize: 4
+    groupSize: 4,
+    parkedVehicles: 1
 })
 
 factory.extend('visit','checkedInVisit',{
