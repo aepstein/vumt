@@ -1,8 +1,20 @@
 const express = require('express');
 const router = express.Router();
-// const auth = require('../../middleware/auth');
 
+const auth = require('../../middleware/auth')
 const Place = require('../../models/Place');
+const handleValidationError = require('../../lib/handleValidationError')
+
+const attrAccessible = (req) => {
+    const attrAccessible = req.place ? req.place : {}
+    const allowed = ['name','location','isOrigin','isDestination','parkingCapacity','timezone']
+    allowed.filter((key) => Object.keys(req.body).includes(key)).
+        forEach((key) => {
+            attrAccessible[key] = req.body[key]
+        })
+    return attrAccessible
+}
+
 
 // @route GET api/places
 // @desc Get all places
@@ -30,5 +42,23 @@ router.get('/:type?', async (req, res) => {
         console.log(err)
     }
 });
+
+// @route POST api/places
+// @desc Create a new place
+// @access Private
+router.post('/', auth({roles:['admin']}), async (req, res) => {
+    const newPlace = new Place(attrAccessible(req))
+    try {
+        return res.status(201).json(await newPlace.save())
+    }
+    catch(err) {
+        if (err.name === 'ValidationError') {
+            return handleValidationError(err,res)
+        }
+        else {
+            throw err
+        }
+    }
+})
 
 module.exports = router;

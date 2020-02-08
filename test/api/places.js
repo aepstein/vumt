@@ -1,4 +1,11 @@
 const { chai, factory, server } = require('../setup')
+const { withAuth } = require('../support/patterns')
+const { validPlace } = require('../support/validProps')
+const { 
+    errorMustHaveRoles,
+    errorNoToken,
+    errorPathRequired
+} = require('../support/middlewareErrors')
 
 describe('/api/places',() => {
     const genPlaces = async () => {
@@ -36,6 +43,35 @@ describe('/api/places',() => {
             res.should.have.status(200)
             res.body.should.be.an('array')
             res.body.map(place => place._id).should.have.members([places.destination.id])
+        })
+    })
+    describe('POST /api/places', () => {
+        const action = async (place,auth) => {
+            const res = chai.request(server).post('/api/places').send(place)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        it('should save a place for authorized user with valid attributes', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const place = await validPlace()
+            const res = await action(place,auth)
+            res.should.have.status(201)
+            res.body.should.be.an('object')
+        })
+        it('should return an error for an invalid submission', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const place = await validPlace({name: null})
+            const res = await action(place,auth)
+            errorPathRequired(res,'name')
+        })
+        it('should deny an unprivileged user', async () => {
+            const auth = await withAuth()
+            const res = await action({},auth)
+            await errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny without authentication', async() => {
+            const res = await action({})
+            await errorNoToken(res)
         })
     })
 })
