@@ -31,6 +31,8 @@ const locale = {
         "editUser": "ערוך את הפרופיל שלך",
         "updateUser": "עדכן את הפרופיל שלך",
         "profile": "פרופיל",
+        "roles": "תפקידים",
+        "rolesPlaceholder": "בחר בתפקידי משתמש הרשאים",
         "yourProfile": "הפרופיל שלך"
     },
     "visit": {

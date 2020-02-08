@@ -31,6 +31,8 @@ const locale = {
         "editUser": "Modifier votre profil",
         "updateUser": "Modifiez votre profil",
         "profile": "Profil",
+        "roles": "Rôles",
+        "rolesPlaceholder": "SSélectionnez des rôles d'utilisateur privilégiés",
         "yourProfile": "Votre profil"
     },
     "visit": {

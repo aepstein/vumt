@@ -46,6 +46,8 @@ export default function UserDetail({user}) {
             <dd>{user.postalCode}</dd>
             <dt>{t('phone')}</dt>
             <dd>{user.phone}</dd>
+            <dt>{t('user:roles')}</dt>
+            <dd>{user.roles.join(', ')}</dd>
         </dl>
     </Container>
 }

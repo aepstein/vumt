@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -13,14 +13,18 @@ import {
     Typeahead
 } from 'react-bootstrap-typeahead'
 import { useHistory } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import countries, { postalCodeRequired } from '../../lib/countries'
 import provinces from 'provinces'
 import postalCodes from 'postal-codes-js'
 import phoneValidator from 'phone'
+import roleOptions from '../../lib/roles'
 
 export default function UserEditor({action,user,onSave,saving}) {
+    const authUser = useSelector(state => state.auth.user)
+
     const { t, i18n } = useTranslation('commonForms')
     const history = useHistory()
 
@@ -78,6 +82,12 @@ export default function UserEditor({action,user,onSave,saving}) {
         setPhone(user.phone)
     },[user.phone,setPhone])
 
+    const [ roles, setRoles ] = useState([])
+    useEffect(() => {
+        setRoles(user.roles)
+    },[user.roles,setRoles])
+    const rolesRef = useRef()
+
     const [ saveButtonText, setSaveButtonText ] = useState('')
     useEffect(() => {
         switch(action) {
@@ -121,6 +131,7 @@ export default function UserEditor({action,user,onSave,saving}) {
             postalCode,
             phone
         }
+        if ( authUser && authUser.roles.includes('admin') ) newUser.roles = roles
         onSave(newUser)
     }
 
@@ -262,6 +273,20 @@ export default function UserEditor({action,user,onSave,saving}) {
                     {errors.phone &&
                         <FormFeedback>{t('commonForms:mustBePhone')}</FormFeedback>}
                 </FormGroup>
+                { !authUser || !authUser.roles.includes('admin') ? '' : <FormGroup>
+                    <Label for="roles">{t('user:roles')}</Label>
+                    <Typeahead
+                        id="roles"
+                        name="roles"
+                        multiple
+                        selected={roles}
+                        placeholder={t('user:rolesPlaceholder')}
+                        options={roleOptions}
+                        onChange={(selected) => setRoles(selected)}
+                        ref={rolesRef}
+                        clearButton={true}
+                    />
+                </FormGroup> }
                 <ButtonGroup>
                     <Button
                         color="primary"

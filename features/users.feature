@@ -26,6 +26,7 @@ Feature: Manage users
         When I visit the "users" page
         And I click "Edit" for user "pschaefer@example.com"
         And I fill in a modified profile
+        And I fill in the "Roles" typeahead with "ranger"
         And I click the "Update profile" button
         And I click "Detail" for user "hclark@example.com"
         Then I should see "First name" defined as "Herbert"
@@ -35,12 +36,14 @@ Feature: Manage users
         And I should see "State, province, or territory" defined as "Quebec"
         And I should see "Postal code" defined as "H2T 2M2"
         And I should see "Phone" defined as "+15142720667"
+        And I should see "Roles" defined as "ranger"
 
     Scenario: Add a new user
         Given I logged in as "bmcmartin@example.com"
         When I visit the "users" page
         And I click the "Add user" button
         And I fill in a new registration for "bmarshall@example.com"
+        And I fill in the "Roles" typeahead with "planner"
         And I click the "Add user" button
         And I click "Detail" for user "bmarshall@example.com"
         Then I should see "First name" defined as "Bob"
@@ -50,6 +53,7 @@ Feature: Manage users
         And I should see "State, province, or territory" defined as "New York"
         And I should see "Postal code" defined as "12943"
         And I should see "Phone" defined as "+15185551212"
+        And I should see "Roles" defined as "planner"
 
     Scenario: Remove a user
         Given I logged in as "bmcmartin@example.com"

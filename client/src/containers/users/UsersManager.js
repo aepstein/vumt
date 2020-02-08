@@ -15,7 +15,8 @@ const BLANK_USER = {
     country: '',
     province: '',
     postalCode: '',
-    phone: ''
+    phone: '',
+    roles: []
 }
 
 export default function UsersManager({action}) {

@@ -2,6 +2,7 @@ const { Given, When, Then } = require('cucumber');
 const {
     clickByText,
     fillByLabel,
+    fillTypeaheadByLabel,
     loginAs,
     parseInput,
     shouldBeLoggedInAs,
@@ -27,6 +28,10 @@ Given('I logged in as {string}', async (email) => {
 
 When(/^I fill in "([^"]+)" with ("[^"]+"|today|tomorrow)$/, async (label, value) => {
     await fillByLabel(label,parseInput(value))
+})
+
+When('I fill in the {string} typeahead with {string}', async (label, value) => {
+    await fillTypeaheadByLabel(label,value)
 })
 
 When('I fill in {string} with nothing', async (label) => {
