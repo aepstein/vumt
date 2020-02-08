@@ -74,4 +74,53 @@ describe('/api/places',() => {
             await errorNoToken(res)
         })
     })
+    describe('PUT /api/places/:placeId', async () => {
+        const action = async (place,props,auth) => {
+            const res = chai.request(server).put('/api/places/' + place._id).send(props)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        it('should save for authorized user with valid attributes', async () => {
+            const place = await factory.create('place')
+            const auth = await withAuth({roles: ['admin']})
+            attr = {
+                name: 'Cascade Lake',
+                location: {
+                    type: 'Point',
+                    coordinates: [44.1,73.2]
+                },
+                isOrigin: true,
+                isDestination: true,
+                parkingCapacity: 15,
+                timezone: 'America/Chicago'
+            }
+            const res = await action(place,attr,auth)
+            res.should.have.status(200)
+            res.body.should.be.an('object')
+            res.body.should.have.a.property('name').eql(attr.name)
+            res.body.should.have.a.property('location').deep.include(attr.location)
+            res.body.should.have.a.property('isOrigin').eql(attr.isOrigin)
+            res.body.should.have.a.property('isDestination').eql(attr.isDestination)
+            res.body.should.have.a.property('parkingCapacity').eql(attr.parkingCapacity)
+            res.body.should.have.a.property('timezone').eql(attr.timezone)
+        })
+        it('should return an error for an invalid submission', async () => {
+            const place = await factory.create('place')
+            const auth = await withAuth({roles: ['admin']})
+            const attr = await validPlace({name: null})
+            const res = await action(place,attr,auth)
+            errorPathRequired(res,'name')
+        })
+        it('should deny an unprivileged user', async () => {
+            const place = await factory.create('place')
+            const auth = await withAuth()
+            const res = await action(place,{},auth)
+            await errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny without authentication', async() => {
+            const place = await factory.create('place')
+            const res = await action(place,{})
+            await errorNoToken(res)
+        })
+    })
 })

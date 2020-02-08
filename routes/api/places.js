@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const auth = require('../../middleware/auth')
+const place = require('../../middleware/place')
 const Place = require('../../models/Place');
 const handleValidationError = require('../../lib/handleValidationError')
 
@@ -50,6 +51,24 @@ router.post('/', auth({roles:['admin']}), async (req, res) => {
     const newPlace = new Place(attrAccessible(req))
     try {
         return res.status(201).json(await newPlace.save())
+    }
+    catch(err) {
+        if (err.name === 'ValidationError') {
+            return handleValidationError(err,res)
+        }
+        else {
+            throw err
+        }
+    }
+})
+
+// @route PUT api/places/:placeId
+// @desc Update an existing place
+// @access Private
+router.put('/:placeId', auth({roles:['admin']}), place(), async (req, res) => {
+    attrAccessible(req)
+    try {
+        return res.status(200).json(await req.place.save())
     }
     catch(err) {
         if (err.name === 'ValidationError') {
