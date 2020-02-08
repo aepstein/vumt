@@ -3,15 +3,17 @@ const {
     validVisit
 } = require('../support/validProps');
 const {
-    shouldDenyWithoutToken,
     withAuth
 } = require("../support/patterns");
 const shouldDenyUnauthorizedUser = async (res) => {
     await res.should.have.status(401);
     await res.body.should.have.a.property('msg').eql('User not authorized to access visit')
 }
+const {
+    errorNoToken,
+    errorPathRequired
+} = require('../support/middlewareErrors')
 const Visit = require('../../models/Visit')
-const { toLocalDate } = require('../support/util')
 
 describe('/api/visits', () => {
     describe('POST /api/visits',() => {
@@ -38,12 +40,11 @@ describe('/api/visits', () => {
             await res.should.have.status(201)
             res.body.destinations.map(d => d._id).should.have.members([destination.id])
         })
-        it('should not save without startOnDate', async () => {
+        it('should not save without startOn', async () => {
             const auth = await withAuth();
-            let visit = await validVisit({startOnDate: null});
+            let visit = await validVisit({startOn: null});
             const res = await action(auth,visit);
-            await res.should.have.status(400);
-            await res.body.should.have.a.property('msg').eql('Path `startOnDate` is required.');
+            errorPathRequired(res,'startOn')
         });
         it('should not save without origin', async () => {
             const auth = await withAuth();
@@ -70,7 +71,7 @@ describe('/api/visits', () => {
         it('should deny unauthenticated user',async () => {
             const visit = await validVisit();
             const res = await action(null,visit);
-            return await shouldDenyWithoutToken(res);
+            return  errorNoToken(res)
         });
     });
     describe('PUT /api/visits/:visitId', () => {
@@ -100,8 +101,7 @@ describe('/api/visits', () => {
             const newProps = {
                 origin: newOrigin.id,
                 destinations: [ newDestination.id ],
-                startOnDate: toLocalDate(tomorrow()),
-                startOnTime: '07:00',
+                startOn: tomorrow(),
                 groupSize: 5
             }
             const [res, oVisit] = await action(auth,newProps)
@@ -109,19 +109,18 @@ describe('/api/visits', () => {
             const visit = await loadVisit(oVisit)
             visit.origin.name.should.eql(newOrigin.name)
             visit.destinations.map(d => d.name).should.have.members([newDestination.name])
-            visit.startOnDate.should.eql(newProps.startOnDate)
-            visit.startOnTime.should.eql(newProps.startOnTime)
+            visit.startOn.should.eql(newProps.startOn)
             visit.groupSize.should.eql(5)
         })
         it('should not update with invalid submission', async () => {
             const auth = await withAuth()
             const newProps = {
-                startOnDate: ''
+                startOn: ''
             }
             const [ res, visit ] = await action(auth,newProps)
             res.should.have.status(400)
             res.body.should.be.an('object')
-            res.body.should.have.a.property('msg').eql('Path `startOnDate` is required.')
+            res.body.should.have.a.property('msg').eql('Path `startOn` is required.')
         })
         it('should update with valid checkedIn/checkedOut', async () => {
             const auth = await withAuth()
@@ -150,7 +149,7 @@ describe('/api/visits', () => {
             const res = await chai.request(server)
                 .put('/api/visits/' + visit._id)
                 .send({});
-            return await shouldDenyWithoutToken(res)
+            return errorNoToken(res)
         })
     })
     describe('DELETE /api/visits', () => {
@@ -176,7 +175,7 @@ describe('/api/visits', () => {
             const visit = await factory.create('visit')
             const res = await chai.request(server)
                 .delete('/api/visits/' + visit._id)
-            return await shouldDenyWithoutToken(res)
+            return errorNoToken(res)
         })
     });
     describe('GET /api/visits', () => {
@@ -239,7 +238,7 @@ describe('/api/visits', () => {
             const visit = await factory.create('visit')
             const res = await chai.request(server)
                 .get('/api/visits/' + visit._id)
-            return await shouldDenyWithoutToken(res)
+            return errorNoToken(res)
         })
     })
 });

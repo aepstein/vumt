@@ -43,4 +43,14 @@ describe('User', () => {
         const user = await factory.build('user',{phone: '555-1212'})
         await user.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    it('should save with valid role', async () => {
+        const roles = ['ranger','planner','admin']
+        const user = await factory.build('user',{roles})
+        const savedUser = await user.save()
+        savedUser.roles.should.have.members(roles)
+    })
+    it('should not save with invalid role', async () => {
+        const user = await factory.build('user',{roles: ['producer']})
+        user.save().should.eventually.be.rejectedWith(ValidationError)
+    })
 })

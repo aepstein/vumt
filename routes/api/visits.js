@@ -6,7 +6,7 @@ const visit = require('../../middleware/visit')
 const handleValidationError = require('../../lib/handleValidationError')
 const attrAccessible = (req) => {
     const attrAccessible = req.visit ? req.visit : {}
-    const allowed = ['startOnDate','startOnTime','origin','destinations','durationNights','groupSize','checkedIn','checkedOut']
+    const allowed = ['startOn','origin','destinations','durationNights','groupSize','checkedIn','checkedOut']
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
             attrAccessible[key] = req.body[key]
@@ -32,14 +32,14 @@ router.get('/', async (req, res) => {
 // @route GET api/visits/:visitId
 // @desc Load a single visit
 // @access Private
-router.get('/:visitId', auth, visit(), async (req, res) => {
+router.get('/:visitId', auth(), visit(), async (req, res) => {
     return res.status(200).json(req.visit)
 })
 
 // @route PUT api/visits/:visitId
 // @desc Update an existing visit
 // @access Private
-router.put('/:visitId', auth, visit(), async (req, res) => {
+router.put('/:visitId', auth(), visit(), async (req, res) => {
     attrAccessible(req)
     try {
         return res.status(200).json(await req.visit.save())
@@ -57,10 +57,10 @@ router.put('/:visitId', auth, visit(), async (req, res) => {
 // @route POST api/visits
 // @desc Create a new visit
 // @access Private
-router.post('/', auth, async (req, res) => {
+router.post('/', auth(), async (req, res) => {
     const newVisit = new Visit({
         ...attrAccessible(req),
-        user: req.authUser.id
+        user: req.authUser._id
     });
     try {
         return res.status(201).json(await newVisit.save())
@@ -78,7 +78,7 @@ router.post('/', auth, async (req, res) => {
 // @route DELETE api/visits
 // @desc Delete an existing visit
 // @access Private
-router.delete('/:visitId', auth, visit(), async (req, res) => {
+router.delete('/:visitId', auth(), visit(), async (req, res) => {
     try {
         await req.visit.deleteOne()
         return res.json({success: true})

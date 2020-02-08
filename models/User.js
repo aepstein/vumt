@@ -40,7 +40,11 @@ const UserSchema = new Schema(
             validate: (val) => {
                 return phone(val,'',true).length > 0
             }
-        }
+        },
+        roles: [{
+            type: String,
+            enum: ['ranger','planner','admin']
+        }]
     },
     {
             timestamps: true
@@ -68,7 +72,8 @@ UserSchema.methods.pubProps = function() {
         country: this.country,
         province: this.province,
         postalCode: this.postalCode,
-        phone: this.phone
+        phone: this.phone,
+        roles: this.roles
     }
 }
 

@@ -23,7 +23,9 @@ export default function AuthUserManager({action}) {
         password: '',
         country: '',
         provice: '',
-        postalCode: ''
+        postalCode: '',
+        phone: '',
+        roles: []
     })
 
     useEffect(() => {

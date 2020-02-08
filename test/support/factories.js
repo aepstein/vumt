@@ -45,8 +45,7 @@ factory.define('user', User, {
 
 factory.define('visit', Visit, {
     user: factory.assoc('user','_id'),
-    startOnDate: () => toLocalDate(new Date()),
-    startOnTime: '08:00',
+    startOn: () => new Date(),
     origin: factory.assoc('originPlace','_id'),
     destinations: [],
     durationNights: 0,

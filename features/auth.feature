@@ -5,12 +5,14 @@ Feature: Authentication
 
     Scenario: Register new user
         When I visit the "home" page
+        And I click the "Register" link
         And I fill in a new registration for "bmarshall@example.com"
         And I click the "Register" button
         Then I should be logged in as "bmarshall@example.com"
 
     Scenario Outline: Register a user with required field missing
         When I visit the "home" page
+        And I click the "Register" link
         And I fill in a new registration for "bmarshall@example.com" except "<field>"
         And I click the "Register" button
         Then the "<field>" field should have an error "Cannot be blank"
@@ -26,6 +28,7 @@ Feature: Authentication
 
     Scenario Outline: Register a user with invalid field
         When I visit the "home" page
+        And I click the "Register" link
         And I fill in a new registration for "bmarshall@example.com"
         And I fill in "<field>" with "<value>"
         And I click the "Register" button

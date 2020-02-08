@@ -12,7 +12,7 @@ const {
 
 
 Given('I am registered as {string}', async (email) => {
-    await userExists(email);
+    await userExists({email})
 });
 
 When('I log in as {string}', async (email) => {
@@ -20,8 +20,6 @@ When('I log in as {string}', async (email) => {
 });
 
 When(/I fill in a new registration for "([^"]+)"(?: except "([^"]+)")?/, async (email,except) => {
-    await waitFor('.navbar');
-    await clickByText("Register");
     if (except != "First name" ) await fillByLabel("First name","Bob");
     if (except != "Last name" ) await fillByLabel("Last name","Marshall");
     if (except != "Email" ) await fillByLabel("Email",email);

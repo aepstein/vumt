@@ -16,21 +16,42 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
+import tz from 'timezone/loaded'
 
 export default function VisitEditor({visit,onSave,saving}) {
     const { t } = useTranslation('visit')
 
+    const [ timezone, setTimezone ] = useState('')
+    useEffect(() => {
+        if (!visit.origin || !visit.origin.timezone) return setTimezone('')
+        setTimezone(visit.origin.timezone)
+    },[visit.origin])
+    const [ startOn, setStartOn ] = useState('')
+    useEffect(() => {
+        setStartOn(visit.startOn)
+    },[visit.startOn,setStartOn])
     const [ startOnDate, setStartOnDate ] = useState('')
     useEffect(() => {
-        setStartOnDate(visit.startOnDate)
-    },[visit.startOnDate])
+        if (!visit.startOn || !timezone) return
+        setStartOnDate(tz(visit.startOn,timezone,'%Y-%m-%d'))
+    },[visit.startOn,setStartOnDate,timezone])
     const [ startOnTime, setStartOnTime ] = useState('')
     useEffect(() => {
-        setStartOnTime(visit.startOnTime)
-    },[visit.startOnTime])
+        if (!visit.startOn || !timezone) return
+        setStartOnTime(tz(visit.startOn,timezone,'%H:%M'))
+    },[visit.startOn,setStartOnTime,timezone])
+    useEffect(() => {
+        if (startOnDate && startOnTime) {
+            setStartOn(new Date(tz(`${startOnDate} ${startOnTime}`,timezone)))
+        }
+        else {
+            setStartOn('')
+        }
+    },[startOnDate,startOnTime,setStartOn,timezone])
     const [ origin, setOrigin ] = useState([])
     useEffect(() => {
-        const vOrigin = visit.origin._id ? [{id: visit.origin._id, label: visit.origin.name}] : []
+        const vOrigin = visit.origin._id ?
+            [{id: visit.origin._id, label: visit.origin.name, timezone: visit.origin.timezone}] : []
         setOriginOptions(vOrigin)
         setOrigin(vOrigin)
     },[visit.origin])
@@ -44,10 +65,14 @@ export default function VisitEditor({visit,onSave,saving}) {
             .then((res) => {
                 setOriginLoading(false)
                 setOriginOptions(res.data.map((place) => {
-                    return {id: place._id, label: place.name}
+                    return {id: place._id, label: place.name, timezone: place.timezone}
                 }))
             })
     }
+    useEffect(() => {
+        if (origin.length === 0 || !origin[0].timezone) return
+        setTimezone(origin[0].timezone)
+    },[origin,setTimezone])
     const [ destinations, setDestinations ] = useState([])
     useEffect(() => {
         const vDestinations = visit.destinations.map((d) => {
@@ -92,8 +117,7 @@ export default function VisitEditor({visit,onSave,saving}) {
         }
         const newVisit = {
             _id: visit._id,
-            startOnDate,
-            startOnTime,
+            startOn,
             origin: (origin && origin[0] ? origin[0].id : ''),
             destinations: destinations.map((d) => {
                 return {

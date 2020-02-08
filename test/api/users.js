@@ -1,20 +1,50 @@
-const { chai, server, factory } = require('../setup')
+const { chai, server, factory, should } = require('../setup')
 const {
     withAuth
 } = require('../support/patterns')
 const {
     validUser
 } = require('../support/validProps');
-
+const {
+    errorMustHaveRoles,
+    errorNoToken,
+    errorPathRequired
+} = require('../support/middlewareErrors')
 describe('/api/users', () => {
     beforeEach( async () => {
         await User.deleteMany({});        
     });
+    describe('GET /api/users', () => {
+        let action = async (q,auth) => {
+            const res = chai.request(server)
+                .get('/api/users')
+            if ( auth ) { res.set('x-auth-token',auth.body.token) }
+            return res
+        }
+        it('should retrieve users for a user with admin role', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const res = await action(null,auth)
+            res.should.have.a.status(200)
+            res.body.should.be.an('array')
+            res.body.map(u => u._id).should.have.members([auth.body.user._id])
+        })
+        it('should deny an unprivileged user',async () => {
+            const auth = await withAuth()
+            const res = await action(null,auth)
+            errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny an unauthenticated user', async () => {
+            const res = await action()
+            errorNoToken(res)
+        })
+    })
     describe('POST /api/users',() => {
-        let action = async (user) => {
-            return chai.request(server)
+        let action = async (user,auth) => {
+            const res = chai.request(server)
                 .post('/api/users')
-                .send(user);            
+                .send(user)
+            if ( auth ) { res.set('x-auth-token',auth.body.token); }
+            return res
         }
         it('should register valid user', async () => {
             const user = validUser();
@@ -31,33 +61,25 @@ describe('/api/users', () => {
             let user = validUser();
             delete user.firstName;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `firstName` is required.');
+            errorPathRequired(res,'firstName')
         });
         it('should not register without lastName', async () => {
             let user = validUser();
             delete user.lastName;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `lastName` is required.');
+            errorPathRequired(res,'lastName')
         });
         it('should not register without email', async () => {
             let user = validUser();
             delete user.email;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `email` is required.');
+            errorPathRequired(res,'email')
         });
         it('should not register without password', async () => {
             let user = validUser();
             delete user.password;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `password` is required.');
+            errorPathRequired(res,'password')
         });
         it('should not register with duplicate email', async () => {
             let user = validUser();
@@ -72,9 +94,7 @@ describe('/api/users', () => {
             let user = validUser();
             delete user.country;
             res = await action(user);
-            await res.should.have.status(400);
-            await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Path `country` is required.');
+            errorPathRequired(res,'country')
         });
         it('should accept a valid province', async () => {
             let user = validUser({province: 'New York'});
@@ -96,6 +116,30 @@ describe('/api/users', () => {
             await res.should.have.status(201);
             await res.body.should.be.a('object');
             await res.body.user.should.have.a.property('phone').eql('+15185551212');
+        })
+        it('should deny an unprivileged user who is logged in', async () => {
+            const auth = await withAuth()
+            res = await action(validUser(),auth)
+            errorMustHaveRoles(res,['admin'])
+        })
+        it('should allow an admin user', async () => {
+            const auth = await withAuth({roles:['admin']})
+            res = await action(validUser(),auth)
+            await res.should.have.status(201)
+            await res.body.should.be.an('object')
+        })
+        it('should not allow a new user to set roles', async () => {
+            res = await action(validUser({roles: ['admin']}))
+            await res.should.have.status(201)
+            await res.body.user.should.be.an('object')
+            await res.body.user.should.have.a.property('roles').an('array').empty
+        })
+        it('should allow an admin user to set roles', async () => {
+            const auth = await withAuth({roles:['admin']})
+            res = await action(validUser({roles: ['admin']}),auth)
+            await res.should.have.status(201)
+            await res.body.should.be.an('object')
+            await res.body.should.have.a.property('roles').members(['admin'])
         })
     });
     describe('PUT /api/users/:userId',() => {
@@ -146,20 +190,53 @@ describe('/api/users', () => {
             const res = await action(auth,newProps)
             res.should.have.status(400)
         })
-        it('should deny with unauthorized user',async () => {
+        it('should deny with unprivileged user who is not the owner',async () => {
             const auth = await withAuth()
             const user = await factory.create('user')
             const res = await action(auth,{},user)
             res.should.have.status(401)
             res.body.should.have.a.property('msg').eql('User not authorized to access user')
         })
+        it('should allow an admin user who is not the owner', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const user = await factory.create('user')
+            const res = await action(auth,{},user)
+            res.should.have.status(200)
+        })
         it('should deny without authentication',async () => {
             const user = await factory.create('user')
             const res = await chai.request(server)
                 .put('/api/users/' + user._id)
                 .send({})
+            errorNoToken(res)
+        })
+    })
+    describe('DELETE /api/users/:userId', async () => {
+        let action = async (user,auth) => {
+            const res = chai.request(server)
+                .delete('/api/users/' + user._id)
+                .send({})
+            if ( auth ) { res.set('x-auth-token',auth.body.token) }
+            return res
+        }
+        it('should delete the user for an authorized user', async () => {
+            const auth = await withAuth({roles: ['admin']})
+            const user = await factory.create('user')
+            const res = await action(user,auth)
+            res.should.have.status(200)
+            const fUser = await User.findById(user._id)
+            should.not.exist(fUser)
+        })
+        it('should deny for unprivileged user', async () => {
+            const auth = await withAuth()
+            const user = await factory.create('user')
+            const res = await action(user,auth)
             res.should.have.status(401)
-            res.body.should.have.a.property('msg').eql('No token, authorization denied')
+        })
+        it('should deny for unauthenticated user', async () => {
+            const user = await factory.create('user')
+            const res = await action(user)
+            res.should.have.status(401)
         })
     })
 });

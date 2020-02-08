@@ -26,9 +26,14 @@ const locale = {
         "mustBeAtLeast": "חייב להיות לפחות\u202b {{min}}"
     },
     "user": {
+        "addUser": "הוסף משתמש",
+        "newUser": "משתמש חדש",
         "editUser": "ערוך את הפרופיל שלך",
         "updateUser": "עדכן את הפרופיל שלך",
-        "profile": "פרופיל"
+        "profile": "פרופיל",
+        "roles": "תפקידים",
+        "rolesPlaceholder": "בחר בתפקידי משתמש הרשאים",
+        "yourProfile": "הפרופיל שלך"
     },
     "visit": {
         "From": "מ",
@@ -57,12 +62,14 @@ const locale = {
         "originPlaceholder": "בחר את ראש השביל שלך"
     },
     "AppNavbar": {
+        "admin": "מינהל",
         "brand": "ניהול אורחים",
         "home": "בית",
         "language": "עברית",
         "login": "התחבר",
         "logout": "התנתק",
         "register": "הרשם",
+        "users": "משתמשים",
         "welcome": "\u202bברוך הבא, \u202a{{name}}"
     }
 }

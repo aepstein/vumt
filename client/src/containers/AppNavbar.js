@@ -32,8 +32,22 @@ function AppNavbar() {
         setIsOpen(!isOpen)
     }
 
+    const adminLinks = (
+        <Fragment>
+            <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>{t('admin')}</DropdownToggle>
+                <DropdownMenu>
+                    <DropdownItem>
+                        <NavLink to="/users" activeClassName="active">{t('users')}</NavLink>
+                    </DropdownItem>
+                </DropdownMenu>
+            </UncontrolledDropdown>
+        </Fragment>
+    )
+
     const authLinks = (
         <Fragment>
+            { user && user.roles.includes('admin') ? adminLinks : '' }
             <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                     {user ? t('welcome',{name: user.firstName}) : ''}

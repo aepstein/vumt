@@ -59,7 +59,7 @@ export default function VisitsList({visits}) {
                                         onClick={() => onDeleteClick(_id)}
                                     >{t('commonForms:remove')}</Button>
                                 </ButtonGroup>
-                                <span class="visit-label">
+                                <span className="visit-label">
                                 <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: origin.timezone}).format(startOn) : ''}</strong>:&nbsp;<em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>
                                 </span>
                             </ListGroupItem>
