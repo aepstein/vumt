@@ -123,4 +123,28 @@ describe('/api/places',() => {
             await errorNoToken(res)
         })
     })
+    describe('DELETE /api/places/:placeId', () => {
+        const action = async (place,auth) => {
+            const res = chai.request(server).delete('/api/places/' + place._id)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        it('should delete for authorized user', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const place = await factory.create('place')
+            const res = await action(place,auth)
+            res.should.have.status('200')
+        })
+        it('should deny an unprivileged user', async () => {
+            const place = await factory.create('place')
+            const auth = await withAuth()
+            const res = await action(place,auth)
+            await errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny without authentication', async() => {
+            const place = await factory.create('place')
+            const res = await action(place)
+            await errorNoToken(res)
+        })
+    })
 })

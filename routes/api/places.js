@@ -16,7 +16,6 @@ const attrAccessible = (req) => {
     return attrAccessible
 }
 
-
 // @route GET api/places
 // @desc Get all places
 // @access Public
@@ -77,6 +76,21 @@ router.put('/:placeId', auth({roles:['admin']}), place(), async (req, res) => {
         else {
             throw err
         }
+    }
+})
+
+// @route DELETE api/places
+// @desc Delete an existing place
+// @access Private
+router.delete('/:placeId', auth({roles: ['admin']}), place(), async (req, res) => {
+    try {
+        await req.place.deleteOne()
+        return res.json({success: true})
+    }
+    catch(err) {
+        return res
+            .status(404)
+            .json({success: false});
     }
 })
 
