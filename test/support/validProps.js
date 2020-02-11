@@ -1,14 +1,18 @@
 const { factory } = require('./setup')
 
-const validCredentials = (user={}) => {
-    let { email, password } = validUser()
+module.exports.validCredentials = (user={}) => {
+    let { email, password } = module.exports.validUser()
     return {
         email: user.email ? user.email : email,
         password
     }
 }
 
-const validUser = (attrs={}) => { return {
+module.exports.validPlace = async (attrs={}) => {
+    return await factory.attrs('place',attrs)
+}
+
+module.exports.validUser = (attrs={}) => { return {
     firstName: 'Bob',
     lastName: 'Marshall',
     email: 'bmarshall@example.com',
@@ -17,13 +21,7 @@ const validUser = (attrs={}) => { return {
     ...attrs
 }};
 
-const validVisit = async (attrs={}) => {
+module.exports.validVisit = async (attrs={}) => {
     attrs.user = null
     return await factory.attrs('visit',attrs)
 };
-
-module.exports = {
-    validCredentials,
-    validUser,
-    validVisit
-}

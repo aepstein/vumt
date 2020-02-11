@@ -37,6 +37,9 @@ function AppNavbar() {
             <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>{t('admin')}</DropdownToggle>
                 <DropdownMenu>
+                <DropdownItem>
+                        <NavLink to="/places" activeClassName="active">{t('places')}</NavLink>
+                    </DropdownItem>
                     <DropdownItem>
                         <NavLink to="/users" activeClassName="active">{t('users')}</NavLink>
                     </DropdownItem>

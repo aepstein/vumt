@@ -13,6 +13,7 @@ const locale = {
         "emailPlaceholder": "moi@example.com",
         "firstName": "Prénom",
         "lastName": "Nom de famille",
+        "no": "Non",
         "password": "Mot de passe",
         "phone": "Téléphone",
         "postalCode": "Code postal",
@@ -23,7 +24,25 @@ const locale = {
         "invalidRequired": "Ne peut être vide",
         "mustBePhone": "Doit être un numéro de téléphone correctement formaté",
         "mustBeWholeNumber": "Doit être un nombre entier",
-        "mustBeAtLeast": "Doit être au moins {{min}}"
+        "mustBeAtLeast": "Doit être au moins {{min}}",
+        "mustBeAtMost": "Ne doit pas dépasser {{max}}",
+        "yes": "Oui"
+    },
+    "place": {
+        "addPlace": "Ajouter un emplacement",
+        "editPlace": "Modifier l'emplacement",
+        "isDestination": "Est une destination",
+        "isOrigin": "Est un point de départ",
+        "latitude": "Latitude",
+        "location": "Emplacement",
+        "longitude": "Longitude",
+        "name": "Nom",
+        "newPlace": "Nouveau emplacement",
+        "parkingCapacity": "Nombre de places de parking publiques",
+        "placeDetail": "Détail d'emplacement",
+        "timezone": "Fuseau horaire",
+        "timezonePlaceholder": "Choisissez le fuseau horaire IANA",
+        "updatePlace": "Modifier l'emplacement"
     },
     "user": {
         "addUser": "Ajouter un utilisateur",
@@ -69,6 +88,7 @@ const locale = {
         "language": "Langue",
         "login": "S'identifier",
         "logout": "Se déconnecter",
+        "places": "Emplacements",
         "register": "S'inscrire",
         "users": "Utilisateurs",
         "welcome": "Bienvenue, {{name}}"

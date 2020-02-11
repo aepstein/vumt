@@ -107,6 +107,19 @@ const fillByLabel = async (label, fill ) => {
 	await el[0].type(fill);
 };
 
+const markByLabel = async (label, un) => {
+	const escapedText = escapeXpathString(label);
+	const selector = `//label[contains(.,${escapedText})]`
+	const page = scope.context.currentPage
+	const el = await page.$x(selector)
+	const handle = el[0]
+	const checkbox = await el[0].$x('./input')
+	const checked = await (await checkbox[0].getProperty('checked')).jsonValue()
+	if ((un && checked) || (!un && !checked)) {
+		await handle.click()
+	}
+}
+
 const selectFormGroupByLabel = async (label) => {
 	const escapedText = escapeXpathString(label);
 	const selector = `//div[contains(@class,'form-group') and contains(.//label,${escapedText})]`
@@ -218,6 +231,7 @@ module.exports = {
 	formatDateForFill,
 	formatDateForDisplay,
 	loginAs,
+	markByLabel,
 	parseInput,
 	visitExists,
 	visitPage,

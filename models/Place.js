@@ -31,7 +31,8 @@ const PlaceSchema = new Schema({
     timezone: {
         type: String,
         default: 'America/New_York',
-        required: true
+        required: true,
+        enum: require('../lib/timezones.json')
     }
 },
 {

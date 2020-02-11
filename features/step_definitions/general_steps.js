@@ -4,6 +4,7 @@ const {
     fillByLabel,
     fillTypeaheadByLabel,
     loginAs,
+    markByLabel,
     parseInput,
     shouldBeLoggedInAs,
     shouldSeeErrorWithLabel,
@@ -44,6 +45,10 @@ When('I click the {string} button', async (label) => {
 
 When('I click the {string} link', async (label) => {
     await clickByText(label,"//a");
+})
+
+When(/^I (un)?mark the "([^"]+)" checkbox$/, async (un,label) => {
+    await markByLabel(label,un)
 })
 
 Then('the {string} field should have an error {string}', async (label, error) => {
