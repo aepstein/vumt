@@ -13,6 +13,7 @@ const locale = {
         "emailPlaceholder": "me@example.com",
         "firstName": "שם פרטי",
         "lastName": "שם המשפחה",
+        "no": "לא",
         "password": "סיסמה",
         "phone": "טלפון",
         "postalCode": "מיקוד",
@@ -23,7 +24,25 @@ const locale = {
         "invalidRequired": "לא ריק",
         "mustBePhone": "חייב להיות מספר טלפון מעוצב בצורה נכונה",
         "mustBeWholeNumber": "חייב להיות מספר שלם",
-        "mustBeAtLeast": "חייב להיות לפחות\u202b {{min}}"
+        "mustBeAtLeast": "חייב להיות לפחות\u202b {{min}}",
+        "mustBeAtMost": "אסור לחרוג\u202b {{max}}",
+        "yes": "כן"
+    },
+    "place": {
+        "addPlace": "הוסף מקום",
+        "editPlace": "ערוך מקום",
+        "isDestination": "יעד",
+        "isOrigin": "נקודת פתיחה",
+        "latitude": "קו רוחב",
+        "location": "מקום",
+        "longitude": "קו אורך",
+        "name": "שם",
+        "newPlace": "מקום חדש",
+        "parkingCapacity": "מספר מקומות החניה הציבוריים",
+        "placeDetail": "פרט מקום",
+        "timezone": "אזור זמן",
+        "timezonePlaceholder": "בחר אזור זמן של\u202b IANA",
+        "updatePlace": "עדכן מקום"
     },
     "user": {
         "addUser": "הוסף משתמש",
@@ -69,6 +88,7 @@ const locale = {
         "language": "עברית",
         "login": "התחבר",
         "logout": "התנתק",
+        "places": "מקומות",
         "register": "הרשם",
         "users": "משתמשים",
         "welcome": "\u202bברוך הבא, \u202a{{name}}"

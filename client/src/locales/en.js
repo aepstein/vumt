@@ -13,6 +13,7 @@ const locale = {
         "emailPlaceholder": "me@example.com",
         "firstName": "First name",
         "lastName": "Last name",
+        "no": "No",
         "password": "Password",
         "phone": "Phone",
         "postalCode": "Postal code",
@@ -23,7 +24,25 @@ const locale = {
         "invalidRequired": "Cannot be blank",
         "mustBePhone": "Must be correctly formatted phone number",
         "mustBeWholeNumber": "Must be a whole number",
-        "mustBeAtLeast": "Must be at least {{min}}"
+        "mustBeAtLeast": "Must be at least {{min}}",
+        "mustBeAtMost": "Must not exceed {{max}}",
+        "yes": "Yes"
+    },
+    "place": {
+        "addPlace": "Add place",
+        "editPlace": "Edit place",
+        "isDestination": "Is a destination",
+        "isOrigin": "Is a starting point",
+        "latitude": "Latitude",
+        "location": "Location",
+        "longitude": "Longitude",
+        "name": "Name",
+        "newPlace": "New place",
+        "parkingCapacity": "Number of public parking spots",
+        "placeDetail": "Place detail",
+        "timezone": "Timezone",
+        "timezonePlaceholder": "Choose IANA timezone",
+        "updatePlace": "Update place"
     },
     "user": {
         "addUser": "Add user",
@@ -70,6 +89,7 @@ const locale = {
         "language": "Language",
         "login": "Login",
         "logout": "Logout",
+        "places": "Places",
         "register": "Register",
         "users": "Users",
         "welcome": "Welcome, {{name}}"
