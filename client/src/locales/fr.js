@@ -38,7 +38,7 @@ const locale = {
         "longitude": "Longitude",
         "name": "Nom",
         "newPlace": "Nouveau emplacement",
-        "parkingCapacity": "Nombre de places de parking publiques",
+        "parkingCapacity": "Nombre de places de stationnement publiques",
         "placeDetail": "Détail d'emplacement",
         "timezone": "Fuseau horaire",
         "timezonePlaceholder": "Choisissez le fuseau horaire IANA",
