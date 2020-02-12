@@ -68,7 +68,6 @@ Feature: Manage users
         And I fill in values for the place except "<field>"
         And I fill in "<field>" with "<value>"
         And I click the "Add place" button
-        And I take a screenshot
         Then the "<field>" field should have an error "<message>"
         Examples:
             | field                          | value | message                |
