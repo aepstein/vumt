@@ -48,6 +48,12 @@ export default function UserDetail({user}) {
             <dd>{user.phone}</dd>
             <dt>{t('user:roles')}</dt>
             <dd>{user.roles.join(', ')}</dd>
+            <dt>{t('translation:createdAt')}</dt>
+            <dd>{`${Intl.DateTimeFormat(i18n.language).format(user.createdAt)} `+
+                `${(new Date(user.createdAt)).toLocaleTimeString(i18n.language)}`}</dd>
+            <dt>{t('translation:updatedAt')}</dt>
+            <dd>{`${Intl.DateTimeFormat(i18n.language).format(user.updatedAt)} `+
+                `${(new Date(user.updatedAt)).toLocaleTimeString(i18n.language)}`}</dd>
         </dl>
     </Container>
 }

@@ -8,8 +8,15 @@ import {
     DELETE_PLACE,
     PLACES_LOADING
  } from './types';
- import { tokenConfig } from './authActions'
- import { returnErrors } from './errorActions'
+import { tokenConfig } from './authActions'
+import { returnErrors } from './errorActions'
+
+const parseDates = ({createdAt, updatedAt}) => {
+    return {
+        createdAt: Date.parse(createdAt),
+        updatedAt: Date.parse(updatedAt)
+    }
+}
 
 export const getPlaces = () => (dispatch, getState) => {
     dispatch(setPlacesLoading())
@@ -20,7 +27,8 @@ export const getPlaces = () => (dispatch, getState) => {
                 type: GET_PLACES,
                 payload: res.data.map((place) => {
                     return {
-                        ...place
+                        ...place,
+                        ...parseDates(place)
                     }
                 })
             })
@@ -54,7 +62,8 @@ export const savePlace = (place, history) => async (dispatch, getState) => {
         dispatch({
             type: place._id ? UPDATE_PLACE : ADD_PLACE,
             payload: {
-                ...res.data
+                ...res.data,
+                ...parseDates(res.data)
             }
         })
         history.push('/places')

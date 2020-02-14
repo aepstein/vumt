@@ -10,13 +10,14 @@ import {
 import { useTranslation } from 'react-i18next'
 
 export default function PlaceDetail({place}) {
-    const { t } = useTranslation('place')
+    const { t, i18n } = useTranslation('place')
     const history = useHistory()
 
-    if (!place) return <Spinner color="primary"/>
+    if (!place._id) return <Spinner color="primary"/>
 
     return <Container>
         <h1>{t('placeDetail')}</h1>
+        <p>{t('translation:timesAreLocal',{timezone: place.timezone})}</p>
         <div>
             <Button color="primary" onClick={() => history.push('/places/' + place.id + '/edit')}
             >{t('commonForms:edit')}</Button>
@@ -34,6 +35,13 @@ export default function PlaceDetail({place}) {
             <dd>{place.parkingCapacity}</dd>
             <dt>{t('timezone')}</dt>
             <dd>{place.timezone}</dd>
+            {console.log(`Timezone: ${place.timezone}`)}
+            <dt>{t('translation:createdAt')}</dt>
+            <dd>{`${Intl.DateTimeFormat(i18n.language,{timeZone: place.timezone}).format(place.createdAt)} `+
+                `${(new Date(place.createdAt)).toLocaleTimeString(i18n.language,{timeZone: place.timezone})}`}</dd>
+            <dt>{t('translation:updatedAt')}</dt>
+            <dd>{`${Intl.DateTimeFormat(i18n.language,{timeZone: place.timezone}).format(place.updatedAt)} `+
+                `${(new Date(place.updatedAt)).toLocaleTimeString(i18n.language,{timeZone: place.timezone})}`}</dd>
         </dl>
     </Container>
 }

@@ -18,6 +18,28 @@ import {
     UPDATE_AUTHUSER_FAIL
 } from './types';
 
+const parseDates = ({createdAt,updatedAt}) => {
+    return {
+        createdAt: Date.parse(createdAt),
+        updatedAt: Date.parse(updatedAt)
+    }
+}
+const transformDates = (data) => {
+    if (data.user) {
+        return {
+            ...data,
+            user: {
+                ...data.user,
+                ...parseDates(data.user)
+            }
+        }
+    }
+    return {
+        ...data,
+        ...parseDates(data)
+    }
+}
+
 export const tokenConfig = getState => {
     return prepareTokenConfig(getState().auth.token)
 }
@@ -34,7 +56,7 @@ export const register = (attrs,history) => async (dispatch) => {
         const res = await axios.post('/api/users', body, config)
         dispatch({
             type: REGISTER_SUCCESS,
-            payload: res.data
+            payload: transformDates(res.data)
         })
         history.push('/')
     }
@@ -55,7 +77,7 @@ export const update = (user,attrs,history) => async (dispatch,getState) => {
         const res = await axios.put('/api/users/' + user._id, body, tokenConfig(getState))
         dispatch({
             type: UPDATE_AUTHUSER_SUCCESS,
-            payload: res.data
+            payload: transformDates(res.data)
         })
         history.push('/profile')
     }
@@ -80,7 +102,7 @@ export const login = (attrs) => async (dispatch) => {
         const res = await axios.post('/api/auth', body, config)
         dispatch({
             type: LOGIN_SUCCESS,
-            payload: res.data
+            payload: transformDates(res.data)
         })
     }
     catch(err) {
@@ -105,7 +127,7 @@ export const loadUser = () => async (dispatch,getState) => {
         const res = await axios.get('/api/auth/user', tokenConfig(getState))
         dispatch({
                 type: USER_LOADED,
-                payload: res.data
+                payload: transformDates(res.data)
         })
     }
     catch(err) {

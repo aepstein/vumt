@@ -66,6 +66,7 @@ UserSchema.pre('save',async function() {
 UserSchema.methods.pubProps = function() {
     return {
         _id: this.id,
+        createdAt: this.createdAt,
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
@@ -73,7 +74,8 @@ UserSchema.methods.pubProps = function() {
         province: this.province,
         postalCode: this.postalCode,
         phone: this.phone,
-        roles: this.roles
+        roles: this.roles,
+        updatedAt: this.updatedAt
     }
 }
 

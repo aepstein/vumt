@@ -8,8 +8,18 @@ import {
     DELETE_VISIT,
     VISITS_LOADING
  } from './types';
- import { tokenConfig } from './authActions';
- import { returnErrors } from './errorActions';
+import { tokenConfig } from './authActions';
+import { returnErrors } from './errorActions';
+
+const parseDates = ({checkedIn,checkedOut,startOn,createdAt,updatedAt}) => {
+    return {
+        checkedIn: checkedIn ? Date.parse(checkedIn) : '',
+        checkedOut: checkedOut ? Date.parse(checkedOut) : '',
+        createdAt: Date.parse(createdAt),
+        startOn: Date.parse(startOn),
+        updatedAt: Date.parse(updatedAt)
+    }
+}
 
 export const getVisits = () => (dispatch, getState) => {
     const userId = getState().auth.user._id
@@ -22,9 +32,7 @@ export const getVisits = () => (dispatch, getState) => {
                 payload: res.data.map((visit) => {
                     return {
                         ...visit,
-                        checkedIn: visit.checkedIn ? Date.parse(visit.checkedIn) : '',
-                        checkedOut: visit.checkedOut ? Date.parse(visit.checkedOut) : '',
-                        startOn: Date.parse(visit.startOn)
+                        ...parseDates(visit)
                     }
                 })
             });
@@ -59,9 +67,7 @@ export const saveVisit = (visit, history) => async (dispatch, getState) => {
             type: visit._id ? UPDATE_VISIT : ADD_VISIT,
             payload: {
                 ...res.data,
-                checkedIn: res.data.checkedIn ? Date.parse(res.data.checkedIn) : '',
-                checkedOut: res.data.checkedOut ? Date.parse(res.data.checkedOut) : '',
-                startOn: Date.parse(res.data.startOn),
+                ...parseDates(res.data)
             }
         })
         history.push('/')

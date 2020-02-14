@@ -29,6 +29,12 @@ export default function VisitDetail({visit}) {
             <dd>{visit.parkedVehicles}</dd>
             <VisitCheckedInDetail visit={visit}/>
             <VisitCheckedOutDetail visit={visit}/>
+            <dt>{t('translation:createdAt')}</dt>
+            <dd>{`${Intl.DateTimeFormat(i18n.language,{timeZone: visit.origin.timezone}).format(visit.createdAt)} `+
+                `${(new Date(visit.createdAt)).toLocaleTimeString(i18n.language,{timeZone: visit.origin.timezone})}`}</dd>
+            <dt>{t('translation:updatedAt')}</dt>
+            <dd>{`${Intl.DateTimeFormat(i18n.language,{timeZone: visit.origin.timezone}).format(visit.updatedAt)} `+
+                `${(new Date(visit.updatedAt)).toLocaleTimeString(i18n.language,{timeZone: visit.origin.timezone})}`}</dd>
         </dl>
     </Container>
 }

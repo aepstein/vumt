@@ -8,8 +8,15 @@ import {
     DELETE_USER,
     USERS_LOADING
  } from './types';
- import { tokenConfig } from './authActions'
- import { returnErrors } from './errorActions'
+import { tokenConfig } from './authActions'
+import { returnErrors } from './errorActions'
+
+const parseDates = ({createdAt,updatedAt}) => {
+    return {
+        createdAt: Date.parse(createdAt),
+        updatedAt: Date.parse(updatedAt)
+    }
+}
 
 export const getUsers = () => (dispatch, getState) => {
     dispatch(setUsersLoading())
@@ -20,7 +27,8 @@ export const getUsers = () => (dispatch, getState) => {
                 type: GET_USERS,
                 payload: res.data.map((user) => {
                     return {
-                        ...user
+                        ...user,
+                        ...parseDates(user)
                     }
                 })
             })
@@ -54,7 +62,8 @@ export const saveUser = (user, history) => async (dispatch, getState) => {
         dispatch({
             type: user._id ? UPDATE_USER : ADD_USER,
             payload: {
-                ...res.data
+                ...res.data,
+                ...parseDates(res.data)
             }
         })
         history.push('/users')
