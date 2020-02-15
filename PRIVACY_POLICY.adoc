@@ -1,0 +1,26 @@
+= VISITOR USE MANAGEMENT TOOL DATA PRIVACY POLICY
+Version February 15, 2020, in effect from February 15, 2020 for all users
+
+This data privacy policy applies to the Visitor Use Management Tool hosted instance available through https://quiet-forest-98456.herokuapp.com/. For other instances powered by our open-source code, please contact the host. Note that Visitor Use Management Tool does not collect or store data from those other instances. Visitor Use Management Tool is licensed for use under the GNU license available here.
+
+== WHAT TYPE OF DATA DO WE CONTROL AND PROCESS?
+This data privacy policy distinguishes between data that in controlled by Visitor Use Management Tool and data that is processed by Visitor Use Management Tool.
+
+Visitor Use Management Tool is:
+
+A data controller of limited data about site visitors and account holders (i.e. we determine the purposes, conditions and means of the processing of personal data). Visitor Use Management Tool collects webpage analytics from unregistered and registered users of its webpage – pages visited, clicks, browser used, language choice, country of origin and so on. For registered users, Visitor Use Management Tool collects e-mail and basic information as part of the registration process and stores users’ preference in their profile. The application then collects and stores limited information about visits recorded by the users.
+
+== HOW DO WE USE YOUR DATA?
+Visitor Use Management Tool takes very seriously the privacy, confidentiality and security of personal information and any data collected or stored using Visitor Use Management Tool.
+
+=== Data that we control:
+Data under our control which includes site visitors data (website analytics) and registration data (username, password and profile) is used in aggregated ways to monitor usage and growth of Visitor Use Management Tool as well as visitor activity at locations configured in the system.  Information about specific visits and visitors may be shared with the entities that own the places where visits are recorded.  For example, reports may allow park rangers who manage a particular trailhead and nearby destinations to review visitors and contact information on a specific date in the same manner they presently can with a paper-based trail register. This enables us to report especially on visitor use at locations configured in the system. Personal information from registered users is used to provide services to registered users and communicate with registered users about our services. Registered users can view, edit, and delete their personal information stored in their profile, unregister from communication emails, or delete their account. Personal information is never shared or sold to third parties.
+
+== HOW DO WE PROTECT YOUR DATA?
+Visitor Use Management Tool is committed to protecting the data you entrust to us. We endeavor to apply industry standard best practices to secure systems and data.  However, we cannot provide any absolute guarantee.  This software is provided for proof of concept purposes and should not be treated as a production-ready product. To further protect your data, we encourage you to never to share your login information and to change your passwords regularly. If you have any questions regarding our security and backup procedures, please contact us.
+
+== CHANGES TO THE PRIVACY POLICY
+We may need to modify this privacy statement from time to time, especially in response to changing norms and legislation, so please review it frequently. If we make material changes to this policy, we will notify you here or by means of a notice on our homepage so that you are aware of any changes with relation to what information we collect, how we use it, and under what circumstances, if any, we disclose it.
+
+== CONTACT US
+If you are uncertain about our data privacy policy or have requests with regards to general compliance, including GDPR rights, please contact us. We respond to requests within 30 days.

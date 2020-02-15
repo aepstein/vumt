@@ -1,0 +1,32 @@
+= VISITOR USE MANAGEMENT TOOL TERMS OF SERVICE
+Version February 15, 2020, in effect from February 15, 2020 for all users
+
+These terms of service apply to the Visitor Use Management Tool hosted instance available through https://quiet-forest-98456.herokuapp.com/. For other instances powered by our open-source code, please contact the host. Note that Visitor Use Management Tool does not collect or store data from those other instances. Visitor Use Management Tool is licensed for use under the GNU license available here.
+
+Welcome to https://quiet-forest-98456.herokuapp.com/, the website and service (“the Service”), owned and operated by Adirondack Wilderness Advocates, Inc. (“Visitor Use Management Tool”). This page explains the terms in which you may use the service for evaluation and testing purposes. By using the Site or any services provided on the Site (collectively, “Services”), you acknowledge that you have read, understood, and agree to be bound by the following terms of service and any future modifications to this agreement (collectively, the “Terms”). The Terms apply to all visitors, authorized users, and others who access the Service (“Users”). Your use of the Service indicates that you accept these Terms and to the collection and use of your information as set forth in our Privacy Policy. If you do not accept these Terms, do not use the Service.
+
+== USING VISITOR USE MANAGEMENT TOOL
+You must register a user account to access the Visitor Use Management Tool service. Your account grants you permission to use the Site and Services. You must adhere to all policies posted within the Services. As a condition of your use of the Services, you warrant to Visitor Use Management Tool that you will not use the Services for any purpose that is unlawful or prohibited by these terms, conditions, or notices. You may not use the Services in any manner which could damage, disable, overburden, or impair the Services or interfere with any other party’s use and enjoyment of the Services.
+
+== YOUR ACCOUNT
+You acknowledge that you are responsible for all activity occurring under the use of your account. You are responsible for maintaining the security of your account and password. Visitor Use Management Tool will not be liable for any loss or damage that results from your failure to do so. You are solely responsible for all your account activity when using this service.
+
+Visitor Use Management Tool makes no representation that usage of the Services or any related content are appropriate or available for use in your country. You acknowledge and agree that you are responsible for ensuring that your use of this service complies with all relevant local and international laws.
+
+== YOUR DATA
+You are responsible for any data or content uploaded to the service and retain full ownership of it. In using this service, you understand the service allows you to share your data with others and acknowledge that Visitor Use Management Tool will not be responsible for how your data is used by others if is shared or made public. If you leave this service, we will make all reasonable efforts to remove your data.
+
+We take the privacy and security of your data seriously and will make all reasonable efforts to ensure it as defined in our Privacy Policy. We will never share your data with third parties. Our team will not view your data directly, unless granted permission by you, in order to provide you technical assistance.
+
+To enhance your use of the service, we may copy, cache or modify your data to improve the systems performance.
+
+== API USAGE
+When using the API you must include your account’s unique API key. Unauthorized use of your API key, including transfer to another user, is prohibited. You may not use the API in any manner which could damage overburden or impair the ability of Visitor Use Management Tool to over the service to other users. In such an event, Visitor Use Management Tool reserves the right to suspend or limit your accounts access to the API.
+
+== DISCLAIMERS AND LIMITATION OF LIABILITY
+We disclaim all responsibility and liability for the availability, timeliness, security or reliability of the Services or Site, or any software provided through the Site. THE SITE AND THE SERVICES ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR OTHERWISE. WITHOUT LIMITATION, WE DISCLAIM ANY AND ALL WARRANTIES REGARDING THE ACCURACY, SECURITY, RELIABILITY, TIMELINESS, AND PERFORMANCE OF ALL SERVICES ASSOCIATED WITH USE OF THE SITE AND THE SERVICES. WE MAKE NO WARRANTY, EXPRESS OR IMPLIED, THAT YOUR USE OF THE SITE AND THE SERVICES WILL BE UNINTERRUPTED, TIMELY, OR ERROR-FREE. We will not be responsible for any harm to your computer, loss of data or other harm that results from your use of the Services.
+
+TO THE EXTENT NOT PROHIBITED BY APPLICABLE LAW, WE WILL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING FROM THE USE OF OR INABILITY TO USE THE SITE OR THE SERVICES. YOU EXPRESSLY AGREE THAT YOUR USE OF THE SITE AND THE SERVICES IS SOLELY AT YOUR OWN RISK. UNDER NO CIRCUMSTANCES SHALL WE BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, OR CONSEQUENTIAL DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, INCOME, BUSINESS OPPORTUNITIES, AND ANY OTHER INJURY REGARDLESS OF THE NATURE OF THE CLAIM OR THE FORM OF ACTION, ARISING OUT OF OR CONNECTED WITH THE SITE (INCLUDING BUT NOT LIMITED TO ITS OPERATION, ITS CONTENTS, OR THE INFORMATION OR MATERIALS CONTAINED THEREIN, OR THE USE OR INABILITY TO USE THE SERVICES OR ANY OTHER SITE LINKED TO THE SITE, OR ANY CONTENT CONTAINED IN ANY SUCH SITE) EVEN IF WE, OR OUR SUPPLIERS OR LICENSORS HAVE BEEN NOTIFIED OF THE POSSIBILITY OF ANY DAMAGES.
+
+== U.S. DIGITAL MILLENNIUM COPYRIGHT ACT.
+If Visitor Use Management Tool receives a notice alleging that material from your account infringes another party’s copyright, Visitor Use Management Tool may disable your user account or remove alleged material in accordance with Title II of the Digital Millennium Copyright Act of 1998 (Section 512 of the U.S. Copyright Act).

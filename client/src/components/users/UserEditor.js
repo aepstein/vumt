@@ -287,6 +287,12 @@ export default function UserEditor({action,user,onSave,saving}) {
                         clearButton={true}
                     />
                 </FormGroup> }
+                <p>
+                    This is a proof of concept application provided for evaluation and experimental purposes only.
+                    By clicking the Register button below, you agree to the Terms of Service for the application,
+                    provided <a href="https://github.com/aepstein/vumt/blob/master/TERMS_OF_SERVICE.adoc">here</a>.
+                    Our privacy policy is available <a href="https://github.com/aepstein/vumt/blob/master/PRIVACY_POLICY">here</a>
+                </p>
                 <ButtonGroup>
                     <Button
                         color="primary"
