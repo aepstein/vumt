@@ -74,6 +74,7 @@ UserSchema.methods.pubProps = function() {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
+        enableGeolocation: this.enableGeolocation,
         country: this.country,
         province: this.province,
         postalCode: this.postalCode,
