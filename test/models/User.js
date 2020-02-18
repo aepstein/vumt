@@ -53,4 +53,8 @@ describe('User', () => {
         const user = await factory.build('user',{roles: ['producer']})
         user.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    it('should save with an enableGeolocation flag', async () => {
+        const user = await factory.create('user',{enableGeolocation: true})
+        user.should.have.a.property('enableGeolocation').eql(true)
+    })
 })

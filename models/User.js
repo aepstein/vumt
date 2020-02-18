@@ -20,6 +20,10 @@ const UserSchema = new Schema(
             required: true,
             unique: true
         },
+        enableGeolocation: {
+            type: Boolean,
+            default: true
+        },
         password: {
             type: String,
             required: true
