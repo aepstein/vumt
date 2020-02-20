@@ -192,9 +192,7 @@ const visitExists = async (attr={}) => {
 const visitPage = async (path) => {
 	await initPage()
 	const url = scope.host + paths[path];
-	const visit = await scope.context.currentPage.goto(url, {
-		waitUntil: 'networkidle2'
-	});
+	const visit = await scope.context.currentPage.goto(url);
 	await waitFor('.navbar')
 	return visit;
 }
