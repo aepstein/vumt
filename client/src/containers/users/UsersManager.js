@@ -16,6 +16,7 @@ const BLANK_USER = {
     province: '',
     postalCode: '',
     phone: '',
+    enableGeolocation: true,
     roles: []
 }
 

@@ -50,10 +50,11 @@ const locale = {
         "addUser": "Ajouter un utilisateur",
         "newUser": "Nouvel utilisateur",
         "editUser": "Modifier votre profil",
+        "enableGeolocation": "Utilisez l'emplacement de l'appareil",
         "updateUser": "Modifiez votre profil",
         "profile": "Profil",
         "roles": "Rôles",
-        "rolesPlaceholder": "SSélectionnez des rôles d'utilisateur privilégiés",
+        "rolesPlaceholder": "Sélectionnez des rôles d'utilisateur privilégiés",
         "yourProfile": "Votre profil"
     },
     "visit": {

@@ -46,6 +46,8 @@ export default function UserDetail({user}) {
             <dd>{user.postalCode}</dd>
             <dt>{t('phone')}</dt>
             <dd>{user.phone}</dd>
+            <dt>{t('user:enableGeolocation')}</dt>
+            <dd>{user.enableGeolocation ? t('commonForms:yes') : t('commonForms:no')}</dd>
             <dt>{t('user:roles')}</dt>
             <dd>{user.roles.join(', ')}</dd>
             <dt>{t('translation:createdAt')}</dt>

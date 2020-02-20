@@ -171,6 +171,14 @@ const shouldSeeText = async (selector, not, expectedText) => {
 		containsText.should.not.have.string(expectedText)
 	}
 }
+const switchByLabel = async (label) => {
+	const escapedText = escapeXpathString(label);
+	const selector = `//label[contains(.,${escapedText})]`
+	const page = scope.context.currentPage
+	const el = await page.$x(selector)
+	const handle = el[0]
+	await handle.click()
+}
 const takeScreenshot = async () => {
 	await new Promise(r => setTimeout(r, 200))
 	await scope.context.currentPage.screenshot({path: `sc${sc++}.png`});
@@ -219,6 +227,7 @@ module.exports = {
 	shouldSeeDefinition,
 	shouldSeeErrorWithLabel,
 	shouldSeeText,
+	switchByLabel,
 	takeScreenshot,
 	userExists,
 	waitFor,

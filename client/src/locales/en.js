@@ -50,6 +50,7 @@ const locale = {
         "addUser": "Add user",
         "newUser": "New user",
         "editUser": "Edit profile",
+        "enableGeolocation": "Use device location",
         "updateUser": "Update profile",
         "profile": "Profile",
         "roles": "Roles",

@@ -25,6 +25,7 @@ export default function AuthUserManager({action}) {
         provice: '',
         postalCode: '',
         phone: '',
+        enableGeolocation: true,
         roles: []
     })
 

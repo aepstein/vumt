@@ -4,10 +4,9 @@ const {
     fillByLabel,
     fillTypeaheadByLabel,
     loginAs,
+    switchByLabel,
     shouldBeLoggedInAs,
-    takeScreenshot,
-    userExists,
-    waitFor
+    userExists
 } = require('../support/actions');
 
 
@@ -44,6 +43,7 @@ When('I fill in a modified profile', async () => {
     await fillTypeaheadByLabel("State, province, or territory","Quebec")
     await fillByLabel("Postal code","H2T 2M2")
     await fillByLabel("Phone",'(514) 272-0667')
+    await switchByLabel("Use device location")
 })
 
 When('I register as a {string}', async (email) => {

@@ -58,3 +58,4 @@ Feature: Authentication
         And I should see "State, province, or territory" defined as "Quebec"
         And I should see "Postal code" defined as "H2T 2M2"
         And I should see "Phone" defined as "+15142720667"
+        And I should see "Use device location" defined as "No"
