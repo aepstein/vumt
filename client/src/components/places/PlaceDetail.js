@@ -26,7 +26,7 @@ export default function PlaceDetail({place}) {
             <dt>{t('name')}</dt>
             <dd>{place.name}</dd>
             <dt>{t('location')}</dt>
-            <dd>{place.location ? `${place.location.coordinates[0]},${place.location.coordinates[1]}` : ''}</dd>
+            <dd>{place.location ? `${place.location.coordinates[1]},${place.location.coordinates[0]}` : ''}</dd>
             <dt>{t('isOrigin')}</dt>
             <dd>{place.isOrigin ? t('commonForms:yes') : t('commonForms:no')}</dd>
             <dt>{t('isDestination')}</dt>
