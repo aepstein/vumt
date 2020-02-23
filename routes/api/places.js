@@ -23,23 +23,36 @@ const attrAccessible = (req) => {
 // @desc Get places that can be starting points for visits
 // @access Public
 router.get('/:type?', async (req, res) => {
-    let criteria = {}
+    const q = []
+    if (req.query.location) {
+        const [ latitude, longitude ] = req.query.location.split(',').map(v => parseFloat(v))
+        q.push({
+            $geoNear: {
+                near: { type: "Point", coordinates: [longitude,latitude] },
+                spherical: true,
+                distanceField: 'distance'
+            }
+        })
+    }
+    else {
+        q.push({$sort: {name: 1}})
+    }
     switch(req.params.type) {
         case 'origins':
-            criteria.isOrigin = true
+            q.push({$match: {isOrigin: true}})
             break
         case 'destinations':
-            criteria.isDestination = true
+            q.push({$match: {isDestination: true}})
             break
     }
     try {
         const places = await Place
-            .find(criteria)
-            .sort({name: 1})
+            .aggregate(q)
         return res.json(places)
     }
     catch(err) {
         console.log(err)
+        return res.status(500).json({msg: 'Error'})
     }
 });
 

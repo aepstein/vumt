@@ -11,7 +11,7 @@ factory.define('place', Place, {
     name: "Algonquin",
     location: {
         type: 'Point',
-        coordinates: [44.0,73.0]
+        coordinates: [-73.0,44.0]
     }
 })
 
@@ -19,7 +19,7 @@ factory.extend('place','originPlace',{
     name: "Adirondack Loj",
     location: {
         type: 'Point',
-        coordinates: [44.183102,-73.963584]
+        coordinates: [-73.963584,44.183102]
     },
     isOrigin: true,
     parkingCapacity: 100
@@ -29,7 +29,7 @@ factory.extend('place','destinationPlace',{
     name: "Marcy Summit",
     location: {
         type: 'Point',
-        coordinates: [44.112744,-73.923267]
+        coordinates: [-73.923267,44.112744]
     },
     isDestination: true,
     parkingCapacity: 0

@@ -26,6 +26,15 @@ describe('/api/places',() => {
             res.body.should.be.an('array')
             res.body.map(place => place._id).should.have.members([places.origin.id,places.destination.id])
         })
+        it('should order places by distance and include distance from location if location is specified',async () => {
+            const places = await genPlaces()
+            const location = '44.112744,-73.923267'
+            const res = await action(`/api/places?location=${location}`)
+            res.body.should.be.an('array')
+            res.body[0].should.have.property('_id').eql(places.destination.id)
+            res.body[0].should.have.property('distance').eql(0)
+            res.body[1].should.have.property('distance').gt(8000)
+        })
     })
     describe('GET /api/places/origins', () => {
         it('should show all places that are origins',async () => {
