@@ -1,7 +1,9 @@
 const locale = {
     "translation": {
         "createdAt": "Créé sur",
-        "distanceAwaykm": "À {{distance}} km",
+        "distanceAway": "À {{distance}} km",
+        "distanceFromPlace": "{{distance}} {{unit}} de {{place}}",
+        "km": "km",
         "mustBeLoggedIn": "Vous devez être connecté pour utiliser ce système.",
         "timesAreLocal": "Les heures sont en heure locale pour {{timezone}}.",
         "updatedAt": "Mis à jour le"

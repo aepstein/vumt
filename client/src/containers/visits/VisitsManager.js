@@ -24,7 +24,8 @@ export default function VisitsManager({action}) {
         groupSize: '',
         durationNights: '',
         checkedIn: '',
-        checkedOut: ''
+        checkedOut: '',
+        parkedVehicles: ''
     })
 
     const dispatch = useDispatch()

@@ -1,7 +1,9 @@
 const locale = {
     "translation": {
         "createdAt": "נוצר ב",
-        "distanceAwaykm": "{{distance}} ק\"מ משם",
+        "distanceAway": "{{distance}} {{unit}} משם",
+        "distanceFromPlace": "{{distance}} {{unit}} מ {{place}}",
+        "km": "ק\"מ",
         "mustBeLoggedIn": ("\u202bעליך להתחבר כדי להשתמש במערכת זו."),
         "timesAreLocal": "\u202bהזמנים הם בזמן המקומי ל{{timezone}}.",
         "updatedAt": "עודכן ב"
