@@ -11,7 +11,8 @@ const User = require('../../models/User');
 
 const attrAccessible = (req) => {
     const attrAccessible = req.user ? req.user : {}
-    let allowed = ['firstName','lastName','email','enableGeolocation','password','country','province','postalCode','phone']
+    let allowed = ['firstName','lastName','email','enableGeolocation','password','country','province','postalCode','phone',
+        'distanceUnitOfMeasure']
     if (req.authUser && req.authUser.roles.includes('admin')) {
         allowed = allowed.concat(['roles'])
     }

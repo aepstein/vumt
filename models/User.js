@@ -85,6 +85,7 @@ UserSchema.methods.pubProps = function() {
         province: this.province,
         postalCode: this.postalCode,
         phone: this.phone,
+        distanceUnitOfMeasure: this.distanceUnitOfMeasure,
         roles: this.roles,
         updatedAt: this.updatedAt
     }

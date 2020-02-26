@@ -124,6 +124,12 @@ describe('/api/users', () => {
             await res.should.have.status(201)
             await res.body.user.should.have.a.property('enableGeolocation').eql(false)
         })
+        it('should accept a valid distanceUnitOfMeasure setting', async () => {
+            let user = validUser({distanceUnitOfMeasure: 'mi'})
+            res = await action(user)
+            await res.should.have.status(201)
+            await res.body.user.should.have.a.property('distanceUnitOfMeasure').eql('mi')
+        })
         it('should deny an unprivileged user who is logged in', async () => {
             const auth = await withAuth()
             res = await action(validUser(),auth)
