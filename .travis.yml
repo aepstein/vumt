@@ -10,7 +10,7 @@ services:
 before_script:
 - date
 script:
-- npm run migrate-up
+- NODE_ENV=test npm run migrate-up
 - npm run test
 deploy:
   provider: heroku
