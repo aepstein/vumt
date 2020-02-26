@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -10,15 +10,28 @@ import {
     Input
 } from 'reactstrap';
 import {
-    AsyncTypeahead
+    AsyncTypeahead,
+    Highlighter
 } from 'react-bootstrap-typeahead'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 import tz from 'timezone/loaded'
 
 export default function VisitEditor({visit,onSave,saving}) {
+    const position = useSelector(state => state.geo.position)
+    const [latitude,setLatitude] = useState(null)
+    useEffect(() => {
+        if (!position) return
+        setLatitude(position.coords.latitude)
+    },[position,setLatitude])
+    const [longitude,setLongitude] = useState(null)
+    useEffect(() => {
+        if (!position) return
+        setLongitude(position.coords.longitude)
+    },[position,setLongitude])
     const { t } = useTranslation('visit')
 
     const [ timezone, setTimezone ] = useState('')
@@ -58,21 +71,37 @@ export default function VisitEditor({visit,onSave,saving}) {
     const originRef = useRef()
     const [ originOptions, setOriginOptions ] = useState([])
     const [ originLoading, setOriginLoading ] = useState(false)
-    const originSearch = (query) => {
+    const originSearch = useCallback((query) => {
+        const params = {}
+        if (latitude && longitude) params['location'] = `${latitude},${longitude}`
         setOriginLoading(true)
         axios
-            .get('/api/places/origins')
+            .get('/api/places/origins',{params})
             .then((res) => {
                 setOriginLoading(false)
                 setOriginOptions(res.data.map((place) => {
-                    return {id: place._id, label: place.name, timezone: place.timezone}
+                    return {id: place._id, label: place.name, timezone: place.timezone, distance: place.distance}
                 }))
             })
-    }
+    },[latitude,longitude])
+    useEffect(() => {
+        if (origin.length !== 0) return
+        originSearch()
+    },[origin,originSearch])
     useEffect(() => {
         if (origin.length === 0 || !origin[0].timezone) return
         setTimezone(origin[0].timezone)
     },[origin,setTimezone])
+    const renderOrigins = (option, props, index) => {
+        return [
+            <Highlighter key="label" search={props.text}>
+                {option.label}
+            </Highlighter>,
+            "distance" in option ? <div key="distance">
+                {t('translation:distanceAwaykm',{distance: Math.round(option.distance/1000)})}
+            </div> : ''
+        ]
+    }
     const [ destinations, setDestinations ] = useState([])
     useEffect(() => {
         const vDestinations = visit.destinations.map((d) => {
@@ -178,9 +207,12 @@ export default function VisitEditor({visit,onSave,saving}) {
                         placeholder={t('originPlaceholder')}
                         options={originOptions}
                         isLoading={originLoading}
+                        delay={1}
                         onSearch={originSearch}
                         onChange={(selected) => setOrigin(selected)}
                         isInvalid={errors.origin}
+                        minLength={0}
+                        renderMenuItemChildren={renderOrigins}
                         ref={originRef}
                         clearButton={true}
                     />

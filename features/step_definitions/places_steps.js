@@ -12,11 +12,16 @@ const placeRowSelector = (name) => {
     return `//li[contains(.,'${name}')]`
 }
 
-Given('an origin {string} exists', async (name) => {
-    await create('originPlace',{name})
-})
-Given('a destination {string} exists', async (name) => {
-    await create('destinationPlace',{name})
+Given(/^an? (origin|destination) "([^"]+)" exists(?: at "([^"]+)")?$/, async (type,name,coords) => {
+    const params = {name}
+    if (coords) {
+        const [latitude,longitude] = coords.split(',')
+        params['location'] = {
+            type: 'Point',
+            coordinates: [longitude,latitude]
+        }
+    }
+    await create(`${type}Place`,params)
 })
 When(/^I fill in values for the place(?: except "([^"]+)")?$/,async (except) => {
     if (except !== "Name") await fillByLabel("Name","Upper Cascade Lake Launch")

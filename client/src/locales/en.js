@@ -1,6 +1,7 @@
 const locale = {
     "translation": {
         "createdAt": "Created",
+        "distanceAwaykm": "{{distance}} km away",
         "mustBeLoggedIn": "You must log in to use this system.",
         "timesAreLocal": "Times are in local {{timezone}} time.",
         "updatedAt": "Updated"

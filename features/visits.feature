@@ -4,7 +4,7 @@ Feature: Manage visits
     I want to be able to create, modify, and delete visits
 
     Background:
-        Given an origin "Adirondack Loj" exists
+        Given an origin "Adirondack Loj" exists at "44.18,-73.96"
         And a destination "Algonquin Summit" exists
 
     Scenario: See visits
@@ -49,6 +49,18 @@ Feature: Manage visits
         When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I click the "Add visit" button
         Then I should see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+
+    Scenario: Select origin with geolocation
+        Given I am registered as "bmarshall@example.com"
+        And an origin "Johns Brook Garden" exists at "44.19,-73.82"
+        And I logged in as "bmarshall@example.com"
+        And my location is "44.19,-73.82"
+        And I visit the "new visit" page
+        And I start to fill in the "Starting point" typeahead and clear
+        Then the 1st option in the typeahead should contain "Johns Brook Garden"
+        And the 1st option in the typeahead should contain "0 km away"
+        And the 2nd option in the typeahead should contain "Adirondack Loj"
+        And the 2nd option in the typeahead should contain "11 km away"
 
     Scenario Outline: Try to add invalid visit
         Given I am registered as "bmarshall@example.com"
