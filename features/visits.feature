@@ -56,8 +56,7 @@ Feature: Manage visits
         And I logged in as "bmarshall@example.com"
         And my location is "44.189006,-73.816306"
         And I visit the "new visit" page
-        And I start to fill in the "Starting point" typeahead and clear
-        And I take a screenshot
+        And I click on the "Starting point" typeahead
         Then the 1st option in the typeahead should contain "Johns Brook Garden"
         And the 1st option in the typeahead should contain "0 km away"
         And the 2nd option in the typeahead should contain "Adirondack Loj"
@@ -69,7 +68,7 @@ Feature: Manage visits
         And I logged in as "bmarshall@example.com"
         And I visit the "new visit" page
         And I fill in the "Starting point" typeahead with "Adirondack Loj"
-        And I start to fill in the "Destinations" typeahead and clear
+        And I click on the "Destinations" typeahead
         Then the 1st option in the typeahead should contain "Algonquin Summit"
         And the 1st option in the typeahead should contain "5 km from Adirondack Loj"
         And the 2nd option in the typeahead should contain "Marcy Summit"

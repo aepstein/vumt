@@ -180,12 +180,7 @@ const startTypeaheadByLabel = async (label, fill) => {
 	const closeButton = await selectTypeaheadCloseByLabel(label)
 	if (closeButton) await closeButton.click()
 	const el = await selectTypeaheadInputByLabel(label)
-    await fillElement(el,fill.substring(0,1))
-    await new Promise(r => setTimeout(r, 200))
-    await fillElement(el,fill.substring(1,2))
-	await new Promise(r => setTimeout(r, 200))
-	el.press('Backspace')
-	el.press('Backspace')
+	await el.click()
 }
 const switchByLabel = async (label) => {
 	const escapedText = escapeXpathString(label);

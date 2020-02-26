@@ -21,7 +21,6 @@ import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 import tz from 'timezone/loaded'
 
 export default function VisitEditor({visit,onSave,saving}) {
-    // const isCancelled = useRef({current: false})
     const position = useSelector(state => state.geo.position)
     const [latitude,setLatitude] = useState(null)
     useEffect(() => {
@@ -80,13 +79,17 @@ export default function VisitEditor({visit,onSave,saving}) {
         axios
             .get('/api/places/origins',{params})
             .then((res) => {
-                setOriginLoading(false)
                 setOriginOptions(res.data.map((place) => {
                     return {id: place._id, label: place.name, timezone: place.timezone, location: place.location,
                         distance: place.distance}
                 }))
+                setOriginLoading(false)
             })
     },[latitude,longitude,setOriginLoading,setOriginOptions])
+    const initOriginSearch = useCallback(() => {
+        if (!position || originOptions.length > 0) return
+        originSearch()
+    },[position,originOptions,originSearch])
     useEffect(() => {
         if (origin.length === 0 || !origin[0].timezone) return
         setTimezone(origin[0].timezone)
@@ -139,18 +142,29 @@ export default function VisitEditor({visit,onSave,saving}) {
         axios
             .get('/api/places/destinations',{params})
             .then((res) => {
-                setDestinationLoading(false)
                 setDestinationOptions(res.data.map((place) => {
                     return {id: place._id, label: place.name, distance: place.distance}
                 }))
+                setDestinationLoading(false)
             })
     },[setDestinationLoading,setDestinationOptions,origin])
+    const initDestinationSearch = useCallback(() => {
+        if (!origin || destinationOptions.length > 0) return
+        destinationSearch()
+    },[origin,destinationOptions,destinationSearch])
+    const doSetOrigin = useCallback((selected) => {
+        setOrigin(selected)
+        if (destinationLoading) return
+        setDestinationLoading(true)
+        setDestinationOptions([])
+        setDestinationLoading(false)
+    },[setOrigin,destinationLoading,setDestinationLoading,setDestinationOptions])
     const renderDestinations = useCallback((option, props, index) => {
         return [
             <Highlighter key="label" search={props.text}>
                 {option.label}
             </Highlighter>,
-            "distance" in option ? <div key="distance">
+            option.distance && origin[0] ? <div key="distance">
                 {t(
                     'translation:distanceFromPlace',
                     {
@@ -233,9 +247,10 @@ export default function VisitEditor({visit,onSave,saving}) {
                         placeholder={t('originPlaceholder')}
                         options={originOptions}
                         isLoading={originLoading}
-                        delay={1}
+                        delay={200}
                         onSearch={originSearch}
-                        onChange={(selected) => setOrigin(selected)}
+                        onFocus={initOriginSearch}
+                        onChange={doSetOrigin}
                         isInvalid={errors.origin}
                         minLength={0}
                         renderMenuItemChildren={renderOrigins}
@@ -258,9 +273,10 @@ export default function VisitEditor({visit,onSave,saving}) {
                         isLoading={destinationLoading}
                         onSearch={destinationSearch}
                         onChange={(selected) => setDestinations(selected)}
+                        onFocus={initDestinationSearch}
                         renderMenuItemChildren={renderDestinations}
                         ref={destinationsRef}
-                        delay={1}
+                        delay={200}
                         minLength={0}
                         clearButton={true}
                     />

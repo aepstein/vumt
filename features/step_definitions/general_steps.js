@@ -43,7 +43,7 @@ When('I fill in the {string} typeahead with {string}', async (label, value) => {
     await fillTypeaheadByLabel(label,value)
 })
 
-When('I start to fill in the {string} typeahead and clear', async (label) => {
+When('I click on the {string} typeahead', async (label) => {
     await startTypeaheadByLabel(label,'Ad')
 })
 
