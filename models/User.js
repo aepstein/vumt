@@ -45,6 +45,12 @@ const UserSchema = new Schema(
                 return phone(val,'',true).length > 0
             }
         },
+        distanceUnitOfMeasure: {
+            type: String,
+            required: true,
+            default: 'mi',
+            enum: ['km','mi']
+        },
         roles: [{
             type: String,
             enum: ['ranger','planner','admin']
