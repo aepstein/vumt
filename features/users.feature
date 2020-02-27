@@ -36,6 +36,8 @@ Feature: Manage users
         And I should see "State, province, or territory" defined as "Quebec"
         And I should see "Postal code" defined as "H2T 2M2"
         And I should see "Phone" defined as "+15142720667"
+        And I should see "Preferred unit of measure for distances" defined as "kilometer"
+        And I should see "Use device location" defined as "No"
         And I should see "Roles" defined as "ranger"
 
     Scenario: Add a new user
@@ -53,6 +55,8 @@ Feature: Manage users
         And I should see "State, province, or territory" defined as "New York"
         And I should see "Postal code" defined as "12943"
         And I should see "Phone" defined as "+15185551212"
+        And I should see "Preferred unit of measure for distances" defined as "mile"
+        And I should see "Use device location" defined as "Yes"
         And I should see "Roles" defined as "planner"
 
     Scenario: Remove a user

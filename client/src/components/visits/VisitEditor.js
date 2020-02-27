@@ -18,10 +18,12 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
+import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
 import tz from 'timezone/loaded'
 
 export default function VisitEditor({visit,onSave,saving}) {
     const position = useSelector(state => state.geo.position)
+    const distanceUOM = useSelector(state => state.auth.user.distanceUnitOfMeasure)
     const [latitude,setLatitude] = useState(null)
     useEffect(() => {
         if (!position) return
@@ -94,7 +96,7 @@ export default function VisitEditor({visit,onSave,saving}) {
         if (origin.length === 0 || !origin[0].timezone) return
         setTimezone(origin[0].timezone)
     },[origin,setTimezone])
-    const renderOrigins = (option, props, index) => {
+    const renderOrigins = useCallback((option, props, index) => {
         return [
             <Highlighter key="label" search={props.text}>
                 {option.label}
@@ -103,13 +105,15 @@ export default function VisitEditor({visit,onSave,saving}) {
                 {t(
                     'translation:distanceAway',
                     {
-                        distance: Math.round(option.distance/1000),
-                        unit: t('translation:km')
+                        distance: t(
+                            `uom:${distanceUOM}WithCount`,
+                            {count: Math.round(option.distance/distanceUsOM[distanceUOM].m)}
+                        )
                     }
                 )}
             </div> : ''
         ]
-    }
+    },[t,distanceUOM])
     const [ destinations, setDestinations ] = useState([])
     useEffect(() => {
         const vDestinations = visit.destinations.map((d) => {
@@ -168,14 +172,16 @@ export default function VisitEditor({visit,onSave,saving}) {
                 {t(
                     'translation:distanceFromPlace',
                     {
-                        distance: Math.round(option.distance/1000),
-                        place: origin[0] ? origin[0].label : t('origin'),
-                        unit: t('translation:km')
+                        distance: t(
+                            `uom:${distanceUOM}WithCount`,
+                            {count: Math.round(option.distance/distanceUsOM[distanceUOM].m)}
+                        ),
+                        place: origin[0] ? origin[0].label : t('origin')
                     }
                 )}
             </div> : ''
         ]
-    },[origin,t])
+    },[origin,t,distanceUOM])
 
     const { register, handleSubmit, setError, errors } = useForm()
 

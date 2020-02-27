@@ -57,10 +57,11 @@ Feature: Manage visits
         And my location is "44.189006,-73.816306"
         And I visit the "new visit" page
         And I click on the "Starting point" typeahead
+        And I take a screenshot
         Then the 1st option in the typeahead should contain "Johns Brook Garden"
-        And the 1st option in the typeahead should contain "0 km away"
+        And the 1st option in the typeahead should contain "0 miles away"
         And the 2nd option in the typeahead should contain "Adirondack Loj"
-        And the 2nd option in the typeahead should contain "12 km away"
+        And the 2nd option in the typeahead should contain "7 miles away"
 
     Scenario: Select destination relative to origin
         Given I am registered as "bmarshall@example.com"
@@ -70,9 +71,9 @@ Feature: Manage visits
         And I fill in the "Starting point" typeahead with "Adirondack Loj"
         And I click on the "Destinations" typeahead
         Then the 1st option in the typeahead should contain "Algonquin Summit"
-        And the 1st option in the typeahead should contain "5 km from Adirondack Loj"
+        And the 1st option in the typeahead should contain "3 miles from Adirondack Loj"
         And the 2nd option in the typeahead should contain "Marcy Summit"
-        And the 2nd option in the typeahead should contain "8 km from Adirondack Loj"
+        And the 2nd option in the typeahead should contain "5 miles from Adirondack Loj"
 
     Scenario Outline: Try to add invalid visit
         Given I am registered as "bmarshall@example.com"

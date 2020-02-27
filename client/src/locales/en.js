@@ -1,9 +1,8 @@
 const locale = {
     "translation": {
         "createdAt": "Created",
-        "distanceAway": "{{distance}} {{unit}} away",
-        "distanceFromPlace": "{{distance}} {{unit}} from {{place}}",
-        "km": "km",
+        "distanceAway": "{{distance}} away",
+        "distanceFromPlace": "{{distance}} from {{place}}",
         "mustBeLoggedIn": "You must log in to use this system.",
         "timesAreLocal": "Times are in local {{timezone}} time.",
         "updatedAt": "Updated"
@@ -49,9 +48,19 @@ const locale = {
         "timezonePlaceholder": "Choose IANA timezone",
         "updatePlace": "Update place"
     },
+    "uom": {
+        "km": "kilometer",
+        "km_plural": "kilometers",
+        "kmWithCount": "{{count}} km",
+        "mi": "mile",
+        "mi_plural": "miles",
+        "miWithCount": "{{count}} mile",
+        "miWithCount_plural": "{{count}} miles"
+    },
     "user": {
         "addUser": "Add user",
         "newUser": "New user",
+        "distanceUnitOfMeasure": "Preferred unit of measure for distances",
         "editUser": "Edit profile",
         "enableGeolocation": "Use device location",
         "updateUser": "Update profile",

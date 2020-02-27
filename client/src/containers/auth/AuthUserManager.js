@@ -26,6 +26,7 @@ export default function AuthUserManager({action}) {
         postalCode: '',
         phone: '',
         enableGeolocation: true,
+        distanceUnitOfMeasure: 'mi',
         roles: []
     })
 

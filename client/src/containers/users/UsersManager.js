@@ -17,6 +17,7 @@ const BLANK_USER = {
     postalCode: '',
     phone: '',
     enableGeolocation: true,
+    distanceUnitOfMeasure: 'mi',
     roles: []
 }
 
