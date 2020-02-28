@@ -35,6 +35,47 @@ describe('/api/places',() => {
             res.body[0].should.have.property('distance').eql(0)
             res.body[1].should.have.property('distance').gt(8000)
         })
+        it('should compile information on intersecting visits', async () => {
+            const places = await genPlaces()
+            startOn = new Date()
+            startOn.setDate(startOn.getDate()+1)
+            justBefore = new Date(startOn)
+            justBefore.setHours(justBefore.getHours()-1)
+            await factory.create('visit',{
+                origin: places.origin._id,
+                durationNights: 0,
+                parkedVehicles: 2,
+                groupSize: 4,
+                startOn: justBefore
+            })
+            justAfter = new Date(startOn)
+            justAfter.setHours(justAfter.getHours()+1)
+            await factory.create('visit',{
+                origin: places.origin._id,
+                durationNights: 0,
+                parkedVehicles: 2,
+                groupSize: 4,
+                startOn: justAfter
+            })
+            overnight = new Date(startOn)
+            overnight.setHours(overnight.getHours()-23)
+            await factory.create('visit',{
+                origin: places.origin._id,
+                durationNights: 1,
+                parkedVehicles: 1,
+                groupSize: 3,
+                startOn: overnight
+            })
+            const res = await action(`/api/places?startOn=${startOn.toISOString()}`)
+            res.should.have.status(200)
+            res.body.should.be.an('array')
+            res.body[0].name.should.be.a('String').eql('Adirondack Loj')
+            const visits = res.body[0].visits[0]
+            visits.should.be.an('object')
+            visits.should.have.a.property('people').eql(7)
+            visits.should.have.a.property('parties').eql(2)
+            visits.should.have.a.property('parkedVehicles').eql(3)
+        })
     })
     describe('GET /api/places/origins', () => {
         it('should show all places that are origins',async () => {

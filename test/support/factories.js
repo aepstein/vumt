@@ -54,6 +54,14 @@ factory.define('visit', Visit, {
     parkedVehicles: 1
 })
 
+factory.extend('visit','futureVisit',{
+    startOn: () => {
+        d = new Date()
+        d.setDate(d.getDate() + 1)
+        return d
+    }
+})
+
 factory.extend('visit','checkedInVisit',{
     checkedIn: () => {
         return fromLocalDateTimeToDate(`${toLocalDate(new Date())} 08:05`)
