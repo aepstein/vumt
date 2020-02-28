@@ -1,6 +1,8 @@
 const locale = {
     "translation": {
         "createdAt": "נוצר ב",
+        "distanceAway": "{{distance}} משם",
+        "distanceFromPlace": "{{distance}} מ {{place}}",
         "mustBeLoggedIn": ("\u202bעליך להתחבר כדי להשתמש במערכת זו."),
         "timesAreLocal": "\u202bהזמנים הם בזמן המקומי ל{{timezone}}.",
         "updatedAt": "עודכן ב"
@@ -46,10 +48,21 @@ const locale = {
         "timezonePlaceholder": "בחר אזור זמן של\u202b IANA",
         "updatePlace": "עדכן מקום"
     },
+    "uom": {
+        "km": "קילומטר",
+        "km_plural": "קילומטרים",
+        "kmWithCount": "{{count}} ק\"מ",
+        "mi": "מייל",
+        "mi_plural": "מיילים",
+        "miWithCount": "{{count}} מייל",
+        "miWithCount_plural": "{{count}} מיילים"
+    },
     "user": {
         "addUser": "הוסף משתמש",
         "newUser": "משתמש חדש",
+        "distanceUnitOfMeasure": "יחידת מידה מועדפת למרחק",
         "editUser": "ערוך את הפרופיל שלך",
+        "enableGeolocation": "השתמש במיקום המכשיר",
         "updateUser": "עדכן את הפרופיל שלך",
         "profile": "פרופיל",
         "roles": "תפקידים",

@@ -1,6 +1,8 @@
 const locale = {
     "translation": {
         "createdAt": "Créé sur",
+        "distanceAway": "À {{distance}}",
+        "distanceFromPlace": "{{distance}} de {{place}}",
         "mustBeLoggedIn": "Vous devez être connecté pour utiliser ce système.",
         "timesAreLocal": "Les heures sont en heure locale pour {{timezone}}.",
         "updatedAt": "Mis à jour le"
@@ -46,14 +48,25 @@ const locale = {
         "timezonePlaceholder": "Choisissez le fuseau horaire IANA",
         "updatePlace": "Modifier l'emplacement"
     },
+    "uom": {
+        "km": "kilomètre",
+        "km_plural": "kilomètres",
+        "kmWithCount": "{{count}} km",
+        "mi": "mile",
+        "mi_plural": "miles",
+        "miWithCount": "{{count}} mile",
+        "miWithCount_plural": "{{count}} miles"
+    },
     "user": {
         "addUser": "Ajouter un utilisateur",
         "newUser": "Nouvel utilisateur",
+        "distanceUnitOfMeasure": "Unité de mesure préférée pour la distance",
         "editUser": "Modifier votre profil",
+        "enableGeolocation": "Utilisez l'emplacement de l'appareil",
         "updateUser": "Modifiez votre profil",
         "profile": "Profil",
         "roles": "Rôles",
-        "rolesPlaceholder": "SSélectionnez des rôles d'utilisateur privilégiés",
+        "rolesPlaceholder": "Sélectionnez des rôles d'utilisateur privilégiés",
         "yourProfile": "Votre profil"
     },
     "visit": {

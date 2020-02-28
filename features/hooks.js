@@ -3,7 +3,8 @@ const puppeteer = require('puppeteer');
 const puppeteerOptions = {
   // headless: false
   //	slowMo: 250,
-  //	devtools: true
+    headless: true,
+    devtools: true
 }
 const scope = require('./support/scope');  
   

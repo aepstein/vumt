@@ -55,6 +55,7 @@ describe('/api/users', () => {
             res.body.user.should.have.property('_id');
             res.body.user.should.have.property('firstName').eql(user.firstName);
             res.body.user.should.have.property('lastName').eql(user.lastName);
+            res.body.user.should.have.property('enableGeolocation').eql(true)
             res.body.should.have.property('token');
         });
         it('should not register without firstName', async () => {
@@ -117,6 +118,18 @@ describe('/api/users', () => {
             await res.body.should.be.a('object');
             await res.body.user.should.have.a.property('phone').eql('+15185551212');
         })
+        it('should accept a valid enableGeolocation flag', async () => {
+            let user = validUser({enableGeolocation: false})
+            res = await action(user)
+            await res.should.have.status(201)
+            await res.body.user.should.have.a.property('enableGeolocation').eql(false)
+        })
+        it('should accept a valid distanceUnitOfMeasure setting', async () => {
+            let user = validUser({distanceUnitOfMeasure: 'mi'})
+            res = await action(user)
+            await res.should.have.status(201)
+            await res.body.user.should.have.a.property('distanceUnitOfMeasure').eql('mi')
+        })
         it('should deny an unprivileged user who is logged in', async () => {
             const auth = await withAuth()
             res = await action(validUser(),auth)
@@ -161,6 +174,7 @@ describe('/api/users', () => {
                 firstName: 'Herbert',
                 lastName: 'Clark',
                 email: 'hclark@example.com',
+                enableGeolocation: false,
                 password: 'adifferentpassword',
                 country: 'CA',
                 province: 'Quebec',
@@ -175,6 +189,7 @@ describe('/api/users', () => {
             user.country.should.eql(newProps.country)
             user.province.should.eql(newProps.province)
             user.postalCode.should.eql(newProps.postalCode)
+            user.enableGeolocation.should.eql(newProps.enableGeolocation)
         })
         it('should fail with an invalid attribute',async () => {
             const auth = await withAuth()

@@ -11,7 +11,7 @@ function Logout() {
     const { t } = useTranslation('AppNavbar')
 
     return <div>
-        <NavLink onClick={() => dispatch(logout())} href="#">
+        <NavLink onClick={() => dispatch(logout)} href="#">
             {t('logout')}
         </NavLink>
     </div>

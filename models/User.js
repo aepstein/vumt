@@ -20,6 +20,10 @@ const UserSchema = new Schema(
             required: true,
             unique: true
         },
+        enableGeolocation: {
+            type: Boolean,
+            default: true
+        },
         password: {
             type: String,
             required: true
@@ -40,6 +44,12 @@ const UserSchema = new Schema(
             validate: (val) => {
                 return phone(val,'',true).length > 0
             }
+        },
+        distanceUnitOfMeasure: {
+            type: String,
+            required: true,
+            default: 'mi',
+            enum: ['km','mi']
         },
         roles: [{
             type: String,
@@ -70,10 +80,12 @@ UserSchema.methods.pubProps = function() {
         firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
+        enableGeolocation: this.enableGeolocation,
         country: this.country,
         province: this.province,
         postalCode: this.postalCode,
         phone: this.phone,
+        distanceUnitOfMeasure: this.distanceUnitOfMeasure,
         roles: this.roles,
         updatedAt: this.updatedAt
     }

@@ -3,6 +3,7 @@ import {
     Button,
     ButtonGroup,
     Container,
+    CustomInput,
     Form,
     FormFeedback,
     FormGroup,
@@ -20,6 +21,7 @@ import countries, { postalCodeRequired } from '../../lib/countries'
 import provinces from 'provinces'
 import postalCodes from 'postal-codes-js'
 import phoneValidator from 'phone'
+import distanceUnitsOfMeasure from '../../lib/distanceUnitsOfMeasure'
 import roleOptions from '../../lib/roles'
 
 export default function UserEditor({action,user,onSave,saving}) {
@@ -81,6 +83,14 @@ export default function UserEditor({action,user,onSave,saving}) {
     useEffect(() => {
         setPhone(user.phone)
     },[user.phone,setPhone])
+    const [ enableGeolocation, setEnableGeolocation ] = useState(true)
+    useEffect(() => {
+        setEnableGeolocation(user.enableGeolocation)
+    },[user.enableGeolocation, setEnableGeolocation])
+    const [ distanceUnitOfMeasure, setDistanceUnitOfMeasure ] = useState('mi')
+    useEffect(() => {
+        setDistanceUnitOfMeasure(user.distanceUnitOfMeasure)
+    },[setDistanceUnitOfMeasure,user.distanceUnitOfMeasure])
 
     const [ roles, setRoles ] = useState([])
     useEffect(() => {
@@ -105,7 +115,8 @@ export default function UserEditor({action,user,onSave,saving}) {
     const { register, handleSubmit, setError, errors } = useForm()
 
     const onChange = (setter) => (e) => {
-        setter(e.target.value)
+        const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value
+        setter(value)
     }
     const onSubmit = () => {
         if (saving) return
@@ -124,7 +135,9 @@ export default function UserEditor({action,user,onSave,saving}) {
             _id: user._id,
             firstName,
             lastName,
+            distanceUnitOfMeasure,
             email,
+            enableGeolocation,
             password,
             country: country[0].id,
             province: province[0] ? province[0].id : '',
@@ -272,6 +285,30 @@ export default function UserEditor({action,user,onSave,saving}) {
                     />
                     {errors.phone &&
                         <FormFeedback>{t('commonForms:mustBePhone')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
+                    <Label>{t('user:distanceUnitOfMeasure')}</Label>
+                    {Object.keys(distanceUnitsOfMeasure).map((uom,index) => {
+                        return <CustomInput
+                            type="radio"
+                            id={`distanceUnitOfMeasure${uom}`}
+                            key={`distanceUnitOfMeasure${index}`}
+                            name={`distanceUnitOfMeasure`}
+                            label={t(`uom:${uom}`)}
+                            checked={distanceUnitOfMeasure === uom}
+                            onChange={() => setDistanceUnitOfMeasure(uom)}
+                        />
+                    })}
+                </FormGroup>
+                <FormGroup>
+                    <CustomInput
+                        type="switch"
+                        id="enableGeolocation"
+                        name="enableGeolocation"
+                        label={t('user:enableGeolocation')}
+                        checked={enableGeolocation}
+                        onChange={onChange(setEnableGeolocation)}
+                    />
                 </FormGroup>
                 { !authUser || !authUser.roles.includes('admin') ? '' : <FormGroup>
                     <Label for="roles">{t('user:roles')}</Label>

@@ -22,7 +22,7 @@ Given(/^a(?:n)?(?: (admin))? user exists "([^"]+)" "([^"]+)" "([^"]+)"$/, async 
 })
 
 Then(/^I should( not)? see the \"([^"]+)\" menu$/, async (negate,menu) => {
-    shouldSeeText(`.navbar`,negate,menu)
+    await shouldSeeText(`.navbar`,negate,menu)
 })
 
 When('I click {string} for user {string}', async (button, email) => {

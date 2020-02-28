@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -10,15 +10,30 @@ import {
     Input
 } from 'reactstrap';
 import {
-    AsyncTypeahead
+    AsyncTypeahead,
+    Highlighter
 } from 'react-bootstrap-typeahead'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
+import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
 import tz from 'timezone/loaded'
 
 export default function VisitEditor({visit,onSave,saving}) {
+    const position = useSelector(state => state.geo.position)
+    const distanceUOM = useSelector(state => state.auth.user.distanceUnitOfMeasure)
+    const [latitude,setLatitude] = useState(null)
+    useEffect(() => {
+        if (!position) return
+        setLatitude(position.coords.latitude)
+    },[position,setLatitude])
+    const [longitude,setLongitude] = useState(null)
+    useEffect(() => {
+        if (!position) return
+        setLongitude(position.coords.longitude)
+    },[position,setLongitude])
     const { t } = useTranslation('visit')
 
     const [ timezone, setTimezone ] = useState('')
@@ -49,30 +64,56 @@ export default function VisitEditor({visit,onSave,saving}) {
         }
     },[startOnDate,startOnTime,setStartOn,timezone])
     const [ origin, setOrigin ] = useState([])
+    const [ originOptions, setOriginOptions ] = useState([])
     useEffect(() => {
         const vOrigin = visit.origin._id ?
-            [{id: visit.origin._id, label: visit.origin.name, timezone: visit.origin.timezone}] : []
+            [{id: visit.origin._id, label: visit.origin.name, timezone: visit.origin.timezone,
+                location: visit.origin.location}] : []
         setOriginOptions(vOrigin)
         setOrigin(vOrigin)
-    },[visit.origin])
+    },[visit.origin,setOrigin,setOriginOptions])
     const originRef = useRef()
-    const [ originOptions, setOriginOptions ] = useState([])
     const [ originLoading, setOriginLoading ] = useState(false)
-    const originSearch = (query) => {
+    const originSearch = useCallback((query) => {
+        const params = {}
+        if (latitude && longitude) params['location'] = `${latitude},${longitude}`
         setOriginLoading(true)
         axios
-            .get('/api/places/origins')
+            .get('/api/places/origins',{params})
             .then((res) => {
-                setOriginLoading(false)
                 setOriginOptions(res.data.map((place) => {
-                    return {id: place._id, label: place.name, timezone: place.timezone}
+                    return {id: place._id, label: place.name, timezone: place.timezone, location: place.location,
+                        distance: place.distance}
                 }))
+                setOriginLoading(false)
             })
-    }
+    },[latitude,longitude,setOriginLoading,setOriginOptions])
+    const initOriginSearch = useCallback(() => {
+        if (!position || originOptions.length > 0) return
+        originSearch()
+    },[position,originOptions,originSearch])
     useEffect(() => {
         if (origin.length === 0 || !origin[0].timezone) return
         setTimezone(origin[0].timezone)
     },[origin,setTimezone])
+    const renderOrigins = useCallback((option, props, index) => {
+        return [
+            <Highlighter key="label" search={props.text}>
+                {option.label}
+            </Highlighter>,
+            "distance" in option ? <div key="distance">
+                {t(
+                    'translation:distanceAway',
+                    {
+                        distance: t(
+                            `uom:${distanceUOM}WithCount`,
+                            {count: Math.round(option.distance/distanceUsOM[distanceUOM].m)}
+                        )
+                    }
+                )}
+            </div> : ''
+        ]
+    },[t,distanceUOM])
     const [ destinations, setDestinations ] = useState([])
     useEffect(() => {
         const vDestinations = visit.destinations.map((d) => {
@@ -96,17 +137,51 @@ export default function VisitEditor({visit,onSave,saving}) {
     useEffect(() => {
         setParkedVehicles(visit.parkedVehicles)
     },[visit.parkedVehicles])
-    const destinationSearch = (query) => {
+    const destinationSearch = useCallback((query) => {
         setDestinationLoading(true)
+        const params = {}
+        if (origin && origin[0]) {
+            params['location'] = `${origin[0].location.coordinates[1]},${origin[0].location.coordinates[0]}`
+        }
         axios
-            .get('/api/places/destinations')
+            .get('/api/places/destinations',{params})
             .then((res) => {
-                setDestinationLoading(false)
                 setDestinationOptions(res.data.map((place) => {
-                    return {id: place._id, label: place.name}
+                    return {id: place._id, label: place.name, distance: place.distance}
                 }))
+                setDestinationLoading(false)
             })
-    }
+    },[setDestinationLoading,setDestinationOptions,origin])
+    const initDestinationSearch = useCallback(() => {
+        if (!origin || destinationOptions.length > 0) return
+        destinationSearch()
+    },[origin,destinationOptions,destinationSearch])
+    const doSetOrigin = useCallback((selected) => {
+        setOrigin(selected)
+        if (destinationLoading) return
+        setDestinationLoading(true)
+        setDestinationOptions([])
+        setDestinationLoading(false)
+    },[setOrigin,destinationLoading,setDestinationLoading,setDestinationOptions])
+    const renderDestinations = useCallback((option, props, index) => {
+        return [
+            <Highlighter key="label" search={props.text}>
+                {option.label}
+            </Highlighter>,
+            option.distance && origin[0] ? <div key="distance">
+                {t(
+                    'translation:distanceFromPlace',
+                    {
+                        distance: t(
+                            `uom:${distanceUOM}WithCount`,
+                            {count: Math.round(option.distance/distanceUsOM[distanceUOM].m)}
+                        ),
+                        place: origin[0] ? origin[0].label : t('origin')
+                    }
+                )}
+            </div> : ''
+        ]
+    },[origin,t,distanceUOM])
 
     const { register, handleSubmit, setError, errors } = useForm()
 
@@ -178,9 +253,13 @@ export default function VisitEditor({visit,onSave,saving}) {
                         placeholder={t('originPlaceholder')}
                         options={originOptions}
                         isLoading={originLoading}
+                        delay={200}
                         onSearch={originSearch}
-                        onChange={(selected) => setOrigin(selected)}
+                        onFocus={initOriginSearch}
+                        onChange={doSetOrigin}
                         isInvalid={errors.origin}
+                        minLength={0}
+                        renderMenuItemChildren={renderOrigins}
                         ref={originRef}
                         clearButton={true}
                     />
@@ -200,7 +279,11 @@ export default function VisitEditor({visit,onSave,saving}) {
                         isLoading={destinationLoading}
                         onSearch={destinationSearch}
                         onChange={(selected) => setDestinations(selected)}
+                        onFocus={initDestinationSearch}
+                        renderMenuItemChildren={renderDestinations}
                         ref={destinationsRef}
+                        delay={200}
+                        minLength={0}
                         clearButton={true}
                     />
                 </FormGroup>

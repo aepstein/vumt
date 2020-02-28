@@ -66,7 +66,7 @@ const fillTypeaheadByLabel = async (label, fill) => {
 	await fillElement(el,fill.substring(2,fill.length-1))
     const choice = `//a[contains(@class,'dropdown-item') and contains(.,'${fill}')]`
     await waitFor(choice)
-    await clickByXPath(choice)
+	await clickByXPath(choice)
 }
 const formatDateForDisplay = (date) => {
 	const str = toLocalDate(date)
@@ -143,6 +143,11 @@ const selectTypeaheadInputByLabel = async (label) => {
 	const el = await formGroup.$x(`.//input[contains(@class,'rbt-input-main')]`)
 	return el[0]
 }
+const setGeolocation = async (latitude,longitude) => {
+	const context = scope.browser.defaultBrowserContext()
+	await context.overridePermissions('http://localhost:5000', ['geolocation'])
+	await scope.context.currentPage.setGeolocation({latitude, longitude})  
+}
 const shouldBeLoggedInAs = async(email) => {
 	await waitFor("//a[contains(text(),'Logout')]");
 	const user = await User.findOne({email})
@@ -171,6 +176,20 @@ const shouldSeeText = async (selector, not, expectedText) => {
 		containsText.should.not.have.string(expectedText)
 	}
 }
+const startTypeaheadByLabel = async (label, fill) => {
+	const closeButton = await selectTypeaheadCloseByLabel(label)
+	if (closeButton) await closeButton.click()
+	const el = await selectTypeaheadInputByLabel(label)
+	await el.click()
+}
+const switchByLabel = async (label) => {
+	const escapedText = escapeXpathString(label);
+	const selector = `//label[contains(.,${escapedText})]`
+	const page = scope.context.currentPage
+	const el = await page.$x(selector)
+	const handle = el[0]
+	await handle.click()
+}
 const takeScreenshot = async () => {
 	await new Promise(r => setTimeout(r, 200))
 	await scope.context.currentPage.screenshot({path: `sc${sc++}.png`});
@@ -184,9 +203,7 @@ const visitExists = async (attr={}) => {
 const visitPage = async (path) => {
 	await initPage()
 	const url = scope.host + paths[path];
-	const visit = await scope.context.currentPage.goto(url, {
-		waitUntil: 'networkidle2'
-	});
+	const visit = await scope.context.currentPage.goto(url);
 	await waitFor('.navbar')
 	return visit;
 }
@@ -214,11 +231,14 @@ module.exports = {
 	visitExists,
 	visitPage,
 	relativeDate,
+	setGeolocation,
 	shouldBeLoggedInAs,
 	shouldSee,
 	shouldSeeDefinition,
 	shouldSeeErrorWithLabel,
 	shouldSeeText,
+	startTypeaheadByLabel,
+	switchByLabel,
 	takeScreenshot,
 	userExists,
 	waitFor,

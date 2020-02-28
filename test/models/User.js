@@ -51,6 +51,18 @@ describe('User', () => {
     })
     it('should not save with invalid role', async () => {
         const user = await factory.build('user',{roles: ['producer']})
-        user.save().should.eventually.be.rejectedWith(ValidationError)
+        await user.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should save with an enableGeolocation flag', async () => {
+        const user = await factory.create('user',{enableGeolocation: true})
+        user.should.have.a.property('enableGeolocation').eql(true)
+    })
+    it('should not save without a distanceUnitOfMeasure', async () => {
+        const user = await factory.build('user',{distanceUnitOfMeasure: null})
+        await user.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should not save with an invalid distanceUnitOfMeasure', async () => {
+        const user = await factory.build('user',{distanceUnitOfMeasure: 'paces'})
+        await user.save().should.eventually.be.rejectedWith(ValidationError)
     })
 })

@@ -3,6 +3,9 @@ import prepareTokenConfig from '../lib/prepareTokenConfig'
 import { 
     returnErrors
 } from './errorActions';
+import {
+    initLocation
+} from './geoActions'
 
 import {
     USER_LOADED,
@@ -58,6 +61,7 @@ export const register = (attrs,history) => async (dispatch) => {
             type: REGISTER_SUCCESS,
             payload: transformDates(res.data)
         })
+        dispatch(initLocation)
         history.push('/')
     }
     catch(err) {
@@ -104,6 +108,7 @@ export const login = (attrs) => async (dispatch) => {
             type: LOGIN_SUCCESS,
             payload: transformDates(res.data)
         })
+        dispatch(initLocation)
     }
     catch(err) {
         dispatch(
@@ -115,10 +120,11 @@ export const login = (attrs) => async (dispatch) => {
     }
 }
 
-export const logout = () => {
-    return {
+export const logout = (dispatch) => {
+    dispatch({
         type: LOGOUT_SUCCESS
-    }
+    })
+    dispatch(initLocation)
 }
 
 export const loadUser = () => async (dispatch,getState) => {
@@ -129,6 +135,7 @@ export const loadUser = () => async (dispatch,getState) => {
                 type: USER_LOADED,
                 payload: transformDates(res.data)
         })
+        dispatch(initLocation)
     }
     catch(err) {
         dispatch({

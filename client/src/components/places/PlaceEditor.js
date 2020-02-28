@@ -30,8 +30,8 @@ export default function PlaceEditor({action,place,onSave,saving}) {
     const [ longitude, setLongitude ] = useState('')
     useEffect(() => {
         if (place.location && place.location.coordinates) {
-            setLatitude(place.location.coordinates[0])
-            setLongitude(place.location.coordinates[1])
+            setLongitude(place.location.coordinates[0])
+            setLatitude(place.location.coordinates[1])
         }
     },[place.location,setLatitude,setLongitude])
     const [ isOrigin, setIsOrigin ] = useState(false)
@@ -68,7 +68,7 @@ export default function PlaceEditor({action,place,onSave,saving}) {
             name,
             location: {
                 type: 'Point',
-                coordinates: [latitude,longitude]
+                coordinates: [longitude,latitude]
             },
             isOrigin,
             isDestination,
