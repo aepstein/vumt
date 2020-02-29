@@ -36,9 +36,9 @@ export default function VisitEditor({visit,onSave,saving}) {
     },[position,setLongitude])
     const { t } = useTranslation('visit')
 
-    const [ timezone, setTimezone ] = useState('')
+    const [ timezone, setTimezone ] = useState('America/New_York')
     useEffect(() => {
-        if (!visit.origin || !visit.origin.timezone) return setTimezone('')
+        if (!visit.origin || !visit.origin.timezone) return setTimezone('America/New_York')
         setTimezone(visit.origin.timezone)
     },[visit.origin])
     const [ startOn, setStartOn ] = useState('')
@@ -77,17 +77,18 @@ export default function VisitEditor({visit,onSave,saving}) {
     const originSearch = useCallback((query) => {
         const params = {}
         if (latitude && longitude) params['location'] = `${latitude},${longitude}`
+        if (startOn) params['startOn'] = startOn.toISOString()
         setOriginLoading(true)
         axios
             .get('/api/places/origins',{params})
             .then((res) => {
                 setOriginOptions(res.data.map((place) => {
                     return {id: place._id, label: place.name, timezone: place.timezone, location: place.location,
-                        distance: place.distance}
+                        distance: place.distance, visits: place.visits, parkingCapacity: place.parkingCapacity}
                 }))
                 setOriginLoading(false)
             })
-    },[latitude,longitude,setOriginLoading,setOriginOptions])
+    },[latitude,longitude,startOn,setOriginLoading,setOriginOptions])
     const initOriginSearch = useCallback(() => {
         if (!position || originOptions.length > 0) return
         originSearch()
@@ -97,11 +98,12 @@ export default function VisitEditor({visit,onSave,saving}) {
         setTimezone(origin[0].timezone)
     },[origin,setTimezone])
     const renderOrigins = useCallback((option, props, index) => {
+        if (option.visits) console.log(option.visits[0])
         return [
             <Highlighter key="label" search={props.text}>
                 {option.label}
             </Highlighter>,
-            "distance" in option ? <div key="distance">
+            typeof option.distance !== 'undefined' ? <div key="distance">
                 {t(
                     'translation:distanceAway',
                     {
@@ -111,6 +113,11 @@ export default function VisitEditor({visit,onSave,saving}) {
                         )
                     }
                 )}
+            </div> : '',
+            (option.visits && option.visits.length > 0) ? <div key="visits">
+                {t('place:partyWithCount',{count: option.visits[0].parties})},&nbsp;
+                {t('place:personWithCount',{count: option.visits[0].people})},&nbsp;
+                {t('place:parkedVehicleWithCount',{count: option.visits[0].parkedVehicles, capacity: option.parkingCapacity})}
             </div> : ''
         ]
     },[t,distanceUOM])

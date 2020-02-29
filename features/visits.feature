@@ -57,11 +57,26 @@ Feature: Manage visits
         And my location is "44.189006,-73.816306"
         And I visit the "new visit" page
         And I click on the "Starting point" typeahead
-        And I take a screenshot
         Then the 1st option in the typeahead should contain "Johns Brook Garden"
         And the 1st option in the typeahead should contain "0 miles away"
         And the 2nd option in the typeahead should contain "Adirondack Loj"
         And the 2nd option in the typeahead should contain "7 miles away"
+
+    Scenario: Select origin with utilization stats
+        Given I am registered as "bmarshall@example.com"
+        And an origin "Johns Brook Garden" exists at "44.189006,-73.816306"
+        And a visit starts from "Adirondack Loj" to "Algonquin Summit" 1 hour from now with 2 people and 1 vehicle
+        And a visit started from "Adirondack Loj" to "Algonquin Summit" 1 hour ago with 4 people and 2 vehicles
+        And I logged in as "bmarshall@example.com"
+        And my location is "44.183102,-73.963584"
+        And I visit the "new visit" page
+        And I fill in "Date of visit" with today
+        And I fill in "Start time" with now
+        And I click on the "Starting point" typeahead
+        Then the 1st option in the typeahead should contain "Adirondack Loj"
+        And the 1st option in the typeahead should contain "1 party"
+        And the 1st option in the typeahead should contain "4 people"
+        And the 1st option in the typeahead should contain "2 parked vehicles"
 
     Scenario: Select destination relative to origin
         Given I am registered as "bmarshall@example.com"

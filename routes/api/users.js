@@ -102,7 +102,7 @@ router.get('/',auth({roles:['admin']}),async (req,res) => {
 // @access Private
 router.delete('/:userId',auth(),user({roles:['admin']}),async (req,res) => {
     try {
-        req.user.deleteOne()
+        await req.user.deleteOne()
         return res.json({success: true})
     }
     catch(err) {

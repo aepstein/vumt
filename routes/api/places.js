@@ -37,6 +37,29 @@ router.get('/:type?', async (req, res) => {
     else {
         q.push({$sort: {name: 1}})
     }
+    if (req.query.startOn) {
+        const startOn = new Date(req.query.startOn)
+        q.push({$lookup: {from: 'visits', let: {originId: '$_id'}, as: 'visits', pipeline: [
+            // Heuristic for end of trip -- 12 hours later or 24 hours * number of nights
+            {$addFields: {endOn: {$add: [
+                    "$startOn",
+                    {$cond: {if: { $eq: ["$durationNights", 0]},
+                        then: 1000*60*60*12,
+                        else: {$multiply: ["$durationNights",1000*60*60*24]}}}
+            ]}}},
+            // Join conditions
+            {$match: { $expr: {$and: [
+                // Originating at place
+                { $eq: ['$$originId','$origin'] },
+                // Intersecting with arrival
+               {$lte:["$startOn",startOn]},
+               {$lte:[startOn,"$endOn"]}
+            ]}}},
+            // Count up visits, vehicles, and people
+            {$group: {_id: null, parties: {$sum: 1}, parkedVehicles: {$sum: "$parkedVehicles"},
+                people: {$sum: "$groupSize"}}}
+        ]}})
+    }
     switch(req.params.type) {
         case 'origins':
             q.push({$match: {isOrigin: true}})
