@@ -3,10 +3,13 @@ const {
     clickByText,
     fillByLabel,
     fillTypeaheadByLabel,
+    formatDateForFill,
+    formatTimeForFill,
     loginAs,
     markByLabel,
     parseInput,
     setGeolocation,
+    relativeDate,
     shouldBeLoggedInAs,
     shouldSeeErrorWithLabel,
     shouldSeeDefinition,
@@ -46,6 +49,13 @@ When('I fill in the {string} typeahead with {string}', async (label, value) => {
 When('I click on the {string} typeahead', async (label) => {
     await startTypeaheadByLabel(label,'Ad')
 })
+
+When(/^I fill in "([^"]+)" with (?:(now)|(\d+) (hour)s? (?:from )?(now|ago))$/,
+    async (label,when,increment,unit,direction) => {
+        const dt = relativeDate({when,increment,unit,direction})
+        await fillByLabel(label,formatTimeForFill(dt))
+    }
+)
 
 When('I fill in {string} with nothing', async (label) => {
     await fillByLabel(label,'')

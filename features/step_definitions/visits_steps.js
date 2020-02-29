@@ -31,6 +31,18 @@ Given(/I have registered a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)
     }
 )
 
+Given(/^a visit start(?:s|ed) from "([^"]+)" to "([^"]+)" (?:(now)|(\d+) (hour)s? (?:from )?(now|ago)) with (\d+) (?:person|people) and (\d+) vehicles?$/,
+    async(origin,destination,when,increment,unit,direction,people,vehicles) => {
+        await visitExists({
+            startOn: relativeDate({when,increment,unit,direction}),
+            origin: (scope.models.originPlace.filter(p => p.name == origin)[0]._id),
+            destinations: scope.models.destinationPlace.filter(p => p.name == destination),
+            groupSize: parseInt(people),
+            parkedVehicles: parseInt(vehicles)
+        })
+    }
+)
+
 When(
     /^I wait for my visit for (today|tomorrow) from "([^"]+)" to "([^"]+)" to disappear$/,
     async (when,from,to) => {

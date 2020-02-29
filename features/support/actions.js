@@ -1,7 +1,7 @@
 const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
-const { toLocalDate } = require('../../test/support/util')
+const { toLocalDate, toLocalTime } = require('../../test/support/util')
 const User = require('../../models/User')
 var sc = 1;
 
@@ -76,6 +76,9 @@ const formatDateForFill = (date) => {
 	const str = toLocalDate(date)
 	return `${str.substring(5,7)}/${str.substring(8,10)}/${str.substring(0,4)}`
 }
+const formatTimeForFill = (time) => {
+	return toLocalTime(time)
+}
 const initPage = async () => {
 	if ( scope.context.currentPage ) return
 	scope.context.currentPage = await scope.browser.newPage();
@@ -116,7 +119,24 @@ const parseInput = (input,display=false) => {
 	}
 }
 const relativeDate = (description) => {
-    const relativeDate = new Date()
+	const relativeDate = new Date()
+	if (typeof description === 'object') {
+		switch(description.when) {
+			case 'now':
+				return relativeDate
+			default:
+				const unit = description.unit.charAt(0).toUpperCase() + description.unit.slice(1) + "s"
+				const increment = parseInt(description.increment)
+				const {direction} = description
+				if (direction === 'now') {
+					relativeDate[`set${unit}`](relativeDate[`get${unit}`]()+increment)
+				}
+				else {
+					relativeDate[`set${unit}`](relativeDate[`get${unit}`]()-increment)
+				}
+				return relativeDate
+		}
+	}
     switch(description) {
         case 'tomorrow':
             relativeDate.setDate(relativeDate.getDate() + 1)
@@ -225,6 +245,7 @@ module.exports = {
 	fillTypeaheadByLabel,
 	formatDateForFill,
 	formatDateForDisplay,
+	formatTimeForFill,
 	loginAs,
 	markByLabel,
 	parseInput,
