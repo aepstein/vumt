@@ -4,7 +4,8 @@ const { validPlace } = require('../support/validProps')
 const { 
     errorMustHaveRoles,
     errorNoToken,
-    errorPathRequired
+    errorPathRequired,
+    errorPathUnique
 } = require('../support/middlewareErrors')
 
 describe('/api/places',() => {
@@ -69,7 +70,7 @@ describe('/api/places',() => {
             const res = await action(`/api/places?startOn=${startOn.toISOString()}`)
             res.should.have.status(200)
             res.body.should.be.an('array')
-            res.body[0].name.should.be.a('String').eql('Adirondack Loj')
+            res.body[0].name.should.be.a('String').eql(places.origin.name)
             const visits = res.body[0].visits[0]
             visits.should.be.an('object')
             visits.should.have.a.property('people').eql(7)
@@ -113,6 +114,13 @@ describe('/api/places',() => {
             const place = await validPlace({name: null})
             const res = await action(place,auth)
             errorPathRequired(res,'name')
+        })
+        it('should return an error for unique key violation', async() => {
+            const auth = await withAuth({roles:['admin']})
+            await factory.create('place',{name: 'Lost Pond'})
+            const place = await validPlace({name: 'Lost Pond'})
+            const res = await action(place,auth)
+            errorPathUnique(res,'name')
         })
         it('should deny an unprivileged user', async () => {
             const auth = await withAuth()

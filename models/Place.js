@@ -1,6 +1,7 @@
 const mongoose = require('../db/mongoose')
 const Schema = mongoose.Schema
 const PointSchema = require('./schemas/PointSchema')
+const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
 
 const PlaceSchema = new Schema({
     name: {
@@ -38,5 +39,7 @@ const PlaceSchema = new Schema({
 {
     timestamps: true
 })
+
+useHandleMongoError11000(PlaceSchema)
 
 module.exports = Place = mongoose.model('place',PlaceSchema)

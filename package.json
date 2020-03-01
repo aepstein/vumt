@@ -37,7 +37,6 @@
     "jsonwebtoken": "^8.5.1",
     "migrate-mongo": "^7.0.1",
     "mongoose": "^5.7.5",
-    "mongoose-unique-validator": "^2.0.3",
     "phone": "^2.4.3",
     "postal-codes-js": "^2.2.5",
     "provinces": "^1.11.0"

@@ -89,7 +89,7 @@ describe('/api/users', () => {
             res = await action(user);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql(`Error, expected \`email\` to be unique. Value: \`${user.email}\``);
+            await res.body.should.have.a.property('msg').eql(`Path \`email\` must be unique. Value: \`${user.email}\``);
         });
         it('should not register without country', async () => {
             let user = validUser();

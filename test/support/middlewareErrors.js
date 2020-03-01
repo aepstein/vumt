@@ -13,3 +13,8 @@ module.exports.errorPathRequired = (res,path) => {
     res.body.should.be.a('object');
     res.body.should.have.a.property('msg').eql(`Path \`${path}\` is required.`);
 }
+module.exports.errorPathUnique = (res,path) => {
+    res.should.have.status(400)
+    res.body.should.be.an('object')
+    res.body.should.have.a.property('msg').include(`Path \`${path}\` must be unique.`);
+}

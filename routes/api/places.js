@@ -88,12 +88,7 @@ router.post('/', auth({roles:['admin']}), async (req, res) => {
         return res.status(201).json(await newPlace.save())
     }
     catch(err) {
-        if (err.name === 'ValidationError') {
-            return handleValidationError(err,res)
-        }
-        else {
-            throw err
-        }
+        return handleValidationError(err,res)
     }
 })
 

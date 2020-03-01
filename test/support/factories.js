@@ -8,7 +8,7 @@ const {
 } = require('./util')
 
 factory.define('place', Place, {
-    name: "Algonquin",
+    name: factory.sequence('Place.name', (n) => `Place ${n}`),
     location: {
         type: 'Point',
         coordinates: [-73.0,44.0]
@@ -16,7 +16,6 @@ factory.define('place', Place, {
 })
 
 factory.extend('place','originPlace',{
-    name: "Adirondack Loj",
     location: {
         type: 'Point',
         coordinates: [-73.963584,44.183102]
@@ -26,7 +25,6 @@ factory.extend('place','originPlace',{
 })
 
 factory.extend('place','destinationPlace',{
-    name: "Marcy Summit",
     location: {
         type: 'Point',
         coordinates: [-73.923267,44.112744]

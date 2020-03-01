@@ -1,9 +1,10 @@
 const mongoose = require('../db/mongoose');
 const Schema = mongoose.Schema;
-const uniqueValidator = require('mongoose-unique-validator')
 const bcrypt = require('bcryptjs');
 const countries = require('i18n-iso-countries')
 const phone = require('phone')
+const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
+
 
 const UserSchema = new Schema(
     {
@@ -17,8 +18,7 @@ const UserSchema = new Schema(
         },
         email: {
             type: String,
-            required: true,
-            unique: true
+            required: true
         },
         enableGeolocation: {
             type: Boolean,
@@ -61,7 +61,6 @@ const UserSchema = new Schema(
     }
 );
 
-UserSchema.plugin(uniqueValidator)
 UserSchema.pre('save',async function() {
     var user = this;
     if (user.isModified('password')) {
@@ -94,5 +93,7 @@ UserSchema.methods.pubProps = function() {
 UserSchema.methods.comparePassword = async function(candidate) {
     return bcrypt.compare(candidate,this.password);
 }
+
+useHandleMongoError11000(UserSchema)
 
 module.exports = User = mongoose.model('user',UserSchema);
