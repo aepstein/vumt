@@ -15,25 +15,14 @@ import {
 } from 'react-bootstrap-typeahead'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 import axios from 'axios'
+import useGeoPosition from '../../hooks/useGeoPosition'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
 import tz from 'timezone/loaded'
 
 export default function VisitEditor({visit,onSave,saving}) {
-    const position = useSelector(state => state.geo.position)
-    const distanceUOM = useSelector(state => state.auth.user.distanceUnitOfMeasure)
-    const [latitude,setLatitude] = useState(null)
-    useEffect(() => {
-        if (!position) return
-        setLatitude(position.coords.latitude)
-    },[position,setLatitude])
-    const [longitude,setLongitude] = useState(null)
-    useEffect(() => {
-        if (!position) return
-        setLongitude(position.coords.longitude)
-    },[position,setLongitude])
+    const { distanceUOM, latitude, longitude, position } = useGeoPosition()
     const { t } = useTranslation('visit')
 
     const [ timezone, setTimezone ] = useState('America/New_York')
