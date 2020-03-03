@@ -9,7 +9,7 @@ import {
     VISITS_LOADING
  } from './types';
 import { tokenConfig } from './authActions';
-import { returnErrors } from './errorActions';
+import { clearErrors, returnErrors } from './errorActions'
 
 const parseDates = ({checkedIn,checkedOut,startOn,createdAt,updatedAt}) => {
     return {
@@ -58,11 +58,12 @@ export const deleteVisit = id => (dispatch, getState) => {
 
 export const saveVisit = (visit, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_VISIT })
-    const res = visit._id ? await axios
-            .put('/api/visits/' + visit._id, visit, tokenConfig(getState)) : 
-        await axios
-            .post('/api/visits', visit, tokenConfig(getState))
+    dispatch(clearErrors())
     try {
+        const res = visit._id ? await axios
+        .put('/api/visits/' + visit._id, visit, tokenConfig(getState)) : 
+        await axios
+        .post('/api/visits', visit, tokenConfig(getState))
         dispatch({
             type: visit._id ? UPDATE_VISIT : ADD_VISIT,
             payload: {
