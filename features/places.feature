@@ -63,6 +63,7 @@ Feature: Manage users
 
     Scenario Outline: Try to add place with invalid values
         Given I logged in as "bmcmartin@example.com"
+        And an origin "Existing" exists
         When I visit the "places" page
         And I click the "Add place" button
         And I fill in values for the place except "<field>"
@@ -70,13 +71,14 @@ Feature: Manage users
         And I click the "Add place" button
         Then the "<field>" field should have an error "<message>"
         Examples:
-            | field                          | value | message                |
-            | Latitude                       | -1    | Must be at least 0     |
-            | Latitude                       | 91    | Must not exceed 90     |
-            | Longitude                      | -181  | Must be at least -180  |
-            | Longitude                      | 181   | Must not exceed 180    |
-            | Number of public parking spots | -1    | Must be at least 0     |
-            | Number of public parking spots | 1.5   | Must be a whole number |
+            | field                          | value    | message                                       |
+            | Latitude                       | -1       | Must be at least 0                            |
+            | Latitude                       | 91       | Must not exceed 90                            |
+            | Longitude                      | -181     | Must be at least -180                         |
+            | Longitude                      | 181      | Must not exceed 180                           |
+            | Number of public parking spots | -1       | Must be at least 0                            |
+            | Number of public parking spots | 1.5      | Must be a whole number                        |
+            | Name                           | Existing | Must be unique and `Existing` is already used |
 
     Scenario: Remove a place
         Given a destination "Marcy Summit" exists

@@ -6,6 +6,7 @@ import {
 
 const initialState = {
     msg: {},
+    validationErrors: [],
     status: null,
     id: null
 }
@@ -20,6 +21,7 @@ export default function(state = initialState, action) {
         case GET_ERRORS:
             return {
                 msg: action.payload.msg,
+                validationErrors: action.payload.validationErrors,
                 status: action.payload.status,
                 id: action.payload.id
             };

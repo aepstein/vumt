@@ -9,7 +9,7 @@ import {
     PLACES_LOADING
  } from './types';
 import { tokenConfig } from './authActions'
-import { returnErrors } from './errorActions'
+import { returnErrors, clearErrors } from './errorActions'
 
 const parseDates = ({createdAt, updatedAt}) => {
     return {
@@ -54,11 +54,12 @@ export const deletePlace = id => (dispatch, getState) => {
 
 export const savePlace = (place, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_PLACE })
-    const res = place._id ? await axios
-            .put('/api/places/' + place._id, place, tokenConfig(getState)) : 
-        await axios
-            .post('/api/places', place, tokenConfig(getState))
+    dispatch(clearErrors())
     try {
+        const res = place._id ? await axios
+            .put('/api/places/' + place._id, place, tokenConfig(getState)) : 
+            await axios
+            .post('/api/places', place, tokenConfig(getState))
         dispatch({
             type: place._id ? UPDATE_PLACE : ADD_PLACE,
             payload: {

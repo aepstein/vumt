@@ -32,6 +32,9 @@ const locale = {
         "mustBeAtMost": "אסור לחרוג\u202b {{max}}",
         "yes": "כן"
     },
+    "error": {
+        "duplicateKey": "חייב להיות ייחודי וכבר משתמשים ב`{{value}}`"
+    },
     "place": {
         "addPlace": "הוסף מקום",
         "editPlace": "ערוך מקום",

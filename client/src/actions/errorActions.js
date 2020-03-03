@@ -4,9 +4,10 @@ import {
 } from './types';
 
 export const returnErrors = (msg, status, id = null) => {
+    const validationErrors = msg.validationErrors ? msg.validationErrors : []
     return {
         type: GET_ERRORS,
-        payload: { msg, status, id }
+        payload: { msg, status, id, validationErrors }
     };
 };
 

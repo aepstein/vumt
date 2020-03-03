@@ -32,6 +32,9 @@ const locale = {
         "mustBeAtMost": "Ne doit pas dépasser {{max}}",
         "yes": "Oui"
     },
+    "error": {
+        "duplicateKey": "Doit être unique et `{{value}}` est déjà utilisé"
+    },
     "place": {
         "addPlace": "Ajouter un emplacement",
         "editPlace": "Modifier l'emplacement",

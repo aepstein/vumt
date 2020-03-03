@@ -14,6 +14,7 @@ import {
 } from 'react-bootstrap-typeahead'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { mustBeAtLeast, mustBeWholeNumber } from '../../lib/validators'
 import timezones from '../../lib/timezones.json'
@@ -51,7 +52,7 @@ export default function PlaceEditor({action,place,onSave,saving}) {
         if (place.timezone) setTimezone([place.timezone])
     },[place.timezone,setTimezone])
 
-    const { register, handleSubmit, setError, errors } = useForm()
+    const { register, handleSubmit, setError, clearError, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value
@@ -59,6 +60,7 @@ export default function PlaceEditor({action,place,onSave,saving}) {
     }
     const onSubmit = () => {
         if (saving) return
+        clearError()
         if (timezone.length === 0) {
             setError("timezone","required",t('invalidRequired'))
             return
@@ -77,6 +79,14 @@ export default function PlaceEditor({action,place,onSave,saving}) {
         }
         onSave(newPlace)
     }
+
+    const validationErrors = useSelector(state => state.error.validationErrors)
+    useEffect(() => {
+        if (validationErrors.length === 0) return
+        validationErrors.forEach(({path,kind,value}) => {
+            setError(path,kind,t(`error:${kind}`,{value}))
+        })
+    },[validationErrors,setError,t])
 
     return <div>
         <Container>
@@ -98,6 +108,8 @@ export default function PlaceEditor({action,place,onSave,saving}) {
                     />
                     {errors.name && errors.name.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                    {errors.name && errors.name.type === 'duplicateKey' &&
+                        <FormFeedback>{errors.name.message}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="latitude">{t('latitude')}</Label>
