@@ -1,7 +1,7 @@
-Feature: Manage users
-    In order to monitor and control who uses the application
+Feature: Manage places
+    In order to maintain locations from and to which visits can go
     As an administrator of the system
-    I want to be able to create, modify, and delete users
+    I want to be able to create, modify, and delete places
 
     Background:
         Given an admin user exists "Barbara" "McMartin" "bmcmartin@example.com"

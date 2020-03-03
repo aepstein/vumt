@@ -14,12 +14,12 @@ import {
 } from 'react-bootstrap-typeahead'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import useValidationErrors from '../../hooks/useValidationErrors'
 import { mustBeAtLeast, mustBeWholeNumber } from '../../lib/validators'
 import timezones from '../../lib/timezones.json'
 
-export default function PlaceEditor({action,place,onSave,saving}) {
+export default function PlaceEditor({place,onSave,saving}) {
     const { t } = useTranslation('place')
     const history = useHistory()
 
@@ -80,13 +80,7 @@ export default function PlaceEditor({action,place,onSave,saving}) {
         onSave(newPlace)
     }
 
-    const validationErrors = useSelector(state => state.error.validationErrors)
-    useEffect(() => {
-        if (validationErrors.length === 0) return
-        validationErrors.forEach(({path,kind,value}) => {
-            setError(path,kind,t(`error:${kind}`,{value}))
-        })
-    },[validationErrors,setError,t])
+    useValidationErrors({setError})
 
     return <div>
         <Container>
