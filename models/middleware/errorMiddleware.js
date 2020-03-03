@@ -3,6 +3,8 @@ const ValidatorError = require('mongoose/lib/error/validator')
 
 function handleMongoError11000(err,res, next) {
     if (err.name === 'MongoError' && err.code === 11000) {
+        console.log(err)
+        console.log(err.keyPattern)
         const keys = Object.keys(err.keyPattern)
         const vErr = new ValidationError(this)
         vErr.addError(keys[0],new ValidatorError({
