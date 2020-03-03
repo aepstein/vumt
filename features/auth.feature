@@ -27,6 +27,7 @@ Feature: Authentication
             | Postal code                   |
 
     Scenario Outline: Register a user with invalid field
+        Given a user exists "Double" "Double" "dup@example.com"
         When I visit the "home" page
         And I click the "Register" link
         And I fill in a new registration for "bmarshall@example.com"
@@ -34,9 +35,10 @@ Feature: Authentication
         And I click the "Register" button
         Then the "<field>" field should have an error "<message>"
         Examples:
-            | field       | value | message                                                              |
-            | Postal code | 1     | Must be correctly formatted postal code for United States of America |
-            | Phone       | 555   | Must be correctly formatted phone number                             |
+            | field       | value           | message                                                              |
+            | Postal code | 1               | Must be correctly formatted postal code for United States of America |
+            | Phone       | 555             | Must be correctly formatted phone number                             |
+            | Email       | dup@example.com | Must be unique and `dup@example.com` is already used                 |
 
     Scenario: Log in as registered user
         Given I am registered as "bmarshall@example.com"

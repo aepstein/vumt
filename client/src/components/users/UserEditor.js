@@ -17,6 +17,7 @@ import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import useValidationErrors from '../../hooks/useValidationErrors'
 import countries, { postalCodeRequired } from '../../lib/countries'
 import provinces from 'provinces'
 import postalCodes from 'postal-codes-js'
@@ -148,6 +149,8 @@ export default function UserEditor({action,user,onSave,saving}) {
         onSave(newUser)
     }
 
+    useValidationErrors({setError})
+
     return <div>
         <Container>
             <h2>{action ? t(`user:${action}User`) : t('AppNavbar:register')}</h2>
@@ -198,6 +201,8 @@ export default function UserEditor({action,user,onSave,saving}) {
                     />
                     {errors.email && errors.email.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                    {errors.email && errors.email.type === 'duplicateKey' &&
+                        <FormFeedback>{errors.email.message}</FormFeedback>}
                 </FormGroup>
                 { (action === 'edit') ? null : <FormGroup>
                     <Label for="password">{t('password')}</Label>

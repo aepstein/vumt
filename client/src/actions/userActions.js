@@ -9,7 +9,7 @@ import {
     USERS_LOADING
  } from './types';
 import { tokenConfig } from './authActions'
-import { returnErrors } from './errorActions'
+import { returnErrors, clearErrors } from './errorActions'
 
 const parseDates = ({createdAt,updatedAt}) => {
     return {
@@ -54,11 +54,12 @@ export const deleteUser = id => (dispatch, getState) => {
 
 export const saveUser = (user, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_USER })
-    const res = user._id ? await axios
-            .put('/api/users/' + user._id, user, tokenConfig(getState)) : 
-        await axios
-            .post('/api/users', user, tokenConfig(getState))
+    dispatch(clearErrors())
     try {
+        const res = user._id ? await axios
+        .put('/api/users/' + user._id, user, tokenConfig(getState)) : 
+        await axios
+        .post('/api/users', user, tokenConfig(getState))
         dispatch({
             type: user._id ? UPDATE_USER : ADD_USER,
             payload: {
