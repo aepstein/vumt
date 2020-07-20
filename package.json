@@ -35,7 +35,7 @@
     "factory-bot": "^6.1.4",
     "i18n-iso-countries": "^4.3.1",
     "jsonwebtoken": "^8.5.1",
-    "migrate-mongo": "^7.1.0",
+    "migrate-mongo": "^7.2.1",
     "mongoose": "^5.9.6",
     "phone": "^2.4.8",
     "postal-codes-js": "^2.3.1",
