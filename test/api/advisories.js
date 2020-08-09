@@ -57,4 +57,42 @@ describe('/api/advisories', () => {
             await errorNoToken(res)
         })
     })
+    describe('PUT /api/advisories/:advisoryId', async () => {
+        const action = async (advisory,props,auth) => {
+            const res = chai.request(server).put('/api/advisories/' + advisory._id).send(props)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        it('should save for authorized user with valid attributes', async () => {
+            const advisory = await factory.create('advisory')
+            const auth = await withAuth({roles: ['admin']})
+            attr = {
+                label: 'Different Advisory',
+                prompt: 'And now for something completely different...'
+            }
+            const res = await action(advisory,attr,auth)
+            res.should.have.status(200)
+            res.body.should.be.an('object')
+            res.body.should.have.a.property('label').eql(attr.label)
+            res.body.should.have.a.property('prompt').deep.include(attr.prompt)
+        })
+        it('should return an error for an invalid submission', async () => {
+            const advisory = await factory.create('advisory')
+            const auth = await withAuth({roles: ['admin']})
+            const attr = await validAdvisory({label: null})
+            const res = await action(advisory,attr,auth)
+            errorPathRequired(res,'label')
+        })
+        it('should deny an unprivileged user', async () => {
+            const advisory = await factory.create('advisory')
+            const auth = await withAuth()
+            const res = await action(advisory,{},auth)
+            await errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny without authentication', async() => {
+            const advisory = await factory.create('advisory')
+            const res = await action(advisory,{})
+            await errorNoToken(res)
+        })
+    })
 })

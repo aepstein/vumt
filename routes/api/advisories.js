@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const auth = require('../../middleware/auth')
+const advisory = require('../../middleware/advisory')
 const Advisory = require('../../models/Advisory');
 const attrAccessible = (req) => {
-    const attrAccessible = req.place ? req.place : {}
+    const attrAccessible = req.advisory ? req.advisory : {}
     const allowed = ['label','prompt']
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
@@ -39,6 +40,24 @@ router.post('/', auth({roles:['admin']}), async (req, res) => {
     }
     catch(err) {
         return handleValidationError(err,res)
+    }
+})
+
+// @route PUT api/advisories/:advisoryId
+// @desc Update an existing advisory
+// @access Private
+router.put('/:advisoryId', auth({roles:['admin']}), advisory(), async (req, res) => {
+    attrAccessible(req)
+    try {
+        return res.status(200).json(await req.advisory.save())
+    }
+    catch(err) {
+        if (err.name === 'ValidationError') {
+            return handleValidationError(err,res)
+        }
+        else {
+            throw err
+        }
     }
 })
 
