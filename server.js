@@ -6,6 +6,7 @@ const app = express();
 
 app.use(express.json());
 
+app.use('/api/advisories', require('./routes/api/advisories'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/places', require('./routes/api/places'));
 app.use('/api/users', require('./routes/api/users'));
