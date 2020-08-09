@@ -1,11 +1,13 @@
 const { factory } = require('./setup')
-const Place = require('../../models/Place')
-const User = require('../../models/User')
-const Visit = require('../../models/Visit')
+const { Advisory, Place, User, Visit } = require('../../models')
 const { 
     toLocalDate,
     fromLocalDateTimeToDate
 } = require('./util')
+
+factory.define('advisory', Advisory, {
+    label: factory.sequence('Advisory.label', (n) => `Advisory ${n}`)
+})
 
 factory.define('place', Place, {
     name: factory.sequence('Place.name', (n) => `Place ${n}`),
