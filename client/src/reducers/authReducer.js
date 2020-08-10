@@ -70,6 +70,7 @@ export default function (state = initialState, action) {
                 ...state,
                 token: null,
                 user: null,
+                isLoading: false,
                 isAuthenticated: false,
                 saving: false
             };
