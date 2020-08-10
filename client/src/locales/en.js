@@ -35,6 +35,15 @@ const locale = {
     "error": {
         "duplicateKey": "Must be unique and `{{value}}` is already used"
     },
+    "advisory": {
+        "addAdvisory": "Add advisory",
+        "editAdvisory": "Edit advisory",
+        "label": "Label",
+        "prompt": "Prompt",
+        "newAdvisory": "New advisory",
+        "advisoryDetail": "Advisory detail",
+        "updateAdvisory": "Update advisory"
+    },
     "place": {
         "addPlace": "Add place",
         "editPlace": "Edit place",
@@ -113,6 +122,7 @@ const locale = {
         "language": "Language",
         "login": "Login",
         "logout": "Logout",
+        "advisories": "Advisories",
         "places": "Places",
         "register": "Register",
         "users": "Users",
