@@ -61,5 +61,19 @@ router.put('/:advisoryId', auth({roles:['admin']}), advisory(), async (req, res)
     }
 })
 
+// @route DELETE api/advisories
+// @desc Delete an existing advisory
+// @access Private
+router.delete('/:advisoryId', auth({roles: ['admin']}), advisory(), async (req, res) => {
+    try {
+        await req.advisory.deleteOne()
+        return res.json({success: true})
+    }
+    catch(err) {
+        return res
+            .status(404)
+            .json({success: false});
+    }
+})
 
 module.exports = router;
