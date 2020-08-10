@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import NeedAuth from './components/NeedAuth'
 import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
+import AdvisoriesManager from './containers/advisories/AdvisoriesManager'
 import PlacesManager from './containers/places/PlacesManager'
 import UsersManager from './containers/users/UsersManager'
 import VisitsManager from './containers/visits/VisitsManager'
@@ -39,6 +40,18 @@ const Root = ({ store }) => (
               </AuthRoute>
               <AuthRoute path="/profile">
                 <AuthUserManager action="show" />
+              </AuthRoute>
+              <AuthRoute path="/advisories/new" roles={['admin']}>
+                <AdvisoriesManager action='new'/>
+              </AuthRoute>
+              <AuthRoute path="/advisories/:advisoryId/edit" roles={['admin']}>
+                <AdvisoriesManager action='edit'/>
+              </AuthRoute>
+              <AuthRoute path="/advisories/:advisoryId" roles={['admin']}>
+                <AdvisoriesManager action='show'/>
+              </AuthRoute>
+              <AuthRoute path="/advisories" roles={['admin']}>
+                <AdvisoriesManager action='list'/>
               </AuthRoute>
               <AuthRoute path="/places/new" roles={['admin']}>
                 <PlacesManager action='new'/>
