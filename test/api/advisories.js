@@ -95,4 +95,28 @@ describe('/api/advisories', () => {
             await errorNoToken(res)
         })
     })
+    describe('DELETE /api/advisories/:advisoryId', () => {
+        const action = async (advisory,auth) => {
+            const res = chai.request(server).delete('/api/advisories/' + advisory._id)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        it('should delete for authorized user', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const advisory = await factory.create('advisory')
+            const res = await action(advisory,auth)
+            res.should.have.status('200')
+        })
+        it('should deny an unprivileged user', async () => {
+            const advisory = await factory.create('advisory')
+            const auth = await withAuth()
+            const res = await action(advisory,auth)
+            await errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny without authentication', async() => {
+            const advisory = await factory.create('advisory')
+            const res = await action(advisory)
+            await errorNoToken(res)
+        })
+    })
 })
