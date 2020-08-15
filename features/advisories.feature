@@ -23,3 +23,12 @@ Feature: Manage advisories
         Then I should see "Label" defined as "Leave Only Footprints, Take Only Pictures"
         And I should see "Prompt" defined as "Respect your surroundings."
 
+    Scenario: Add a new advisory
+        Given I logged in as "bmcmartin@example.com"
+        When I visit the "advisories" page
+        And I click the "Add advisory" button
+        And I fill in values for the advisory
+        And I click the "Add advisory" button
+        And I click "Detail" for advisory "Stay Safe"
+        Then I should see "Label" defined as "Stay Safe"
+        And I should see "Prompt" defined as "Bring a map, compass, and headlamp."

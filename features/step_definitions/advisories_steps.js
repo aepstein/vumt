@@ -2,6 +2,7 @@ const { Given, When, Then } = require ('cucumber')
 const {
     clickByXPath,
     create,
+    fillByLabel,
     shouldSeeText,
     waitFor
 } = require('../support/actions')
@@ -20,7 +21,10 @@ When(
         await clickByXPath(advisoryRowSelector(label)+`//button[contains(.,'${button}')]`)
     }
 )
-
+When(/^I fill in values for the advisory(?: except "([^"]+)")?$/,async (except) => {
+    if (except !== "Label") await fillByLabel("Label","Stay Safe")
+    if (except !== "Prompt") await fillByLabel("Prompt","Bring a map, compass, and headlamp.")
+})
 Then(/^I should( not)? see advisory "([^"]+)"$/, async (not,name) => {
     await waitFor('.advisories-list')
     await shouldSeeText(".advisory-label", not, name)
