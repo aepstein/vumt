@@ -29,3 +29,7 @@ Then(/^I should( not)? see advisory "([^"]+)"$/, async (not,name) => {
     await waitFor('.advisories-list')
     await shouldSeeText(".advisory-label", not, name)
 })
+Then('I wait for advisory {string} to disappear', async (label) => {
+    const selector = `//ul[contains(@class,'advisories-list') and not(.${advisoryRowSelector(label)})]`
+    await waitFor(selector)
+})

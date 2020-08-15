@@ -43,3 +43,10 @@ Feature: Manage advisories
         Examples:
             | field                          |
             | Label                          |
+
+    Scenario: Remove a advisory
+        Given an advisory "Stay Safe" exists
+        And I logged in as "bmcmartin@example.com"
+        When I visit the "advisories" page
+        And I click "Remove" for advisory "Stay Safe"
+        Then I wait for advisory "Stay Safe" to disappear
