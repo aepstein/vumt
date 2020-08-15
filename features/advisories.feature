@@ -32,3 +32,14 @@ Feature: Manage advisories
         And I click "Detail" for advisory "Stay Safe"
         Then I should see "Label" defined as "Stay Safe"
         And I should see "Prompt" defined as "Bring a map, compass, and headlamp."
+
+    Scenario Outline: Try to add invalid advisory
+        Given I logged in as "bmcmartin@example.com"
+        When I visit the "advisories" page
+        And I click the "Add advisory" button
+        And I fill in values for the advisory except "<field>"
+        And I click the "Add advisory" button
+        Then the "<field>" field should have an error "Cannot be blank"
+        Examples:
+            | field                          |
+            | Label                          |
