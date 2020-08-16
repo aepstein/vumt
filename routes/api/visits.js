@@ -37,6 +37,13 @@ router.get('/:visitId', auth(), visit(), async (req, res) => {
     return res.status(200).json(req.visit)
 })
 
+// @route GET api/visits/:visitId/applicableVisits
+// @desc Load advisories applicable to a visit
+// @access Private
+router.get('/:visitId/applicableAdvisories', auth(), visit(), async (req, res) => {
+    return res.status(200).json(await req.visit.applicableAdvisories())
+})
+
 // @route PUT api/visits/:visitId
 // @desc Update an existing visit
 // @access Private

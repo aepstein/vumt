@@ -84,4 +84,9 @@ VisitSchema.post('save', async function(visit) {
     await visit.populate('origin').populate('destinations').execPopulate()
 })
 
+// Retrieve advisories that are applicable to this visit
+VisitSchema.methods.applicableAdvisories = async function () {
+    return mongoose.model('advisory').find()
+}
+
 module.exports = Visit = mongoose.model('visit',VisitSchema);
