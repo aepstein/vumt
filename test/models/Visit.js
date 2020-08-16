@@ -2,8 +2,8 @@ const { factory } = require('../setup')
 const ValidationError = require('mongoose/lib/error/validation')
 
 describe('Visit', () => {
-    it('creates a valid visit', () => {
-        return factory.create('visit')
+    it('creates a valid visit', async () => {
+        await factory.create('visit')
     })
     it('should not save without an origin', async () => {
         const visit = await factory.build('visit',{origin: null})
@@ -70,5 +70,13 @@ describe('Visit', () => {
         const visit = await factory.create('visit')
         visit.checkedOut = new Date()
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    describe('applicableAdvisories', () => {
+        it('should return all visits', async() => {
+            const advisory = await factory.create('advisory')
+            const visit = await factory.create('visit')
+            advisories = await visit.applicableAdvisories()
+            advisories.map((v) => v.id).should.have.members([advisory.id])
+        })
     })
 })

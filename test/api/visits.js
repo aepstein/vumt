@@ -241,4 +241,32 @@ describe('/api/visits', () => {
             return errorNoToken(res)
         })
     })
+    describe('GET /api/visits/:visitId/applicableAdvisories', () => {
+        const action = async (auth,user) => {
+            const visit = await factory.create('visit',{ user: (user ? user.id : auth.body.user._id) })
+            const res = chai.request(server)
+                .get('/api/visits/' + visit._id + '/applicableAdvisories')
+            if ( auth ) { res.set('x-auth-token',auth.body.token) }
+            return Promise.all([res, visit])
+        }
+        it('should return advisories applicable to all visits', async () => {
+            const advisory = await factory.create('advisory')
+            const auth = await withAuth()
+            const [res] = await action(auth)
+            res.should.have.status(200)
+            res.body.should.be.an('array')
+            res.body.map((v) => v._id).should.have.members([advisory.id])
+        })
+        it('should deny with nonowner credentials', async () => {
+            const auth = await withAuth()
+            const [ res, visit ] = await action(auth,await factory.create('user'))
+            shouldDenyUnauthorizedUser(res)
+        })
+        it('should deny without authentication',async () => {
+            const visit = await factory.create('visit')
+            const res = await chai.request(server)
+                .get('/api/visits/' + visit._id)
+            return errorNoToken(res)
+        })
+    })
 });
