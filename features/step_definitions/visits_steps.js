@@ -85,3 +85,8 @@ Then(
         await waitFor('.visits-list')
         await shouldSeeText(".visit-label", not, visitRowText(startOn,origin,destination));
 });
+
+Then(/^I should( not)? see an applicable advisory for "([^"]+)"$/, async (not,label) => {
+    await waitFor('.applicable-advisories')
+    await shouldSeeText(".card-title", not, label)
+});

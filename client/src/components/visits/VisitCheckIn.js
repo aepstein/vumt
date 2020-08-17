@@ -12,6 +12,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import tz from 'timezone/loaded'
+import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
 
 export default function VisitCheckIn({visit,onSave,saving}) {
     const { t } = useTranslation('visit')
@@ -20,6 +21,7 @@ export default function VisitCheckIn({visit,onSave,saving}) {
     const [ checkedInTime, setCheckedInTime ] = useState('')
     const [ checkedIn, setCheckedIn ] = useState('')
     const [ timezone, setTimezone ] = useState('')
+
     useEffect(() => {
         if (!visit.origin || !visit.origin.timezone) return
         setTimezone(visit.origin.timezone)
@@ -121,6 +123,7 @@ export default function VisitCheckIn({visit,onSave,saving}) {
                     {errors.checkedInTime && errors.checkedInTime.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
+                <ApplicableAdvisories visit={visit} />
                 <ButtonGroup>
                     <Button
                         color="dark"

@@ -144,6 +144,15 @@ Feature: Manage visits
         Then I should see "Check out date" defined as today
         And I should see "Check out time" defined as "8:55:00 AM"
 
+    Scenario: See applicable advisory on check in
+        Given an advisory "Leave No Trace" exists
+        And I am registered as "bmarshall@example.com"
+        And I have registered a visit for today from "Adirondack Loj" to "Algonquin Summit"
+        And I logged in as "bmarshall@example.com"
+        When I visit the "home" page
+        And I click "Check in" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
+        Then I should see an applicable advisory for "Leave No Trace" 
+
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
