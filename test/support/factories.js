@@ -4,9 +4,25 @@ const {
     toLocalDate,
     fromLocalDateTimeToDate
 } = require('./util')
+const moment = require('moment')
 
 factory.define('advisory', Advisory, {
     label: factory.sequence('Advisory.label', (n) => `Advisory ${n}`)
+})
+
+factory.extend('advisory','currentAdvisory', {
+    startOn: () => moment().subtract(1,'days'),
+    endOn: () => moment().add(1,'days')
+})
+
+factory.extend('advisory','pastAdvisory', {
+    startOn: () => moment().subtract(2,'days'),
+    endOn: () => moment().subtract(1,'days')
+})
+
+factory.extend('advisory','futureAdvisory', {
+    startOn: () => moment().add(1,'days'),
+    endOn: () => moment().add(2,'days')
 })
 
 factory.define('place', Place, {
