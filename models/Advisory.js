@@ -9,11 +9,24 @@ const AdvisorySchema = new Schema(
         },
         prompt: {
             type: String
+        },
+        startOn: {
+            type: Date
+        },
+        endOn: {
+            type: Date
         }
     },
     {
         timestamps: true
     }
 )
+
+AdvisorySchema.pre('validate', function (next) {
+    if (this.startOn && this.endOn && this.startOn > this.endOn) {
+        this.invalidate('startOn', 'Cannot be after endOn')
+    }
+    next()
+})
 
 module.exports = Advisory = mongoose.model('advisory',AdvisorySchema)
