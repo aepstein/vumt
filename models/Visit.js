@@ -86,7 +86,10 @@ VisitSchema.post('save', async function(visit) {
 
 // Retrieve advisories that are applicable to this visit
 VisitSchema.methods.applicableAdvisories = async function () {
-    return mongoose.model('advisory').find()
+    return mongoose.model('advisory').find({ $and: [
+        {$or: [{startOn: { $lte: this.startOn }}, {startOn: {$eq: null}}]},
+        {$or: [{endOn: { $gte: this.startOn }}, {endOn: {$eq: null}}]},
+    ]})
 }
 
 module.exports = Visit = mongoose.model('visit',VisitSchema);

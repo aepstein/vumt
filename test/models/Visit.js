@@ -72,11 +72,14 @@ describe('Visit', () => {
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
     })
     describe('applicableAdvisories', () => {
-        it('should return all visits', async() => {
+        it('should return applicable advisories', async() => {
             const advisory = await factory.create('advisory')
+            const currentAdvisory = await factory.create('currentAdvisory')
+            await factory.create('pastAdvisory')
+            await factory.create('futureAdvisory')
             const visit = await factory.create('visit')
             advisories = await visit.applicableAdvisories()
-            advisories.map((v) => v.id).should.have.members([advisory.id])
+            advisories.map((v) => v.id).should.have.members([advisory.id,currentAdvisory.id])
         })
     })
 })
