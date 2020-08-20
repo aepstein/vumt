@@ -13,6 +13,8 @@ import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import useValidationErrors from '../../hooks/useValidationErrors'
+import useZonedDateTime from '../../hooks/useZonedDateTime'
+import tz from 'timezone/loaded'
 
 export default function AdvisoryEditor({advisory,onSave,saving}) {
     const { t } = useTranslation('advisory')
@@ -26,6 +28,13 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
     useEffect(() => {
         setPrompt(advisory.prompt)
     },[advisory.prompt,setPrompt])
+    const [ startOn, setStartOn ] = useState('')
+    const [ timezone, , startOnDate, setStartOnDate, startOnTime, setStartOnTime
+    ] = useZonedDateTime(advisory.startOn,setStartOn)
+    useEffect(() => {
+        if (!advisory.startOn || !timezone) return
+        setStartOnDate(tz(advisory.startOn,timezone,'%Y-%m-%d'))
+    },[advisory.startOn,setStartOnDate,timezone])
 
     const { register, handleSubmit, setError, clearError, errors } = useForm()
 
@@ -39,7 +48,8 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
         const newAdvisory = {
             _id: advisory._id,
             label,
-            prompt
+            prompt,
+            startOn
         }
         onSave(newAdvisory)
     }
@@ -52,6 +62,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
             <Form
                 onSubmit={handleSubmit(onSubmit)}
             >
+                <p>{t('translation:timesAreLocal',{timezone})}</p>
                 <FormGroup>
                     <Label for="label">{t('label')}</Label>
                     <Input
@@ -81,6 +92,29 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                     />
                     {errors.prompt && errors.prompt.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                </FormGroup>
+                <FormGroup>
+                    <Label for="startOnDate">{t('startOnDate')}</Label>
+                    <Input
+                        id="startOnDate"
+                        name="startOnDate"
+                        type="date"
+                        value={startOnDate}
+                        onChange={onChange(setStartOnDate)}
+                        invalid={errors.startOnDate ? true : false}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="startOnTime">{t('startOnTime')}</Label>
+                    <Input
+                        id="startOnTime"
+                        name="startOnTime"
+                        type="time"
+                        value={startOnTime}
+                        onChange={onChange(setStartOnTime)}
+                        innerRef={register({required: true})}
+                        invalid={errors.startOnTime ? true : false}
+                    />
                 </FormGroup>
                 <ButtonGroup>
                     <Button
