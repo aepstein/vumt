@@ -40,6 +40,8 @@ const locale = {
         "editAdvisory": "Edit advisory",
         "label": "Label",
         "prompt": "Prompt",
+        "startOnDate": "Start date",
+        "startOnTime": "Start time",
         "newAdvisory": "New advisory",
         "advisoryDetail": "Advisory detail",
         "updateAdvisory": "Update advisory"

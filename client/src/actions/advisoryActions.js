@@ -11,9 +11,11 @@ import {
 import { tokenConfig } from './authActions'
 import { returnErrors, clearErrors } from './errorActions'
 
-const parseDates = ({createdAt, updatedAt}) => {
+const parseDates = ({createdAt, endOn, startOn, updatedAt}) => {
     return {
         createdAt: Date.parse(createdAt),
+        endOn: Date.parse(endOn),
+        startOn: Date.parse(startOn),
         updatedAt: Date.parse(updatedAt)
     }
 }

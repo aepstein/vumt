@@ -3,6 +3,8 @@ const {
     clickByXPath,
     create,
     fillByLabel,
+    formatDateForFill,
+    relativeDate,
     shouldSeeText,
     waitFor
 } = require('../support/actions')
@@ -24,6 +26,8 @@ When(
 When(/^I fill in values for the advisory(?: except "([^"]+)")?$/,async (except) => {
     if (except !== "Label") await fillByLabel("Label","Stay Safe")
     if (except !== "Prompt") await fillByLabel("Prompt","Bring a map, compass, and headlamp.")
+    if ( except != "Start date" ) await fillByLabel("Start date",formatDateForFill(relativeDate('today')))
+    if ( except != "Start time" ) await fillByLabel("Start time",'08:00AM')
 })
 Then(/^I should( not)? see advisory "([^"]+)"$/, async (not,name) => {
     await waitFor('.advisories-list')
