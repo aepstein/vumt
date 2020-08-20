@@ -24,7 +24,7 @@ export default function VisitCheckIn({visit,onSave,saving}) {
     useEffect(() => {
         if (!visit.origin || !visit.origin.timezone) return
         setTimezone(visit.origin.timezone)
-    },[visit.origin])
+    },[visit.origin,setTimezone])
     const [ startOnLeft, setStartOnLeft ] = useState('')
     useEffect(() => {
         if (!visit.startOn) setStartOnLeft('')

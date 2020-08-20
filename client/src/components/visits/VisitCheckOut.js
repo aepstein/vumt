@@ -23,7 +23,7 @@ export default function VisitCheckOut({visit,onSave,saving}) {
     useEffect(() => {
         if (!visit.origin || !visit.origin.timezone) return
         setTimezone(visit.origin.timezone)
-    },[visit.origin])
+    },[visit.origin,setTimezone])
     const [ startOnRight, setStartOnRight ] = useState('')
     useEffect(() => {
         if (!visit.startOn || !visit.durationNights) setStartOnRight('')
