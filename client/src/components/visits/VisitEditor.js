@@ -17,41 +17,24 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import useGeoPosition from '../../hooks/useGeoPosition'
+import useZonedDateTime from '../../hooks/useZonedDateTime'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
-import tz from 'timezone/loaded'
 
 export default function VisitEditor({visit,onSave,saving}) {
     const { distanceUOM, latitude, longitude, position } = useGeoPosition()
     const { t } = useTranslation('visit')
 
-    const [ timezone, setTimezone ] = useState('America/New_York')
-    useEffect(() => {
-        if (!visit.origin || !visit.origin.timezone) return setTimezone('America/New_York')
-        setTimezone(visit.origin.timezone)
-    },[visit.origin])
     const [ startOn, setStartOn ] = useState('')
     useEffect(() => {
         setStartOn(visit.startOn)
     },[visit.startOn,setStartOn])
-    const [ startOnDate, setStartOnDate ] = useState('')
+    const [ timezone, setTimezone, startOnDate, setStartOnDate, startOnTime, setStartOnTime
+        ] = useZonedDateTime(visit.startOn,setStartOn)
     useEffect(() => {
-        if (!visit.startOn || !timezone) return
-        setStartOnDate(tz(visit.startOn,timezone,'%Y-%m-%d'))
-    },[visit.startOn,setStartOnDate,timezone])
-    const [ startOnTime, setStartOnTime ] = useState('')
-    useEffect(() => {
-        if (!visit.startOn || !timezone) return
-        setStartOnTime(tz(visit.startOn,timezone,'%H:%M'))
-    },[visit.startOn,setStartOnTime,timezone])
-    useEffect(() => {
-        if (startOnDate && startOnTime) {
-            setStartOn(new Date(tz(`${startOnDate} ${startOnTime}`,timezone)))
-        }
-        else {
-            setStartOn('')
-        }
-    },[startOnDate,startOnTime,setStartOn,timezone])
+        if (!visit.origin || !visit.origin.timezone) return setTimezone('America/New_York')
+        setTimezone(visit.origin.timezone)
+    },[visit.origin,setTimezone])
     const [ origin, setOrigin ] = useState([])
     const [ originOptions, setOriginOptions ] = useState([])
     useEffect(() => {
@@ -212,6 +195,7 @@ export default function VisitEditor({visit,onSave,saving}) {
             <Form
                 onSubmit={handleSubmit(onSubmit)}
             >
+                <p>{t('translation:timesAreLocal',{timezone})}</p>
                 <FormGroup>
                     <Label for="startOnDate">{t('startOnDate')}</Label>
                     <Input
