@@ -11,15 +11,15 @@ import {
 } from 'reactstrap';
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import useZonedDateTime from '../../hooks/useZonedDateTime'
 import tz from 'timezone/loaded'
 
 export default function VisitCheckOut({visit,onSave,saving}) {
     const { t } = useTranslation('visit')
 
-    const [ checkedOutDate, setCheckedOutDate ] = useState('')
-    const [ checkedOutTime, setCheckedOutTime ] = useState('')
     const [ checkedOut, setCheckedOut ] = useState('')
-    const [ timezone, setTimezone ] = useState('')
+    const [ timezone, setTimezone, checkedOutDate, setCheckedOutDate, checkedOutTime, setCheckedOutTime
+    ] = useZonedDateTime(visit.checkedOut,setCheckedOut)
     useEffect(() => {
         if (!visit.origin || !visit.origin.timezone) return
         setTimezone(visit.origin.timezone)
@@ -39,14 +39,6 @@ export default function VisitCheckOut({visit,onSave,saving}) {
             setCheckedOutTime(tz(currentDate,timezone,'%H:%M'))
         }
     },[visit.startOn,timezone,setCheckedOutDate,setCheckedOutTime,visit.checkedIn,startOnRight])
-    useEffect(() => {
-        if (checkedOutDate && checkedOutTime) {
-            setCheckedOut(new Date(tz(`${checkedOutDate} ${checkedOutTime}`,timezone)))
-        }
-        else {
-            setCheckedOut('')
-        }
-    },[checkedOutDate,checkedOutTime,setCheckedOut,timezone])
 
     const { register, handleSubmit, errors } = useForm()
     

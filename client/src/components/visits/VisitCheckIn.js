@@ -11,17 +11,16 @@ import {
 } from 'reactstrap';
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import useZonedDateTime from '../../hooks/useZonedDateTime'
 import tz from 'timezone/loaded'
 import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
 
 export default function VisitCheckIn({visit,onSave,saving}) {
     const { t } = useTranslation('visit')
 
-    const [ checkedInDate, setCheckedInDate ] = useState('')
-    const [ checkedInTime, setCheckedInTime ] = useState('')
     const [ checkedIn, setCheckedIn ] = useState('')
-    const [ timezone, setTimezone ] = useState('')
-
+    const [ timezone, setTimezone, checkedInDate, setCheckedInDate, checkedInTime, setCheckedInTime
+    ] = useZonedDateTime(visit.checkedIn,setCheckedIn)
     useEffect(() => {
         if (!visit.origin || !visit.origin.timezone) return
         setTimezone(visit.origin.timezone)
@@ -51,14 +50,6 @@ export default function VisitCheckIn({visit,onSave,saving}) {
             setCheckedInDate(tz(visit.startOn,timezone,'%Y-%m-%d'))
         }
     },[visit.startOn,timezone,setCheckedInDate,setCheckedInTime,startOnLeft,startOnRight])
-    useEffect(() => {
-        if (checkedInDate && checkedInTime) {
-            setCheckedIn(new Date(tz(`${checkedInDate} ${checkedInTime}`,timezone)))
-        }
-        else {
-            setCheckedIn('')
-        }
-    },[checkedInDate,checkedInTime,setCheckedIn,timezone])
 
     const { register, handleSubmit, errors } = useForm()
     
