@@ -1,5 +1,5 @@
 const { factory } = require('./setup')
-const { Advisory, Place, User, Visit } = require('../../models')
+const { Advisory, District, Place, User, Visit } = require('../../models')
 const { 
     toLocalDate,
     fromLocalDateTimeToDate
@@ -23,6 +23,43 @@ factory.extend('advisory','pastAdvisory', {
 factory.extend('advisory','futureAdvisory', {
     startOn: () => moment().add(1,'days'),
     endOn: () => moment().add(2,'days')
+})
+
+factory.define('district', District, {
+    name: 'McIntyre Ridge',
+    boundaries: {
+        "type": "Polygon",
+        "coordinates": [[
+            [
+            -73.97506713867186,
+            44.171123644193784
+            ],
+            [
+            -74.02347564697266,
+            44.13639184602692
+            ],
+            [
+            -74.05265808105469,
+            44.10558415185072
+            ],
+            [
+            -74.03205871582031,
+            44.07130713213532
+            ],
+            [
+            -73.96408081054688,
+            44.14230508499824
+            ],
+            [
+            -73.95515441894531,
+            44.169892369723506
+            ],
+            [
+            -73.97506713867186,
+            44.171123644193784
+            ]
+        ]]
+    }
 })
 
 factory.define('place', Place, {
