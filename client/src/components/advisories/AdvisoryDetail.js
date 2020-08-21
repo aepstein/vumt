@@ -36,6 +36,10 @@ export default function AdvisoryDetail({advisory}) {
             <dd>{advisory.startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: timezone}).format(advisory.startOn) : ''}</dd>
             <dt>{t('startOnTime')}</dt>
             <dd>{(new Date(advisory.startOn)).toLocaleTimeString(i18n.language,{timeZone: timezone})}</dd>
+            <dt>{t('endOnDate')}</dt>
+            <dd>{advisory.endOn ? Intl.DateTimeFormat(i18n.language,{timeZone: timezone}).format(advisory.endOn) : ''}</dd>
+            <dt>{t('endOnTime')}</dt>
+            <dd>{(new Date(advisory.endOn)).toLocaleTimeString(i18n.language,{timeZone: timezone})}</dd>
         </dl>
     </Container>
 }

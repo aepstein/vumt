@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 import useValidationErrors from '../../hooks/useValidationErrors'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
-import tz from 'timezone/loaded'
 
 export default function AdvisoryEditor({advisory,onSave,saving}) {
     const { t } = useTranslation('advisory')
@@ -33,10 +32,9 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
     const [ timezone ] = useTimezone()
     const [ startOnDate, setStartOnDate, startOnTime, setStartOnTime
     ] = useZonedDateTime(timezone,advisory.startOn,setStartOn)
-    useEffect(() => {
-        if (!advisory.startOn || !timezone) return
-        setStartOnDate(tz(advisory.startOn,timezone,'%Y-%m-%d'))
-    },[advisory.startOn,setStartOnDate,timezone])
+    const [ endOn, setEndOn ] = useState('')
+    const [ endOnDate, setEndOnDate, endOnTime, setEndOnTime
+    ] = useZonedDateTime(timezone,advisory.endOn,setEndOn)
 
     const { register, handleSubmit, setError, clearError, errors } = useForm()
 
@@ -47,11 +45,16 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
     const onSubmit = () => {
         if (saving) return
         clearError()
+        if (startOn && endOn && startOn > endOn) {
+            setError("startOnDate","afterEndOn",t('mustBeBeforeEndOn'))
+            return
+        }
         const newAdvisory = {
             _id: advisory._id,
             label,
             prompt,
-            startOn
+            startOn,
+            endOn
         }
         onSave(newAdvisory)
     }
@@ -105,6 +108,8 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         onChange={onChange(setStartOnDate)}
                         invalid={errors.startOnDate ? true : false}
                     />
+                    {errors.startOnDate && errors.startOnDate.type === 'afterEndOn' &&
+                        <FormFeedback>{t('mustBeBeforeEndOn')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="startOnTime">{t('startOnTime')}</Label>
@@ -116,6 +121,29 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         onChange={onChange(setStartOnTime)}
                         innerRef={register({required: true})}
                         invalid={errors.startOnTime ? true : false}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="endOnDate">{t('endOnDate')}</Label>
+                    <Input
+                        id="endOnDate"
+                        name="endOnDate"
+                        type="date"
+                        value={endOnDate}
+                        onChange={onChange(setEndOnDate)}
+                        invalid={errors.endOnDate ? true : false}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="endOnTime">{t('endOnTime')}</Label>
+                    <Input
+                        id="endOnTime"
+                        name="endOnTime"
+                        type="time"
+                        value={endOnTime}
+                        onChange={onChange(setEndOnTime)}
+                        innerRef={register({required: true})}
+                        invalid={errors.endOnTime ? true : false}
                     />
                 </FormGroup>
                 <ButtonGroup>
