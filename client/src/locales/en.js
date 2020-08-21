@@ -42,9 +42,12 @@ const locale = {
         "prompt": "Prompt",
         "startOnDate": "Start date",
         "startOnTime": "Start time",
+        "endOnDate": "End date",
+        "endOnTime": "End time",
         "newAdvisory": "New advisory",
         "advisoryDetail": "Advisory detail",
-        "updateAdvisory": "Update advisory"
+        "updateAdvisory": "Update advisory",
+        "mustBeBeforeEndOn": "Must be before end date"
     },
     "place": {
         "addPlace": "Add place",
