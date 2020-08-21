@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import tz from 'timezone/loaded'
 import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
@@ -19,8 +20,9 @@ export default function VisitCheckIn({visit,onSave,saving}) {
     const { t } = useTranslation('visit')
 
     const [ checkedIn, setCheckedIn ] = useState('')
-    const [ timezone, setTimezone, checkedInDate, setCheckedInDate, checkedInTime, setCheckedInTime
-    ] = useZonedDateTime(visit.checkedIn,setCheckedIn)
+    const [ timezone, setTimezone ] = useTimezone()
+    const [ checkedInDate, setCheckedInDate, checkedInTime, setCheckedInTime
+    ] = useZonedDateTime(timezone,visit.checkedIn,setCheckedIn)
     useEffect(() => {
         if (!visit.origin || !visit.origin.timezone) return
         setTimezone(visit.origin.timezone)

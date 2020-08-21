@@ -1,8 +1,7 @@
 import {useState, useEffect} from 'react'
 import tz from 'timezone/loaded'
 
-export default function useZonedDateTime(dt,setDt) {
-    const [ timezone, setTimezone ] = useState('America/New_York')
+export default function useZonedDateTime(timezone,dt,setDt) {
     const [ date, setDate ] = useState('')
     useEffect(() => {
         if (!dt) return
@@ -21,5 +20,5 @@ export default function useZonedDateTime(dt,setDt) {
             setDt('')
         }
     },[date,time,timezone,setDt])
-    return [timezone,setTimezone,date,setDate,time,setTime]
+    return [date,setDate,time,setTime]
 }

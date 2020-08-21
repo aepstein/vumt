@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import useGeoPosition from '../../hooks/useGeoPosition'
+import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
@@ -29,8 +30,9 @@ export default function VisitEditor({visit,onSave,saving}) {
     useEffect(() => {
         setStartOn(visit.startOn)
     },[visit.startOn,setStartOn])
-    const [ timezone, setTimezone, startOnDate, setStartOnDate, startOnTime, setStartOnTime
-        ] = useZonedDateTime(visit.startOn,setStartOn)
+    const [ timezone, setTimezone ] = useTimezone()
+    const [ startOnDate, setStartOnDate, startOnTime, setStartOnTime
+        ] = useZonedDateTime(timezone,visit.startOn,setStartOn)
     useEffect(() => {
         if (!visit.origin || !visit.origin.timezone) return setTimezone('America/New_York')
         setTimezone(visit.origin.timezone)

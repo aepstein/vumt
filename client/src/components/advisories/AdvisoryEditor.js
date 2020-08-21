@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import useValidationErrors from '../../hooks/useValidationErrors'
+import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import tz from 'timezone/loaded'
 
@@ -29,8 +30,9 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
         setPrompt(advisory.prompt)
     },[advisory.prompt,setPrompt])
     const [ startOn, setStartOn ] = useState('')
-    const [ timezone, , startOnDate, setStartOnDate, startOnTime, setStartOnTime
-    ] = useZonedDateTime(advisory.startOn,setStartOn)
+    const [ timezone ] = useTimezone()
+    const [ startOnDate, setStartOnDate, startOnTime, setStartOnTime
+    ] = useZonedDateTime(timezone,advisory.startOn,setStartOn)
     useEffect(() => {
         if (!advisory.startOn || !timezone) return
         setStartOnDate(tz(advisory.startOn,timezone,'%Y-%m-%d'))
