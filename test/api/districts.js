@@ -9,7 +9,7 @@ const {
     errorPathRequired,
 } = require('../support/middlewareErrors')
 
-describe('/api/districts',() => {
+describe.only('/api/districts',() => {
     const genDistricts = async () => {
         return {
             mcintyre: await factory.create('district')
@@ -42,6 +42,21 @@ describe('/api/districts',() => {
             res.body.should.be.an('object')
             res.body.name.should.be.a('string').eql(district.name)
             res.body.boundaries.coordinates[0][0].should.have.deep.members(district.boundaries.coordinates[0][0])
+        })
+        it('should return an error for an invalid submission', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const district = await validDistrict({name: null})
+            const res = await action(district,auth)
+            errorPathRequired(res,'name')
+        })
+        it('should deny an unprivileged user', async () => {
+            const auth = await withAuth()
+            const res = await action({},auth)
+            await errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny without authentication', async() => {
+            const res = await action({})
+            await errorNoToken(res)
         })
     })
 })
