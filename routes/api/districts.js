@@ -42,4 +42,22 @@ router.post('/', auth({roles:['admin']}), async (req, res) => {
     }
 })
 
+// @route PUT api/districts/:districtId
+// @desc Update an existing district
+// @access Private
+router.put('/:districtId', auth({roles:['admin']}), district(), async (req, res) => {
+    attrAccessible(req)
+    try {
+        return res.status(200).json(await req.district.save())
+    }
+    catch(err) {
+        if (err.name === 'ValidationError') {
+            return handleValidationError(err,res)
+        }
+        else {
+            throw err
+        }
+    }
+})
+
 module.exports = router
