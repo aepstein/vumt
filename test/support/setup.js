@@ -16,8 +16,10 @@ const Place = require('../../models/Place')
 const User = require('../../models/User')
 const Visit = require('../../models/Visit');
 const Advisory = require('../../models/Advisory');
+const District = require('../../models/District')
 const purgeDb = async () => {
     await Advisory.deleteMany({})
+    await District.deleteMany({})
     await Place.deleteMany({})
     await User.deleteMany({})
     await Visit.deleteMany({})
