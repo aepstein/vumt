@@ -26,7 +26,7 @@ factory.extend('advisory','futureAdvisory', {
 })
 
 factory.define('district', District, {
-    name: 'McIntyre Ridge',
+    name: factory.sequence('District.label', (n) => `District ${n}`),
     boundaries: {
         "type": "Polygon",
         "coordinates": [[
