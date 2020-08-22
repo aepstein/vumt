@@ -8,6 +8,7 @@ app.use(express.json());
 
 app.use('/api/advisories', require('./routes/api/advisories'));
 app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/districts', require('./routes/api/districts'))
 app.use('/api/places', require('./routes/api/places'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/visits', require('./routes/api/visits'));
