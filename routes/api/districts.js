@@ -60,4 +60,19 @@ router.put('/:districtId', auth({roles:['admin']}), district(), async (req, res)
     }
 })
 
+// @route DELETE api/districts
+// @desc Delete an existing district
+// @access Private
+router.delete('/:districtId', auth({roles: ['admin']}), district(), async (req, res) => {
+    try {
+        await req.district.deleteOne()
+        return res.json({success: true})
+    }
+    catch(err) {
+        return res
+            .status(404)
+            .json({success: false});
+    }
+})
+
 module.exports = router
