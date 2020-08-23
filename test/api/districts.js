@@ -59,7 +59,7 @@ describe.only('/api/districts',() => {
             await errorNoToken(res)
         })
     })
-    describe.only('PUT /api/districts/:districtId', async () => {
+    describe('PUT /api/districts/:districtId', async () => {
         const action = async (district,props,auth) => {
             const res = chai.request(server).put('/api/districts/' + district._id).send(props)
             if (auth) res.set('x-auth-token',auth.body.token)
@@ -114,6 +114,30 @@ describe.only('/api/districts',() => {
         it('should deny without authentication', async() => {
             const district = await factory.create('district')
             const res = await action(district,{})
+            await errorNoToken(res)
+        })
+    })
+    describe('DELETE /api/districts/:districtId', () => {
+        const action = async (district,auth) => {
+            const res = chai.request(server).delete('/api/districts/' + district._id)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        it('should delete for authorized user', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const district = await factory.create('district')
+            const res = await action(district,auth)
+            res.should.have.status('200')
+        })
+        it('should deny an unprivileged user', async () => {
+            const district = await factory.create('district')
+            const auth = await withAuth()
+            const res = await action(district,auth)
+            await errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny without authentication', async() => {
+            const district = await factory.create('district')
+            const res = await action(district)
             await errorNoToken(res)
         })
     })
