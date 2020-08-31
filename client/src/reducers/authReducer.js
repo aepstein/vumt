@@ -72,6 +72,7 @@ export default function (state = initialState, action) {
                 user: null,
                 isLoading: false,
                 isAuthenticated: false,
+                isLoading: false,
                 saving: false
             };
         default:

@@ -3,6 +3,8 @@
 import 'bootswatch/dist/sketchy/bootstrap.min.css'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
+import 'leaflet/dist/leaflet.css'
+import 'leaflet-draw/dist/leaflet.draw.css'
 import React, { Suspense } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
@@ -10,6 +12,7 @@ import NeedAuth from './components/NeedAuth'
 import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
 import AdvisoriesManager from './containers/advisories/AdvisoriesManager'
+import DistrictsManager from './containers/districts/DistrictsManager'
 import PlacesManager from './containers/places/PlacesManager'
 import UsersManager from './containers/users/UsersManager'
 import VisitsManager from './containers/visits/VisitsManager'
@@ -52,6 +55,18 @@ const Root = ({ store }) => (
               </AuthRoute>
               <AuthRoute path="/advisories" roles={['admin']}>
                 <AdvisoriesManager action='list'/>
+              </AuthRoute>
+              <AuthRoute path="/districts/new" roles={['admin']}>
+                <DistrictsManager action='new'/>
+              </AuthRoute>
+              <AuthRoute path="/districts/:districtId/edit" roles={['admin']}>
+                <DistrictsManager action='edit'/>
+              </AuthRoute>
+              <AuthRoute path="/districts/:districtId" roles={['admin']}>
+                <DistrictsManager action='show'/>
+              </AuthRoute>
+              <AuthRoute path="/districts" roles={['admin']}>
+                <DistrictsManager action='list'/>
               </AuthRoute>
               <AuthRoute path="/places/new" roles={['admin']}>
                 <PlacesManager action='new'/>

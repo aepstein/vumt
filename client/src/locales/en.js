@@ -49,6 +49,15 @@ const locale = {
         "updateAdvisory": "Update advisory",
         "mustBeBeforeEndOn": "Must be before end date"
     },
+    "district": {
+        "addDistrict": "Add district",
+        "editDistrict": "Edit district",
+        "name": "Name",
+        "boundaries": "Boundaries",
+        "newDistrict": "New district",
+        "districtDetail": "District detail",
+        "updateDistrict": "Update district"
+    },
     "place": {
         "addPlace": "Add place",
         "editPlace": "Edit place",
@@ -128,6 +137,7 @@ const locale = {
         "login": "Login",
         "logout": "Logout",
         "advisories": "Advisories",
+        "districts": "Districts",
         "places": "Places",
         "register": "Register",
         "users": "Users",
