@@ -9,7 +9,7 @@ const {
     errorPathRequired,
 } = require('../support/middlewareErrors')
 
-describe.only('/api/districts',() => {
+describe('/api/districts',() => {
     const genDistricts = async () => {
         return {
             mcintyre: await factory.create('district')
