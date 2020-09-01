@@ -33,4 +33,16 @@ AdvisorySchema.pre('validate', function (next) {
     next()
 })
 
+// Populate districts on load
+AdvisorySchema.post('find', async function(advisories) {
+    for (let advisory of advisories) {
+        await advisory.populate('districts').execPopulate()
+    }
+})
+
+// After save, populate
+AdvisorySchema.post('save', async function(advisory) {
+    await advisory.populate('districts').execPopulate()
+})
+
 module.exports = Advisory = mongoose.model('advisory',AdvisorySchema)
