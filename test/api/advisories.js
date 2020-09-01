@@ -36,15 +36,18 @@ describe('/api/advisories', () => {
         }
         it('should save an advisory for authorized user with valid attributes', async () => {
             const auth = await withAuth({roles:['admin']})
+            const district = await factory.create('district')
             const advisory = await validAdvisory({
                 startOn: Date(),
-                endOn: Date()
+                endOn: Date(),
+                districts: [{"_id": district.id}]
             })
             const res = await action(advisory,auth)
             res.should.have.status(201)
             res.body.should.be.an('object')
             Date(res.body.startOn).should.eql(Date(advisory.startOn))
             Date(res.body.endOn).should.eql(Date(advisory.endOn))
+            res.body.districts.map(d => d._id).should.have.members([district.id])
         })
         it('should return an error for an invalid submission', async () => {
             const auth = await withAuth({roles:['admin']})
