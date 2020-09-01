@@ -15,7 +15,11 @@ const AdvisorySchema = new Schema(
         },
         endOn: {
             type: Date
-        }
+        },
+        districts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'district'
+        }]
     },
     {
         timestamps: true
