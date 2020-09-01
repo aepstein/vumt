@@ -23,4 +23,11 @@ describe("Advisory", () => {
             endOn: moment().add(1,'days')
         })
     })
+    it('should save with a district restriction', async () => {
+        await factory.create('advisory',{
+            districts: [
+                await factory.create('district')
+            ]
+        })
+    })
 })
