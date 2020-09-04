@@ -79,6 +79,11 @@ VisitSchema.post('find', async function(visits) {
     }
 })
 
+// Populate origin, destinations on load
+VisitSchema.post('findOne', async function(visit) {
+    await visit.populate('origin').populate('destinations').execPopulate()
+})
+
 // After save, populate
 VisitSchema.post('save', async function(visit) {
     await visit.populate('origin').populate('destinations').execPopulate()
@@ -86,10 +91,31 @@ VisitSchema.post('save', async function(visit) {
 
 // Retrieve advisories that are applicable to this visit
 VisitSchema.methods.applicableAdvisories = async function () {
-    return mongoose.model('advisory').find({ $and: [
-        {$or: [{startOn: { $lte: this.startOn }}, {startOn: {$eq: null}}]},
-        {$or: [{endOn: { $gte: this.startOn }}, {endOn: {$eq: null}}]},
-    ]})
+    // Basic conditions - no geographic constraint or intersect with origin
+    const geoConditions = [
+        {"districts.boundaries": { $geoIntersects: {$geometry: this.origin.location}}},
+        {districts: {$eq: null}}
+    ]
+    // Also include if intersecting with origin
+    this.destinations.forEach(d => {
+        geoConditions.push({
+            "districts.boundaries": { $geoIntersects: {$geometry: d.location}}
+        })
+    })
+    return mongoose.model('advisory').aggregate([
+        {$lookup: {from: 'districts', localField: 'districts', foreignField: '_id', as: 'districts'}},
+        {$unwind: {path: '$districts', preserveNullAndEmptyArrays: true}},
+        {$match: {$and: [
+            {$or: [{startOn: { $lte: this.startOn }}, {startOn: {$eq: null}}]},
+            {$or: [{endOn: { $gte: this.startOn }}, {endOn: {$eq: null}}]},
+            {$or: geoConditions}
+        ]}},
+        {$group: {
+            _id: '$_id',
+            label: {$first: '$label'},
+            prompt: {$first: '$prompt'}
+        }}
+    ])
 }
 
 module.exports = Visit = mongoose.model('visit',VisitSchema);
