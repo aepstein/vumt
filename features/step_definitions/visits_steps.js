@@ -7,7 +7,6 @@ const {
     formatDateForDisplay,
     relativeDate,
     shouldSeeText,
-    takeScreenshot,
     visitExists,
     waitFor
 } = require('../support/actions');
@@ -88,5 +87,6 @@ Then(
 
 Then(/^I should( not)? see an applicable advisory for "([^"]+)"$/, async (not,label) => {
     await waitFor('.applicable-advisories')
+    if (!not) { await waitFor('.card-title') }
     await shouldSeeText(".card-title", not, label)
 });
