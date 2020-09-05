@@ -5,7 +5,7 @@ Feature: Manage districts
 
     Background:
         Given an admin user exists "Barbara" "McMartin" "bmcmartin@example.com"
-        And an district "McIntyre Range" exists
+        And a district "McIntyre Range" exists
 
     Scenario: See districts
         Given I logged in as "bmcmartin@example.com"
