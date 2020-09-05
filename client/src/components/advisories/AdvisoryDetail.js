@@ -40,6 +40,8 @@ export default function AdvisoryDetail({advisory}) {
             <dd>{advisory.endOn ? Intl.DateTimeFormat(i18n.language,{timeZone: timezone}).format(advisory.endOn) : ''}</dd>
             <dt>{t('endOnTime')}</dt>
             <dd>{(new Date(advisory.endOn)).toLocaleTimeString(i18n.language,{timeZone: timezone})}</dd>
+            <dt>{t('districts')}</dt>
+            <dd>{advisory.districts.map(d => d.name).join(', ')}</dd>
         </dl>
     </Container>
 }

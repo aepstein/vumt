@@ -44,6 +44,8 @@ const locale = {
         "startOnTime": "Start time",
         "endOnDate": "End date",
         "endOnTime": "End time",
+        "districts": "Districts",
+        "districtsPlaceholder": "Specify districts to which advisory is restricted",
         "newAdvisory": "New advisory",
         "advisoryDetail": "Advisory detail",
         "updateAdvisory": "Update advisory",

@@ -10,7 +10,7 @@ const districtRowSelector = (name) => {
     return `//li[contains(.,'${name}')]`
 }
 
-Given('an district {string} exists', async (name) => {
+Given('a district {string} exists', async (name) => {
     await create('district',{name})
 })
 
@@ -23,6 +23,7 @@ When(
 )
 When(/^I fill in values for the district(?: except "([^"]+)")?$/,async (except) => {
     if (except !== "Name") await fillByLabel("Name","McIntyre Range")
+    await clickByXPath(`//a[contains(@class,'leaflet-draw-draw-polygon')]`)
 })
 Then(/^I should( not)? see district "([^"]+)"$/, async (not,name) => {
     await waitFor('.districts-list')
