@@ -76,6 +76,10 @@ const formatDateForFill = (date) => {
 	const str = toLocalDate(date)
 	return `${str.substring(5,7)}/${str.substring(8,10)}/${str.substring(0,4)}`
 }
+const formatTimeForDisplay = (time) => {
+	const str = toLocalTime(time)
+	return `${parseInt(str.substring(0,2))}:${str.substring(2,4)}:00 ${str.substring(4)}`
+}
 const formatTimeForFill = (time) => {
 	return toLocalTime(time)
 }
@@ -118,6 +122,16 @@ const parseInput = (input,display=false) => {
 			return input.replace(/"/g,'')
 	}
 }
+/*
+ * Generates a datetime relative to the current datetime
+ * @description: Either a string or an object with the following properties
+ * For a string, use 8am local time. tomorrow will give the date exactly a day later. Otherwise, current date.
+ * For an object:
+ *  - when: if 'now' return current datetime
+ *  - unit: the unit by which to add/subtract from current datetime
+ *  - increment: the amount by which to add/subtract
+ *  - direction: if 'now' add, otherwise subtract
+ */
 const relativeDate = (description) => {
 	const relativeDate = new Date()
 	if (typeof description === 'object') {
@@ -128,7 +142,7 @@ const relativeDate = (description) => {
 				const unit = description.unit.charAt(0).toUpperCase() + description.unit.slice(1) + "s"
 				const increment = parseInt(description.increment)
 				const {direction} = description
-				if (direction === 'now') {
+				if (direction === 'now' || direction === 'later') {
 					relativeDate[`set${unit}`](relativeDate[`get${unit}`]()+increment)
 				}
 				else {
@@ -245,6 +259,7 @@ module.exports = {
 	fillTypeaheadByLabel,
 	formatDateForFill,
 	formatDateForDisplay,
+	formatTimeForDisplay,
 	formatTimeForFill,
 	loginAs,
 	markByLabel,

@@ -125,24 +125,24 @@ Feature: Manage visits
 
     Scenario: Check in/out of a visit
         Given I am registered as "bmarshall@example.com"
-        And I have registered a visit for today from "Adirondack Loj" to "Algonquin Summit"
+        And I have registered a visit for 10 minutes ago from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         And I click "Check in" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
         And I fill in "Check in date" with today
-        And I fill in "Check in time" with "805A"
+        And I fill in "Check in time" with 5 minutes ago
         And I click the "Check in" button
         And I click "Detail" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
         Then I should see "Check in date" defined as today
-        And I should see "Check in time" defined as "8:05:00 AM"
+        And I should see "Check in time" defined as 5 minutes ago
         When I visit the "home" page
         And I click "Check out" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
         And I fill in "Check out date" with today
-        And I fill in "Check out time" with "855A"
+        And I fill in "Check out time" with 1 minute ago
         And I click the "Check out" button
         And I click "Detail" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
         Then I should see "Check out date" defined as today
-        And I should see "Check out time" defined as "8:55:00 AM"
+        And I should see "Check out time" defined as 1 minute ago
 
     Scenario: See applicable advisory on check in
         Given an advisory "Leave No Trace" exists

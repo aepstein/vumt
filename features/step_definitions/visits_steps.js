@@ -19,14 +19,26 @@ const visitRowText = (startOn,origin,destination) => {
     return `${formatDateForDisplay(relativeDate(startOn))}: From ${origin} To ${destination}`
 }
 
-Given(/I have registered a visit for (today|tomorrow) from "([^"]+)" to "([^"]+)"/,
-    async (startOn, originName, destinationName) => {
-        await visitExists({
-            startOn: relativeDate(startOn),
-            origin: (scope.models.originPlace.filter(p => p.name == originName)[0]._id),
-            destinations: scope.models.destinationPlace.filter(p => p.name == destinationName),
-            user: scope.context.user.id
-        })
+const callVisitExists = async (startOn, originName, destinationName) => {
+    return visitExists({
+        startOn,
+        origin: (scope.models.originPlace.filter(p => p.name == originName)[0]._id),
+        destinations: scope.models.destinationPlace.filter(p => p.name == destinationName),
+        user: scope.context.user.id
+    })
+}
+
+Given(/I have registered a visit for (now|today|tomorrow) from "([^"]+)" to "([^"]+)"/,
+    async ( startOnStr, originName, destinationName) => {
+        const startOn = relativeDate(startOnStr)
+        await callVisitExists(startOn, originName, destinationName)
+    }
+)
+
+Given(/I have registered a visit for (\d+) (hour|minute)s? (ago|later) from "([^"]+)" to "([^"]+)"/,
+    async ( increment, unit, direction, originName, destinationName) => {
+        const startOn = relativeDate({unit, increment, direction})
+        await callVisitExists(startOn, originName, destinationName)
     }
 )
 
