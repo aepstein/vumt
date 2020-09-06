@@ -4,6 +4,7 @@ const {
     fillByLabel,
     fillTypeaheadByLabel,
     formatDateForFill,
+    formatTimeForDisplay,
     formatTimeForFill,
     loginAs,
     markByLabel,
@@ -50,9 +51,16 @@ When('I click on the {string} typeahead', async (label) => {
     await startTypeaheadByLabel(label,'Ad')
 })
 
-When(/^I fill in "([^"]+)" with (?:(now)|(\d+) (hour)s? (?:from )?(now|ago))$/,
-    async (label,when,increment,unit,direction) => {
-        const dt = relativeDate({when,increment,unit,direction})
+When(/^I fill in "([^"]+)" with (now)$/,
+    async (label,when) => {
+        const dt = relativeDate(when)
+        await fillByLabel(label,formatTimeForFill(dt))
+    }
+)
+
+When(/^I fill in "([^"]+)" with (\d+) (hour|minute)s? (later|ago)$/,
+    async (label,increment,unit,direction) => {
+        const dt = relativeDate({increment,unit,direction})
         await fillByLabel(label,formatTimeForFill(dt))
     }
 )
@@ -81,6 +89,18 @@ Then('the {string} field should have an error {string}', async (label, error) =>
 Then(/I should see "([^"]+)" defined as ("[^"]+"|today|tomorrow)/, async (dt, dd) => {
     await shouldSeeDefinition(dt,parseInput(dd,true))
 });
+
+Then(/I should see "([^"]+)" defined as (now)/,
+    async (dt, when) => {
+    const dd = relativeDate(when)
+    await shouldSeeDefinition(dt,formatTimeForDisplay(dd))
+})
+
+Then(/I should see "([^"]+)" defined as (\d+) (hour|minute)s? (later|ago)/,
+    async (dt, increment, unit, direction) => {
+    const dd = relativeDate({increment,unit,direction})
+    await shouldSeeDefinition(dt,formatTimeForDisplay(dd))
+})
 
 Then(/^the (\d+)(?:st|nd|rd|th) option in the typeahead should contain "([^"]+)"$/, async (n,text) => {
     await waitFor(`//ul[contains(@class,'rbt-menu')]/li[position()='${n}' and contains(.,'${text}')]`)
