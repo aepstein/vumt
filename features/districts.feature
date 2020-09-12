@@ -11,3 +11,13 @@ Feature: Manage districts
         Given I logged in as "bmcmartin@example.com"
         When I visit the "districts" page
         Then I should see district "McIntyre Range"
+
+    Scenario: Edit a district
+        Given I logged in as "bmcmartin@example.com"
+        When I visit the "districts" page
+        And I click "Edit" for district "McIntyre Range"
+        And I fill in "Name" with "Great Range"
+        And I click the "Update district" button
+        And I click "Detail" for district "Great Range"
+        Then I should see "Name" defined as "Great Range"
+    
