@@ -31,4 +31,9 @@ Feature: Manage districts
         Examples:
             | field                          |
             | Name                           |
-   
+
+    Scenario: Remove a district
+        Given I logged in as "bmcmartin@example.com"
+        When I visit the "districts" page
+        And I click "Remove" for district "McIntyre Range"
+        Then I wait for district "Stay Safe" to disappear
