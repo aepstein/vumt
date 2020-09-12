@@ -1,5 +1,6 @@
 const mongoose = require('../db/mongoose')
 const Schema = mongoose.Schema
+const TranslationSchema = require('./schemas/TranslationSchema')
 
 const AdvisorySchema = new Schema(
     {
@@ -19,7 +20,8 @@ const AdvisorySchema = new Schema(
         districts: [{
             type: Schema.Types.ObjectId,
             ref: 'district'
-        }]
+        }],
+        translations: [TranslationSchema]
     },
     {
         timestamps: true
