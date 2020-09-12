@@ -20,4 +20,15 @@ Feature: Manage districts
         And I click the "Update district" button
         And I click "Detail" for district "Great Range"
         Then I should see "Name" defined as "Great Range"
-    
+
+    Scenario Outline: Try to add invalid district
+        Given I logged in as "bmcmartin@example.com"
+        When I visit the "districts" page
+        And I click the "Add district" button
+        And I fill in values for the district except "<field>"
+        And I click the "Add district" button
+        Then the "<field>" field should have an error "Cannot be blank"
+        Examples:
+            | field                          |
+            | Name                           |
+   
