@@ -130,7 +130,6 @@ export default function DistrictEditor({district,onSave,saving}) {
                                 circlemarker: false
                             }}
                             />
-                            {/* <Polygon positions={[[44.171123644193784,-73.97506713867186],[44.13639184602692,-74.02347564697266],[44.10558415185072,-74.05265808105469],[44.07130713213532,-74.03205871582031],[44.14230508499824,-73.96408081054688],[44.169892369723506,-73.95515441894531],[44.171123644193784,-73.97506713867186]]} /> */}
                         </FeatureGroup>
                     </Map>
                     {errors.boundaries && errors.boundaries.type === 'required' &&
