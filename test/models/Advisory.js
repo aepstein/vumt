@@ -30,4 +30,35 @@ describe("Advisory", () => {
             ]
         })
     })
+    it('should save with a valid translation', async () => {
+        await factory.create('advisory',{
+            translations: [
+                {language: 'en', translation: 'The English version.'}
+            ]
+        })
+    })
+    it('should not save with a translation missing translation', async () => {
+        const advisory = await factory.build('advisory',{
+            translations: [
+                {language: 'en'}
+            ]
+        })
+        await advisory.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should not save with a translation missing language', async () => {
+        const advisory = await factory.build('advisory',{
+            translations: [
+                {translation: 'The English version.'}
+            ]
+        })
+        await advisory.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should not save with a translation to invalid language code', async () => {
+        const advisory = await factory.build('advisory',{
+            translations: [
+                {language: 'zz', translation: 'The English version.'}
+            ]
+        })
+        await advisory.save().should.eventually.be.rejectedWith(ValidationError)
+    })
 })
