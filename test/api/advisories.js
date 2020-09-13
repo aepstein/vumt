@@ -41,7 +41,7 @@ describe('/api/advisories', () => {
                 startOn: Date(),
                 endOn: Date(),
                 districts: [{"_id": district.id}],
-                translations: [{language: 'en-US', translation: 'A translation.'}]
+                prompts: [{language: 'en-US', translation: 'A translation.'}]
             })
             const res = await action(advisory,auth)
             res.should.have.status(201)
@@ -49,7 +49,7 @@ describe('/api/advisories', () => {
             Date(res.body.startOn).should.eql(Date(advisory.startOn))
             Date(res.body.endOn).should.eql(Date(advisory.endOn))
             res.body.districts.map(d => d._id).should.have.members([district.id])
-            res.body.translations[0].language.should.eql('en-US')
+            res.body.prompts[0].language.should.eql('en-US')
         })
         it('should return an error for an invalid submission', async () => {
             const auth = await withAuth({roles:['admin']})
@@ -77,14 +77,12 @@ describe('/api/advisories', () => {
             const advisory = await factory.create('advisory')
             const auth = await withAuth({roles: ['admin']})
             attr = {
-                label: 'Different Advisory',
-                prompt: 'And now for something completely different...'
+                label: 'Different Advisory'
             }
             const res = await action(advisory,attr,auth)
             res.should.have.status(200)
             res.body.should.be.an('object')
             res.body.should.have.a.property('label').eql(attr.label)
-            res.body.should.have.a.property('prompt').deep.include(attr.prompt)
         })
         it('should return an error for an invalid submission', async () => {
             const advisory = await factory.create('advisory')

@@ -113,7 +113,7 @@ VisitSchema.methods.applicableAdvisories = async function () {
         {$group: {
             _id: '$_id',
             label: {$first: '$label'},
-            prompt: {$first: '$prompt'}
+            prompts: {$first: '$prompts'}
         }}
     ])
 }

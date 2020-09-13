@@ -30,10 +30,6 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
     useEffect(() => {
         setLabel(advisory.label)
     },[advisory.label,setLabel])
-    const [ prompt, setPrompt ] = useState('')
-    useEffect(() => {
-        setPrompt(advisory.prompt)
-    },[advisory.prompt,setPrompt])
     const [ startOn, setStartOn ] = useState('')
     const [ timezone ] = useTimezone()
     const [ startOnDate, setStartOnDate, startOnTime, setStartOnTime
@@ -75,25 +71,39 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
             </Highlighter>
         ]
     }
-    const [translations,setTranslations] = useState([])
+    const [prompts,setPrompts] = useState([])
     useEffect(() => {
-        if (!advisory.translations) {return}
-        setTranslations(advisory.translations)
-    },[advisory.translations])
-    const updateTranslation = (index,field) => {
+        if (!advisory.prompts) {return}
+        setPrompts(advisory.prompts)
+    },[advisory.prompts])
+    const updatePrompt = (index,field) => {
         return (e) => {
-            const newVal = {...translations[index]}
+            const newVal = {...prompts[index]}
             newVal[field] = e.target.value
-            setTranslations([
-                ...translations.slice(0,index),
+            setPrompts([
+                ...prompts.slice(0,index),
                 newVal,
-                ...translations.slice(index+1)
+                ...prompts.slice(index+1)
             ])
         }
     }
-    const appendTranslation = () => {
-        setTranslations([...translations, {language: '', translation: ''}])
+    const appendPrompt = (e) => {
+        setPrompts([...prompts, {language: e.target.value, translation: ''}])
     }
+    const removePrompt = (index) => {
+        return () => {
+            setPrompts(prompts.filter((prompt,i) => {return i !== index}))
+        }
+    }
+    const [missingLocales,setMissingLocales] = useState([])
+    useEffect(() => {
+        const presentLocales = prompts.map((prompt) => {
+            return prompt.language
+        })
+        setMissingLocales(locales.filter(({code}) => {
+            return !presentLocales.includes(code)
+        }))
+    },[prompts,setMissingLocales])
 
     const { register, handleSubmit, setError, clearError, errors } = useForm()
 
@@ -111,15 +121,14 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
         const newAdvisory = {
             _id: advisory._id,
             label,
-            prompt,
+            prompts,
             startOn,
             endOn,
             districts: districts.map((d) => {
                 return {
                     "_id": d.id
                 }
-            }),
-            translations
+            })
         }
         onSave(newAdvisory)
     }
@@ -149,21 +158,6 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
-                    <Label for="prompt">{t('prompt')}</Label>
-                    <Input
-                        type="text"
-                        name="prompt"
-                        id="prompt"
-                        placeholder={t('prompt')}
-                        innerRef={register({required: true})}
-                        value={prompt}
-                        onChange={onChange(setPrompt)}
-                        invalid={errors.prompt ? true : false}
-                    />
-                    {errors.prompt && errors.prompt.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
-                </FormGroup>
-                <FormGroup>
                     <Label for="startOnDate">{t('startOnDate')}</Label>
                     <Input
                         id="startOnDate"
@@ -184,7 +178,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         type="time"
                         value={startOnTime}
                         onChange={onChange(setStartOnTime)}
-                        innerRef={register({required: true})}
+                        innerRef={register()}
                         invalid={errors.startOnTime ? true : false}
                     />
                 </FormGroup>
@@ -207,7 +201,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         type="time"
                         value={endOnTime}
                         onChange={onChange(setEndOnTime)}
-                        innerRef={register({required: true})}
+                        innerRef={register()}
                         invalid={errors.endOnTime ? true : false}
                     />
                 </FormGroup>
@@ -231,59 +225,50 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         clearButton={true}
                     />
                 </FormGroup>
-                <h2>{t('translation:translations')}</h2>
-                {translations.map((translation,index) => {
-                    return <div key={index}>
-                        <FormGroup>
-                            <Label for={`translations[${index}].language`}>{t('translation:language')}</Label>
-                            <Input
-                                type="select"
-                                name={`translations[${index}].language`}
-                                placeholder={t('translation:language')}
-                                innerRef={register({required: true})}
-                                value={translation.language}
-                                onChange={updateTranslation(index,'language')}
-                                invalid={errors.label ? true : false}
-                            >
-                                {locales
-                                    .filter((language) => {
-                                        return language === translation.language || 
-                                            !translations.map((tr) => {return tr.language}).includes(language)
-                                    })
-                                    .map((language, i) => {
-                                        return <option key={i} value={language.code}>{language.name}</option>
-                                    })
-                                }
-                            </Input>
-                            {   errors.translations &&
-                                errors.translations[index] &&
-                                errors.translations[index].language && 
-                                errors.translations[index].language.type === 'required' &&
-                                <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for={`translations[${index}].translation`}>{t('translation:translation')}</Label>
-                            <Input
-                                type="text"
-                                name={`translations[${index}].translation`}
-                                placeholder={t('translation:translation')}
-                                innerRef={register({required: true})}
-                                value={translation.translation}
-                                onChange={updateTranslation(index,'translation')}
-                                invalid={errors.label ? true : false}
-                            />
-                            {
-                                errors.translations &&
-                                errors.translations[index] &&
-                                errors.translations[index].translation &&
-                                errors.translations[index].translation.type === 'required' &&
-                                <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
-                        </FormGroup>
-                    </div>
+                <h2>{t('prompts')}</h2>
+                {prompts.map((prompt,index) => {
+                    return <FormGroup key={index}>
+                        <Label for={`prompts[${index}].translation`}>{locales.find((locale) => {
+                            return locale.code === prompt.language
+                        }).name}</Label>
+                        <Input
+                            type="text"
+                            name={`prompts[${index}].translation`}
+                            placeholder={t('translation:translation')}
+                            innerRef={register({required: true})}
+                            value={prompt.translation}
+                            onChange={updatePrompt(index,'translation')}
+                            invalid={
+                                errors.prompts && 
+                                errors.prompts[index] &&
+                                errors.prompts[index].translation ? true : false}
+                        />
+                        <Button
+                            color="danger"
+                            onClick={removePrompt(index)}
+                        >{t('removePrompt')}</Button>
+                        {
+                            errors.prompts &&
+                            errors.prompts[index] &&
+                            errors.prompts[index].translation &&
+                            errors.prompts[index].translation.type === 'required' &&
+                            <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                    </FormGroup>
                 })}
-                <ButtonGroup>
-                    <Button onClick={appendTranslation}>{t('translation:addTranslation')}</Button>
-                </ButtonGroup>
+                {missingLocales.length > 0 ? <FormGroup>
+                    <Label for="addPrompt">{t('addPrompt')}</Label>
+                    <Input
+                        type="select"
+                        name="addPrompt"
+                        value=""
+                        onChange={appendPrompt}
+                    >
+                        <option value="">{t('translation:selectLanguage')}</option>
+                        {missingLocales.map(({code,name},index) => {
+                            return <option key={index} value={code}>{name}</option>
+                        })}
+                    </Input>
+                </FormGroup> : ''}
                 <ButtonGroup>
                     <Button
                         color="primary"

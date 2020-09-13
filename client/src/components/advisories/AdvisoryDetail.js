@@ -31,8 +31,6 @@ export default function AdvisoryDetail({advisory}) {
         <dl>
             <dt>{t('label')}</dt>
             <dd>{advisory.label}</dd>
-            <dt>{t('prompt')}</dt>
-            <dd>{advisory.prompt}</dd>
             <dt>{t('startOnDate')}</dt>
             <dd>{advisory.startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: timezone}).format(advisory.startOn) : ''}</dd>
             <dt>{t('startOnTime')}</dt>
@@ -44,9 +42,9 @@ export default function AdvisoryDetail({advisory}) {
             <dt>{t('districts')}</dt>
             <dd>{advisory.districts.map(d => d.name).join(', ')}</dd>
         </dl>
-        <h2>{t('translation:translations')}</h2>
+        <h2>{t('prompts')}</h2>
         <dl>
-        {advisory.translations && advisory.translations.map(({language,translation},index) => {
+        {advisory.prompts && advisory.prompts.map(({language,translation},index) => {
             return <div key={index}>
                 <dt>{locales.filter(t => t.code === language)[0].name}</dt>
                 <dd>{translation}</dd>

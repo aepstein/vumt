@@ -146,12 +146,17 @@ Feature: Manage visits
 
     Scenario: See applicable advisory on check in
         Given an advisory "Leave No Trace" exists
+        And the advisory "Leave No Trace" has "en-US" prompt "Respect your surroundings"
+        And the advisory "Leave No Trace" has "fr" prompt "Respectez votre environnement"
         And I am registered as "bmarshall@example.com"
         And I have registered a visit for today from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         And I click "Check in" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
-        Then I should see an applicable advisory for "Leave No Trace" 
+        Then I should see an applicable advisory for "Leave No Trace" prompting "Respect your surroundings"
+        When I change the language to "Français"
+        Then I should see an applicable advisory for "Leave No Trace" prompting "Respectez votre environnement"
+
 
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
