@@ -1,10 +1,14 @@
 const locale = {
     "translation": {
+        "addTranslation": "Add translation",
         "createdAt": "Created",
         "distanceAway": "{{distance}} away",
         "distanceFromPlace": "{{distance}} from {{place}}",
+        "language": "Language",
         "mustBeLoggedIn": "You must log in to use this system.",
         "timesAreLocal": "Times are in local {{timezone}} time.",
+        "translation": "Translation",
+        "translations": "Translations",
         "updatedAt": "Updated"
     },
     "commonForms": {

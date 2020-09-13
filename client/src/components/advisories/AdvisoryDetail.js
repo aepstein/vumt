@@ -8,6 +8,7 @@ import {
     useHistory
 } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import locales from '../../locales'
 
 export default function AdvisoryDetail({advisory}) {
     const { t, i18n } = useTranslation('advisory')
@@ -42,6 +43,15 @@ export default function AdvisoryDetail({advisory}) {
             <dd>{(new Date(advisory.endOn)).toLocaleTimeString(i18n.language,{timeZone: timezone})}</dd>
             <dt>{t('districts')}</dt>
             <dd>{advisory.districts.map(d => d.name).join(', ')}</dd>
+        </dl>
+        <h2>{t('translation:translations')}</h2>
+        <dl>
+        {advisory.translations && advisory.translations.map(({language,translation},index) => {
+            return <div key={index}>
+                <dt>{locales.filter(t => t.code === language)[0].name}</dt>
+                <dd>{translation}</dd>
+            </div>
+        })}
         </dl>
     </Container>
 }
