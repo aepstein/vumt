@@ -71,7 +71,7 @@ Feature: Manage visits
         And my location is "44.183102,-73.963584"
         And I visit the "new visit" page
         And I fill in "Date of visit" with today
-        And I fill in "Start time" with now
+        And I fill in "Start time" with 0 minutes ago
         And I click on the "Starting point" typeahead
         Then the 1st option in the typeahead should contain "Adirondack Loj"
         And the 1st option in the typeahead should contain "1 party"
