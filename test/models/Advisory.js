@@ -30,32 +30,32 @@ describe("Advisory", () => {
             ]
         })
     })
-    it('should save with a valid translation', async () => {
+    it('should save with a valid prompt', async () => {
         await factory.create('advisory',{
-            translations: [
+            prompts: [
                 {language: 'en-US', translation: 'The English version.'}
             ]
         })
     })
-    it('should not save with a translation missing translation', async () => {
+    it('should not save with a prompt missing translation', async () => {
         const advisory = await factory.build('advisory',{
-            translations: [
+            prompts: [
                 {language: 'en-US'}
             ]
         })
         await advisory.save().should.eventually.be.rejectedWith(ValidationError)
     })
-    it('should not save with a translation missing language', async () => {
+    it('should not save with a prompt missing language', async () => {
         const advisory = await factory.build('advisory',{
-            translations: [
+            prompts: [
                 {translation: 'The English version.'}
             ]
         })
         await advisory.save().should.eventually.be.rejectedWith(ValidationError)
     })
-    it('should not save with a translation to invalid language code', async () => {
+    it('should not save with a prompt having an invalid language code', async () => {
         const advisory = await factory.build('advisory',{
-            translations: [
+            prompts: [
                 {language: 'zz', translation: 'The English version.'}
             ]
         })

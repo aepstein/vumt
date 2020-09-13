@@ -8,9 +8,7 @@ const AdvisorySchema = new Schema(
             type: String,
             required: true
         },
-        prompt: {
-            type: String
-        },
+        prompts: [TranslationSchema],
         startOn: {
             type: Date
         },
@@ -20,8 +18,7 @@ const AdvisorySchema = new Schema(
         districts: [{
             type: Schema.Types.ObjectId,
             ref: 'district'
-        }],
-        translations: [TranslationSchema]
+        }]
     },
     {
         timestamps: true

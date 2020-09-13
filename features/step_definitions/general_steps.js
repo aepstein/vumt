@@ -18,7 +18,8 @@ const {
     startTypeaheadByLabel,
     takeScreenshot,
     visitPage,
-    waitFor
+    waitFor,
+    clickByXPath
 } = require('../support/actions');
 
 Given(/my location is "(?<lat>(-?(90|(\d|[1-8]\d)(\.\d{1,6}){0,1})))\,{1}(?<long>(-?(180|(\d|\d\d|1[0-7]\d)(\.\d{1,6}){0,1})))"/,
@@ -39,6 +40,11 @@ Given('I logged in as {string}', async (email) => {
     await loginAs(email);
     await shouldBeLoggedInAs(email);
 });
+
+When('I change the language to {string}', async (language) => {
+    await clickByXPath('//button[contains(../@class,"language-selector")]')
+    await clickByXPath(`//button[contains(.,'${language}')]`)
+})
 
 When(/^I fill in "([^"]+)" with ("[^"]+"|today|tomorrow)$/, async (label, value) => {
     await fillByLabel(label,parseInput(value))

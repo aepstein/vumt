@@ -97,8 +97,9 @@ Then(
         await shouldSeeText(".visit-label", not, visitRowText(startOn,origin,destination));
 });
 
-Then(/^I should( not)? see an applicable advisory for "([^"]+)"$/, async (not,label) => {
+Then(/^I should( not)? see an applicable advisory for "([^"]+)" prompting "([^"]+)"$/, async (not,label,prompt) => {
     await waitFor('.applicable-advisories')
     if (!not) { await waitFor('.card-title') }
     await shouldSeeText(".card-title", not, label)
-});
+    await shouldSeeText(".card-text", not, prompt)
+})

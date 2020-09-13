@@ -2,6 +2,7 @@ const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
 const { toLocalDate, toLocalTime } = require('../../test/support/util')
+const Advisory = require('../../models/Advisory')
 const User = require('../../models/User')
 var sc = 1;
 
@@ -235,6 +236,9 @@ const takeScreenshot = async () => {
 	await new Promise(r => setTimeout(r, 200))
 	await scope.context.currentPage.screenshot({path: `sc${sc++}.png`});
 }
+const updateAdvisory = async (label,update) => {
+	await Advisory.updateOne({label},update)
+}
 const userExists = async (attr) => {
 	scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
 }
@@ -284,6 +288,7 @@ module.exports = {
 	startTypeaheadByLabel,
 	switchByLabel,
 	takeScreenshot,
+	updateAdvisory,
 	userExists,
 	waitFor,
 	waitForText

@@ -25,7 +25,7 @@ function LanguageSelector() {
     },[lang,i18n])
 
     return <div>
-        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+        <Dropdown isOpen={dropdownOpen} toggle={toggle} className="language-selector">
             <DropdownToggle caret>{t('language')}</DropdownToggle>
             <DropdownMenu>
                 {locales.map((language) => {
