@@ -5,6 +5,13 @@ const { toLocalDate, toLocalTime } = require('../../test/support/util')
 const User = require('../../models/User')
 var sc = 1;
 
+const chooseFromSelectByLabel = async (label, choice) => {
+	const escapedText = escapeXpathString(label);
+	const selector = `//select[@name=(//label[contains(text(),${escapedText})][1]/@for)]`;
+	const page = scope.context.currentPage
+	const el = await page.$x(selector)
+	await el[0].select(choice)
+}
 const clearInput = async (el) => {
 	await el.evaluate((input) => input.value = "")
 }
@@ -192,7 +199,7 @@ const shouldSee = async (selector,context) => {
 	await scope.context.currentPage.waitForXPath(selectors[context][selector]);
 } 
 const shouldSeeDefinition = async (dt,dd) => {
-	const q = `//dl/dt[contains(text(),'${dt}')]/following-sibling::dd[contains(text(),'${dd}')]`
+	const q = `//dt[contains(text(),'${dt}')]/following-sibling::dd[contains(text(),'${dd}')]`
 	await waitFor(q)
 }
 const shouldSeeErrorWithLabel = async (error,label) => {
@@ -251,6 +258,7 @@ const waitFor = async (selector) => {
 }
 
 module.exports = {
+	chooseFromSelectByLabel,
 	clickByText,
 	clickByXPath,
 	create,

@@ -33,14 +33,14 @@ describe("Advisory", () => {
     it('should save with a valid translation', async () => {
         await factory.create('advisory',{
             translations: [
-                {language: 'en', translation: 'The English version.'}
+                {language: 'en-US', translation: 'The English version.'}
             ]
         })
     })
     it('should not save with a translation missing translation', async () => {
         const advisory = await factory.build('advisory',{
             translations: [
-                {language: 'en'}
+                {language: 'en-US'}
             ]
         })
         await advisory.save().should.eventually.be.rejectedWith(ValidationError)

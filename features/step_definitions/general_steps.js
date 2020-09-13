@@ -1,5 +1,6 @@
 const { Given, When, Then } = require('cucumber');
 const {
+    chooseFromSelectByLabel,
     clickByText,
     fillByLabel,
     fillTypeaheadByLabel,
@@ -41,6 +42,10 @@ Given('I logged in as {string}', async (email) => {
 
 When(/^I fill in "([^"]+)" with ("[^"]+"|today|tomorrow)$/, async (label, value) => {
     await fillByLabel(label,parseInput(value))
+})
+
+When('I choose {string} for {string}', async (choice,label) => {
+    await chooseFromSelectByLabel(label,choice)
 })
 
 When('I fill in the {string} typeahead with {string}', async (label, value) => {

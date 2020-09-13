@@ -3,11 +3,11 @@ import {
     Button,
     ButtonGroup,
     Container,
+    Input,
     Form,
     FormFeedback,
     FormGroup,
-    Label,
-    Input
+    Label
 } from 'reactstrap';
 import {
     AsyncTypeahead,
@@ -20,6 +20,7 @@ import axios from 'axios'
 import useValidationErrors from '../../hooks/useValidationErrors'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
+import locales from '../../locales'
 
 export default function AdvisoryEditor({advisory,onSave,saving}) {
     const { t } = useTranslation('advisory')
@@ -74,6 +75,25 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
             </Highlighter>
         ]
     }
+    const [translations,setTranslations] = useState([])
+    useEffect(() => {
+        if (!advisory.translations) {return}
+        setTranslations(advisory.translations)
+    },[advisory.translations])
+    const updateTranslation = (index,field) => {
+        return (e) => {
+            const newVal = {...translations[index]}
+            newVal[field] = e.target.value
+            setTranslations([
+                ...translations.slice(0,index),
+                newVal,
+                ...translations.slice(index+1)
+            ])
+        }
+    }
+    const appendTranslation = () => {
+        setTranslations([...translations, {language: '', translation: ''}])
+    }
 
     const { register, handleSubmit, setError, clearError, errors } = useForm()
 
@@ -98,7 +118,8 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                 return {
                     "_id": d.id
                 }
-            })
+            }),
+            translations
         }
         onSave(newAdvisory)
     }
@@ -210,6 +231,59 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         clearButton={true}
                     />
                 </FormGroup>
+                <h2>{t('translation:translations')}</h2>
+                {translations.map((translation,index) => {
+                    return <div key={index}>
+                        <FormGroup>
+                            <Label for={`translations[${index}].language`}>{t('translation:language')}</Label>
+                            <Input
+                                type="select"
+                                name={`translations[${index}].language`}
+                                placeholder={t('translation:language')}
+                                innerRef={register({required: true})}
+                                value={translation.language}
+                                onChange={updateTranslation(index,'language')}
+                                invalid={errors.label ? true : false}
+                            >
+                                {locales
+                                    .filter((language) => {
+                                        return language === translation.language || 
+                                            !translations.map((tr) => {return tr.language}).includes(language)
+                                    })
+                                    .map((language, i) => {
+                                        return <option key={i} value={language.code}>{language.name}</option>
+                                    })
+                                }
+                            </Input>
+                            {   errors.translations &&
+                                errors.translations[index] &&
+                                errors.translations[index].language && 
+                                errors.translations[index].language.type === 'required' &&
+                                <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for={`translations[${index}].translation`}>{t('translation:translation')}</Label>
+                            <Input
+                                type="text"
+                                name={`translations[${index}].translation`}
+                                placeholder={t('translation:translation')}
+                                innerRef={register({required: true})}
+                                value={translation.translation}
+                                onChange={updateTranslation(index,'translation')}
+                                invalid={errors.label ? true : false}
+                            />
+                            {
+                                errors.translations &&
+                                errors.translations[index] &&
+                                errors.translations[index].translation &&
+                                errors.translations[index].translation.type === 'required' &&
+                                <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        </FormGroup>
+                    </div>
+                })}
+                <ButtonGroup>
+                    <Button onClick={appendTranslation}>{t('translation:addTranslation')}</Button>
+                </ButtonGroup>
                 <ButtonGroup>
                     <Button
                         color="primary"
