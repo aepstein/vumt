@@ -1,0 +1,8 @@
+module.exports = {
+    ADVISORY_CONTEXT_CHECKIN: 'checkin',
+    ADVISORY_CONTEXT_CHECKOUT: 'checkout',
+    ADVISORY_CONTEXT_EDIT_VISIT: 'editVisit',
+    ADVISORY_CONTEXT_NEW_VISIT: 'newVisit',
+    ADVISORY_CONTEXT_REGISTER: 'register',
+    ADVISORY_CONTEXT_UNAUTHENTICATED: 'unauthenticated'
+}
