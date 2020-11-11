@@ -11,7 +11,8 @@ import {
 } from 'reactstrap';
 import {
     AsyncTypeahead,
-    Highlighter
+    Highlighter,
+    Typeahead
 } from 'react-bootstrap-typeahead'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -21,6 +22,7 @@ import useValidationErrors from '../../hooks/useValidationErrors'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import locales from '../../locales'
+import advisoryContexts from '../../lib/advisoryContexts'
 
 export default function AdvisoryEditor({advisory,onSave,saving}) {
     const { t } = useTranslation('advisory')
@@ -71,6 +73,22 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
             </Highlighter>
         ]
     }
+    const [ contexts, setContexts ] = useState([])
+    useEffect(() => {
+        if (!advisory.contexts) { return }
+        const vContexts = advisory.contexts.map((c) => {
+            return {id: c, label: t(`advisoryContext:${c}`)}
+        })
+        setContexts(vContexts)
+    },[advisory.contexts,t])
+    const [contextOptions, setContextOptions] = useState(advisoryContexts.map(c => {
+        return {id: c, label: t(`advisoryContext:${c}`)}
+    }))
+    useEffect(() => {
+        setContextOptions(advisoryContexts.map(c => {
+            return {id: c, label: t(`advisoryContext:${c}`)}
+        }))
+    }, [setContextOptions,t])
     const [prompts,setPrompts] = useState([])
     useEffect(() => {
         if (!advisory.prompts) {return}
@@ -128,6 +146,9 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                 return {
                     "_id": d.id
                 }
+            }),
+            contexts: contexts.map((c) => {
+                return c.id
             })
         }
         onSave(newAdvisory)
@@ -222,6 +243,19 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         ref={districtsRef}
                         delay={200}
                         minLength={0}
+                        clearButton={true}
+                    />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="contexts">{t('contexts')}</Label>
+                    <Typeahead
+                        id="contexts"
+                        name="contexts"
+                        multiple
+                        selected={contexts}
+                        placeholder={t('contextsPlaceholder')}
+                        options={contextOptions}
+                        onChange={(selected) => setContexts(selected)}
                         clearButton={true}
                     />
                 </FormGroup>

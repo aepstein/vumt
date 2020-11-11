@@ -24,6 +24,7 @@ Feature: Manage advisories
         And I fill in "End date" with tomorrow
         And I fill in "End time" with "1000A"
         And I fill in the "Districts" typeahead with "Other Range"
+        And I fill in the "Contexts" typeahead with "check in"
         And I choose "en-US" for "Add prompt"
         And I fill in "English" with "Respect your environment."
         And I click the "Update advisory" button
@@ -34,6 +35,7 @@ Feature: Manage advisories
         And I should see "End date" defined as tomorrow
         And I should see "End time" defined as "10:00:00 AM"
         And I should see "Districts" defined as "Other Range"
+        And I should see "Contexts" defined as "check in"
         And I should see "English" defined as "Respect your environment."
 
     Scenario: Add a new advisory
@@ -49,6 +51,7 @@ Feature: Manage advisories
         And I should see "End date" defined as today
         And I should see "End time" defined as "9:00:00 AM"
         And I should see "Districts" defined as "McIntyre Range"
+        And I should see "Contexts" defined as "check out"
 
     Scenario Outline: Try to add invalid advisory
         Given I logged in as "bmcmartin@example.com"

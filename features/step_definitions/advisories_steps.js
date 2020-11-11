@@ -36,6 +36,7 @@ When(/^I fill in values for the advisory(?: except "([^"]+)")?$/,async (except) 
     if ( except !== "End date" ) await fillByLabel("End date",formatDateForFill(relativeDate('today')))
     if ( except !== "End time" ) await fillByLabel("End time",'09:00AM')
     if ( except !== "Districts" ) await fillTypeaheadByLabel("Districts","McIntyre Range")
+    if ( except !== "Contexts" ) await fillTypeaheadByLabel("Contexts","check out")
 })
 
 Then(/^I should( not)? see advisory "([^"]+)"$/, async (not,name) => {
