@@ -6,7 +6,7 @@ const advisory = require('../../middleware/advisory')
 const Advisory = require('../../models/Advisory');
 const attrAccessible = (req) => {
     const attrAccessible = req.advisory ? req.advisory : {}
-    const allowed = ['label','prompts','startOn','endOn','districts']
+    const allowed = ['label','prompts','startOn','endOn','districts','contexts']
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
             attrAccessible[key] = req.body[key]

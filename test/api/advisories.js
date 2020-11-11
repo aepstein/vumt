@@ -41,7 +41,8 @@ describe('/api/advisories', () => {
                 startOn: Date(),
                 endOn: Date(),
                 districts: [{"_id": district.id}],
-                prompts: [{language: 'en-US', translation: 'A translation.'}]
+                prompts: [{language: 'en-US', translation: 'A translation.'}],
+                contexts: ['register']
             })
             const res = await action(advisory,auth)
             res.should.have.status(201)
@@ -50,6 +51,7 @@ describe('/api/advisories', () => {
             Date(res.body.endOn).should.eql(Date(advisory.endOn))
             res.body.districts.map(d => d._id).should.have.members([district.id])
             res.body.prompts[0].language.should.eql('en-US')
+            res.body.contexts.should.have.members(['register'])
         })
         it('should return an error for an invalid submission', async () => {
             const auth = await withAuth({roles:['admin']})
