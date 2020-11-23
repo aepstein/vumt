@@ -26,7 +26,7 @@ const reduceUpdatedPlaces = (places,payload) => {
     return reducedPlaces
 }
 
-export default function( state = initialState, action ) {
+export default function placeReducer( state = initialState, action ) {
     switch(action.type) {
         case LOGOUT_SUCCESS:
             return {

@@ -1,4 +1,4 @@
-export default {
+const distanceUnitsOfMeasure = {
     km: {
         m: 1000
     },
@@ -6,3 +6,5 @@ export default {
         m: 1609.334
     }
 }
+
+export default distanceUnitsOfMeasure

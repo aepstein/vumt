@@ -57,6 +57,7 @@ Feature: Manage visits
         And my location is "44.189006,-73.816306"
         And I visit the "new visit" page
         And I click on the "Starting point" typeahead
+        And I take a screenshot
         Then the 1st option in the typeahead should contain "Johns Brook Garden"
         And the 1st option in the typeahead should contain "0 miles away"
         And the 2nd option in the typeahead should contain "Adirondack Loj"

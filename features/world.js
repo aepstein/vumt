@@ -1,6 +1,6 @@
 const { factory, mongoose, purgeDb, server } = require('../test/support/setup')
 require('../test/support/factories')
-const { setWorldConstructor } = require('cucumber');
+const { setWorldConstructor } = require('@cucumber/cucumber');
 const scope = require('./support/scope');
 
 const World = function() {

@@ -26,7 +26,7 @@ const reduceUpdatedVisits = (visits,payload) => {
     return reducedVisits
 }
 
-export default function( state = initialState, action ) {
+export default function visitReducer( state = initialState, action ) {
     switch(action.type) {
         case LOGOUT_SUCCESS:
             return {

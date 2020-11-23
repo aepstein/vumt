@@ -1,4 +1,4 @@
-const { After, Before, BeforeAll, AfterAll } = require('cucumber');
+const { After, Before, BeforeAll, AfterAll } = require('@cucumber/cucumber');
 const puppeteer = require('puppeteer');
 const puppeteerOptions = {
   // headless: false

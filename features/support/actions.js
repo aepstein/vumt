@@ -246,9 +246,24 @@ const visitExists = async (attr={}) => {
     scope.context.visit = await scope.factory.create('visit',attr);
 }
 const visitPage = async (path) => {
+	// const logStackTrace = async (error) => {
+	// 	return await scope.context.currentPage.evaluate(stack => new Promise(resolve =>
+	// 	  window.sourceMappedStackTrace.mapStackTrace(stack, (newStack) => {
+	// 		resolve(newStack);
+	// 	  })
+	// 	), typeof error.stack === 'string' ? error.stack : error.stack.join('\n'))
+	// 	.then((result) => {
+	// 	  console.log('ERROR:', error.message, result[0]);
+	// 	});
+	// }
 	await initPage()
 	const url = scope.host + paths[path];
 	const visit = await scope.context.currentPage.goto(url);
+	// await scope.context.currentPage.addScriptTag({
+	// 	url: 'https://cdn.jsdelivr.net/npm/sourcemapped-stacktrace@1.1.11/dist/sourcemapped-stacktrace.js',
+	// })
+	// scope.context.currentPage.on('pageerror', logStackTrace)
+	// scope.context.currentPage.on('error', logStackTrace)
 	await waitFor('.navbar')
 	return visit;
 }
@@ -258,7 +273,12 @@ const waitForText = async (text, context = "//a") => {
 	await scope.context.currentPage.waitForXPath(selector);
 }
 const waitFor = async (selector) => {
-	await scope.context.currentPage.waitFor(selector);
+	if (selector.match(/^\/\//)) {
+		await scope.context.currentPage.waitForXPath(selector)
+	}
+	else {
+		await scope.context.currentPage.waitForSelector(selector)
+	}
 }
 
 module.exports = {
