@@ -7,6 +7,16 @@ Feature: Manage advisories
         Given an admin user exists "Barbara" "McMartin" "bmcmartin@example.com"
         And a district "McIntyre Range" exists
         And an advisory "Leave No Trace" exists
+        And the advisory "Leave No Trace" has "en-US" prompt "Respect your surroundings."
+   
+    Scenario: Unauthenticated context advisories
+        Given an advisory "Welcome" exists
+        And the advisory "Welcome" has "en-US" prompt "This is something you see when you have not logged in."
+        And the advisory "Welcome" has context "unauthenticated"
+        And the advisory "Leave No Trace" has context "checkin"
+        When I visit the "home" page
+        Then I should see an applicable advisory for "Welcome" prompting "This is something you see when you have not logged in."
+        Then I should not see an applicable advisory for "Leave No Trace" prompting "Respect your surroundings"
 
     Scenario: See advisories
         Given I logged in as "bmcmartin@example.com"

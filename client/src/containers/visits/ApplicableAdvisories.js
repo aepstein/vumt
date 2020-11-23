@@ -9,11 +9,25 @@ export default function ApplicableAdvisories({visit,context}) {
     const [ applicableAdvisories, setApplicableAdvisories ] = useState([])
     const [ applicableAdvisoriesLoading, setApplicableAdvisoriesLoading ] = useState(false)
     const [ applicableAdvisoriesLoaded, setApplicableAdvisoriesLoaded ] = useState(false)
+    const [ url, setUrl ] = useState('')
+    useEffect(() => {
+        let newUrl = ''
+        if (visit) {
+            if (visit._id) { newUrl = '/api/visits/' + visit._id + '/applicableAdvisories/' + context }
+        }
+        else {
+            newUrl = '/api/advisories/applicable/' + context
+        }
+        if ( newUrl && newUrl !== url ) {
+            setUrl(newUrl)
+            setApplicableAdvisoriesLoaded(false)
+        }
+    },[url,visit,context,setUrl,setApplicableAdvisoriesLoaded])
     useEffect( () => {
-        if (visit._id && !applicableAdvisoriesLoading && !applicableAdvisoriesLoaded) {
+        if (url && !applicableAdvisoriesLoading && !applicableAdvisoriesLoaded) {
             setApplicableAdvisoriesLoading(true)
             axios
-            .get('/api/visits/' + visit._id + '/applicableAdvisories/' + context,prepareTokenConfig(token))
+            .get(url,prepareTokenConfig(token))
             .then((res) => {
                 setApplicableAdvisories(res.data.map(
                     advisory => <ApplicableAdvisory  key={advisory._id} advisory={advisory}/>
@@ -22,7 +36,7 @@ export default function ApplicableAdvisories({visit,context}) {
                 setApplicableAdvisoriesLoading(false)
             })
         }
-    },[visit._id, applicableAdvisories, applicableAdvisoriesLoading, applicableAdvisoriesLoaded,
+    },[url, applicableAdvisories, applicableAdvisoriesLoading, applicableAdvisoriesLoaded,
     setApplicableAdvisories, setApplicableAdvisoriesLoading, setApplicableAdvisoriesLoaded, token])
 
     return <div className="applicable-advisories">{applicableAdvisories}</div>

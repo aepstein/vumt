@@ -157,7 +157,6 @@ Feature: Manage visits
         When I change the language to "Français"
         Then I should see an applicable advisory for "Leave No Trace" prompting "Respectez votre environnement"
 
-
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"

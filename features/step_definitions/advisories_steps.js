@@ -22,6 +22,10 @@ Given('the advisory {string} has {string} prompt {string}', async (label, langua
     await updateAdvisory(label,{$push: {prompts: {language, translation}}})
 })
 
+Given('the advisory {string} has context {string}', async (label, context) => {
+    await updateAdvisory(label,{$push: {contexts: context}})
+})
+
 When(
     /^I click "([^"]+)" for advisory "([^"]+)"$/,
     async (button,label) => {
