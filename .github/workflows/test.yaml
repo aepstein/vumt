@@ -26,8 +26,9 @@ jobs:
     - run: npm install --prefix client
     - run: npm run migrate-up
       env:
-        NODE_ENV: test
+        NODE_ENV: test-gh
     - run: npm run test
       env:
         CI: true
         TZ: America/New_York
+        NODE_ENV: test-gh
