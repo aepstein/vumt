@@ -12,20 +12,33 @@ const {
 describe('/api/advisories', () => {
     const genAdvisories = async () => {
         return {
-            global: await factory.create('advisory', { label: 'global' })
+            global: await factory.create('advisory', { label: 'global' }),
+            checkin: await factory.create('advisory', { label: 'check in only', contexts: ['checkin'] }),
+            checkout: await factory.create('advisory', { label: 'check out only', contexts: ['checkout'] })
         }
     }
-    const action = async (path) => {
-        const req = chai.request(server).get(path);
-        return req;
-    }
     describe('GET /api/advisories', () => {
+        const action = async (path,options={}) => {
+            const req = chai.request(server).get(path,options).query(options)
+            return req;
+        }
         it('should return all advisories', async () => {
             const advisories = await genAdvisories()
             const res = await action('/api/advisories')
             res.should.have.status(200)
             res.body.should.be.an('array')
-            res.body.map(advisory => advisory._id).should.have.members([advisories.global.id])
+            res.body.map(advisory => advisory._id).should.have.members( Object.values(advisories).map(v => v.id) )
+        })
+    })
+    describe('GET /api/advisories/applicable', () => {
+        const action = async (path,options={}) => {
+            const req = chai.request(server).get(path,options).query(options)
+            return req;
+        }
+        it('should return advisories scoped to a context', async () => {
+            const advisories = await genAdvisories()
+            const res = await action(`/api/advisories/applicable/checkin`)
+            res.body.map(a => a._id).should.have.members([advisories.global.id,advisories.checkin.id])
         })
     })
     describe('POST /api/advisories', () => {

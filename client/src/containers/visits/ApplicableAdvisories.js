@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import ApplicableAdvisory from '../../components/visits/ApplicableAdvisory'
 
-export default function ApplicableAdvisories({visit}) {
+export default function ApplicableAdvisories({visit,context}) {
     const token = useSelector((state) => state.auth.token)
     const [ applicableAdvisories, setApplicableAdvisories ] = useState([])
     const [ applicableAdvisoriesLoading, setApplicableAdvisoriesLoading ] = useState(false)
@@ -13,7 +13,7 @@ export default function ApplicableAdvisories({visit}) {
         if (visit._id && !applicableAdvisoriesLoading && !applicableAdvisoriesLoaded) {
             setApplicableAdvisoriesLoading(true)
             axios
-            .get('/api/visits/' + visit._id + '/applicableAdvisories',prepareTokenConfig(token))
+            .get('/api/visits/' + visit._id + '/applicableAdvisories/' + context,prepareTokenConfig(token))
             .then((res) => {
                 setApplicableAdvisories(res.data.map(
                     advisory => <ApplicableAdvisory  key={advisory._id} advisory={advisory}/>

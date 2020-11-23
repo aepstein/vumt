@@ -1,5 +1,7 @@
 const mongoose = require('../db/mongoose');
+const { options } = require('../routes/api/advisories');
 const Schema = mongoose.Schema;
+const Advisory = require('./Advisory')
 
 const VisitSchema = new Schema({
     // User responsible for the visit
@@ -90,32 +92,11 @@ VisitSchema.post('save', async function(visit) {
 })
 
 // Retrieve advisories that are applicable to this visit
-VisitSchema.methods.applicableAdvisories = async function () {
-    // Basic conditions - no geographic constraint or intersect with origin
-    const geoConditions = [
-        {"districts.boundaries": { $geoIntersects: {$geometry: this.origin.location}}},
-        {districts: {$eq: null}}
-    ]
-    // Also include if intersecting with origin
-    this.destinations.forEach(d => {
-        geoConditions.push({
-            "districts.boundaries": { $geoIntersects: {$geometry: d.location}}
-        })
+VisitSchema.methods.applicableAdvisories = async function (context) {
+    return Advisory.applicable({
+        context,
+        visit: this
     })
-    return mongoose.model('advisory').aggregate([
-        {$lookup: {from: 'districts', localField: 'districts', foreignField: '_id', as: 'districts'}},
-        {$unwind: {path: '$districts', preserveNullAndEmptyArrays: true}},
-        {$match: {$and: [
-            {$or: [{startOn: { $lte: this.startOn }}, {startOn: {$eq: null}}]},
-            {$or: [{endOn: { $gte: this.startOn }}, {endOn: {$eq: null}}]},
-            {$or: geoConditions}
-        ]}},
-        {$group: {
-            _id: '$_id',
-            label: {$first: '$label'},
-            prompts: {$first: '$prompts'}
-        }}
-    ])
 }
 
 module.exports = Visit = mongoose.model('visit',VisitSchema);

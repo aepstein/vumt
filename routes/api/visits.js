@@ -14,6 +14,7 @@ const attrAccessible = (req) => {
         })
     return attrAccessible
 }
+const advisoryContext = require('../../middleware/advisoryContext')
 
 // @route GET api/visits
 // @desc Get all visits
@@ -40,8 +41,8 @@ router.get('/:visitId', auth(), visit(), async (req, res) => {
 // @route GET api/visits/:visitId/applicableVisits
 // @desc Load advisories applicable to a visit
 // @access Private
-router.get('/:visitId/applicableAdvisories', auth(), visit(), async (req, res) => {
-    return res.status(200).json(await req.visit.applicableAdvisories())
+router.get('/:visitId/applicableAdvisories/:advisoryContext', auth(), visit(), advisoryContext(true), async (req, res) => {
+    return res.status(200).json(await req.visit.applicableAdvisories(req.advisoryContext))
 })
 
 // @route PUT api/visits/:visitId
