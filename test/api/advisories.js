@@ -12,20 +12,33 @@ const {
 describe('/api/advisories', () => {
     const genAdvisories = async () => {
         return {
-            global: await factory.create('advisory', { label: 'global' })
+            global: await factory.create('advisory', { label: 'global' }),
+            checkin: await factory.create('advisory', { label: 'check in only', contexts: ['checkin'] }),
+            checkout: await factory.create('advisory', { label: 'check out only', contexts: ['checkout'] })
         }
     }
-    const action = async (path) => {
-        const req = chai.request(server).get(path);
-        return req;
-    }
     describe('GET /api/advisories', () => {
+        const action = async (path,options={}) => {
+            const req = chai.request(server).get(path,options).query(options)
+            return req;
+        }
         it('should return all advisories', async () => {
             const advisories = await genAdvisories()
             const res = await action('/api/advisories')
             res.should.have.status(200)
             res.body.should.be.an('array')
-            res.body.map(advisory => advisory._id).should.have.members([advisories.global.id])
+            res.body.map(advisory => advisory._id).should.have.members( Object.values(advisories).map(v => v.id) )
+        })
+    })
+    describe('GET /api/advisories/applicable', () => {
+        const action = async (path,options={}) => {
+            const req = chai.request(server).get(path,options).query(options)
+            return req;
+        }
+        it('should return advisories scoped to a context', async () => {
+            const advisories = await genAdvisories()
+            const res = await action(`/api/advisories/applicable/checkin`)
+            res.body.map(a => a._id).should.have.members([advisories.global.id,advisories.checkin.id])
         })
     })
     describe('POST /api/advisories', () => {
@@ -41,7 +54,8 @@ describe('/api/advisories', () => {
                 startOn: Date(),
                 endOn: Date(),
                 districts: [{"_id": district.id}],
-                prompts: [{language: 'en-US', translation: 'A translation.'}]
+                prompts: [{language: 'en-US', translation: 'A translation.'}],
+                contexts: ['register']
             })
             const res = await action(advisory,auth)
             res.should.have.status(201)
@@ -50,6 +64,7 @@ describe('/api/advisories', () => {
             Date(res.body.endOn).should.eql(Date(advisory.endOn))
             res.body.districts.map(d => d._id).should.have.members([district.id])
             res.body.prompts[0].language.should.eql('en-US')
+            res.body.contexts.should.have.members(['register'])
         })
         it('should return an error for an invalid submission', async () => {
             const auth = await withAuth({roles:['admin']})

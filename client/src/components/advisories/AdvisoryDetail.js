@@ -41,6 +41,8 @@ export default function AdvisoryDetail({advisory}) {
             <dd>{(new Date(advisory.endOn)).toLocaleTimeString(i18n.language,{timeZone: timezone})}</dd>
             <dt>{t('districts')}</dt>
             <dd>{advisory.districts.map(d => d.name).join(', ')}</dd>
+            <dt>{t('contexts')}</dt>
+            <dd>{advisory.contexts.map(c => t(`advisoryContext:${c}`)).join(', ')}</dd>
         </dl>
         <h2>{t('prompts')}</h2>
         <dl>

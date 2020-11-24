@@ -116,7 +116,7 @@ export default function VisitCheckIn({visit,onSave,saving}) {
                     {errors.checkedInTime && errors.checkedInTime.type === 'required' &&
                         <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
                 </FormGroup>
-                <ApplicableAdvisories visit={visit} />
+                <ApplicableAdvisories visit={visit} context="checkin" />
                 <ButtonGroup>
                     <Button
                         color="dark"

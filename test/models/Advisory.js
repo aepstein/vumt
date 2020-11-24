@@ -61,4 +61,15 @@ describe("Advisory", () => {
         })
         await advisory.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    it('should save with a valid context', async () => {
+        await factory.create('advisory',{contexts: ['register']})
+    })
+    it('should not save with an invalid context', async () => {
+        const advisory = await factory.build('advisory',{contexts: ['malarky']})
+        await advisory.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    it('should remove duplicate contexts on save', async () => {
+        const advisory = await factory.create('advisory',{contexts: ['register','register']})
+        advisory.contexts.length.should.eql(1)
+    })
 })

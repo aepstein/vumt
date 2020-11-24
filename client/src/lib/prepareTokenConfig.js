@@ -1,4 +1,4 @@
-export default function(token) {
+export default function prepareTokenConfig (token) {
     const config = {
         headers: {
             'Content-type': 'application/json'

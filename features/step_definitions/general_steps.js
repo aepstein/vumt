@@ -1,4 +1,4 @@
-const { Given, When, Then } = require('cucumber');
+const { Given, When, Then } = require('@cucumber/cucumber');
 const {
     chooseFromSelectByLabel,
     clickByText,
@@ -114,5 +114,5 @@ Then(/I should see "([^"]+)" defined as (\d+) (hour|minute)s? (later|ago)/,
 })
 
 Then(/^the (\d+)(?:st|nd|rd|th) option in the typeahead should contain "([^"]+)"$/, async (n,text) => {
-    await waitFor(`//ul[contains(@class,'rbt-menu')]/li[position()='${n}' and contains(.,'${text}')]`)
+    await waitFor(`//div[contains(@class,'rbt-menu')]/a[position()='${n}' and contains(.,'${text}')]`)
 })

@@ -7,6 +7,16 @@ Feature: Manage advisories
         Given an admin user exists "Barbara" "McMartin" "bmcmartin@example.com"
         And a district "McIntyre Range" exists
         And an advisory "Leave No Trace" exists
+        And the advisory "Leave No Trace" has "en-US" prompt "Respect your surroundings."
+   
+    Scenario: Unauthenticated context advisories
+        Given an advisory "Welcome" exists
+        And the advisory "Welcome" has "en-US" prompt "This is something you see when you have not logged in."
+        And the advisory "Welcome" has context "unauthenticated"
+        And the advisory "Leave No Trace" has context "checkin"
+        When I visit the "home" page
+        Then I should see an applicable advisory for "Welcome" prompting "This is something you see when you have not logged in."
+        Then I should not see an applicable advisory for "Leave No Trace" prompting "Respect your surroundings"
 
     Scenario: See advisories
         Given I logged in as "bmcmartin@example.com"
@@ -24,8 +34,8 @@ Feature: Manage advisories
         And I fill in "End date" with tomorrow
         And I fill in "End time" with "1000A"
         And I fill in the "Districts" typeahead with "Other Range"
-        And I choose "en-US" for "Add prompt"
-        And I fill in "English" with "Respect your environment."
+        And I fill in the "Contexts" typeahead with "check in"
+        And I fill in "English" with "Respect your environment please."
         And I click the "Update advisory" button
         And I click "Detail" for advisory "Leave Only Footprints, Take Only Pictures"
         Then I should see "Label" defined as "Leave Only Footprints, Take Only Pictures"
@@ -34,7 +44,8 @@ Feature: Manage advisories
         And I should see "End date" defined as tomorrow
         And I should see "End time" defined as "10:00:00 AM"
         And I should see "Districts" defined as "Other Range"
-        And I should see "English" defined as "Respect your environment."
+        And I should see "Contexts" defined as "check in"
+        And I should see "English" defined as "Respect your environment please."
 
     Scenario: Add a new advisory
         Given I logged in as "bmcmartin@example.com"
@@ -49,6 +60,7 @@ Feature: Manage advisories
         And I should see "End date" defined as today
         And I should see "End time" defined as "9:00:00 AM"
         And I should see "Districts" defined as "McIntyre Range"
+        And I should see "Contexts" defined as "check out"
 
     Scenario Outline: Try to add invalid advisory
         Given I logged in as "bmcmartin@example.com"

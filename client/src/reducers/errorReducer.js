@@ -11,7 +11,7 @@ const initialState = {
     id: null
 }
 
-export default function(state = initialState, action) {
+export default function errorReducer(state = initialState, action) {
     switch(action.type) {
         case LOGOUT_SUCCESS:
             return {

@@ -26,7 +26,7 @@ const reduceUpdatedDistricts = (districts,payload) => {
     return reducedDistricts
 }
 
-export default function( state = initialState, action ) {
+export default function districtReducer( state = initialState, action ) {
     switch(action.type) {
         case LOGOUT_SUCCESS:
             return {

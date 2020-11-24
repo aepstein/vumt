@@ -13,7 +13,7 @@ app.use('/api/places', require('./routes/api/places'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/visits', require('./routes/api/visits'));
 
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
+if (config.production || config.test) {
     app.use(express.static('client/build'));
     app.get('*', (req,res) => {
         res.sendFile(path.resolve(__dirname,'client','build','index.html'));
@@ -28,7 +28,7 @@ const listen = () => {
     });
 }
 
-if (process.env.NODE_ENV === 'test') {
+if (config.test) {
     const httpShutdown = require('http-shutdown');
     s = httpShutdown(listen());
     s.host = `http://localhost:${port}`;

@@ -1,4 +1,4 @@
-const { Given, When, Then } = require ('cucumber')
+const { Given, When, Then } = require ('@cucumber/cucumber')
 const {
     clickByXPath,
     create,
@@ -22,6 +22,10 @@ Given('the advisory {string} has {string} prompt {string}', async (label, langua
     await updateAdvisory(label,{$push: {prompts: {language, translation}}})
 })
 
+Given('the advisory {string} has context {string}', async (label, context) => {
+    await updateAdvisory(label,{$push: {contexts: context}})
+})
+
 When(
     /^I click "([^"]+)" for advisory "([^"]+)"$/,
     async (button,label) => {
@@ -36,6 +40,7 @@ When(/^I fill in values for the advisory(?: except "([^"]+)")?$/,async (except) 
     if ( except !== "End date" ) await fillByLabel("End date",formatDateForFill(relativeDate('today')))
     if ( except !== "End time" ) await fillByLabel("End time",'09:00AM')
     if ( except !== "Districts" ) await fillTypeaheadByLabel("Districts","McIntyre Range")
+    if ( except !== "Contexts" ) await fillTypeaheadByLabel("Contexts","check out")
 })
 
 Then(/^I should( not)? see advisory "([^"]+)"$/, async (not,name) => {

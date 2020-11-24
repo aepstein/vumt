@@ -241,11 +241,11 @@ describe('/api/visits', () => {
             return errorNoToken(res)
         })
     })
-    describe('GET /api/visits/:visitId/applicableAdvisories', () => {
-        const action = async (auth,user) => {
+    describe('GET /api/visits/:visitId/applicableAdvisories/:advisoryContext', () => {
+        const action = async (auth,user,context='checkin') => {
             const visit = await factory.create('visit',{ user: (user ? user.id : auth.body.user._id) })
             const res = chai.request(server)
-                .get('/api/visits/' + visit._id + '/applicableAdvisories')
+                .get('/api/visits/' + visit._id + '/applicableAdvisories/' + context)
             if ( auth ) { res.set('x-auth-token',auth.body.token) }
             return Promise.all([res, visit])
         }

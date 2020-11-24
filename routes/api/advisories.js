@@ -3,10 +3,11 @@ const router = express.Router();
 
 const auth = require('../../middleware/auth')
 const advisory = require('../../middleware/advisory')
+const advisoryContext = require('../../middleware/advisoryContext')
 const Advisory = require('../../models/Advisory');
 const attrAccessible = (req) => {
     const attrAccessible = req.advisory ? req.advisory : {}
-    const allowed = ['label','prompts','startOn','endOn','districts']
+    const allowed = ['label','prompts','startOn','endOn','districts','contexts']
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
             attrAccessible[key] = req.body[key]
@@ -15,6 +16,19 @@ const attrAccessible = (req) => {
 }
 const handleValidationError = require('../../lib/handleValidationError')
 
+// @route GET api/advisories/applicable/:advisoryContext
+// @desc Get applicable advisories for specified context and circumstances
+// @access Public
+router.get('/applicable/:advisoryContext',advisoryContext(true),async (req, res) => {
+    try {
+        const advisories = await Advisory.applicable({context: req.advisoryContext})
+        return res.json(advisories)
+    }
+    catch(err) {
+        console.log(err)
+        return res.status(500).json({msg: 'Error'})
+    }
+})
 
 // @route GET api/advisories
 // @desc Get all advisories

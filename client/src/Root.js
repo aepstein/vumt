@@ -2,7 +2,7 @@
 // import 'bootstrap-v4-rtl/dist/css/bootstrap.min.css'
 import 'bootswatch/dist/sketchy/bootstrap.min.css'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
-import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
+// import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import React, { Suspense } from 'react'

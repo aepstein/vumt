@@ -26,7 +26,7 @@ const reduceUpdatedAdvisories = (advisories,payload) => {
     return reducedAdvisories
 }
 
-export default function( state = initialState, action ) {
+export default function advisoryReducer( state = initialState, action ) {
     switch(action.type) {
         case LOGOUT_SUCCESS:
             return {

@@ -11,7 +11,7 @@ const initialState = {
     watch: null
 }
 
-export default function (state = initialState, action) {
+export default function geoReducer(state = initialState, action) {
     switch(action.type) {
         case GEO_CLEAR:
             return {

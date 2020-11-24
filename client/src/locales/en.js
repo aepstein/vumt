@@ -54,10 +54,20 @@ const locale = {
         "endOnTime": "End time",
         "districts": "Districts",
         "districtsPlaceholder": "Specify districts to which advisory is restricted",
+        "contexts": "Contexts",
+        "contextsPlaceholder": "Specify contexts in which advisory should be displayed",
         "newAdvisory": "New advisory",
         "advisoryDetail": "Advisory detail",
         "updateAdvisory": "Update advisory",
         "mustBeBeforeEndOn": "Must be before end date"
+    },
+    "advisoryContext": {
+        'checkin': "check in",
+        'checkout': "check out",
+        'editVisit': "edit visit",
+        'newVisit': "new visit",
+        'register': "register user",
+        'unauthenticated': "unauthenticated user"
     },
     "district": {
         "addDistrict": "Add district",
