@@ -7,7 +7,8 @@ const {
 } = require("../support/patterns");
 const {
     errorNoToken
-} = require('../support/middlewareErrors')
+} = require('../support/middlewareErrors');
+const User = require('../../models/User');
 
 describe('/api/auth', () => {
     describe('POST /api/auth',() => {
@@ -85,4 +86,20 @@ describe('/api/auth', () => {
             errorNoToken(res)
         });
     });
+    describe('PUT /api/auth/resetPassword',() => {
+        let action = async (email) => {
+            return chai.request(server)
+                .put('/api/auth/resetPassword')
+                .query({email})
+        }
+        it('should succeed for an existing user email',async () => {
+            const user = await factory.create('user')
+            const res = await action(user.email)
+            res.should.have.status(200)
+        })
+        it('should fail for unregistered email', async () => {
+            const res = await action('doesnotexist@nowhere.com')
+            res.should.have.status(404)
+        })
+    })
 });
