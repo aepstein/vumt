@@ -3,5 +3,8 @@
         "port": 5000
     },
     "test": false,
-    "production": false
+    "production": false,
+    "mail": {
+        "from": "contact@adirondackwilderness.org"
+    }
 }

@@ -37,6 +37,7 @@
     "jsonwebtoken": "^8.5.1",
     "migrate-mongo": "^8.1.4",
     "mongoose": "^5.9.6",
+    "nodemailer": "^6.4.16",
     "phone": "^2.4.8",
     "postal-codes-js": "^2.3.1",
     "provinces": "^1.11.0"

@@ -65,4 +65,12 @@ describe('User', () => {
         const user = await factory.build('user',{distanceUnitOfMeasure: 'paces'})
         await user.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    describe('User.resetPassword',() => {
+        it('should set token and expiration and send an email',async () => {
+            const user = await factory.create('user')
+            const email = await user.resetPassword('localhost')
+            user.resetPasswordToken.length.should.eql(40)
+            email.envelope.should.have.a.property('to').have.members([user.email])
+        })
+    })
 })
