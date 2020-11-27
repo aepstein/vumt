@@ -45,8 +45,8 @@ router.post('/', async (req, res) => {
 // @route   PUT api/resetPassword/:email
 // @desc    Initiate password reset
 // @access  Public
-router.put('/resetPassword',async (req, res) => {
-  const user = await User.findOne({email: req.query.email})
+router.put('/resetPassword/:email',async (req, res) => {
+  const user = await User.findOne({email: req.params.email})
   if (user) {
     await user.resetPassword(req.headers.host)
     return res.status(200).json({msg: "Password reset email sent"})

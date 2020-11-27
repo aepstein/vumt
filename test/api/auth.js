@@ -9,6 +9,7 @@ const {
     errorNoToken
 } = require('../support/middlewareErrors');
 const User = require('../../models/User');
+const user = require('../../middleware/user');
 
 describe('/api/auth', () => {
     describe('POST /api/auth',() => {
@@ -86,11 +87,10 @@ describe('/api/auth', () => {
             errorNoToken(res)
         });
     });
-    describe('PUT /api/auth/resetPassword',() => {
+    describe('PUT /api/auth/resetPassword/:email',() => {
         let action = async (email) => {
             return chai.request(server)
-                .put('/api/auth/resetPassword')
-                .query({email})
+                .put('/api/auth/resetPassword/' + encodeURIComponent(email))
         }
         it('should succeed for an existing user email',async () => {
             const user = await factory.create('user')
