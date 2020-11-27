@@ -58,12 +58,19 @@ const UserSchema = new Schema(
             type: String,
             enum: ['ranger','planner','admin']
         }],
-        resetPasswordToken: {
-            type: String
-        },
-        resetPasswordExpires: {
-            type: Date
-        }
+        resetPasswordTokens: [{
+            token: {
+                type: String,
+                required: true
+            },
+            expires: {
+                type: Date,
+                required: true
+            },
+            expended: {
+                type: Date
+            }
+        }]
     },
     {
             timestamps: true
@@ -83,13 +90,16 @@ UserSchema.pre('save',async function() {
 
 UserSchema.methods.resetPassword = async function(host) {
     var user = this
-    user.resetPasswordToken = await new Promise((resolve,reject) => {
-        crypto.randomBytes(20,(err,buf) => {
-            if (err) { reject('error generating token') }
-            resolve(buf.toString('hex'))
-        })
-    })
-    user.resetPasswordExpires = Date.now() + 3600000 // 1 hour
+    const newToken = {
+        token: await new Promise((resolve,reject) => {
+            crypto.randomBytes(20,(err,buf) => {
+                if (err) { reject('error generating token') }
+                resolve(buf.toString('hex'))
+            })
+        }),
+        expires: Date.now() + 3600000 // 1 hour
+    }
+    user.resetPasswordTokens.push(newToken)
     await user.save()
     return mailer.sendMail({
         from: config.mail.from,
@@ -97,7 +107,7 @@ UserSchema.methods.resetPassword = async function(host) {
         subject: "Visitor Use Management Tool Password Reset",
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'https://' + host + '/reset/' + user.resetPasswordToken + '\n\n' +
+        'https://' + host + '/reset/' + newToken.token + '\n\n' +
         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
     })
 }

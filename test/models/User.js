@@ -69,7 +69,7 @@ describe('User', () => {
         it('should set token and expiration and send an email',async () => {
             const user = await factory.create('user')
             const email = await user.resetPassword('localhost')
-            user.resetPasswordToken.length.should.eql(40)
+            user.resetPasswordTokens[0].token.length.should.eql(40)
             email.envelope.should.have.a.property('to').have.members([user.email])
         })
     })

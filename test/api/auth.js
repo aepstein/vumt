@@ -87,15 +87,15 @@ describe('/api/auth', () => {
             errorNoToken(res)
         });
     });
-    describe('PUT /api/auth/resetPassword/:email',() => {
+    describe('POST /api/auth/resetPassword/:email',() => {
         let action = async (email) => {
             return chai.request(server)
-                .put('/api/auth/resetPassword/' + encodeURIComponent(email))
+                .post('/api/auth/resetPassword/' + encodeURIComponent(email))
         }
         it('should succeed for an existing user email',async () => {
             const user = await factory.create('user')
             const res = await action(user.email)
-            res.should.have.status(200)
+            res.should.have.status(201)
         })
         it('should fail for unregistered email', async () => {
             const res = await action('doesnotexist@nowhere.com')

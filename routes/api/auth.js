@@ -42,14 +42,14 @@ router.post('/', async (req, res) => {
   catch(err) { throw err }
 })
 
-// @route   PUT api/resetPassword/:email
+// @route   POST api/resetPassword/:email
 // @desc    Initiate password reset
 // @access  Public
-router.put('/resetPassword/:email',async (req, res) => {
+router.post('/resetPassword/:email',async (req, res) => {
   const user = await User.findOne({email: req.params.email})
   if (user) {
     await user.resetPassword(req.headers.host)
-    return res.status(200).json({msg: "Password reset email sent"})
+    return res.status(201).json({msg: "Password reset email sent"})
   }
   else {
     return res.status(404).json({msg: "No user registered with email"})
