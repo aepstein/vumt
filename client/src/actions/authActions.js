@@ -13,6 +13,7 @@ import {
     AUTH_ERROR,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
+    LOGIN_CANCEL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
     REGISTER_FAIL,
@@ -95,7 +96,7 @@ export const update = (user,attrs,history) => async (dispatch,getState) => {
     }
 }
 
-export const login = (attrs) => async (dispatch) => {
+export const login = (attrs,history) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -109,6 +110,7 @@ export const login = (attrs) => async (dispatch) => {
             payload: transformDates(res.data)
         })
         dispatch(initLocation)
+        history.push('/')
     }
     catch(err) {
         dispatch(
@@ -118,6 +120,11 @@ export const login = (attrs) => async (dispatch) => {
             type: LOGIN_FAIL
         })
     }
+}
+
+export const cancelLogin = (history) => (dispatch) => {
+    dispatch({ type: LOGIN_CANCEL })
+    history.push('/')
 }
 
 export const logout = (dispatch) => {

@@ -152,6 +152,7 @@ const locale = {
     "AppNavbar": {
         "admin": "Administration",
         "brand": "Visitor Use Management Tool",
+        "cancel": "Cancel",
         "home": "Home",
         "language": "Language",
         "login": "Login",
@@ -161,6 +162,9 @@ const locale = {
         "places": "Places",
         "register": "Register",
         "users": "Users",
+        "forgotPassword": "Forgot your password?",
+        "resetPassword": "Reset your password",
+        "resetPasswordInstructions": "Provide the email address with which you registered and we will send a link you can use to reset your password.",
         "welcome": "Welcome, {{name}}"
     }
 }

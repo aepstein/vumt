@@ -17,6 +17,7 @@ import PlacesManager from './containers/places/PlacesManager'
 import UsersManager from './containers/users/UsersManager'
 import VisitsManager from './containers/visits/VisitsManager'
 import AuthUserManager from './containers/auth/AuthUserManager'
+import LoginManager from './containers/auth/LoginManager'
 import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
 import AlertsManager from './containers/AlertsManager'
@@ -37,6 +38,9 @@ const Root = ({ store }) => (
               </UnAuthRoute>
               <UnAuthRoute path="/register">
                 <AuthUserManager action="register" />
+              </UnAuthRoute>
+              <UnAuthRoute path="/login">
+                <LoginManager />
               </UnAuthRoute>
               <AuthRoute path="/profile/edit">
                 <AuthUserManager action="edit" />
