@@ -34,6 +34,7 @@
     "express-async-handler": "^1.1.4",
     "factory-bot": "^6.1.4",
     "i18n-iso-countries": "^4.3.1",
+    "i18next": "^19.8.4",
     "jsonwebtoken": "^8.5.1",
     "migrate-mongo": "^8.1.4",
     "mongoose": "^5.9.6",
