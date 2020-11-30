@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const server = require('../../server');
 
+const { interactsWithMail } = require('nodemailer-stub')
+
 const chai = require('chai');
 const should = chai.should()
 const chaiHttp = require('chai-http');
@@ -28,6 +30,7 @@ const purgeDb = async () => {
 module.exports = {
     chai,
     factory,
+    interactsWithMail,
     mongoose,
     purgeDb,
     server,

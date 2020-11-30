@@ -1,3 +1,6 @@
 module.exports = {
-    production: true
+    production: true,
+    mail: {
+        secure: true
+    }
 }

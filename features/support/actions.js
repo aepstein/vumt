@@ -35,6 +35,19 @@ const create = async (template, attrs={}) => {
 	scope.models[template].push(created)
 	return created
 }
+
+const emailFollowLink = async (regex) => {
+	const mail = scope.mail.lastMail()
+	const path = mail.content.match(regex)[0]
+	return visitPath(path)
+}
+
+const emailShouldBeSentTo = (email) => {
+	const mail = scope.mail.lastMail()
+	mail.should.not.be.a('null')
+	mail.should.have.property('to').have.members([email])
+}
+
 // credit: https://gist.github.com/tokland/d3bae3b6d3c1576d8700405829bbdb52
 // see: https://stackoverflow.com/questions/47407791/puppeteer-click-on-element-with-text
 const escapeXpathString = str => {
@@ -245,25 +258,13 @@ const userExists = async (attr) => {
 const visitExists = async (attr={}) => {
     scope.context.visit = await scope.factory.create('visit',attr);
 }
-const visitPage = async (path) => {
-	// const logStackTrace = async (error) => {
-	// 	return await scope.context.currentPage.evaluate(stack => new Promise(resolve =>
-	// 	  window.sourceMappedStackTrace.mapStackTrace(stack, (newStack) => {
-	// 		resolve(newStack);
-	// 	  })
-	// 	), typeof error.stack === 'string' ? error.stack : error.stack.join('\n'))
-	// 	.then((result) => {
-	// 	  console.log('ERROR:', error.message, result[0]);
-	// 	});
-	// }
+const visitPage = async (page) => {
+	return await visitPath(paths[page])
+}
+const visitPath = async (path) => {
 	await initPage()
-	const url = scope.host + paths[path];
+	const url = scope.host + path;
 	const visit = await scope.context.currentPage.goto(url);
-	// await scope.context.currentPage.addScriptTag({
-	// 	url: 'https://cdn.jsdelivr.net/npm/sourcemapped-stacktrace@1.1.11/dist/sourcemapped-stacktrace.js',
-	// })
-	// scope.context.currentPage.on('pageerror', logStackTrace)
-	// scope.context.currentPage.on('error', logStackTrace)
 	await waitFor('.navbar')
 	return visit;
 }
@@ -286,6 +287,8 @@ module.exports = {
 	clickByText,
 	clickByXPath,
 	create,
+	emailFollowLink,
+	emailShouldBeSentTo,
 	fillByLabel,
 	fillByPlaceholder,
 	fillTypeaheadByLabel,
@@ -298,6 +301,7 @@ module.exports = {
 	parseInput,
 	visitExists,
 	visitPage,
+	visitPath,
 	relativeDate,
 	setGeolocation,
 	shouldBeLoggedInAs,

@@ -61,3 +61,18 @@ Feature: Authentication
         And I should see "Postal code" defined as "H2T 2M2"
         And I should see "Phone" defined as "+15142720667"
         And I should see "Use device location" defined as "No"
+
+    Scenario: Request to reset forgotten password
+        Given I am registered as "bmarshall@example.com"
+        When I visit the "login" page
+        And I click the "Reset your password" link
+        And I fill in "Email" with "bmarshall@example.com"
+        And I click the "Reset your password" button
+        Then I should see "An email with instructions to reset your password was sent to bmarshall@example.com" in a modal
+        And an email should be sent to "bmarshall@example.com"
+        When I open the email and follow the password reset link
+        And I fill in "Password" with "mynewpassword"
+        And I click the "Reset your password" button
+        Then I should see "Your password was reset and you are now logged in." in a modal
+        When I click the "Continue" button
+        Then I should be logged in as "bmarshall@example.com"

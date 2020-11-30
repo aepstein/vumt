@@ -17,7 +17,6 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 
 import LanguageSelector from '../components/LanguageSelector'
-import LoginModal from './auth/LoginModal';
 import Logout from './auth/Logout';
 
 function AppNavbar() {
@@ -84,7 +83,7 @@ function AppNavbar() {
                 <NavLink to="/register" className="nav-link" activeClassName="active">{t('register')}</NavLink>
             </NavItem>
             <NavItem>
-                <LoginModal />
+                <NavLink to="/login" className="nav-link" activeClassName="active">{t('login')}</NavLink>
             </NavItem>
         </Fragment>
     );

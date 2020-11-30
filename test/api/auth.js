@@ -7,7 +7,7 @@ const {
 } = require("../support/patterns");
 const {
     errorNoToken
-} = require('../support/middlewareErrors')
+} = require('../support/middlewareErrors');
 
 describe('/api/auth', () => {
     describe('POST /api/auth',() => {
@@ -85,4 +85,100 @@ describe('/api/auth', () => {
             errorNoToken(res)
         });
     });
+    describe('POST /api/auth/resetPassword/:email',() => {
+        let action = async (email) => {
+            return chai.request(server)
+                .post('/api/auth/resetPassword/' + encodeURIComponent(email))
+        }
+        it('should succeed for an existing user email',async () => {
+            const user = await factory.create('user')
+            const res = await action(user.email)
+            res.should.have.status(201)
+        })
+        it('should fail for unregistered email', async () => {
+            const res = await action('doesnotexist@nowhere.com')
+            res.should.have.status(404)
+        })
+    })
+    describe('GET /api/auth/resetPassword/:email/:token',() => {
+        let action = async (email,token) => {
+            return chai.request(server)
+                .get('/api/auth/resetPassword/' + encodeURIComponent(email) + '/' + token)
+        }
+        it('should succeed for an existing user email with valid token', async () => {
+            const user = await factory.create('user')
+            await user.createResetPasswordToken('localhost')
+            const res = await action(user.email,user.resetPasswordTokens[0].token)
+            res.should.have.status(200)
+        })
+        it('should fail for an expired token', async () => {
+            const user = await factory.create('user')
+            await user.createResetPasswordToken('localhost')
+            user.resetPasswordTokens[0].expires = Date.now() - 1
+            await user.save()
+            const res = await action(user.email,user.resetPasswordTokens[0].token)
+            res.should.have.status(401)
+        })
+        it('should fail for an expended token', async () => {
+            const user = await factory.create('user')
+            await user.createResetPasswordToken('localhost')
+            user.resetPasswordTokens[0].expended = Date.now()
+            await user.save()
+            const res = await action(user.email,user.resetPasswordTokens[0].token)
+            res.should.have.status(403)
+        })
+        it('should fail if no user exists', async () => {
+            const user = await factory.create('user')
+            const res = await action('nobody@nowhere.com',"a6b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7")
+            res.should.have.status(404)
+            res.body.should.have.property('code').eql('noEmail')
+        })
+        it('should fail if no token exists', async () => {
+            const user = await factory.create('user')
+            const res = await action(user.email,"a6b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7")
+            res.should.have.status(404)
+            res.body.should.have.property('code').eql('noToken')
+        })
+    })
+    describe('PUT /api/resetPassword/:email/:token',() => {
+        let action = async (email,token,password) => {
+            return chai.request(server)
+                .put('/api/auth/resetPassword/' + encodeURIComponent(email) + '/' + token)
+                .send({password})
+        }
+        it('should succeed for an existing user email with valid token', async () => {
+            const user = await factory.create('user')
+            await user.createResetPasswordToken('localhost')
+            const res = await action(user.email,user.resetPasswordTokens[0].token,'swordfish')
+            res.should.have.status(200)
+        })
+        it('should fail for an expired token', async () => {
+            const user = await factory.create('user')
+            await user.createResetPasswordToken('localhost')
+            user.resetPasswordTokens[0].expires = Date.now() - 1
+            await user.save()
+            const res = await action(user.email,user.resetPasswordTokens[0].token,'swordfish')
+            res.should.have.status(401)
+        })
+        it('should fail for an expended token', async () => {
+            const user = await factory.create('user')
+            await user.createResetPasswordToken('localhost')
+            user.resetPasswordTokens[0].expended = Date.now()
+            await user.save()
+            const res = await action(user.email,user.resetPasswordTokens[0].token,'swordfish')
+            res.should.have.status(403)
+        })
+        it('should fail if no user exists', async () => {
+            const user = await factory.create('user')
+            const res = await action('nobody@nowhere.com',"a6b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7",'swordfish')
+            res.should.have.status(404)
+            res.body.should.have.property('code').eql('noEmail')
+        })
+        it('should fail if no token exists', async () => {
+            const user = await factory.create('user')
+            const res = await action(user.email,"a6b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7",'swordfish')
+            res.should.have.status(404)
+            res.body.should.have.property('code').eql('noToken')
+        })
+    })
 });

@@ -4,5 +4,15 @@
     "jwtSecret": "JWT_SECRET",
     "server": {
         "port": "PORT"
-    }
+    },
+    "mail": {
+        "host": "MAIL_HOST",
+        "port": "MAIL_PORT",
+        "auth": {
+            "type": "MAIL_AUTH_TYPE",
+            "user": "MAIL_AUTH_USER",
+            "serviceClient": "MAIL_AUTH_CLIENT_ID",
+            "privateKey": "MAIL_AUTH_KEY"
+        }
+    } 
 }

@@ -4,6 +4,11 @@ const bcrypt = require('bcryptjs');
 const countries = require('i18n-iso-countries')
 const phone = require('phone')
 const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
+const crypto = require('crypto')
+const mailer = require('../mailer/mailer')
+const config = require('config')
+const jwtSecret = config.jwtSecret
+const jwt = require('jsonwebtoken')
 
 
 const UserSchema = new Schema(
@@ -54,6 +59,19 @@ const UserSchema = new Schema(
         roles: [{
             type: String,
             enum: ['ranger','planner','admin']
+        }],
+        resetPasswordTokens: [{
+            token: {
+                type: String,
+                required: true
+            },
+            expires: {
+                type: Date,
+                required: true
+            },
+            expended: {
+                type: Date
+            }
         }]
     },
     {
@@ -71,6 +89,49 @@ UserSchema.pre('save',async function() {
         user.phone = phone(user.phone,'',true)[0]
     }
 });
+
+/* Issues a JSON web token in a server response for a user who has been authenticated
+ */
+UserSchema.methods.genToken = async function() {
+    const user = this
+    return jwt.sign(
+        { id: user.id },
+        jwtSecret,
+        { expiresIn: 2678400 }
+    )
+}
+
+UserSchema.methods.createResetPasswordToken = async function(host) {
+    var user = this
+    const newToken = {
+        token: await new Promise((resolve,reject) => {
+            crypto.randomBytes(20,(err,buf) => {
+                if (err) { reject('error generating token') }
+                resolve(buf.toString('hex'))
+            })
+        }),
+        expires: Date.now() + 3600000 // 1 hour
+    }
+    user.resetPasswordTokens.push(newToken)
+    await user.save()
+    return mailer.sendMail({
+        from: config.mail.from,
+        to: user.email,
+        subject: "Visitor Use Management Tool Password Reset",
+        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+        'https://' + (config.host ? config.host : host) + '/resetPassword/' + encodeURIComponent(user.email) + '/' + newToken.token + '\n\n' +
+        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+    })
+}
+
+UserSchema.methods.resetPasswordWithToken = async function (token,password) {
+    const user = this
+    const tokenRecord = user.resetPasswordTokens.find((t) => t.token === token)
+    tokenRecord.expended = Date.now()
+    user.password = password
+    user.save()
+}
 
 UserSchema.methods.pubProps = function() {
     return {

@@ -1,6 +1,7 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const {
     clickByText,
+    emailFollowLink,
     fillByLabel,
     fillTypeaheadByLabel,
     loginAs,
@@ -50,6 +51,10 @@ When('I fill in a modified profile', async () => {
 When('I register as a {string}', async (email) => {
     await fillInRegistration(email)
     await clickByText("Register","//button");
+});
+
+When('I open the email and follow the password reset link', async () => {
+    await emailFollowLink(/\/resetPassword\/[^\\]+\/[a-f0-9]+/)
 });
 
 Then('I should be logged in as {string}', async(email) => {

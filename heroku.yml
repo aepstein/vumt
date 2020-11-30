@@ -1,0 +1,7 @@
+release:
+  image: web
+  command:
+    - npm run migrate-up
+run:
+  web:
+    - npm start

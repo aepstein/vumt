@@ -2,9 +2,9 @@ const { Given, When, Then } = require('@cucumber/cucumber');
 const {
     chooseFromSelectByLabel,
     clickByText,
+    emailShouldBeSentTo,
     fillByLabel,
     fillTypeaheadByLabel,
-    formatDateForFill,
     formatTimeForDisplay,
     formatTimeForFill,
     loginAs,
@@ -19,7 +19,8 @@ const {
     takeScreenshot,
     visitPage,
     waitFor,
-    clickByXPath
+    waitForText,
+    clickByXPath,
 } = require('../support/actions');
 
 Given(/my location is "(?<lat>(-?(90|(\d|[1-8]\d)(\.\d{1,6}){0,1})))\,{1}(?<long>(-?(180|(\d|\d\d|1[0-7]\d)(\.\d{1,6}){0,1})))"/,
@@ -113,6 +114,14 @@ Then(/I should see "([^"]+)" defined as (\d+) (hour|minute)s? (later|ago)/,
     await shouldSeeDefinition(dt,formatTimeForDisplay(dd))
 })
 
+Then(/^I should see "([^"]+)" in a modal$/, async (text) => {
+    await waitForText(text,"//div[contains(@class,'modal-body')]")
+})
+
 Then(/^the (\d+)(?:st|nd|rd|th) option in the typeahead should contain "([^"]+)"$/, async (n,text) => {
     await waitFor(`//div[contains(@class,'rbt-menu')]/a[position()='${n}' and contains(.,'${text}')]`)
 })
+
+Then('an email should be sent to {string}', async (email) => {
+    await emailShouldBeSentTo(email)
+});
