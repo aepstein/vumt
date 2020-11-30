@@ -133,7 +133,7 @@ export const login = (attrs,history) => async (dispatch) => {
 export const requestResetPassword = (email) => async (dispatch) => {
     dispatch({type: RESET_PASSWORD_REQUEST})
     try {
-        const res = await axios.post('/api/auth/resetPassword/' + encodeURIComponent(email))
+        await axios.post('/api/auth/resetPassword/' + encodeURIComponent(email))
         dispatch({type: RESET_PASSWORD_REQUEST_SUCCESS, payload: {email}})
     }
     catch(err) {

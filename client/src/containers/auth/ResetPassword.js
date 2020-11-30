@@ -55,7 +55,7 @@ function ResetPassword() {
         })
     },[email,token,checkingToken,checkedToken,setCheckingToken,setCheckedToken,setVerifiedToken,setTokenCode])
 
-    const { register, handleSubmit, setError, errors } = useForm()
+    const { register, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         setter(e.target.value)
