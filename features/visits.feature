@@ -57,7 +57,6 @@ Feature: Manage visits
         And my location is "44.189006,-73.816306"
         And I visit the "new visit" page
         And I click on the "Starting point" typeahead
-        And I take a screenshot
         Then the 1st option in the typeahead should contain "Johns Brook Garden"
         And the 1st option in the typeahead should contain "0 miles away"
         And the 2nd option in the typeahead should contain "Adirondack Loj"
@@ -163,6 +162,5 @@ Feature: Manage visits
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
-        And I take a screenshot
         And I click "Remove" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         Then I wait for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit" to disappear
