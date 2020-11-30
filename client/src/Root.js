@@ -18,6 +18,9 @@ import UsersManager from './containers/users/UsersManager'
 import VisitsManager from './containers/visits/VisitsManager'
 import AuthUserManager from './containers/auth/AuthUserManager'
 import LoginManager from './containers/auth/LoginManager'
+import ResetPassword from './containers/auth/ResetPassword'
+import ResetPasswordRequest from './containers/auth/ResetPasswordRequest'
+import ResetPasswordComplete from './containers/auth/ResetPasswordComplete'
 import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
 import AlertsManager from './containers/AlertsManager'
@@ -32,12 +35,19 @@ const Root = ({ store }) => (
             <Router>
             <AppNavbar />
             <AlertsManager />
+            <ResetPasswordComplete />
             <Switch>
               <UnAuthRoute path="/need-auth">
                 <NeedAuth />
               </UnAuthRoute>
               <UnAuthRoute path="/register">
                 <AuthUserManager action="register" />
+              </UnAuthRoute>
+              <UnAuthRoute path="/resetPassword/:email/:token">
+                <ResetPassword />
+              </UnAuthRoute>
+              <UnAuthRoute path="/resetPassword">
+                <ResetPasswordRequest />
               </UnAuthRoute>
               <UnAuthRoute path="/login">
                 <LoginManager />

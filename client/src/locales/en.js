@@ -153,6 +153,7 @@ const locale = {
         "admin": "Administration",
         "brand": "Visitor Use Management Tool",
         "cancel": "Cancel",
+        "continue": "Continue",
         "home": "Home",
         "language": "Language",
         "login": "Login",
@@ -164,8 +165,19 @@ const locale = {
         "users": "Users",
         "forgotPassword": "Forgot your password?",
         "resetPassword": "Reset your password",
+        "resetPasswordComplete": "Your password was reset",
+        "resetPasswordCompleteMessage": "Your password was reset and you are now logged in.",
+        "resetPasswordConfirmInstructions": "You verified your identity. You may now reset your password.",
         "resetPasswordInstructions": "Provide the email address with which you registered and we will send a link you can use to reset your password.",
+        "resetPasswordRequestSent": "Password Reset Email Sent",
+        "resetPasswordRequestSentTo": "An email with instructions to reset your password was sent to {{email}}",
         "welcome": "Welcome, {{name}}"
+    },
+    "resetPasswordTokenError": {
+        "noEmail": "No user is registered with the specified email",
+        "noToken": "The specified password reset request token does not exist for the specified user",
+        "expired": "The password reset request is too old to be processed.  Please submit a new password reset request.",
+        "expended": "This password reset request was already used to reset the password.  Please submit a new password reset request."
     }
 }
 

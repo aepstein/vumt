@@ -163,5 +163,6 @@ Feature: Manage visits
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
+        And I take a screenshot
         And I click "Remove" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         Then I wait for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit" to disappear

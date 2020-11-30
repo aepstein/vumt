@@ -11,13 +11,23 @@ import {
     REGISTER_FAIL,
     SAVING_AUTHUSER,
     UPDATE_AUTHUSER_SUCCESS,
-    UPDATE_AUTHUSER_FAIL
+    UPDATE_AUTHUSER_FAIL,
+    RESET_PASSWORD_REQUEST,
+    RESET_PASSWORD_REQUEST_CONTINUE,
+    RESET_PASSWORD_REQUEST_FAIL,
+    RESET_PASSWORD_REQUEST_SUCCESS,
+    RESET_PASSWORD,
+    RESET_PASSWORD_CONTINUE,
+    RESET_PASSWORD_FAIL,
+    RESET_PASSWORD_SUCCESS
 } from '../actions/types';
 
 const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     isLoading: false,
+    resetPasswordEmail: null,
+    resetPasswordComplete: false,
     saving: false,
     user: null
 };
@@ -29,6 +39,8 @@ export default function authReducer (state = initialState, action) {
                 ...state,
                 isLoading: true
             };
+        case RESET_PASSWORD:
+        case RESET_PASSWORD_REQUEST:
         case SAVING_AUTHUSER:
             return {
                 ...state,
@@ -62,7 +74,31 @@ export default function authReducer (state = initialState, action) {
                 isLoading: false,
                 saving: false
             };
+        case RESET_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                saving: false,
+                resetPasswordComplete: true
+            }
+        case RESET_PASSWORD_CONTINUE:
+            return {
+                ...state,
+                resetPasswordComplete: false
+            }
+        case RESET_PASSWORD_REQUEST_SUCCESS:
+            return {
+                ...state,
+                resetPasswordEmail: action.payload.email,
+                saving: false
+            }
+        case RESET_PASSWORD_REQUEST_CONTINUE:
+            return {
+                ...state,
+                resetPasswordEmail: null
+            }
         case AUTH_ERROR:
+        case RESET_PASSWORD_FAIL:
+        case RESET_PASSWORD_REQUEST_FAIL:
         case LOGIN_FAIL:
         case LOGIN_CANCEL:
         case LOGOUT_SUCCESS:

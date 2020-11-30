@@ -6,17 +6,20 @@ import {
     FormGroup,
     Label,
     Input,
-    Alert
+    Alert,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter
 } from 'reactstrap';
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import { login, cancelLogin } from '../../actions/authActions';
+import { cancelLogin, requestResetPassword, requestResetPasswordContinue } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 
-function LoginManager() {
+function ResetPasswordRequest() {
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
     const [msg, setMsg] = useState(null)
 
     const error = useSelector(state => state.error)
@@ -26,22 +29,25 @@ function LoginManager() {
     
     const { t } = useTranslation('AppNavbar')
 
+    const saving = useSelector((state) => state.auth.saving)
+    const resetPasswordEmail = useSelector((state) => state.auth.resetPasswordEmail)
+
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
     const onSubmit = (e) => {
         e.preventDefault()
-        const user = {
-            email,
-            password
-        }
         dispatch(clearErrors())
-        dispatch(login(user,history))
+        dispatch(requestResetPassword(email))
     }
     const onCancel = (e) => {
         e.preventDefault()
         dispatch(clearErrors())
         dispatch(cancelLogin(history))
+    }
+    const onComplete = (e) => {
+        e.preventDefault()
+        dispatch(requestResetPasswordContinue(history))
     }
 
     useEffect(() => {
@@ -53,8 +59,9 @@ function LoginManager() {
     },[error])
 
     return <Container>
-        <h1>{t('login')}</h1>
+        <h1>{t('resetPassword')}</h1>
         {msg ? <Alert color="danger">{msg}</Alert> : null }
+        <p>{t('resetPasswordInstructions')}</p>
         <Form onSubmit={onSubmit}>
             <FormGroup>
                 <Label for="email">{t('commonForms:email')}</Label>
@@ -66,25 +73,23 @@ function LoginManager() {
                     onChange={onChange(setEmail)}
                     className="mb-3"
                 />
-                <Label for="password">{t('commonForms:password')}</Label>
-                <Input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder={t('commonForms:password')}
-                    onChange={onChange(setPassword)}
-                    className="mb-3"
-                />
                 <Button
+                    disabled={saving}
                     color="dark"
                     style={{marginTop: '2rem'}}
                     block
-                >{t('login')}</Button>
-                <Button color="link" onClick={onCancel}>{t('cancel')}</Button>
+                >{t('resetPassword')}</Button>
+                <Button color="link" disabled={saving} onClick={onCancel}>{t('cancel')}</Button>
             </FormGroup>
         </Form>
-        <p>{t('forgotPassword')} <Link to="/resetPassword">{t('resetPassword')}</Link></p>
+        <Modal isOpen={resetPasswordEmail !== null}>
+            <ModalHeader>{t('resetPasswordRequestSent')}</ModalHeader>
+            <ModalBody>{t('resetPasswordRequestSentTo',{email: resetPasswordEmail})}</ModalBody>
+            <ModalFooter>
+                <Button color="primary" onClick={onComplete}>{t('continue')}</Button>
+            </ModalFooter>
+        </Modal>
     </Container>
 }
 
-export default LoginManager;
+export default ResetPasswordRequest;

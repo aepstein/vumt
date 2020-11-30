@@ -17,6 +17,14 @@ import {
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
     REGISTER_FAIL,
+    RESET_PASSWORD_REQUEST,
+    RESET_PASSWORD_REQUEST_FAIL,
+    RESET_PASSWORD_REQUEST_SUCCESS,
+    RESET_PASSWORD_REQUEST_CONTINUE,
+    RESET_PASSWORD,
+    RESET_PASSWORD_FAIL,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_CONTINUE,
     SAVING_AUTHUSER,
     UPDATE_AUTHUSER_SUCCESS,
     UPDATE_AUTHUSER_FAIL
@@ -120,6 +128,51 @@ export const login = (attrs,history) => async (dispatch) => {
             type: LOGIN_FAIL
         })
     }
+}
+
+export const requestResetPassword = (email) => async (dispatch) => {
+    dispatch({type: RESET_PASSWORD_REQUEST})
+    try {
+        const res = await axios.post('/api/auth/resetPassword/' + encodeURIComponent(email))
+        dispatch({type: RESET_PASSWORD_REQUEST_SUCCESS, payload: {email}})
+    }
+    catch(err) {
+        dispatch(returnErrors(err.response.data,err.response.status,RESET_PASSWORD_REQUEST_FAIL))
+        dispatch({type: RESET_PASSWORD_REQUEST_FAIL})
+    }
+}
+
+export const requestResetPasswordContinue = (history) => async (dispatch) => {
+    dispatch({type: RESET_PASSWORD_REQUEST_CONTINUE})
+    history.push('/')
+}
+
+export const resetPasswordContinue = (dispatch) => {
+    dispatch({type: RESET_PASSWORD_CONTINUE})
+}
+
+export const resetPassword = ({email,token,password}) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const body = JSON.stringify({password})
+    dispatch({type: RESET_PASSWORD})
+    try {
+        const res = await axios
+            .put(`/api/auth/resetPassword/${email}/${token}`,body,config)
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: transformDates(res.data)
+        })
+        dispatch(initLocation)
+        dispatch({type: RESET_PASSWORD_SUCCESS})
+    }
+    catch(err) {
+        dispatch(returnErrors(err.response.data,err.response.status,RESET_PASSWORD_FAIL))
+        dispatch({type: RESET_PASSWORD_FAIL})
+    } 
 }
 
 export const cancelLogin = (history) => (dispatch) => {

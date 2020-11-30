@@ -7,6 +7,8 @@ const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
 const crypto = require('crypto')
 const mailer = require('../mailer/mailer')
 const config = require('config')
+const jwtSecret = config.jwtSecret
+const jwt = require('jsonwebtoken')
 
 
 const UserSchema = new Schema(
@@ -88,7 +90,18 @@ UserSchema.pre('save',async function() {
     }
 });
 
-UserSchema.methods.resetPassword = async function(host) {
+/* Issues a JSON web token in a server response for a user who has been authenticated
+ */
+UserSchema.methods.genToken = async function() {
+    const user = this
+    return jwt.sign(
+        { id: user.id },
+        jwtSecret,
+        { expiresIn: 2678400 }
+    )
+}
+
+UserSchema.methods.createResetPasswordToken = async function(host) {
     var user = this
     const newToken = {
         token: await new Promise((resolve,reject) => {
@@ -107,9 +120,17 @@ UserSchema.methods.resetPassword = async function(host) {
         subject: "Visitor Use Management Tool Password Reset",
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'https://' + host + '/reset/' + newToken.token + '\n\n' +
+        'https://' + (config.host ? config.host : host) + '/resetPassword/' + encodeURIComponent(user.email) + '/' + newToken.token + '\n\n' +
         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
     })
+}
+
+UserSchema.methods.resetPasswordWithToken = async function (token,password) {
+    const user = this
+    const tokenRecord = user.resetPasswordTokens.find((t) => t.token === token)
+    tokenRecord.expended = Date.now()
+    user.password = password
+    user.save()
 }
 
 UserSchema.methods.pubProps = function() {

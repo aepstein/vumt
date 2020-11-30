@@ -4,5 +4,6 @@ module.exports = {
     mongoURI: 'mongodb://mongodb/vumt_dev',
     mongoDb: 'vumt_dev',
     jwtSecret: 'noneofyourbusiness',
-    mail: require('./secret/mail')
+    mail: require('./secret/mail'),
+    host: 'localhost:3000'
 }

@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const config = require('config');
-const jwtSecret = config.jwtSecret;
-const jwt = require('jsonwebtoken');
 const auth = require('../../middleware/auth');
+const resetPasswordToken = require('../../middleware/resetPasswordToken')
 
 const User = require('../../models/User');
 
@@ -25,21 +23,12 @@ router.post('/', async (req, res) => {
   // Validate password
   const isMatch = await user.comparePassword(password)
   if(!isMatch) return res.status(400).json({ msg: 'Invalid credentials' })
-  
-  try {
-    const token = await jwt.sign(
-      { id: user.id },
-      jwtSecret,
-      { expiresIn: 3600 }
-    )
-    return res.status(201).json({
-      token,
-      user: {
-        ...user.pubProps()
-      }
-    })
-  }
-  catch(err) { throw err }
+
+  const token = await user.genToken()
+  return res.status(201).json({
+    token,
+    user: { ...user.pubProps() }
+  })
 })
 
 // @route   POST api/resetPassword/:email
@@ -48,12 +37,34 @@ router.post('/', async (req, res) => {
 router.post('/resetPassword/:email',async (req, res) => {
   const user = await User.findOne({email: req.params.email})
   if (user) {
-    await user.resetPassword(req.headers.host)
+    await user.createResetPasswordToken(req.headers.host)
     return res.status(201).json({msg: "Password reset email sent"})
   }
   else {
     return res.status(404).json({msg: "No user registered with email"})
   }
+})
+
+// @route   GET api/resetPassword/:email/:token
+// @desc    Confirm token
+// @access  Public
+router.get('/resetPassword/:email/:token',resetPasswordToken(),async (req,res) => {
+  const { expires } = req.resetPasswordToken
+  return res.status(200).json({code: "validToken", expires})
+})
+
+// @route   PUT api/resetPassword/:email/:token
+// @desc    Confirm token
+// @access  Public
+router.put('/resetPassword/:email/:token',resetPasswordToken(),async (req,res) => {
+  const { password } = req.body
+  const { user, token } = req.resetPasswordToken
+  await user.resetPasswordWithToken(token,password)
+  const authToken = await user.genToken()
+  return res.status(200).json({
+    token: authToken,
+    user: { ...user.pubProps() }
+  })
 })
 
 // @route   GET api/auth
