@@ -3,6 +3,7 @@ import {
     USER_LOADED,
     USER_LOADING,
     AUTH_ERROR,
+    LOGIN,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGIN_CANCEL,
@@ -39,6 +40,7 @@ export default function authReducer (state = initialState, action) {
                 ...state,
                 isLoading: true
             };
+        case LOGIN:
         case RESET_PASSWORD:
         case RESET_PASSWORD_REQUEST:
         case SAVING_AUTHUSER:
