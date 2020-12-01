@@ -27,7 +27,7 @@ function ResetPasswordRequest() {
     const dispatch = useDispatch()
     const history = useHistory()
     
-    const { t } = useTranslation('AppNavbar')
+    const { t, i18n } = useTranslation('AppNavbar')
 
     const saving = useSelector((state) => state.auth.saving)
     const resetPasswordEmail = useSelector((state) => state.auth.resetPasswordEmail)
@@ -38,7 +38,7 @@ function ResetPasswordRequest() {
     const onSubmit = (e) => {
         e.preventDefault()
         dispatch(clearErrors())
-        dispatch(requestResetPassword(email))
+        dispatch(requestResetPassword(email,i18n.language))
     }
     const onCancel = (e) => {
         e.preventDefault()

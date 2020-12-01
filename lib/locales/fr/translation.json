@@ -1,0 +1,7 @@
+{
+    "salutation": "{{name}},",
+    "passwordResetSubject": "Réinitialisation du mot de passe du Outil de Gestion de l'Utilisation des Visiteurs",
+    "passwordResetWhy": "Vous recevez ceci parce que vous (ou quelqu'un d'autre) avez demandé la réinitialisation du mot de passe de votre compte.",
+    "passwordResetPrimary": "Veuillez cliquer sur le lien suivant ou collez-le dans votre navigateur pour accomplir le processus:",
+    "passwordResetIgnore": "Si vous ne l'avez pas demandé, veuillez ignorer cet e-mail et votre mot de passe restera le même."
+}

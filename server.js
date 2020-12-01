@@ -1,10 +1,13 @@
 const express = require('express');
 const path = require('path');
 const config = require('config');
+const { i18nextMiddleware } = require('./lib/i18n')
 
 const app = express();
 
 app.use(express.json());
+
+app.use(i18nextMiddleware)
 
 app.use('/api/advisories', require('./routes/api/advisories'));
 app.use('/api/auth', require('./routes/api/auth'));

@@ -48,6 +48,12 @@ const emailShouldBeSentTo = (email) => {
 	mail.should.have.property('to').have.members([email])
 }
 
+const emailSubjectShouldBe = (subject) => {
+	const mail = scope.mail.lastMail()
+	mail.should.not.be.a('null')
+	mail.should.have.property('subject').eql(subject)
+}
+
 // credit: https://gist.github.com/tokland/d3bae3b6d3c1576d8700405829bbdb52
 // see: https://stackoverflow.com/questions/47407791/puppeteer-click-on-element-with-text
 const escapeXpathString = str => {
@@ -289,6 +295,7 @@ module.exports = {
 	create,
 	emailFollowLink,
 	emailShouldBeSentTo,
+	emailSubjectShouldBe,
 	fillByLabel,
 	fillByPlaceholder,
 	fillTypeaheadByLabel,

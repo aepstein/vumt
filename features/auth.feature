@@ -70,9 +70,21 @@ Feature: Authentication
         And I click the "Reset your password" button
         Then I should see "An email with instructions to reset your password was sent to bmarshall@example.com" in a modal
         And an email should be sent to "bmarshall@example.com"
+        And the email subject should be "Visitor Use Management Tool Password Reset"
         When I open the email and follow the password reset link
         And I fill in "Password" with "mynewpassword"
         And I click the "Reset your password" button
         Then I should see "Your password was reset and you are now logged in." in a modal
         When I click the "Continue" button
         Then I should be logged in as "bmarshall@example.com"
+
+    Scenario: Request to reset forgotten password in another language
+        Given I am registered as "bmarshall@example.com"
+        When I visit the "login" page
+        And I change the language to "Français"
+        And I click the "Réinitialisez votre mot de passe" link
+        And I fill in "Email" with "bmarshall@example.com"
+        And I click the "Réinitialisez votre mot de passe" button
+        Then I should see "Un e-mail contenant des instructions pour réinitialiser votre mot de passe a été envoyé à bmarshall@example.com" in a modal
+        And an email should be sent to "bmarshall@example.com"
+        And the email subject should be "Réinitialisation du mot de passe du Outil de Gestion de l'Utilisation des Visiteurs"
