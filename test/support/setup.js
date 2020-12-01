@@ -1,7 +1,7 @@
+const { interactsWithMail } = require('nodemailer-stub')
+
 const mongoose = require('mongoose');
 const server = require('../../server');
-
-const { interactsWithMail } = require('nodemailer-stub')
 
 const chai = require('chai');
 const should = chai.should()

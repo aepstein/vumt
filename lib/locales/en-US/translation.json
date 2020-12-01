@@ -1,0 +1,4 @@
+{
+    "salutation": "Dear {{name}},",
+    "passwordResetSubject": "Visitor Use Management Tool Password Reset"
+}

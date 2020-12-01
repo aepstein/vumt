@@ -1,6 +1,7 @@
 const {
     chai,
     factory,
+    interactsWithMail,
     mongoose,
     purgeDb,
     server,
@@ -21,7 +22,8 @@ afterEach(async () => {
 
 module.exports = {
 	chai,
-	factory,
+    factory,
+    interactsWithMail,
 	server,
     mongoose,
     should

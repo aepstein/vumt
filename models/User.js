@@ -5,10 +5,10 @@ const countries = require('i18n-iso-countries')
 const phone = require('phone')
 const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
 const crypto = require('crypto')
-const mailer = require('../mailer/mailer')
 const config = require('config')
 const jwtSecret = config.jwtSecret
 const jwt = require('jsonwebtoken')
+const passwordRequestMailer = require('../mailers/passwordResetMailer')
 
 
 const UserSchema = new Schema(
@@ -114,15 +114,7 @@ UserSchema.methods.createResetPasswordToken = async function(host) {
     }
     user.resetPasswordTokens.push(newToken)
     await user.save()
-    return mailer.sendMail({
-        from: config.mail.from,
-        to: user.email,
-        subject: "Visitor Use Management Tool Password Reset",
-        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'https://' + (config.host ? config.host : host) + '/resetPassword/' + encodeURIComponent(user.email) + '/' + newToken.token + '\n\n' +
-        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-    })
+    return passwordRequestMailer(user,newToken.token,host)
 }
 
 UserSchema.methods.resetPasswordWithToken = async function (token,password) {

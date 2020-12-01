@@ -1,4 +1,4 @@
-const { factory } = require('../setup')
+const { factory, interactsWithMail } = require('../setup')
 const ValidationError = require('mongoose/lib/error/validation')
 
 describe('User', () => {
@@ -68,7 +68,8 @@ describe('User', () => {
     describe('User.createResetPasswordToken',() => {
         it('should set token and expiration and send an email',async () => {
             const user = await factory.create('user')
-            const email = await user.createResetPasswordToken('localhost')
+            await user.createResetPasswordToken('localhost')
+            const email = interactsWithMail.lastMail()
             user.resetPasswordTokens[0].token.length.should.eql(40)
             email.envelope.should.have.a.property('to').have.members([user.email])
         })
