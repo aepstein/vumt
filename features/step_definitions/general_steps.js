@@ -3,6 +3,7 @@ const {
     chooseFromSelectByLabel,
     clickByText,
     emailShouldBeSentTo,
+    emailSubjectShouldBe,
     fillByLabel,
     fillTypeaheadByLabel,
     formatTimeForDisplay,
@@ -122,6 +123,10 @@ Then(/^the (\d+)(?:st|nd|rd|th) option in the typeahead should contain "([^"]+)"
     await waitFor(`//div[contains(@class,'rbt-menu')]/a[position()='${n}' and contains(.,'${text}')]`)
 })
 
-Then('an email should be sent to {string}', async (email) => {
-    await emailShouldBeSentTo(email)
+Then('an email should be sent to {string}', (email) => {
+    emailShouldBeSentTo(email)
 });
+
+Then('the email subject should be {string}', (subject) => {
+    emailSubjectShouldBe(subject)
+})

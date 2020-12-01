@@ -30,6 +30,7 @@ import {
     UPDATE_AUTHUSER_FAIL
 } from './types';
 
+const querystring = require('querystring')
 const parseDates = ({createdAt,updatedAt}) => {
     return {
         createdAt: Date.parse(createdAt),
@@ -130,10 +131,10 @@ export const login = (attrs,history) => async (dispatch) => {
     }
 }
 
-export const requestResetPassword = (email) => async (dispatch) => {
+export const requestResetPassword = (email,lng) => async (dispatch) => {
     dispatch({type: RESET_PASSWORD_REQUEST})
     try {
-        await axios.post('/api/auth/resetPassword/' + encodeURIComponent(email))
+        await axios.post('/api/auth/resetPassword/' + encodeURIComponent(email) + '?' + querystring.stringify({lng}))
         dispatch({type: RESET_PASSWORD_REQUEST_SUCCESS, payload: {email}})
     }
     catch(err) {

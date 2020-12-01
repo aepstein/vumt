@@ -115,6 +115,14 @@ const locale = {
         "places": "Emplacements",
         "register": "S'inscrire",
         "users": "Utilisateurs",
+        "forgotPassword": "Mot de passe oublié?",
+        "resetPassword": "Réinitialisez votre mot de passe",
+        "resetPasswordComplete": "Votre mot de passe a été réinitialisé",
+        "resetPasswordCompleteMessage": "Votre mot de passe a été réinitialisé et vous êtes maintenant connecté.",
+        "resetPasswordConfirmInstructions": "Vous avez vérifié votre identité. Vous pouvez maintenant réinitialiser votre mot de passe.",
+        "resetPasswordInstructions": "Indiquez l'adresse e-mail avec laquelle vous vous êtes inscrit et nous vous enverrons un lien que vous pourrez utiliser pour réinitialiser votre mot de passe.",
+        "resetPasswordRequestSent": "Email de réinitialisation du mot de passe envoyé",
+        "resetPasswordRequestSentTo": "Un e-mail contenant des instructions pour réinitialiser votre mot de passe a été envoyé à {{email}}",
         "welcome": "Bienvenue, {{name}}"
     }
 }
