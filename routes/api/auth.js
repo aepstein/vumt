@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const resetPasswordToken = require('../../middleware/resetPasswordToken')
+const passwordResetMailer = require('../../mailers/passwordResetMailer')
 
 const User = require('../../models/User');
 
@@ -37,7 +38,8 @@ router.post('/', async (req, res) => {
 router.post('/resetPassword/:email',async (req, res) => {
   const user = await User.findOne({email: req.params.email})
   if (user) {
-    await user.createResetPasswordToken(req.headers.host)
+    const token = await user.createResetPasswordToken(req)
+    await passwordResetMailer(user,token,req)
     return res.status(201).json({msg: "Password reset email sent"})
   }
   else {

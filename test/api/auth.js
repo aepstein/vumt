@@ -8,6 +8,7 @@ const {
 const {
     errorNoToken
 } = require('../support/middlewareErrors');
+const { interactsWithMail } = require('nodemailer-stub')
 
 describe('/api/auth', () => {
     describe('POST /api/auth',() => {
@@ -86,14 +87,25 @@ describe('/api/auth', () => {
         });
     });
     describe('POST /api/auth/resetPassword/:email',() => {
-        let action = async (email) => {
+        let action = async (email,query={}) => {
             return chai.request(server)
                 .post('/api/auth/resetPassword/' + encodeURIComponent(email))
+                .query(query)
         }
-        it('should succeed for an existing user email',async () => {
+        it('should succeed for an existing user email and send an email',async () => {
             const user = await factory.create('user')
             const res = await action(user.email)
             res.should.have.status(201)
+            const email = interactsWithMail.lastMail()
+            email.envelope.should.have.a.property('to').have.members([user.email])
+            email.should.have.a.property('subject').eql("Visitor Use Management Tool Password Reset")
+        })
+        it('should send an email in language directed by query parameter',async () => {
+            const user = await factory.create('user')
+            const res = await action(user.email,{lng: 'fr'})
+            res.should.have.status(201)
+            const email = interactsWithMail.lastMail()
+            email.should.have.a.property('subject').eql("Réinitialisation du mot de passe du Outil de Gestion de l'Utilisation des Visiteurs")
         })
         it('should fail for unregistered email', async () => {
             const res = await action('doesnotexist@nowhere.com')

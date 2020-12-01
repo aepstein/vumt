@@ -101,7 +101,7 @@ UserSchema.methods.genToken = async function() {
     )
 }
 
-UserSchema.methods.createResetPasswordToken = async function(host) {
+UserSchema.methods.createResetPasswordToken = async function() {
     var user = this
     const newToken = {
         token: await new Promise((resolve,reject) => {
@@ -114,7 +114,7 @@ UserSchema.methods.createResetPasswordToken = async function(host) {
     }
     user.resetPasswordTokens.push(newToken)
     await user.save()
-    return passwordRequestMailer(user,newToken.token,host)
+    return newToken
 }
 
 UserSchema.methods.resetPasswordWithToken = async function (token,password) {
