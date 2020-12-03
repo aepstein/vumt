@@ -38,7 +38,17 @@ const locale = {
         "yes": "Yes"
     },
     "error": {
-        "duplicateKey": "Must be unique and `{{value}}` is already used"
+        "duplicateKey": "Must be unique and `{{value}}` is already used",
+        "AUTH_EXPIRED_PASSWORD_RESET_TOKEN": "The password reset request is too old to be processed.  Please submit a new password reset request.",
+        "AUTH_EXPENDED_PASSWORD_RESET_TOKEN": "This password reset request was already used to reset the password.  Please submit a new password reset request.",
+        "AUTH_INVALID_PASSWORD": "Supplied password is not valid.",
+        "AUTH_INVALID_USER_TOKEN": "Invalid user token.",
+        "AUTH_MISSING_EMAIL": "Email is missing.",
+        "AUTH_MISSING_PASSWORD":  "Password is missing.",
+        "AUTH_NEED_ROLE": "You must have one of the following roles to access this resource: {{roles}}.",
+        "AUTH_NO_USER_TOKEN": "No user token provided",
+        "AUTH_NO_PASSWORD_RESET_TOKEN": "The specified password reset request token does not exist for the specified user",
+        "AUTH_NO_USER":  "No user is registered with the specified email"
     },
     "advisory": {
         "addAdvisory": "Add advisory",
@@ -172,13 +182,8 @@ const locale = {
         "resetPasswordInstructions": "Provide the email address with which you registered and we will send a link you can use to reset your password.",
         "resetPasswordRequestSent": "Password Reset Email Sent",
         "resetPasswordRequestSentTo": "An email with instructions to reset your password was sent to {{email}}",
+        "resubmitPasswordResetRequest": "Submit another password reset request",
         "welcome": "Welcome, {{name}}"
-    },
-    "resetPasswordTokenError": {
-        "noEmail": "No user is registered with the specified email",
-        "noToken": "The specified password reset request token does not exist for the specified user",
-        "expired": "The password reset request is too old to be processed.  Please submit a new password reset request.",
-        "expended": "This password reset request was already used to reset the password.  Please submit a new password reset request."
     }
 }
 

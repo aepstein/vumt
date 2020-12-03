@@ -12,14 +12,15 @@ import {
     ModalBody,
     ModalFooter
 } from 'reactstrap';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { cancelLogin, requestResetPassword, requestResetPasswordContinue } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 
 function ResetPasswordRequest() {
-    const [email, setEmail] = useState('')
+    const {initEmail} = useParams()
+    const [email, setEmail] = useState(initEmail ? decodeURIComponent(initEmail) : '')
     const [msg, setMsg] = useState(null)
 
     const error = useSelector(state => state.error)
@@ -69,6 +70,7 @@ function ResetPasswordRequest() {
                     type="email"
                     name="email"
                     id="email"
+                    value={email}
                     placeholder={t('commonForms:emailPlaceholder')}
                     onChange={onChange(setEmail)}
                     className="mb-3"

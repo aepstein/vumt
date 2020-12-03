@@ -1,6 +1,11 @@
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User')
+const {
+    E_AUTH_INVALID_USER_TOKEN,
+    E_AUTH_NEED_ROLE,
+    E_AUTH_NO_USER_TOKEN
+} = require('../lib/errorCodes')
 
 module.exports = ({isOptional,roles}={}) => async (req, res, next) => {
     try {
@@ -11,7 +16,7 @@ module.exports = ({isOptional,roles}={}) => async (req, res, next) => {
                 return next()
             }
             else {
-                return res.status(401).json({msg: 'No token, authorization denied'})
+                return res.status(401).json({code: E_AUTH_NO_USER_TOKEN})
             }
         }
 
@@ -21,10 +26,9 @@ module.exports = ({isOptional,roles}={}) => async (req, res, next) => {
             return next()
         }
         else {
-            return res.status(401).json({msg: `Insufficient privileges. ` +
-                `User must have one of these roles: ${roles.join(', ')}`})
+            return res.status(401).json({code: E_AUTH_NEED_ROLE, roles})
         }
     } catch(e) {
-        return res.status(400).json({msg: 'Invalid token'});
+        return res.status(400).json({code: E_AUTH_INVALID_USER_TOKEN})
     }
 }
