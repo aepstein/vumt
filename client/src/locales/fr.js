@@ -33,7 +33,17 @@ const locale = {
         "yes": "Oui"
     },
     "error": {
-        "duplicateKey": "Doit être unique et `{{value}}` est déjà utilisé"
+        "duplicateKey": "Doit être unique et `{{value}}` est déjà utilisé",
+        "AUTH_EXPIRED_PASSWORD_RESET_TOKEN": "La demande de réinitialisation du mot de passe est trop ancienne pour être traitée. Veuillez soumettre une nouvelle demande de réinitialisation de mot de passe.",
+        "AUTH_EXPENDED_PASSWORD_RESET_TOKEN": "Cette demande de réinitialisation de mot de passe a déjà été utilisée pour réinitialiser le mot de passe. Veuillez soumettre une nouvelle demande de réinitialisation de mot de passe.",
+        "AUTH_INVALID_PASSWORD": "Le mot de passe fourni n'est pas valide.",
+        "AUTH_INVALID_USER_TOKEN": "Jeton d'utilisateur non valide.",
+        "AUTH_MISSING_EMAIL": "L'e-mail est manquant.",
+        "AUTH_MISSING_PASSWORD":  "Le mot de passe est manquant.",
+        "AUTH_NEED_ROLE": "Vous devez disposer de l'un des rôles suivants pour accéder à cette ressource: {{roles}}.",
+        "AUTH_NO_USER_TOKEN": "Aucun jeton utilisateur n'a pas été fourni.",
+        "AUTH_NO_PASSWORD_RESET_TOKEN": "Le jeton de demande de réinitialisation de mot de passe spécifié n'existe pas pour l'utilisateur spécifié.",
+        "AUTH_NO_USER":  "Aucun utilisateur n'est enregistré avec l'e-mail spécifié."
     },
     "place": {
         "addPlace": "Ajouter un emplacement",
@@ -123,6 +133,7 @@ const locale = {
         "resetPasswordInstructions": "Indiquez l'adresse e-mail avec laquelle vous vous êtes inscrit et nous vous enverrons un lien que vous pourrez utiliser pour réinitialiser votre mot de passe.",
         "resetPasswordRequestSent": "Email de réinitialisation du mot de passe envoyé",
         "resetPasswordRequestSentTo": "Un e-mail contenant des instructions pour réinitialiser votre mot de passe a été envoyé à {{email}}",
+        "resubmitPasswordResetRequest": "Soumettez une autre demande de réinitialisation de mot de passe",
         "welcome": "Bienvenue, {{name}}"
     }
 }
