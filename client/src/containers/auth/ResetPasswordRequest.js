@@ -81,7 +81,7 @@ function ResetPasswordRequest() {
                     style={{marginTop: '2rem'}}
                     block
                 >{t('resetPassword')}</Button>
-                <Button color="link" disabled={saving} onClick={onCancel}>{t('cancel')}</Button>
+                <Button color="link" disabled={saving} onClick={onCancel}>{t('commonForms:cancel')}</Button>
             </FormGroup>
         </Form>
         <Modal isOpen={resetPasswordEmail !== null}>

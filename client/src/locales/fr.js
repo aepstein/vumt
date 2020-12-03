@@ -118,6 +118,8 @@ const locale = {
     "AppNavbar": {
         "admin": "Administration",
         "brand": "Outil de Gestion de l'Utilisation des Visiteurs",
+        "checkingCredentials": "Vérification des informations d'identification",
+        "continue": "Continuez",
         "home": "Accueil",
         "language": "Langue",
         "login": "S'identifier",

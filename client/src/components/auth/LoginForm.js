@@ -88,7 +88,7 @@ function LoginForm({saving,error}) {
                     style={{marginTop: '2rem'}}
                     block
                 >{t('login')}</Button>
-                <Button color="link" onClick={onCancel}>{t('cancel')}</Button>
+                <Button color="link" onClick={onCancel}>{t('commonForms:cancel')}</Button>
             </FormGroup>
         </Form>
         <p>{t('forgotPassword')} <Link to="/resetPassword">{t('resetPassword')}</Link></p>

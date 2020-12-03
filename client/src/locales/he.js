@@ -118,6 +118,8 @@ const locale = {
     "AppNavbar": {
         "admin": "מינהל",
         "brand": "ניהול אורחים",
+        "checkingCredentials": "בודק אישורים",
+        "continue": "לְהַמשִׁיך",
         "home": "בית",
         "language": "עברית",
         "login": "התחבר",

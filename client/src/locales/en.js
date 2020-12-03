@@ -162,7 +162,6 @@ const locale = {
     "AppNavbar": {
         "admin": "Administration",
         "brand": "Visitor Use Management Tool",
-        "cancel": "Cancel",
         "checkingCredentials": "Checking credentials",
         "continue": "Continue",
         "home": "Home",
