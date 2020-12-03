@@ -2,25 +2,18 @@ import React, { useState, useEffect } from 'react';
 import {
     Button,
     Container,
-    Form,
-    FormGroup,
-    FormFeedback,
-    Label,
-    Input,
     Spinner
 } from 'reactstrap';
+import ResetPasswordForm from '../../components/auth/ResetPasswordForm'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import { useForm } from 'react-hook-form'
-import { cancelLogin, resetPassword } from '../../actions/authActions';
 import { clearErrors, returnErrors } from '../../actions/errorActions';
 import axios from 'axios'
 
 function ResetPassword() {
     const {email,token} = useParams()
 
-    const [password, setPassword] = useState('')
     const [checkingToken, setCheckingToken] = useState(false)
     const [checkedToken, setCheckedToken] = useState(false)
     const [verifiedToken,setVerifiedToken] = useState('')
@@ -50,25 +43,10 @@ function ResetPassword() {
         })
     },[email,token,checkingToken,checkedToken,setCheckingToken,setCheckedToken,setVerifiedToken,dispatch])
 
-    const { register, errors } = useForm()
-
-    const onChange = (setter) => (e) => {
-        setter(e.target.value)
-    }
-    const onSubmit = (e) => {
-        e.preventDefault()
-        dispatch(clearErrors())
-        dispatch(resetPassword({email,token,password}))
-    }
     const onResetAgain = (e) => {
         e.preventDefault()
         dispatch(clearErrors())
         history.push('/resetPassword/' + email)
-    }
-    const onCancel = (e) => {
-        e.preventDefault()
-        dispatch(clearErrors())
-        dispatch(cancelLogin(history))
     }
 
     if (!checkedToken) {
@@ -81,33 +59,7 @@ function ResetPassword() {
         </Container>
     }
 
-    return <Container>
-        <h1>{t('resetPassword')}</h1>
-        <p>{t('resetPasswordConfirmInstructions')}</p>
-        <Form onSubmit={onSubmit}>
-            <FormGroup>
-                <Label for="password">{t('commonForms:password')}</Label>
-                <Input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder={t('password')}
-                    innerRef={register({required: true})}
-                    onChange={onChange(setPassword)}
-                    invalid={errors.password ? true : false}
-                />
-                {errors.password && errors.password.type === 'required' &&
-                    <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
-            </FormGroup>
-            <Button
-                disabled={saving}
-                color="dark"
-                style={{marginTop: '2rem'}}
-                block
-            >{t('resetPassword')}</Button>
-            <Button color="link" disabled={saving} onClick={onCancel}>{t('cancel')}</Button>
-        </Form>
-    </Container>
+    return <ResetPasswordForm saving={saving} email={email} token={token}/>
 }
 
 export default ResetPassword;
