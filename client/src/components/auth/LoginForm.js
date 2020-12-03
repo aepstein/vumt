@@ -68,6 +68,7 @@ function LoginForm({saving,error}) {
                     type="email"
                     name="email"
                     id="email"
+                    value={email}
                     placeholder={t('commonForms:emailPlaceholder')}
                     onChange={onChange(setEmail)}
                     className="mb-3"
@@ -77,6 +78,7 @@ function LoginForm({saving,error}) {
                     type="password"
                     name="password"
                     id="password"
+                    value={password}
                     placeholder={t('commonForms:password')}
                     onChange={onChange(setPassword)}
                     className="mb-3"
