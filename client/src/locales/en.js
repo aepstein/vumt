@@ -48,7 +48,8 @@ const locale = {
         "AUTH_NEED_ROLE": "You must have one of the following roles to access this resource: {{roles}}.",
         "AUTH_NO_USER_TOKEN": "No user token provided",
         "AUTH_NO_PASSWORD_RESET_TOKEN": "The specified password reset request token does not exist for the specified user",
-        "AUTH_NO_USER":  "No user is registered with the specified email"
+        "AUTH_NO_USER": "No user is registered with the specified email",
+        "USER_UNAUTHORIZED": "You are not authorized for the specified user"
     },
     "advisory": {
         "addAdvisory": "Add advisory",

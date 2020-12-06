@@ -43,7 +43,8 @@ const locale = {
         "AUTH_NEED_ROLE": "Vous devez disposer de l'un des rôles suivants pour accéder à cette ressource: {{roles}}.",
         "AUTH_NO_USER_TOKEN": "Aucun jeton utilisateur n'a pas été fourni.",
         "AUTH_NO_PASSWORD_RESET_TOKEN": "Le jeton de demande de réinitialisation de mot de passe spécifié n'existe pas pour l'utilisateur spécifié.",
-        "AUTH_NO_USER":  "Aucun utilisateur n'est enregistré avec l'e-mail spécifié."
+        "AUTH_NO_USER":  "Aucun utilisateur n'est enregistré avec l'e-mail spécifié.",
+        "USER_UNAUTHORIZED": "Vous n'êtes pas autorisé pour l'utilisateur spécifié."
     },
     "place": {
         "addPlace": "Ajouter un emplacement",
