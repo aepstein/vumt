@@ -44,7 +44,8 @@ const locale = {
         "AUTH_NO_USER_TOKEN": "Aucun jeton utilisateur n'a pas été fourni.",
         "AUTH_NO_PASSWORD_RESET_TOKEN": "Le jeton de demande de réinitialisation de mot de passe spécifié n'existe pas pour l'utilisateur spécifié.",
         "AUTH_NO_USER":  "Aucun utilisateur n'est enregistré avec l'e-mail spécifié.",
-        "USER_UNAUTHORIZED": "Vous n'êtes pas autorisé pour l'utilisateur spécifié."
+        "AUTH_REQUIRED": "Vous devez vous connecter pour effectuer cette action.",
+        "UNAUTHORIZED": "Vous ne pouvez pas effectuer l'action demandée."
     },
     "place": {
         "addPlace": "Ajouter un emplacement",

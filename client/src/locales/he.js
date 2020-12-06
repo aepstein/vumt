@@ -44,7 +44,8 @@ const locale = {
         "AUTH_NO_USER_TOKEN": "לא סופק אסימון משתמש",
         "AUTH_NO_PASSWORD_RESET_TOKEN": "אסימון הבקשה לאיפוס הסיסמה שצוין אינו קיים עבור המשתמש שצוין.",
         "AUTH_NO_USER":  "אף משתמש לא רשום בדוא\"ל שצוין.",
-        "USER_UNAUTHORIZED": "אינך מורשה למשתמש שצוין."
+        "AUTH_REQUIRED": "עליך להיכנס כדי לבצע פעולה זו.",
+        "UNAUTHORIZED": "אינך רשאי לבצע את הפעולה המבוקשת."
     },
     "place": {
         "addPlace": "הוסף מקום",

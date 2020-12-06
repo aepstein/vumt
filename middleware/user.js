@@ -2,7 +2,7 @@ const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 const {
     E_AUTH_REQUIRED,
-    E_USER_UNAUTHORIZED
+    E_UNAUTHORIZED
 } = require('../lib/errorCodes')
 
 module.exports = ({roles, self}={}) => asyncHandler( async (req, res, next) => {
@@ -15,5 +15,5 @@ module.exports = ({roles, self}={}) => asyncHandler( async (req, res, next) => {
     if (roles && roles.filter(r => req.authUser.roles.includes(r)).length > 0) {
         return next()
     }
-    return await res.status(401).json({code: E_USER_UNAUTHORIZED})
+    return await res.status(401).json({code: E_UNAUTHORIZED})
 })

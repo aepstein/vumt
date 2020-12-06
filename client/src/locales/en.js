@@ -49,7 +49,8 @@ const locale = {
         "AUTH_NO_USER_TOKEN": "No user token provided",
         "AUTH_NO_PASSWORD_RESET_TOKEN": "The specified password reset request token does not exist for the specified user",
         "AUTH_NO_USER": "No user is registered with the specified email",
-        "USER_UNAUTHORIZED": "You are not authorized for the specified user"
+        "AUTH_REQUIRED": "You must log in to perform this action.",
+        "UNAUTHORIZED": "You may not perform the requested action."
     },
     "advisory": {
         "addAdvisory": "Add advisory",
