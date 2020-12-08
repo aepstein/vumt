@@ -11,6 +11,7 @@ import {
     USER_LOADED,
     USER_LOADING,
     AUTH_ERROR,
+    LOGIN,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGIN_CANCEL,
@@ -111,6 +112,7 @@ export const login = (attrs,history) => async (dispatch) => {
             'Content-Type': 'application/json'
         }
     }
+    dispatch({type: LOGIN})
     try {
         const body = JSON.stringify(attrs)
         const res = await axios.post('/api/auth', body, config)

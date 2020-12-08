@@ -7,7 +7,7 @@ const {
 } = require("../support/patterns");
 const shouldDenyUnauthorizedUser = async (res) => {
     await res.should.have.status(401);
-    await res.body.should.have.a.property('msg').eql('User not authorized to access visit')
+    await res.body.should.have.a.property('code').eql('UNAUTHORIZED')
 }
 const {
     errorNoToken,
@@ -142,7 +142,7 @@ describe('/api/visits', () => {
             const auth = await withAuth()
             const user = await factory.create('user')
             const [res] = await action(auth,{},user)
-            shouldDenyUnauthorizedUser(res)
+            return shouldDenyUnauthorizedUser(res)
         })
         it('should not update without authentication',async () => {
             const visit = await factory.create('visit')
@@ -169,7 +169,7 @@ describe('/api/visits', () => {
             const auth = await withAuth()
             const visit = await factory.create('visit')
             res = await action(auth,visit)
-            shouldDenyUnauthorizedUser(res)
+            return shouldDenyUnauthorizedUser(res)
         })
         it('should deny without authentication',async () => {
             const visit = await factory.create('visit')
@@ -232,7 +232,7 @@ describe('/api/visits', () => {
         it('should deny with nonowner credentials', async () => {
             const auth = await withAuth()
             const [ res, visit ] = await action(auth,await factory.create('user'))
-            shouldDenyUnauthorizedUser(res)
+            return shouldDenyUnauthorizedUser(res)
         })
         it('should deny without authentication',async () => {
             const visit = await factory.create('visit')
@@ -260,7 +260,7 @@ describe('/api/visits', () => {
         it('should deny with nonowner credentials', async () => {
             const auth = await withAuth()
             const [ res, visit ] = await action(auth,await factory.create('user'))
-            shouldDenyUnauthorizedUser(res)
+            return shouldDenyUnauthorizedUser(res)
         })
         it('should deny without authentication',async () => {
             const visit = await factory.create('visit')

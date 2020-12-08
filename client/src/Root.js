@@ -46,6 +46,9 @@ const Root = ({ store }) => (
               <UnAuthRoute path="/resetPassword/:email/:token">
                 <ResetPassword />
               </UnAuthRoute>
+              <UnAuthRoute path="/resetPassword/:initEmail">
+                <ResetPasswordRequest />
+              </UnAuthRoute>
               <UnAuthRoute path="/resetPassword">
                 <ResetPasswordRequest />
               </UnAuthRoute>

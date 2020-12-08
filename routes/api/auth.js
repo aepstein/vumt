@@ -3,7 +3,12 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const resetPasswordToken = require('../../middleware/resetPasswordToken')
 const passwordResetMailer = require('../../mailers/passwordResetMailer')
-
+const {
+  E_AUTH_MISSING_EMAIL,
+  E_AUTH_MISSING_PASSWORD,
+  E_AUTH_NO_USER,
+  E_AUTH_INVALID_PASSWORD
+} = require('../../lib/errorCodes')
 const User = require('../../models/User');
 
 // @route   POST api/auth
@@ -13,17 +18,20 @@ router.post('/', async (req, res) => {
   const { email, password } = req.body
 
   // Simple validation
-  if(!email || !password) {
-    return res.status(400).json({ msg: 'Please enter all fields' })
+  if(!email) {
+    return res.status(400).json({ code: E_AUTH_MISSING_EMAIL })
+  }
+
+  if(!password) {
+    return res.status(400).json({ code: E_AUTH_MISSING_PASSWORD })
   }
 
   // Check for existing user
   const user = await User.findOne({ email })
-  if (!user) return res.status(400).json({ msg: 'User does not exist' })
+  if (!user) return res.status(400).json({ code: E_AUTH_NO_USER })
 
-  // Validate password
   const isMatch = await user.comparePassword(password)
-  if(!isMatch) return res.status(400).json({ msg: 'Invalid credentials' })
+  if(!isMatch) return res.status(400).json({ code: E_AUTH_INVALID_PASSWORD })
 
   const token = await user.genToken()
   return res.status(201).json({
@@ -38,12 +46,17 @@ router.post('/', async (req, res) => {
 router.post('/resetPassword/:email',async (req, res) => {
   const user = await User.findOne({email: req.params.email})
   if (user) {
-    const token = await user.createResetPasswordToken(req)
-    await passwordResetMailer(user,token,req)
-    return res.status(201).json({msg: "Password reset email sent"})
+    try {
+      const token = await user.createResetPasswordToken(req)
+      await passwordResetMailer(user,token,req)
+      return res.status(201).json({code: 'success'})
+    }
+    catch(err) {
+      return res.status(500).json({code: ''})
+    }
   }
   else {
-    return res.status(404).json({msg: "No user registered with email"})
+    return res.status(404).json({code: E_AUTH_NO_USER})
   }
 })
 

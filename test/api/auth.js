@@ -32,7 +32,7 @@ describe('/api/auth', () => {
             const res = await action(credentials);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Invalid credentials');
+            await res.body.should.have.a.property('code').eql('AUTH_INVALID_PASSWORD');
         });
         it('should not authenticate with missing email', async () => {
             let credentials = validCredentials();
@@ -40,7 +40,7 @@ describe('/api/auth', () => {
             const res = await action(credentials);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Please enter all fields');
+            await res.body.should.have.a.property('code').eql('AUTH_MISSING_EMAIL');
         });
         it('should not authenticate with missing password', async () => {
             let credentials = validCredentials();
@@ -48,14 +48,14 @@ describe('/api/auth', () => {
             const res = await action(credentials);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('Please enter all fields');
+            await res.body.should.have.a.property('code').eql('AUTH_MISSING_PASSWORD');
         });
         it('should not authenticate with unregistered email', async () => {
             let credentials = validCredentials();
             const res = await action(credentials);
             await res.should.have.status(400);
             await res.body.should.be.a('object');
-            await res.body.should.have.a.property('msg').eql('User does not exist');
+            await res.body.should.have.a.property('code').eql('AUTH_NO_USER');
         });
     });
     describe('GET /api/auth/user',() => {
@@ -79,7 +79,7 @@ describe('/api/auth', () => {
                 .set("x-auth-token", "blahblah");
             await res.should.have.status(400)
             await res.body.should.be.a('object');
-            return await res.body.should.have.a.property('msg').eql('Invalid token');
+            return await res.body.should.have.a.property('code').eql('AUTH_INVALID_USER_TOKEN');
         });
         it('should deny for a user without a token', async () => {
             res = await action(null);
@@ -143,13 +143,13 @@ describe('/api/auth', () => {
             const user = await factory.create('user')
             const res = await action('nobody@nowhere.com',"a6b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7")
             res.should.have.status(404)
-            res.body.should.have.property('code').eql('noEmail')
+            res.body.should.have.property('code').eql('AUTH_NO_USER')
         })
         it('should fail if no token exists', async () => {
             const user = await factory.create('user')
             const res = await action(user.email,"a6b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7")
             res.should.have.status(404)
-            res.body.should.have.property('code').eql('noToken')
+            res.body.should.have.property('code').eql('AUTH_NO_PASSWORD_RESET_TOKEN')
         })
     })
     describe('PUT /api/resetPassword/:email/:token',() => {
@@ -184,13 +184,13 @@ describe('/api/auth', () => {
             const user = await factory.create('user')
             const res = await action('nobody@nowhere.com',"a6b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7",'swordfish')
             res.should.have.status(404)
-            res.body.should.have.property('code').eql('noEmail')
+            res.body.should.have.property('code').eql('AUTH_NO_USER')
         })
         it('should fail if no token exists', async () => {
             const user = await factory.create('user')
             const res = await action(user.email,"a6b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7b7",'swordfish')
             res.should.have.status(404)
-            res.body.should.have.property('code').eql('noToken')
+            res.body.should.have.property('code').eql('AUTH_NO_PASSWORD_RESET_TOKEN')
         })
     })
 });

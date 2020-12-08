@@ -33,7 +33,19 @@ const locale = {
         "yes": "כן"
     },
     "error": {
-        "duplicateKey": "חייב להיות ייחודי וכבר משתמשים ב`{{value}}`"
+        "duplicateKey": "חייב להיות ייחודי וכבר משתמשים ב`{{value}}`",
+        "AUTH_EXPIRED_PASSWORD_RESET_TOKEN": "בקשת איפוס הסיסמה ישנה מדי לעיבוד. אנא שלח בקשה לאיפוס סיסמה חדשה.",
+        "AUTH_EXPENDED_PASSWORD_RESET_TOKEN": "בקשה זו לאיפוס סיסמה כבר שימשה לאיפוס הסיסמה. אנא שלח בקשה לאיפוס סיסמה חדשה.",
+        "AUTH_INVALID_PASSWORD": "הסיסמה שסופקה אינה חוקית.",
+        "AUTH_INVALID_USER_TOKEN": "אסימון משתמש לא חוקי.",
+        "AUTH_MISSING_EMAIL": "כתובת האימייל חסר.",
+        "AUTH_MISSING_PASSWORD":  "סיסמה חסרה.",
+        "AUTH_NEED_ROLE": "עליך לגשת לאחד התפקידים הבאים כדי לגשת למשאב זה: {{roles}}.",
+        "AUTH_NO_USER_TOKEN": "לא סופק אסימון משתמש",
+        "AUTH_NO_PASSWORD_RESET_TOKEN": "אסימון הבקשה לאיפוס הסיסמה שצוין אינו קיים עבור המשתמש שצוין.",
+        "AUTH_NO_USER":  "אף משתמש לא רשום בדוא\"ל שצוין.",
+        "AUTH_REQUIRED": "עליך להיכנס כדי לבצע פעולה זו.",
+        "UNAUTHORIZED": "אינך רשאי לבצע את הפעולה המבוקשת."
     },
     "place": {
         "addPlace": "הוסף מקום",
@@ -108,6 +120,8 @@ const locale = {
     "AppNavbar": {
         "admin": "מינהל",
         "brand": "ניהול אורחים",
+        "checkingCredentials": "בודק אישורים",
+        "continue": "לְהַמשִׁיך",
         "home": "בית",
         "language": "עברית",
         "login": "התחבר",
@@ -115,6 +129,15 @@ const locale = {
         "places": "מקומות",
         "register": "הרשם",
         "users": "משתמשים",
+        "forgotPassword": "שכחת ססמה?",
+        "resetPassword": "לאפס את הסיסמה שלך",
+        "resetPasswordComplete": "הסיסמה שלך התאפסה",
+        "resetPasswordCompleteMessage": "הסיסמה שלך התאפסה וכעת אתה מחובר.",
+        "resetPasswordConfirmInstructions": "אימתת את זהותך. כעת תוכל לאפס את הסיסמה שלך.",
+        "resetPasswordInstructions": "ספק את כתובת הדוא\"ל שאיתה נרשמת ואנחנו נשלח קישור שבו תוכל להשתמש כדי לאפס את הסיסמה שלך.",
+        "resetPasswordRequestSent": "אימייל איפוס הסיסמה נשלח",
+        "resetPasswordRequestSentTo": "נשלח אליך אימייל עם הוראות לאיפוס הסיסמה שלך ל{{email}}",
+        "resubmitPasswordResetRequest": "הגש בקשה נוספת לאיפוס סיסמה",
         "welcome": "\u202bברוך הבא, \u202a{{name}}"
     }
 }
