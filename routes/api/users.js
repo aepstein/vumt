@@ -90,11 +90,17 @@ router.put('/:userId',auth(),user({self:true,roles:['admin']}),async (req,res) =
 // @desc Get listing of users
 // @access Private
 router.get('/',auth({roles:['admin']}),async (req,res) => {
-    let criteria = {}
+    const criteria = {}
+    const pagination = {
+        sort: {lastName: 1, firstName: 1, middleName: 1, email: 1}
+    }
     const users = await User
-        .find(criteria)
-        .sort({lastName: 1, firstName: 1, middleName: 1, email: 1})
-    return res.json(users.map(u => u.pubProps()))
+        .paginate(criteria,pagination)
+    return res.json({
+        ...users,
+        docs: users.docs.map(u => u.pubProps())
+    })
+    // return res.json(users.map(u => u.pubProps()))
 })
 
 // @route DELETE api/users/:userId

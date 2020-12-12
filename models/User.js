@@ -8,7 +8,7 @@ const crypto = require('crypto')
 const config = require('config')
 const jwtSecret = config.jwtSecret
 const jwt = require('jsonwebtoken')
-
+const mongoosePaginate = require('mongoose-paginate-v2')
 
 const UserSchema = new Schema(
     {
@@ -147,5 +147,7 @@ UserSchema.methods.comparePassword = async function(candidate) {
 }
 
 useHandleMongoError11000(UserSchema)
+
+UserSchema.plugin(mongoosePaginate)
 
 module.exports = User = mongoose.model('user',UserSchema);

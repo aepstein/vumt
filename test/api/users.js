@@ -21,10 +21,11 @@ describe('/api/users', () => {
             if ( auth ) { res.set('x-auth-token',auth.body.token) }
             return res
         }
-        it('should retrieve users for a user with admin role', async () => {
+        it.only('should retrieve users for a user with admin role', async () => {
             const auth = await withAuth({roles:['admin']})
             const res = await action(null,auth)
             res.should.have.a.status(200)
+            console.log(res.body)
             res.body.should.be.an('array')
             res.body.map(u => u._id).should.have.members([auth.body.user._id])
         })
