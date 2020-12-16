@@ -1,7 +1,7 @@
 {
-    "salutation": "Dear {{name}},",
-    "passwordResetSubject": "Visitor Use Management Tool Password Reset",
-    "passwordResetWhy": "You are receiving this because you (or someone else) have requested the reset of the password for your account.",
-    "passwordResetPrimary": "Please click on the following link, or paste this into your browser to complete the process:",
-    "passwordResetIgnore": "If you did not request this, please ignore this email and your password will remain unchanged."
+    "salutation": "Querida {{name}},",
+    "passwordResetSubject": "Visitor Use Management Tool restablecimiento de contraseña",
+    "passwordResetWhy": "Está recibiendo esto porque usted (u otra persona) ha solicitado el restablecimiento de la contraseña de su cuenta.",
+    "passwordResetPrimary": "Por favor, haga clic en el siguiente enlace, o pegue esto en su navegador para completar el proceso:",
+    "passwordResetIgnore": "Si no lo solicitó, ignore este correo electrónico y su contraseña permanecerá sin cambios."
 }
