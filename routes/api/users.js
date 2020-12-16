@@ -89,17 +89,28 @@ router.put('/:userId',auth(),user({self:true,roles:['admin']}),async (req,res) =
 // @route GET api/users
 // @desc Get listing of users
 // @access Private
-router.get('/',auth({roles:['admin']}),async (req,res) => {
-    const criteria = {}
-    const pagination = {
-        sort: {lastName: 1, firstName: 1, middleName: 1, email: 1}
+router.get(['/','/after/:afterId'],auth({roles:['admin']}),async (req,res) => {
+    try {
+        const limit = 10
+        const criteria = req.params.afterId ? { _id: { $gt: req.params.afterId } } : {}
+        const users = await User
+            .find(criteria)
+            .select({password: 0, resetPasswordTokens: 0})
+            .limit(limit + 1)
+        const pageLink = (req,cursor) => {
+            return req.protocol + "://" + req.hostname + req.baseUrl + "/after/" + cursor
+        }
+        const next = users[limit] ? users[limit-1]._id : null
+        return res.json({
+            data: users.slice(0,limit),
+            links: {
+                next: next ? pageLink(req,next) : null
+            }
+        })
     }
-    const users = await User
-        .paginate(criteria,pagination)
-    return res.json({
-        ...users,
-        docs: users.docs.map(u => u.pubProps())
-    })
+    catch (err) {
+        return res.status(500).json({code: 'ERROR'})
+    }
     // return res.json(users.map(u => u.pubProps()))
 })
 

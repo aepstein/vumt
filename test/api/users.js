@@ -17,17 +17,37 @@ describe('/api/users', () => {
     describe('GET /api/users', () => {
         let action = async (q,auth) => {
             const res = chai.request(server)
-                .get('/api/users')
+                .get(q ? q : '/api/users')
             if ( auth ) { res.set('x-auth-token',auth.body.token) }
             return res
         }
-        it.only('should retrieve users for a user with admin role', async () => {
+        it('should retrieve users for a user with admin role', async () => {
             const auth = await withAuth({roles:['admin']})
             const res = await action(null,auth)
             res.should.have.a.status(200)
-            console.log(res.body)
-            res.body.should.be.an('array')
-            res.body.map(u => u._id).should.have.members([auth.body.user._id])
+            res.body.data.should.be.an('array')
+            res.body.data.map(u => u._id).should.have.members([auth.body.user._id])
+            res.body.links.should.have.property('next').null
+        })
+        it('should paginate for more than 10 users', async () => {
+            const userCreates = []
+            const times = x => f => {
+                if (x > 0) {
+                    userCreates.push(f())
+                    times( x - 1 )(f)
+                }
+            }
+            times(10)(() => factory.create('user'))
+            const users = await Promise.all(userCreates)
+            const auth = await withAuth({roles:['admin']})
+            const res = await action(null,auth)
+            res.should.have.a.status(200)
+            res.body.data.should.be.an('array')
+            res.body.data.length.should.eq(10)
+            res.body.data.map(u => u._id).should.have.members(users.map(u => u.id))
+            res.body.links.should.have.property('next').not.null
+            const res2 = await action(res.body.links.next.match(/\/api.+$/)[0],auth)
+            res2.body.data.map(u => u._id).should.be.an('array').have.members([auth.body.user._id])
         })
         it('should deny an unprivileged user',async () => {
             const auth = await withAuth()
