@@ -3,7 +3,7 @@ const mongoose = require('../../db/mongoose');
 const TranslationSchema = new mongoose.Schema({
     language: {
         type: String,
-        enum: ['en-US','fr','he'],
+        enum: ['en-US','es','fr','he'],
         required: true
     },
     translation: {
