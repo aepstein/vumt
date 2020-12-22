@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const auth = require('../../middleware/auth')
 const user = require('../../middleware/user')
 const handleValidationError = require('../../lib/handleValidationError')
+const paginate = require('../../lib/paginate')
 
 const User = require('../../models/User');
 
@@ -90,38 +91,23 @@ router.put('/:userId',auth(),user({self:true,roles:['admin']}),async (req,res) =
 // @desc Get listing of users
 // @access Private
 router.get(['/','/after/:afterId'],auth({roles:['admin']}),async (req,res) => {
+    const {q} = req.query
     try {
-        const limit = 10
+        const qc = q ? new RegExp(q,'i') : null
         const criteria = {}
-        if ( req.params.afterId ) { criteria._id = { $gt: req.params.afterId } }
-        const q = req.query.q
-        const qc = new RegExp(q,'i')
-        if (q) {
+        if (qc) {
             criteria.$or = []
             criteria.$or.push({email: { $regex: qc }})
             criteria.$or.push({firstName: { $regex: qc }})
             criteria.$or.push({lastName: { $regex: qc }})
         }
-        const users = await User
-            .find(criteria)
-            .select({password: 0, resetPasswordTokens: 0})
-            .limit(limit + 1)
-        const pageLink = (req,cursor) => {
-            const qs = q ? `?q=${q}` : ''
-            return req.baseUrl + "/after/" + cursor + qs
-        }
-        const next = users[limit] ? users[limit-1]._id : null
-        return res.json({
-            users: users.slice(0,limit),
-            links: {
-                next: next ? pageLink(req,next) : null
-            }
-        })
+        const qs = q ? `?q=${q}` : ''
+        const select = {password: 0, resetPasswordTokens: 0}
+        return paginate({req,res,model: User,criteria,select,qs})
     }
     catch (err) {
         return res.status(500).json({code: 'ERROR'})
     }
-    // return res.json(users.map(u => u.pubProps()))
 })
 
 // @route DELETE api/users/:userId

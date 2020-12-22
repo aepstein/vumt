@@ -38,7 +38,7 @@ export const getUsers = (dispatch, getState) => {
         .then((res) => {
             // Skip posting this list of users if query has changed since initiation
             if ( q !== getState().user.q ) { return }
-            const users = res.data.users.map((user) => {
+            const users = res.data.data.map((user) => {
                 return {
                     ...user,
                     ...parseDates(user)
