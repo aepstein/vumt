@@ -15,6 +15,7 @@ i18n
     fallbackLng: 'en',
     resources: {
         en: require('./locales/en').default,
+        es: require('./locales/es').default,
         fr: require('./locales/fr').default,
         he: require('./locales/he').default
     },

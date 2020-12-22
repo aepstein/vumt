@@ -1,9 +1,10 @@
 const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
-const { toLocalDate, toLocalTime } = require('../../test/support/util')
+const { toLocalDate, toLocalTime, times } = require('../../test/support/util')
 const Advisory = require('../../models/Advisory')
-const User = require('../../models/User')
+const User = require('../../models/User');
+const { factory } = require('factory-bot');
 var sc = 1;
 
 const chooseFromSelectByLabel = async (label, choice) => {
@@ -52,6 +53,11 @@ const emailSubjectShouldBe = (subject) => {
 	const mail = scope.mail.lastMail()
 	mail.should.not.be.a('null')
 	mail.should.have.property('subject').eql(subject)
+}
+
+const entitiesExist = async (x,f,attr) => {
+	if (!scope.context[f]) { scope.context[f] = [] }
+	scope.context[f] = scope.context[f].concat(await times(x,() => factory.create(f,attr)))
 }
 
 // credit: https://gist.github.com/tokland/d3bae3b6d3c1576d8700405829bbdb52
@@ -188,6 +194,11 @@ const relativeDate = (description) => {
 	relativeDate.setHours(8,0,0,0)
 	return relativeDate
 }
+const scrollToBottom = async () => {
+	await scope.context.currentPage.evaluate( () => {
+		window.scrollBy(0,window.innerHeight)
+	})
+}
 const selectFormGroupByLabel = async (label) => {
 	const escapedText = escapeXpathString(label);
 	const selector = `//div[contains(@class,'form-group') and contains(.//label,${escapedText})]`
@@ -259,7 +270,8 @@ const updateAdvisory = async (label,update) => {
 	await Advisory.updateOne({label},update)
 }
 const userExists = async (attr) => {
-	scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
+	await entitiesExist(1,'user',{password: "secret",...attr})
+	// scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
 }
 const visitExists = async (attr={}) => {
     scope.context.visit = await scope.factory.create('visit',attr);
@@ -280,11 +292,14 @@ const waitForText = async (text, context = "//a") => {
 	await scope.context.currentPage.waitForXPath(selector);
 }
 const waitFor = async (selector) => {
+	if (Array.isArray(selector)) {
+		return Promise.all(selector.map(async s => waitFor(s)))
+	}
 	if (selector.match(/^\/\//)) {
-		await scope.context.currentPage.waitForXPath(selector)
+		return scope.context.currentPage.waitForXPath(selector)
 	}
 	else {
-		await scope.context.currentPage.waitForSelector(selector)
+		return scope.context.currentPage.waitForSelector(selector)
 	}
 }
 
@@ -296,6 +311,7 @@ module.exports = {
 	emailFollowLink,
 	emailShouldBeSentTo,
 	emailSubjectShouldBe,
+	entitiesExist,
 	fillByLabel,
 	fillByPlaceholder,
 	fillTypeaheadByLabel,
@@ -310,6 +326,8 @@ module.exports = {
 	visitPage,
 	visitPath,
 	relativeDate,
+	scope,
+	scrollToBottom,
 	setGeolocation,
 	shouldBeLoggedInAs,
 	shouldSee,

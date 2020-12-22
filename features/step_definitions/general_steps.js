@@ -13,6 +13,7 @@ const {
     parseInput,
     setGeolocation,
     relativeDate,
+    scrollToBottom,
     shouldBeLoggedInAs,
     shouldSeeErrorWithLabel,
     shouldSeeDefinition,
@@ -92,6 +93,10 @@ When('I click the {string} link', async (label) => {
 
 When(/^I (un)?mark the "([^"]+)" checkbox$/, async (un,label) => {
     await markByLabel(label,un)
+})
+
+When('I scroll down', async () => {
+    await scrollToBottom()
 })
 
 Then('the {string} field should have an error {string}', async (label, error) => {

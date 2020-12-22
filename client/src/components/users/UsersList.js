@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom'
 import {
     Button,
     Container,
+    Spinner,
     Table
 } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom';
-import { deleteUser } from '../../actions/userActions';
+import { deleteUser, getUsers } from '../../actions/userActions';
+import UserSearch from './UserSearch'
 
-export default function UsersList({users}) {
+export default function UsersList({users,next,loading}) {
     const authUser = useSelector(state => state.auth.user)
     const dispatch = useDispatch()
     const history = useHistory()
@@ -20,16 +22,33 @@ export default function UsersList({users}) {
     const onDeleteClick = (id) => {
         dispatch(deleteUser(id))
     }
+    const loadMore = useCallback(() => {
+        dispatch(getUsers)
+    },[dispatch])
+
+    useEffect(() => {
+        const onMore = () => {
+            if (loading || !next) { return }
+            if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+                loadMore()
+            }
+        }
+        window.addEventListener("scroll",onMore)
+        return () => {
+            window.removeEventListener("scroll",onMore)
+        }
+    },[loading,next,loadMore])
 
     return <div>
         <Container>
+            <UserSearch />
             <Link to="/users/new">
                 <Button color="dark" style={{marginBottom: '2rem'}}>{t('addUser')}</Button>
             </Link>
             <Table responsive={true} className="users-list">
                 <thead>
                     <tr>
-                        <th colspan="3"></th>
+                        <th colSpan="3"></th>
                         <th>{t('commonForms:firstName')}</th>
                         <th>{t('commonForms:lastName')}</th>
                         <th>{t('commonForms:email')}</th>
@@ -37,7 +56,7 @@ export default function UsersList({users}) {
                 </thead>
                 <tbody>
                     {users.map(({_id,firstName,lastName,email}) =>
-                        <tr>
+                        <tr key={_id}>
                             <td>
                                 <Button
                                     color="info"
@@ -68,6 +87,8 @@ export default function UsersList({users}) {
                     )}
                 </tbody>
             </Table>
+            {!loading && next ? <Button color="secondary" onClick={loadMore}>{t('search:more')}</Button> : ''}
+            {loading ? <Spinner color="secondary"/> : ''}
         </Container>
     </div>
 }

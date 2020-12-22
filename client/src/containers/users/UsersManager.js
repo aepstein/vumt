@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { getUsers, saveUser } from '../../actions/userActions';
-import { Spinner } from 'reactstrap'
+import { saveUser, getUsers } from '../../actions/userActions';
 import UsersList from '../../components/users/UsersList'
 import UserDetail from '../../components/users/UserDetail'
 import UserEditor from '../../components/users/UserEditor'
@@ -23,6 +22,7 @@ const BLANK_USER = {
 
 export default function UsersManager({action}) {
     const { defaultAction, userId } = useParams()
+    const next = useSelector(state => state.user.next)
     const users = useSelector(state => state.user.users, shallowEqual)
     const loading = useSelector(state => state.user.usersLoading)
     const loaded = useSelector(state => state.user.usersLoaded)
@@ -41,7 +41,7 @@ export default function UsersManager({action}) {
     
     useEffect(() => {
         if (!loading && !loaded) {
-            dispatch(getUsers())
+            dispatch(getUsers)
         }
     },[loading,loaded,dispatch])
 
@@ -58,8 +58,6 @@ export default function UsersManager({action}) {
         }
     },[user,userId,loaded,users])
 
-    if (loading) return <Spinner color="secondary" />
-
     switch (action ? action : defaultAction) {
         case 'new':
         case 'edit':
@@ -67,6 +65,6 @@ export default function UsersManager({action}) {
         case 'show':
             return <UserDetail user={user} />
         default:
-            return <UsersList users={users} />
+            return <UsersList users={users} next={next} loading={loading}/>
     }
 }

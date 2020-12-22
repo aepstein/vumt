@@ -92,17 +92,27 @@ router.put('/:userId',auth(),user({self:true,roles:['admin']}),async (req,res) =
 router.get(['/','/after/:afterId'],auth({roles:['admin']}),async (req,res) => {
     try {
         const limit = 10
-        const criteria = req.params.afterId ? { _id: { $gt: req.params.afterId } } : {}
+        const criteria = {}
+        if ( req.params.afterId ) { criteria._id = { $gt: req.params.afterId } }
+        const q = req.query.q
+        const qc = new RegExp(q,'i')
+        if (q) {
+            criteria.$or = []
+            criteria.$or.push({email: { $regex: qc }})
+            criteria.$or.push({firstName: { $regex: qc }})
+            criteria.$or.push({lastName: { $regex: qc }})
+        }
         const users = await User
             .find(criteria)
             .select({password: 0, resetPasswordTokens: 0})
             .limit(limit + 1)
         const pageLink = (req,cursor) => {
-            return req.protocol + "://" + req.hostname + req.baseUrl + "/after/" + cursor
+            const qs = q ? `?q=${q}` : ''
+            return req.baseUrl + "/after/" + cursor + qs
         }
         const next = users[limit] ? users[limit-1]._id : null
         return res.json({
-            data: users.slice(0,limit),
+            users: users.slice(0,limit),
             links: {
                 next: next ? pageLink(req,next) : null
             }

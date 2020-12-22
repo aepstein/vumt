@@ -7,6 +7,10 @@ const locale = {
         "timesAreLocal": "Les heures sont en heure locale pour {{timezone}}.",
         "updatedAt": "Mis à jour le"
     },
+    "search": {
+        "more": "Plus",
+        "search": "Chercher"
+    },
     "commonForms": {
         "cancel": "Cancel",
         "country": "Pays où vous résidez",

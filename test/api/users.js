@@ -10,6 +10,9 @@ const {
     errorNoToken,
     errorPathRequired
 } = require('../support/middlewareErrors')
+const {
+    times
+} = require('../support/util')
 describe('/api/users', () => {
     beforeEach( async () => {
         await User.deleteMany({});        
@@ -25,29 +28,36 @@ describe('/api/users', () => {
             const auth = await withAuth({roles:['admin']})
             const res = await action(null,auth)
             res.should.have.a.status(200)
-            res.body.data.should.be.an('array')
-            res.body.data.map(u => u._id).should.have.members([auth.body.user._id])
+            res.body.users.should.be.an('array')
+            res.body.users.map(u => u._id).should.have.members([auth.body.user._id])
             res.body.links.should.have.property('next').null
         })
         it('should paginate for more than 10 users', async () => {
-            const userCreates = []
-            const times = x => f => {
-                if (x > 0) {
-                    userCreates.push(f())
-                    times( x - 1 )(f)
-                }
-            }
-            times(10)(() => factory.create('user'))
-            const users = await Promise.all(userCreates)
+            const users = await times(10,async () => factory.create('user'))
             const auth = await withAuth({roles:['admin']})
             const res = await action(null,auth)
             res.should.have.a.status(200)
-            res.body.data.should.be.an('array')
-            res.body.data.length.should.eq(10)
-            res.body.data.map(u => u._id).should.have.members(users.map(u => u.id))
+            res.body.users.should.be.an('array')
+            res.body.users.length.should.eq(10)
+            res.body.users.map(u => u._id).should.have.members(users.map(u => u.id))
             res.body.links.should.have.property('next').not.null
             const res2 = await action(res.body.links.next.match(/\/api.+$/)[0],auth)
-            res2.body.data.map(u => u._id).should.be.an('array').have.members([auth.body.user._id])
+            res2.body.users.map(u => u._id).should.be.an('array').have.members([auth.body.user._id])
+            const res3 = await action(`/api/users?q=${users[0].firstName}`,auth)
+            res3.body.links.should.have.property('next').match(new RegExp(`q=${users[0].firstName}`))
+        })
+        it('should filter for q=',async () => {
+            const q = "needle"
+            const userCreates = []
+            userCreates.push(factory.create('user',{firstName: ' needle '}))
+            userCreates.push(factory.create('user',{lastName: ' Needle '}))
+            userCreates.push(factory.create('user',{email: 'jdoe@needle.com'}))
+            const users = await Promise.all(userCreates)
+            const auth = await withAuth({roles:['admin']})
+            const res = await action('/api/users?q=needle',auth)
+            res.should.have.a.status(200)
+            const ids = res.body.users.map(u => u._id)
+            ids.should.have.members(users.map(u => u.id))
         })
         it('should deny an unprivileged user',async () => {
             const auth = await withAuth()

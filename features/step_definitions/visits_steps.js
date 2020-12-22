@@ -24,7 +24,7 @@ const callVisitExists = async (startOn, originName, destinationName) => {
         startOn,
         origin: (scope.models.originPlace.filter(p => p.name == originName)[0]._id),
         destinations: scope.models.destinationPlace.filter(p => p.name == destinationName),
-        user: scope.context.user.id
+        user: scope.context.user[scope.context.user.length - 1].id
     })
 }
 

@@ -7,6 +7,10 @@ const locale = {
         "timesAreLocal": "\u202bהזמנים הם בזמן המקומי ל{{timezone}}.",
         "updatedAt": "עודכן ב"
     },
+    "search": {
+        "more": "יותר",
+        "search": "לחפש"
+    },
     "commonForms": {
         "cancel": "בטל",
         "country": "מדינה בה אתה מתגורר",

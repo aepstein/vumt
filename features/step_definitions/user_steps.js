@@ -1,6 +1,8 @@
 const { Given, When, Then } = require('@cucumber/cucumber')
 const {
     clickByXPath,
+    entitiesExist,
+    scope,
     shouldSeeText,
     userExists,
     waitFor
@@ -8,8 +10,11 @@ const {
 const User = require('../../models/User')
 const userRowSelector = async (email) => {
     const user = await User.findOne({email})
-    return `//tr[contains(./td[4],'${user.firstName}') and contains(./td[5],'${user.lastName}') and ` +
-        `contains(./td[6],'${user.email}')]`
+    return userRowSelectorSync(user)
+}
+const userRowSelectorSync = ({email,firstName,lastName}) => {
+    return `//tr[contains(./td[4],'${firstName}') and contains(./td[5],'${lastName}') and ` +
+        `contains(./td[6],'${email}')]`
 }
 Given(/^a(?:n)?(?: (admin))? user exists "([^"]+)" "([^"]+)" "([^"]+)"$/, async (role, firstName, lastName, email) => {
     const attr = {
@@ -19,6 +24,18 @@ Given(/^a(?:n)?(?: (admin))? user exists "([^"]+)" "([^"]+)" "([^"]+)"$/, async 
     }
     if (role) attr.roles = [role]
     await userExists(attr)
+})
+
+Given('{int} users exist named {string} {string}', async (n, firstName, lastName) => {
+    await entitiesExist(n,'user',{firstName, lastName})
+})
+
+Then('I should see the first {int} users', async (n) => {
+    await waitFor(scope.context.user.slice(0,n-1).map(u => userRowSelectorSync(u)))
+})
+
+Then('I should see users {int} through {int}', async (first,last) => {
+    await waitFor(scope.context.user.slice(first-1,last-1).map(u => userRowSelectorSync(u)))
 })
 
 Then(/^I should( not)? see the \"([^"]+)\" menu$/, async (negate,menu) => {
@@ -33,6 +50,10 @@ When('I click {string} for user {string}', async (button, email) => {
 
 Then('I should see user {string}', async (email) => {
     await waitFor(await userRowSelector(email))
+})
+
+Then('I should not see user {string}', async (email) => {
+    await waitFor(`//table[contains(@class,'users-list') and not(contains(text(),'${email}'))]`)
 })
 
 Then('I wait for user {string} to disappear', async (email) => {
