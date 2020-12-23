@@ -55,7 +55,7 @@ const emailSubjectShouldBe = (subject) => {
 	mail.should.have.property('subject').eql(subject)
 }
 
-const entitiesExist = async (x,f,attr) => {
+const entitiesExist = async (x,f,attr={}) => {
 	if (!scope.context[f]) { scope.context[f] = [] }
 	scope.context[f] = scope.context[f].concat(await times(x,() => factory.create(f,attr)))
 }
