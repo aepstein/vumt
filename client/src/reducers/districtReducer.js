@@ -1,4 +1,5 @@
-import { 
+import {
+    FILTER_DISTRICTS,
     GET_DISTRICTS,
     ADD_DISTRICT,
     UPDATE_DISTRICT,
@@ -13,7 +14,9 @@ const initialState = {
     districts: [],
     districtsLoading: false,
     districtsLoaded: false,
-    districtSaving: false
+    districtSaving: false,
+    next: '/api/districts',
+    q: ''
 }
 
 const reduceUpdatedDistricts = (districts,payload) => {
@@ -33,12 +36,22 @@ export default function districtReducer( state = initialState, action ) {
                 ...state,
                 ...initialState
             }
+        case FILTER_DISTRICTS:
+            return {
+                ...state,
+                q: action.payload.q,
+                next: `${initialState.next}?q=${action.payload.q}`,
+                districts: [],
+                districtsLoading: true,
+                districtsLoaded: false
+            }
         case GET_DISTRICTS:
             return {
                 ...state,
-                districts: action.payload,
+                districts: action.payload.districts,
                 districtsLoading: false,
-                districtsLoaded: true
+                districtsLoaded: true,
+                next: action.payload.next
             };
         case DELETE_DISTRICT:
             return {

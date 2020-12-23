@@ -1,29 +1,27 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import {
     Button,
     ButtonGroup,
     Container,
     ListGroup,
-    ListGroupItem
+    ListGroupItem,
+    Spinner
 } from 'reactstrap';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom';
-import { deleteDistrict } from '../../actions/districtActions';
+import useScrollDown from '../../hooks/useScrollDown'
+import Search from '../search/Search'
 
-export default function DistrictsList({districts}) {
-    const dispatch = useDispatch()
+export default function DistrictsList({districts,loading,next,q,onDelete,onLoadMore,onSearch}) {
     const history = useHistory()
     
     const { t } = useTranslation('district')
 
-    const onDeleteClick = (id) => {
-        dispatch(deleteDistrict(id))
-    }
+    useScrollDown(onLoadMore)
 
     return <div>
         <Container>
+            <Search q={q} onSearch={onSearch} />
             <Link to="/districts/new">
                 <Button color="dark" style={{marginBottom: '2rem'}}>{t('addDistrict')}</Button>
             </Link>
@@ -44,13 +42,15 @@ export default function DistrictsList({districts}) {
                             <Button
                                 color="danger"
                                 size="sm"
-                                onClick={() => onDeleteClick(_id)}
+                                onClick={() => onDelete(_id)}
                             >{t('commonForms:remove')}</Button>
                         </ButtonGroup>
                         <span className="district-name">{name}</span>
                     </ListGroupItem>
                 ))}
             </ListGroup>
+            {!loading && next ? <Button color="secondary" onClick={onLoadMore}>{t('search:more')}</Button> : ''}
+            {loading ? <Spinner color="secondary"/> : ''}
         </Container>
     </div>
 }

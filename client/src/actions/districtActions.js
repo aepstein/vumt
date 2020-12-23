@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+    FILTER_DISTRICTS,
     GET_DISTRICTS,
     ADD_DISTRICT,
     UPDATE_DISTRICT,
@@ -18,19 +19,34 @@ const parseDates = ({createdAt, endOn, startOn, updatedAt}) => {
     }
 }
 
-export const getDistricts = () => (dispatch, getState) => {
+export const filterDistricts = (q) => (dispatch, getState) => {
+    if (q === getState().district.q) { return }
+    dispatch({
+        type: FILTER_DISTRICTS,
+        payload: { q }
+    })
+    dispatch(getDistricts)
+}
+
+export const getDistricts = (dispatch, getState) => {
     dispatch(setDistrictsLoading())
+    const q = getState().district.q
+    const next = getState().district.next
+    const config = tokenConfig(getState)
     axios
-        .get('/api/districts',tokenConfig(getState))
+        .get(next,config)
         .then(res => {
+            if ( q !== getState().district.q ) { return }
+            const districts = res.data.data.map((district) => {
+                return {
+                    ...district,
+                    ...parseDates(district)
+                }
+            })
+            const next = res.data.links.next
             dispatch({
                 type: GET_DISTRICTS,
-                payload: res.data.map((district) => {
-                    return {
-                        ...district,
-                        ...parseDates(district)
-                    }
-                })
+                payload: { districts, next }
             })
         })
     .catch(err => {

@@ -51,12 +51,12 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
     const districtsRef = useRef()
     const [ districtOptions, setDistrictOptions ] = useState([])
     const [ districtLoading, setDistrictLoading ] = useState(false)
-    const districtSearch = useCallback((query) => {
+    const districtSearch = useCallback((q) => {
         setDistrictLoading(true)
         axios
-            .get('/api/districts')
+            .get('/api/districts',{params: {q}})
             .then((res) => {
-                setDistrictOptions(res.data.map((district) => {
+                setDistrictOptions(res.data.data.map((district) => {
                     return {id: district._id, label: district.name}
                 }))
                 setDistrictLoading(false)

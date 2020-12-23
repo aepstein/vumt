@@ -5,19 +5,14 @@ import {
     Input,
     Label
 } from 'reactstrap'
-import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { filterUsers } from '../../actions/userActions'
 
-export default function UserSearch() {
-    const q = useSelector(state => state.user.q)
-    const dispatch = useDispatch()
-
+export default function Search({q,onSearch}) {
     const { t } = useTranslation('search')
 
     const onChange = (e) => {
         if (q !== e.target.value)
-        dispatch(filterUsers(e.target.value))
+        onSearch(e.target.value)
     }
 
     return <Form inline>
