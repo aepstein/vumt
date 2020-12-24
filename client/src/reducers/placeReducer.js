@@ -1,4 +1,5 @@
-import { 
+import {
+    FILTER_PLACES,
     GET_PLACES,
     ADD_PLACE,
     UPDATE_PLACE,
@@ -10,10 +11,12 @@ import {
 } from '../actions/types';
 
 const initialState = {
+    next: '/api/places',
     places: [],
     placesLoading: false,
     placesLoaded: false,
-    placeSaving: false
+    placeSaving: false,
+    q: ''
 }
 
 const reduceUpdatedPlaces = (places,payload) => {
@@ -33,10 +36,20 @@ export default function placeReducer( state = initialState, action ) {
                 ...state,
                 ...initialState
             }
+        case FILTER_PLACES:
+            return {
+                ...state,
+                q: action.payload.q,
+                next: `${initialState.next}?q=${action.payload.q}`,
+                places: [],
+                placesLoading: true,
+                placesLoaded: false
+            }
         case GET_PLACES:
             return {
                 ...state,
-                places: action.payload,
+                next: action.payload.next,
+                places: state.places.concat(action.payload.places),
                 placesLoading: false,
                 placesLoaded: true
             };

@@ -55,9 +55,10 @@ const emailSubjectShouldBe = (subject) => {
 	mail.should.have.property('subject').eql(subject)
 }
 
-const entitiesExist = async (x,f,attr={}) => {
-	if (!scope.context[f]) { scope.context[f] = [] }
-	scope.context[f] = scope.context[f].concat(await times(x,() => factory.create(f,attr)))
+const entitiesExist = async (x,f,attr={},bucket=null) => {
+	const b = bucket ? bucket : f
+	if (!scope.context[b]) { scope.context[b] = [] }
+	scope.context[b] = scope.context[b].concat(await times(x,() => factory.create(f,attr)))
 }
 
 // credit: https://gist.github.com/tokland/d3bae3b6d3c1576d8700405829bbdb52
@@ -242,10 +243,10 @@ const shouldSeeText = async (selector, not, expectedText) => {
     const containsText = elementText && elementText.replace(/\s+/,' ')
 	const shouldContainText = not ? false : true;
 	if (shouldContainText) {
-		containsText.should.have.string(expectedText)
+		return containsText.should.have.string(expectedText)
 	}
 	else {
-		containsText.should.not.have.string(expectedText)
+		return containsText.should.not.have.string(expectedText)
 	}
 }
 const startTypeaheadByLabel = async (label, fill) => {

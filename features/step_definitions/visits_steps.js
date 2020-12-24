@@ -22,8 +22,8 @@ const visitRowText = (startOn,origin,destination) => {
 const callVisitExists = async (startOn, originName, destinationName) => {
     return visitExists({
         startOn,
-        origin: (scope.models.originPlace.filter(p => p.name == originName)[0]._id),
-        destinations: scope.models.destinationPlace.filter(p => p.name == destinationName),
+        origin: (scope.context.place.filter(p => p.isOrigin && p.name == originName)[0]._id),
+        destinations: scope.context.place.filter(p => p.isDestination && p.name == destinationName),
         user: scope.context.user[scope.context.user.length - 1].id
     })
 }
@@ -46,8 +46,8 @@ Given(/^a visit start(?:s|ed) from "([^"]+)" to "([^"]+)" (?:(now)|(\d+) (hour)s
     async(origin,destination,when,increment,unit,direction,people,vehicles) => {
         await visitExists({
             startOn: relativeDate({when,increment,unit,direction}),
-            origin: (scope.models.originPlace.filter(p => p.name == origin)[0]._id),
-            destinations: scope.models.destinationPlace.filter(p => p.name == destination),
+            origin: (scope.context.place.filter(p => p.isOrigin && p.name == origin)[0]._id),
+            destinations: scope.context.place.filter(p => p.isDestination && p.name == destination),
             groupSize: parseInt(people),
             parkedVehicles: parseInt(vehicles)
         })

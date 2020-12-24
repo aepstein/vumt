@@ -5,25 +5,24 @@ import {
     ButtonGroup,
     Container,
     ListGroup,
-    ListGroupItem
+    ListGroupItem,
+    Spinner
 } from 'reactstrap';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom';
-import { deletePlace } from '../../actions/placeActions';
+import useScrollDown from '../../hooks/useScrollDown'
+import Search from '../search/Search'
 
-export default function PlacesList({places}) {
-    const dispatch = useDispatch()
+export default function PlacesList({places,loading,next,q,onDelete,onLoadMore,onSearch}) {
     const history = useHistory()
     
     const { t } = useTranslation('place')
 
-    const onDeleteClick = (id) => {
-        dispatch(deletePlace(id))
-    }
+    useScrollDown(onLoadMore)
 
     return <div>
         <Container>
+            <Search q={q} onSearch={onSearch} />
             <Link to="/places/new">
                 <Button color="dark" style={{marginBottom: '2rem'}}>{t('addPlace')}</Button>
             </Link>
@@ -44,13 +43,15 @@ export default function PlacesList({places}) {
                             <Button
                                 color="danger"
                                 size="sm"
-                                onClick={() => onDeleteClick(_id)}
+                                onClick={() => onDelete(_id)}
                             >{t('commonForms:remove')}</Button>
                         </ButtonGroup>
                         <span className="place-label">{name}</span>
                     </ListGroupItem>
                 ))}
             </ListGroup>
+            {!loading && next ? <Button color="secondary" onClick={onLoadMore}>{t('search:more')}</Button> : ''}
+            {loading ? <Spinner color="secondary" /> : ''}
         </Container>
     </div>
 }
