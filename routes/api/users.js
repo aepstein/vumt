@@ -101,9 +101,8 @@ router.get(['/','/after/:afterId'],auth({roles:['admin']}),async (req,res) => {
             criteria.$or.push({firstName: { $regex: qc }})
             criteria.$or.push({lastName: { $regex: qc }})
         }
-        const qs = q ? `?q=${q}` : ''
         const select = {password: 0, resetPasswordTokens: 0}
-        return paginate({req,res,model: User,criteria,select,qs})
+        return paginate({req,res,model: User,criteria,select})
     }
     catch (err) {
         return res.status(500).json({code: 'ERROR'})

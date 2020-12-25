@@ -27,8 +27,7 @@ router.get(['/','/after/:afterId'], async (req, res) => {
         if (qc) {
             criteria.name = { $regex: qc }
         }
-        const qs = q ? `?q=${q}` : ''
-        return paginate({req,res,model: District,criteria,qs})
+        return paginate({req,res,model: District,criteria})
     }
     catch (err) {
         return res.status(500).json({code: 'ERROR'})
