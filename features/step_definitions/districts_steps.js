@@ -41,5 +41,5 @@ Then('I wait for district {string} to disappear', async (name) => {
 })
 
 Then('I should see districts {int} through {int}', async (first, last) => {
-    await waitFor(scope.context.district.slice(first-1,last-1).map(d => districtRowSelector(d.name)))
+    await waitFor(scope.context.district.slice(first-1,last-1).map(d => districtRowSelector(d.name)),{visible: true})
 })

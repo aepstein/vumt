@@ -99,6 +99,10 @@ When('I scroll down', async () => {
     await scrollToBottom()
 })
 
+When('there is no spinner', async () => {
+    await waitFor('.spinner-border',{hidden: true})
+})
+
 Then('the {string} field should have an error {string}', async (label, error) => {
     await new Promise(r => setTimeout(r, 200))
     await shouldSeeErrorWithLabel(error,label)

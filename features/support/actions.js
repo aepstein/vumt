@@ -292,15 +292,18 @@ const waitForText = async (text, context = "//a") => {
 	const selector = `${context}[contains(text(), ${escapedText})]`;
 	await scope.context.currentPage.waitForXPath(selector);
 }
-const waitFor = async (selector) => {
+const waitFor = async (selector,options={}) => {
 	if (Array.isArray(selector)) {
-		return Promise.all(selector.map(async s => waitFor(s)))
+		const tests = selector.map((s) => {
+			return waitFor(s,options)
+		})
+		return Promise.all(tests)
 	}
 	if (selector.match(/^\/\//)) {
-		return scope.context.currentPage.waitForXPath(selector)
+		return scope.context.currentPage.waitForXPath(selector,options)
 	}
 	else {
-		return scope.context.currentPage.waitForSelector(selector)
+		return scope.context.currentPage.waitForSelector(selector,options)
 	}
 }
 

@@ -48,7 +48,7 @@ export default function districtReducer( state = initialState, action ) {
         case GET_DISTRICTS:
             return {
                 ...state,
-                districts: action.payload.districts,
+                districts: state.districts.concat(action.payload.districts),
                 districtsLoading: false,
                 districtsLoaded: true,
                 next: action.payload.next

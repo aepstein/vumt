@@ -21,6 +21,7 @@ Feature: Manage places
         Then I should see places 2 through 12
         And I should not see place "special place"
         When I click the "More" button
+        And there is no spinner
         Then I should see places 2 through 13
         And I should not see place "Pitchoff Summit"
 

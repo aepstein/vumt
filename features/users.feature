@@ -30,6 +30,7 @@ Feature: Manage users
         Then I should see users 3 through 13
         And I should not see user "Jane"
         When I click the "More" button
+        And there is no spinner
         Then I should see users 3 through 14
         And I should not see user "bmcmartin@example.com"
     
