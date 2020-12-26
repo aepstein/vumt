@@ -5,25 +5,24 @@ import {
     ButtonGroup,
     Container,
     ListGroup,
-    ListGroupItem
+    ListGroupItem,
+    Spinner
 } from 'reactstrap';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom';
-import { deleteAdvisory } from '../../actions/advisoryActions';
+import Search from '../search/Search'
+import useScrollDown from '../../hooks/useScrollDown'
 
-export default function AdvisoriesList({advisories}) {
-    const dispatch = useDispatch()
+export default function AdvisoriesList({advisories,loading,next,q,onDelete,onLoadMore,onSearch}) {
     const history = useHistory()
     
     const { t } = useTranslation('advisory')
 
-    const onDeleteClick = (id) => {
-        dispatch(deleteAdvisory(id))
-    }
+    useScrollDown(onLoadMore)
 
     return <div>
         <Container>
+            <Search q={q} onSearch={onSearch} />
             <Link to="/advisories/new">
                 <Button color="dark" style={{marginBottom: '2rem'}}>{t('addAdvisory')}</Button>
             </Link>
@@ -44,13 +43,15 @@ export default function AdvisoriesList({advisories}) {
                             <Button
                                 color="danger"
                                 size="sm"
-                                onClick={() => onDeleteClick(_id)}
+                                onClick={() => onDelete(_id)}
                             >{t('commonForms:remove')}</Button>
                         </ButtonGroup>
                         <span className="advisory-label">{label}</span>
                     </ListGroupItem>
                 ))}
             </ListGroup>
+            {loading ? <Spinner color="secondary"/> : ''}
+            {!loading && next ? <Button color="secondary" onClick={onLoadMore}>{t('search:more')}</Button> : ''}
         </Container>
     </div>
 }

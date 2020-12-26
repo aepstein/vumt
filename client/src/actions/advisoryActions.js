@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+    FILTER_ADVISORIES,
     GET_ADVISORIES,
     ADD_ADVISORY,
     UPDATE_ADVISORY,
@@ -20,19 +21,33 @@ const parseDates = ({createdAt, endOn, startOn, updatedAt}) => {
     }
 }
 
-export const getAdvisories = () => (dispatch, getState) => {
+export const filterAdvisories = (q) => (dispatch, getState) => {
+    if (q === getState().advisory.q) { return }
+    dispatch({
+        type: FILTER_ADVISORIES,
+        payload: { q }
+    })
+    dispatch(getAdvisories)
+}
+
+export const getAdvisories = (dispatch, getState) => {
     dispatch(setAdvisoriesLoading())
+    const {q,next} = getState().advisory
+    const config = tokenConfig(getState)
     axios
-        .get('/api/advisories',tokenConfig(getState))
+        .get(next,config)
         .then(res => {
+            if ( q !== getState().advisory.q ) { return }
+            const advisories = res.data.data.map((advisory) => {
+                return {
+                    ...advisory,
+                    ...parseDates(advisory)
+                }
+            })
+            const next = res.data.links.next
             dispatch({
                 type: GET_ADVISORIES,
-                payload: res.data.map((advisory) => {
-                    return {
-                        ...advisory,
-                        ...parseDates(advisory)
-                    }
-                })
+                payload: { advisories, next }
             })
         })
     .catch(err => {

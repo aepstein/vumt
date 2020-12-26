@@ -1,4 +1,5 @@
-import { 
+import {
+    FILTER_ADVISORIES,
     GET_ADVISORIES,
     ADD_ADVISORY,
     UPDATE_ADVISORY,
@@ -13,7 +14,9 @@ const initialState = {
     advisories: [],
     advisoriesLoading: false,
     advisoriesLoaded: false,
-    advisorySaving: false
+    advisorySaving: false,
+    next: '/api/advisories',
+    q: ''
 }
 
 const reduceUpdatedAdvisories = (advisories,payload) => {
@@ -33,12 +36,22 @@ export default function advisoryReducer( state = initialState, action ) {
                 ...state,
                 ...initialState
             }
+        case FILTER_ADVISORIES:
+            return {
+                ...state,
+                q: action.payload.q,
+                next: `${initialState.next}?q=${action.payload.q}`,
+                advisories: [],
+                advisoriesLoading: true,
+                advisoriesLoaded: false
+            }
         case GET_ADVISORIES:
             return {
                 ...state,
-                advisories: action.payload,
+                advisories: state.advisories.concat(action.payload.advisories),
                 advisoriesLoading: false,
-                advisoriesLoaded: true
+                advisoriesLoaded: true,
+                next: action.payload.next
             };
         case DELETE_ADVISORY:
             return {

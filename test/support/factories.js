@@ -7,7 +7,7 @@ const {
 const moment = require('moment')
 
 factory.define('advisory', Advisory, {
-    label: factory.sequence('Advisory.label', (n) => `Advisory ${n}`),
+    label: factory.sequence('Advisory.label', (n) => `Advisory ${n.toString().padStart(3,'0')}`),
     prompt: 'Take note'
 })
 

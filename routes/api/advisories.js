@@ -15,6 +15,7 @@ const attrAccessible = (req) => {
     return attrAccessible
 }
 const handleValidationError = require('../../lib/handleValidationError')
+const paginate = require('../../lib/paginate')
 
 // @route GET api/advisories/applicable/:advisoryContext
 // @desc Get applicable advisories for specified context and circumstances
@@ -33,10 +34,18 @@ router.get('/applicable/:advisoryContext',advisoryContext(true),async (req, res)
 // @route GET api/advisories
 // @desc Get all advisories
 // @access Public
-router.get('/', async (req, res) => {
+router.get(['/','/after/:afterId'], async (req, res) => {
+    const {q} = req.query
     try {
-        const advisories = await Advisory.find()
-        return res.json(advisories)
+        const qc = q ? new RegExp(q,'i') : null
+        const criteria = {}
+        if (qc) {
+            criteria.$or = [
+                {label: { $regex: qc }},
+                {'prompts.translation': { $regex: qc }}
+            ]
+        }
+        return paginate({req,res,model: Advisory,criteria})
     }
     catch(err) {
         console.log(err)

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { getAdvisories, saveAdvisory } from '../../actions/advisoryActions';
-import { Spinner } from 'reactstrap'
+import { deleteAdvisory, filterAdvisories, getAdvisories, saveAdvisory } from '../../actions/advisoryActions';
 import AdvisoriesList from '../../components/advisories/AdvisoriesList'
 import AdvisoryDetail from '../../components/advisories/AdvisoryDetail'
 import AdvisoryEditor from '../../components/advisories/AdvisoryEditor'
@@ -17,6 +16,8 @@ export default function AdvisoriesManager({action}) {
     const advisories = useSelector(state => state.advisory.advisories, shallowEqual)
     const loading = useSelector(state => state.advisory.advisoriesLoading)
     const loaded = useSelector(state => state.advisory.advisoriesLoaded)
+    const next = useSelector(state => state.advisory.next)
+    const q = useSelector(state => state.advisory.q)
     const saving = useSelector(state => state.advisory.advisorySaving)
 
     const [advisory,setAdvisory] = useState(BLANK_ADVISORY)
@@ -25,14 +26,24 @@ export default function AdvisoriesManager({action}) {
 
     const history = useHistory()
     
+    const onDelete = (id) => {
+        dispatch(deleteAdvisory(id))
+    }
+    const onLoadMore = () => {
+        if (loading || !next) { return }
+        dispatch(getAdvisories)
+    }
     const onSave = (newProps) => {
         if (saving) return
         dispatch(saveAdvisory(newProps,history))
     }
+    const onSearch = (q) => {
+        dispatch(filterAdvisories(q))
+    }
     
     useEffect(() => {
         if (!loading && !loaded) {
-            dispatch(getAdvisories())
+            dispatch(getAdvisories)
         }
     },[loading,loaded,dispatch])
 
@@ -49,8 +60,6 @@ export default function AdvisoriesManager({action}) {
         }
     },[advisory,advisoryId,loaded,advisories])
 
-    if (loading) return <Spinner color="secondary" />
-
     switch (action ? action : defaultAction) {
         case 'new':
         case 'edit':
@@ -58,6 +67,7 @@ export default function AdvisoriesManager({action}) {
         case 'show':
             return <AdvisoryDetail advisory={advisory} />
         default:
-            return <AdvisoriesList advisories={advisories} />
+            return <AdvisoriesList advisories={advisories} loading={loading} next={next} q={q}
+                onDelete={onDelete} onLoadMore={onLoadMore} onSearch={onSearch} />
     }
 }
