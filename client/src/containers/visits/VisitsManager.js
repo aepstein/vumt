@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { getVisits, saveVisit } from '../../actions/visitActions';
+import { deleteVisit, getVisits, saveVisit } from '../../actions/visitActions';
 import { Spinner } from 'reactstrap'
 import VisitsList from '../../components/visits/VisitsList'
 import VisitDetail from '../../components/visits/VisitDetail'
@@ -32,6 +32,9 @@ export default function VisitsManager({action}) {
 
     const history = useHistory()
     
+    const onDelete = (id) => {
+        dispatch(deleteVisit(id))
+    }
     const onSave = (newProps) => {
         if (saving) return
         dispatch(saveVisit(newProps,history))
@@ -66,6 +69,7 @@ export default function VisitsManager({action}) {
         case 'show':
             return <VisitDetail visit={visit} />
         default:
-            return <VisitsList visits={visits} />
+            return <VisitsList visits={visits}
+                onDelete={onDelete} />
     }
 }

@@ -11,21 +11,14 @@ import {
     CSSTransition,
     TransitionGroup
 } from 'react-transition-group';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom';
-import { deleteVisit } from '../../actions/visitActions';
 import VisitCheckButton from './VisitCheckButton'
 
-export default function VisitsList({visits}) {
-    const dispatch = useDispatch()
+export default function VisitsList({visits,onDelete}) {
     const history = useHistory()
     
     const { t, i18n } = useTranslation('visit')
-
-    const onDeleteClick = (id) => {
-        dispatch(deleteVisit(id))
-    }
 
     return <div>
         <Container>
@@ -56,7 +49,7 @@ export default function VisitsList({visits}) {
                                     <Button
                                         color="danger"
                                         size="sm"
-                                        onClick={() => onDeleteClick(_id)}
+                                        onClick={() => onDelete(_id)}
                                     >{t('commonForms:remove')}</Button>
                                 </ButtonGroup>
                                 <span className="visit-label">
