@@ -51,7 +51,6 @@ export const getUsers = (dispatch, getState) => {
             })
         })
         .catch((err) => {
-            console.log(err)
             dispatch(returnErrors(err.response.data,err.response.status))
         })
 };

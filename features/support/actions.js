@@ -58,7 +58,8 @@ const emailSubjectShouldBe = (subject) => {
 const entitiesExist = async (x,f,attr={},bucket=null) => {
 	const b = bucket ? bucket : f
 	if (!scope.context[b]) { scope.context[b] = [] }
-	scope.context[b] = scope.context[b].concat(await times(x,() => factory.create(f,attr)))
+	const attrs = (typeof attr === 'function') ? attr() : attr
+	scope.context[b] = scope.context[b].concat(await times(x,() => factory.create(f,attrs)))
 }
 
 // credit: https://gist.github.com/tokland/d3bae3b6d3c1576d8700405829bbdb52
@@ -275,7 +276,8 @@ const userExists = async (attr) => {
 	// scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
 }
 const visitExists = async (attr={}) => {
-    scope.context.visit = await scope.factory.create('visit',attr);
+	await entitiesExist(1,'visit',attr)
+    // scope.context.visit = await scope.factory.create('visit',attr);
 }
 const visitPage = async (page) => {
 	return await visitPath(paths[page])

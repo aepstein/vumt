@@ -16,21 +16,6 @@ const attrAccessible = (req) => {
 }
 const advisoryContext = require('../../middleware/advisoryContext')
 
-// @route GET api/visits
-// @desc Get all visits
-// @access Public
-// @route GET api/users/:userId/visits
-// @desc Get user's visits
-// @access Public
-router.get('/', async (req, res) => {
-    let criteria = {}
-    if (req.userId) { criteria.user = req.userId }
-    const visits = await Visit
-        .find(criteria)
-        .sort({date: -1})
-    return res.json(visits)
-});
-
 // @route GET api/visits/:visitId
 // @desc Load a single visit
 // @access Private
@@ -98,5 +83,10 @@ router.delete('/:visitId', auth(), visit(), async (req, res) => {
             .json({success: false});
     }
 });
+
+// @route GET api/visits
+// @desc Get all visits
+// @access Private
+router.use('/', auth({roles:['admin']}), require('../../lib/routes/visits'))
 
 module.exports = router;

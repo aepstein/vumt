@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const auth = require('../../middleware/auth')
 const user = require('../../middleware/user')
 const handleValidationError = require('../../lib/handleValidationError')
+const visits = require('../../lib/routes/visits')
 const paginate = require('../../lib/paginate')
 
 const User = require('../../models/User');
@@ -24,14 +25,7 @@ const attrAccessible = (req) => {
     return attrAccessible
 }
 // Use visits routes scoped to the user
-router.use(
-    '/:userId/visits',
-    function (req, res, next) {
-        req.userId = req.params.userId;
-        next();
-    },
-    require('./visits')
-);
+router.use('/:userId/visits', auth(), user({self: true, roles:['admin']}), visits)
 
 // @route POST api/users
 // @desc Register a new user

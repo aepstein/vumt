@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {
+    FILTER_VISITS,
     GET_VISITS,
+    INIT_VISITS,
     ADD_VISIT,
     UPDATE_VISIT,
     SAVING_VISIT,
@@ -21,26 +23,48 @@ const parseDates = ({checkedIn,checkedOut,startOn,createdAt,updatedAt}) => {
     }
 }
 
-export const getVisits = () => (dispatch, getState) => {
-    const userId = getState().auth.user._id
-    dispatch(setVisitsLoading());
+export const filterVisits = (q) => (dispatch, getState) => {
+    if (q === getState().visit.q) { return }
+    dispatch({
+        type: FILTER_VISITS,
+        payload: { q }
+    })
+    dispatch(getVisits)
+}
+
+export const getVisits = (dispatch, getState) => {
+    dispatch(setVisitsLoading())
+    const {q,next} = getState().visit
+    const config = tokenConfig(getState)
     axios
-        .get('/api/users/' + userId + '/visits',tokenConfig(getState))
+        .get(next,config)
         .then(res => {
+            if ( q !== getState().visit.q ) { return }
+            const visits = res.data.data.map((visit) => {
+                return {
+                    ...visit,
+                    ...parseDates(visit)
+                }
+            })
+            const next = res.data.links.next
             dispatch({
                 type: GET_VISITS,
-                payload: res.data.map((visit) => {
-                    return {
-                        ...visit,
-                        ...parseDates(visit)
-                    }
-                })
+                payload: {next,visits}
             });
         })
     .catch(err => {
+        console.log(err)
         dispatch(returnErrors(err.response.data,err.response.status));
     });
 };
+
+export const initVisits = (dispatch, getState) => {
+    const user = getState().auth.user._id
+    dispatch({
+        type: INIT_VISITS,
+        payload: user ? '/api/users/' + user + '/visits' : null
+    })
+}
 
 export const deleteVisit = id => (dispatch, getState) => {
     axios
