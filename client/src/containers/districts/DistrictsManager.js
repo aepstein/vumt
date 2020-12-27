@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { getDistricts, saveDistrict } from '../../actions/districtActions';
-import { Spinner } from 'reactstrap'
+import { deleteDistrict, filterDistricts, getDistricts, saveDistrict } from '../../actions/districtActions'
 import DistrictsList from '../../components/districts/DistrictsList'
 import DistrictDetail from '../../components/districts/DistrictDetail'
 import DistrictEditor from '../../components/districts/DistrictEditor'
@@ -16,6 +15,8 @@ export default function DistrictsManager({action}) {
     const districts = useSelector(state => state.district.districts, shallowEqual)
     const loading = useSelector(state => state.district.districtsLoading)
     const loaded = useSelector(state => state.district.districtsLoaded)
+    const next = useSelector(state => state.district.next)
+    const q = useSelector(state => state.district.q)
     const saving = useSelector(state => state.district.districtSaving)
 
     const [district,setDistrict] = useState(BLANK_DISTRICT)
@@ -24,14 +25,24 @@ export default function DistrictsManager({action}) {
 
     const history = useHistory()
     
+    const onDelete = (id) => {
+        dispatch(deleteDistrict(id))
+    }
+    const onLoadMore = () => {
+        if (loading || !next) { return }
+        dispatch(getDistricts)
+    }
     const onSave = (newProps) => {
         if (saving) return
         dispatch(saveDistrict(newProps,history))
     }
+    const onSearch = (q) => {
+        dispatch(filterDistricts(q))
+    }
     
     useEffect(() => {
         if (!loading && !loaded) {
-            dispatch(getDistricts())
+            dispatch(getDistricts)
         }
     },[loading,loaded,dispatch])
 
@@ -48,8 +59,6 @@ export default function DistrictsManager({action}) {
         }
     },[district,districtId,loaded,districts])
 
-    if (loading) return <Spinner color="secondary" />
-
     switch (action ? action : defaultAction) {
         case 'new':
         case 'edit':
@@ -57,6 +66,7 @@ export default function DistrictsManager({action}) {
         case 'show':
             return <DistrictDetail district={district} />
         default:
-            return <DistrictsList districts={districts} />
+            return <DistrictsList districts={districts} q={q} loading={loading} next={next}
+                onDelete={onDelete} onLoadMore={onLoadMore} onSearch={onSearch} />
     }
 }

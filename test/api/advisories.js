@@ -8,6 +8,7 @@ const {
     errorNoToken,
     errorPathRequired,
 } = require('../support/middlewareErrors')
+const { times } = require('../support/util')
 
 describe('/api/advisories', () => {
     const genAdvisories = async () => {
@@ -26,8 +27,35 @@ describe('/api/advisories', () => {
             const advisories = await genAdvisories()
             const res = await action('/api/advisories')
             res.should.have.status(200)
-            res.body.should.be.an('array')
-            res.body.map(advisory => advisory._id).should.have.members( Object.values(advisories).map(v => v.id) )
+            res.body.data.should.be.an('array')
+            res.body.data.map(advisory => advisory._id).should.have.members( Object.values(advisories).map(v => v.id) )
+        })
+        it('should paginate for more than 10 advisories', async () => {
+            const advisories = await times(11,() => factory.create('advisory'))
+            const res = await action('/api/advisories')
+            res.should.have.status(200)
+            res.body.data.should.be.an('array')
+            res.body.data.map(a => a._id).should.have.members(advisories.slice(0,10).map(a => a.id))
+            res.body.links.should.have.property('next')
+            res2 = await action(res.body.links.next)
+            res2.should.have.status(200)
+            res2.body.data.should.be.an('array')
+            res2.body.data.map(a => a._id).should.have.members(advisories.slice(10,11).map(a => a.id))
+        })
+        it('should filter and paginate with q=', async () => {
+            var i = 0
+            const advisories = await times(11,() => { 
+                return factory.create('advisory',{label: `needle ${i.toString().padStart(2,'0')}`})
+            })
+            advisories.push(await factory.create('advisory',{prompts: [{language: 'en-US', translation: 'Needle'}]}))
+            advisories.push(await factory.create('advisory',{label: 'haystack'}))
+            const res = await action('/api/advisories?q=needle')
+            res.should.have.status(200)
+            res.body.data.should.be.an('array')
+            res.body.data.map(a => a._id).should.have.members(advisories.slice(0,10).map(a => a.id))
+            const res2 = await action(res.body.links.next)
+            res2.body.data.map(a => a._id).should.have.members(advisories.slice(10,12).map(a => a.id))
+            res2.body.links.should.have.property('next').be.null
         })
     })
     describe('GET /api/advisories/applicable', () => {

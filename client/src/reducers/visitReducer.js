@@ -1,5 +1,7 @@
-import { 
+import {
+    FILTER_VISITS,
     GET_VISITS,
+    INIT_VISITS,
     ADD_VISIT,
     UPDATE_VISIT,
     SAVING_VISIT,
@@ -10,6 +12,9 @@ import {
 } from '../actions/types';
 
 const initialState = {
+    initNext: null,
+    next: null,
+    q: '',
     visits: [],
     visitsLoading: false,
     visitsLoaded: false,
@@ -33,13 +38,29 @@ export default function visitReducer( state = initialState, action ) {
                 ...state,
                 ...initialState
             }
+        case FILTER_VISITS:
+            return {
+                ...state,
+                q: action.payload.q,
+                next: `${state.initNext}?q=${action.payload.q}`,
+                visits: [],
+                visitsLoading: true,
+                visitsLoaded: false
+            }
         case GET_VISITS:
             return {
                 ...state,
-                visits: action.payload,
+                next: action.payload.next,
+                visits: state.visits.concat(action.payload.visits),
                 visitsLoading: false,
                 visitsLoaded: true
             };
+        case INIT_VISITS:
+            return {
+                ...initialState,
+                initNext: action.payload,
+                next: action.payload
+            }
         case DELETE_VISIT:
             return {
                 ...state,

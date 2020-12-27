@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+    FILTER_USERS,
     GET_USERS,
     ADD_USER,
     UPDATE_USER,
@@ -18,24 +19,40 @@ const parseDates = ({createdAt,updatedAt}) => {
     }
 }
 
-export const getUsers = () => (dispatch, getState) => {
-    dispatch(setUsersLoading())
+export const filterUsers = (q) => (dispatch, getState) => {
+    if (q === getState().user.q) { return }
+    dispatch({
+        type: FILTER_USERS,
+        payload: { q }
+    })
+    dispatch(getUsers)
+}
+
+export const getUsers = (dispatch, getState) => {
+    dispatch(setUsersLoading)
+    const q = getState().user.q
+    const next = getState().user.next
+    const config = tokenConfig(getState)
     axios
-        .get('/api/users',tokenConfig(getState))
-        .then(res => {
+        .get(next,config)
+        .then((res) => {
+            // Skip posting this list of users if query has changed since initiation
+            if ( q !== getState().user.q ) { return }
+            const users = res.data.data.map((user) => {
+                return {
+                    ...user,
+                    ...parseDates(user)
+                }
+            })
+            const next = res.data.links.next
             dispatch({
                 type: GET_USERS,
-                payload: res.data.map((user) => {
-                    return {
-                        ...user,
-                        ...parseDates(user)
-                    }
-                })
+                payload: { users, next }
             })
         })
-    .catch(err => {
-        dispatch(returnErrors(err.response.data,err.response.status))
-    });
+        .catch((err) => {
+            dispatch(returnErrors(err.response.data,err.response.status))
+        })
 };
 
 export const deleteUser = id => (dispatch, getState) => {
@@ -75,8 +92,6 @@ export const saveUser = (user, history) => async (dispatch, getState) => {
     }
 }
 
-export const setUsersLoading = () => {
-    return {
-        type: USERS_LOADING
-    }
+export const setUsersLoading = {
+    type: USERS_LOADING
 }

@@ -21,6 +21,19 @@ Feature: Manage users
         Then I should see user "bmcmartin@example.com"
         And I should see user "pschaefer@example.com"
 
+    Scenario: Search users with pagination
+        Given I logged in as "bmcmartin@example.com"
+        And 10 users exist named "John" "Doe"
+        And 1 users exist named "Jane" "Doe"
+        When I visit the "users" page
+        And I fill in "Search" with "doe"
+        Then I should see users 3 through 13
+        And I should not see user "Jane"
+        When I click the "More" button
+        And there is no spinner
+        Then I should see users 3 through 14
+        And I should not see user "bmcmartin@example.com"
+    
     Scenario: Edit a user
         Given I logged in as "bmcmartin@example.com"
         When I visit the "users" page

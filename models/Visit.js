@@ -1,5 +1,5 @@
 const mongoose = require('../db/mongoose');
-const { options } = require('../routes/api/advisories');
+const {ObjectId} = require('mongoose').Types
 const Schema = mongoose.Schema;
 const Advisory = require('./Advisory')
 
@@ -90,6 +90,31 @@ VisitSchema.post('findOne', async function(visit) {
 VisitSchema.post('save', async function(visit) {
     await visit.populate('origin').populate('destinations').execPopulate()
 })
+
+VisitSchema.statics.searchPipeline = ({q,user}) => {
+    const c = []
+    if (user) { c.push({$match: {user: ObjectId(user.id)}}) }
+    c.push(
+        {$lookup: {from: 'places',localField:'origin',foreignField:'_id',as:'origin'}},
+        {$lookup: {from: 'places',localField:'destinations',foreignField:'_id',as:'destinations'}},
+        {$unwind: "$origin"}
+    )
+    if (q) {
+        c.push(
+            {$lookup: {from: 'users',localField:'user',foreignField:'_id',as:'userInfo'}}
+        )
+        const qc = new RegExp(q,'i')
+        const qf = ['userInfo.firstName','userInfo.lastName','origin.name','destinations.name']
+        c.push({$match: {$or: qf.map((f) => {
+            const criterion = {}
+            criterion[f] = {$regex: qc}
+            return criterion
+        })}})
+        c.push({$project: {userInfo: 0}})
+    }
+    c.push({$sort: {startOn: -1, _id: 1}})
+    return c
+}
 
 // Retrieve advisories that are applicable to this visit
 VisitSchema.methods.applicableAdvisories = async function (context) {

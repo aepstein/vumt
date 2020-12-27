@@ -6,6 +6,9 @@ import {
 import {
     initLocation
 } from './geoActions'
+import {
+    initVisits
+} from './visitActions'
 
 import {
     USER_LOADED,
@@ -73,6 +76,7 @@ export const register = (attrs,history) => async (dispatch) => {
             payload: transformDates(res.data)
         })
         dispatch(initLocation)
+        dispatch(initVisits)
         history.push('/')
     }
     catch(err) {
@@ -121,6 +125,7 @@ export const login = (attrs,history) => async (dispatch) => {
             payload: transformDates(res.data)
         })
         dispatch(initLocation)
+        dispatch(initVisits)
         history.push('/')
     }
     catch(err) {
@@ -199,6 +204,7 @@ export const loadUser = () => async (dispatch,getState) => {
                 payload: transformDates(res.data)
         })
         dispatch(initLocation)
+        dispatch(initVisits)
     }
     catch(err) {
         dispatch({

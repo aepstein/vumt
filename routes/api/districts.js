@@ -14,18 +14,23 @@ const attrAccessible = (req) => {
     return attrAccessible
 }
 const handleValidationError = require('../../lib/handleValidationError')
+const paginate = require('../../lib/paginate')
 
 // @route GET api/districts
 // @desc Get all districts
 // @access Public
-router.get('/', async (req, res) => {
+router.get(['/','/after/:afterId'], async (req, res) => {
+    const {q} = req.query
     try {
-        const districts = await District.find()
-        return res.json(districts)
+        const qc = q ? new RegExp(q,'i') : null
+        const criteria = {}
+        if (qc) {
+            criteria.name = { $regex: qc }
+        }
+        return paginate({req,res,model: District,criteria})
     }
-    catch(err) {
-        console.log(err)
-        return res.status(500).json({msg: 'Error'})
+    catch (err) {
+        return res.status(500).json({code: 'ERROR'})
     }
 })
 

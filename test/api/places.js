@@ -7,6 +7,7 @@ const {
     errorPathRequired,
     errorPathUnique
 } = require('../support/middlewareErrors')
+const { times } = require('../support/util')
 
 describe('/api/places',() => {
     const genPlaces = async () => {
@@ -15,8 +16,8 @@ describe('/api/places',() => {
             destination: await factory.create('destinationPlace')
         }
     }
-    const action = async (path) => {
-        const req = chai.request(server).get(path);
+    const action = async (path,options={}) => {
+        const req = chai.request(server).get(path,options);
         return req;
     };
     describe('GET /api/places', () => {
@@ -24,17 +25,17 @@ describe('/api/places',() => {
             const places = await genPlaces()
             const res = await action('/api/places')
             res.should.have.status(200)
-            res.body.should.be.an('array')
-            res.body.map(place => place._id).should.have.members([places.origin.id,places.destination.id])
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(place => place._id).should.have.members([places.origin.id,places.destination.id])
         })
         it('should order places by distance and include distance from location if location is specified',async () => {
             const places = await genPlaces()
             const location = '44.112744,-73.923267'
             const res = await action(`/api/places?location=${location}`)
-            res.body.should.be.an('array')
-            res.body[0].should.have.property('_id').eql(places.destination.id)
-            res.body[0].should.have.property('distance').eql(0)
-            res.body[1].should.have.property('distance').gt(8000)
+            res.body.data.should.be.an('array')
+            res.body.data[0].should.have.property('_id').eql(places.destination.id)
+            res.body.data[0].should.have.property('distance').eql(0)
+            res.body.data[1].should.have.property('distance').gt(8000)
         })
         it('should compile information on intersecting visits', async () => {
             const places = await genPlaces()
@@ -69,31 +70,62 @@ describe('/api/places',() => {
             })
             const res = await action(`/api/places?startOn=${startOn.toISOString()}`)
             res.should.have.status(200)
-            res.body.should.be.an('array')
-            res.body[0].name.should.be.a('String').eql(places.origin.name)
-            const visits = res.body[0].visits[0]
+            res.body.should.have.property('data').be.an('array')
+            res.body.data[0].name.should.be.a('String').eql(places.origin.name)
+            const visits = res.body.data[0].visits[0]
             visits.should.be.an('object')
             visits.should.have.a.property('people').eql(7)
             visits.should.have.a.property('parties').eql(2)
             visits.should.have.a.property('parkedVehicles').eql(3)
         })
-    })
-    describe('GET /api/places/origins', () => {
-        it('should show all places that are origins',async () => {
-            const places = await genPlaces()
-            const res = await action('/api/places/origins')
+        it('should paginate',async () => {
+            const places = await times(11,async () => factory.create('place'))
+            const res = await action('/api/places')
             res.should.have.status(200)
-            res.body.should.be.an('array')
-            res.body.map(place => place._id).should.have.members([places.origin.id])
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(p => p._id).should.have.members(places.slice(0,10).map(p => p.id))
+            res.body.should.have.property('links').be.an('object')
+            res.body.links.should.have.property('next').match(/after/i)
+            res2 = await action(res.body.links.next)
+            res2.body.should.have.property('data').be.an('array')
+            res2.body.data.map(p => p._id).should.have.members(places.slice(10,11).map(p => p.id))
+        })
+        it('should filter and paginate with q=',async () => {
+            var i = 0
+            const places = await times(11,async () => {
+                return factory.create('place',{name: `needle ${(i++).toString().padStart(2,'0')}`})
+            })
+            places.push(await factory.create('place',{name: 'haystack'}))
+            const res = await action('/api/places?q=needle')
+            res.should.have.status(200)
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(p => p._id).should.have.members(places.slice(0,10).map(p => p.id))
+            res.body.should.have.property('links').be.an('object')
+            res.body.links.should.have.property('next').be.a('string')
+            const res2 = await action(res.body.links.next)
+            res2.should.have.status(200)
+            res2.body.should.have.property('data').be.an('array')
+            res2.body.data.map(p => p._id).should.have.members(places.slice(10,11).map(p => p.id))
+            res2.body.should.have.property('links').be.an('object')
+            res2.body.links.should.have.property('next').be.null
         })
     })
-    describe('GET /api/places/destinations', () => {
+    describe('GET /api/places?type=origins', () => {
+        it('should show all places that are origins',async () => {
+            const places = await genPlaces()
+            const res = await action('/api/places?type=origins')
+            res.should.have.status(200)
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(place => place._id).should.have.members([places.origin.id])
+        })
+    })
+    describe('GET /api/places?type=destinations', () => {
         it('should show all places that are destinations',async () => {
             const places = await genPlaces()
-            const res = await action('/api/places/destinations')
+            const res = await action('/api/places?type=destinations')
             res.should.have.status(200)
-            res.body.should.be.an('array')
-            res.body.map(place => place._id).should.have.members([places.destination.id])
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(place => place._id).should.have.members([places.destination.id])
         })
     })
     describe('POST /api/places', () => {

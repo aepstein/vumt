@@ -23,6 +23,19 @@ Feature: Manage advisories
         When I visit the "advisories" page
         Then I should see advisory "Leave No Trace"
 
+    Scenario: Search advisories with pagination
+        Given I logged in as "bmcmartin@example.com"
+        And 11 advisories exist
+        When I visit the "advisories" page
+        And I fill in "Search" with "advisory"
+        And there is no spinner
+        Then I should see advisories 2 through 11
+        And I should not see advisory "Leave No Trace"
+        When I click the "More" button
+        And there is no spinner
+        Then I should see advisories 2 through 12
+        And I should not see advisory "Leave No Trace"
+
     Scenario: Edit an advisory
         Given I logged in as "bmcmartin@example.com"
         And a district "Other Range" exists

@@ -8,6 +8,7 @@ const {
     errorNoToken,
     errorPathRequired,
 } = require('../support/middlewareErrors')
+const { times } = require('../support/util')
 
 describe('/api/districts',() => {
     const genDistricts = async () => {
@@ -24,8 +25,33 @@ describe('/api/districts',() => {
             const districts = await genDistricts()
             const res = await action('/api/districts')
             res.should.have.status(200)
-            res.body.should.be.an('array')
-            res.body.map(district => district._id).should.have.members([districts.mcintyre.id])
+            res.body.data.should.be.an('array')
+            res.body.data.map(district => district._id).should.have.members([districts.mcintyre.id])
+            res.body.links.should.have.property('next').null
+        })
+        it('should paginate for more than 10 districts', async () => {
+            const districts = await times(11,async () => factory.create('district'))
+            const res = await action('/api/districts')
+            res.should.have.a.status(200)
+            res.body.data.should.be.an('array')
+            res.body.data.map(d => d._id).should.have.members(districts.slice(0,10).map(d => d.id))
+            res.body.links.should.have.property('next')
+            const res2 = await action(res.body.links.next)
+            res2.body.data.should.be.an('array')
+            res2.body.data.map(d => d._id).should.have.members(districts.slice(10,11).map(d => d.id))
+            res2.body.links.should.have.property('next').null
+        })
+        it('should filter for q=', async () => {
+            const q = "needle"
+            const districtCreates = []
+            districtCreates.push(factory.create('district',{name: 'Haystack'}))
+            districtCreates.push(factory.create('district',{name: 'Weaver\'s Needle'}))
+            districtCreates.push(factory.create('district',{name: 'needle in the haystack'}))
+            const districts = await Promise.all(districtCreates)
+            const res = await action('/api/districts?q=needle')
+            res.should.have.status(200)
+            res.body.data.map(d => d._id).should.have
+                .members(districts.filter(d => d.name.match(/needle/i)).map(d => d.id))
         })
     })
     describe('POST /api/districts', () => {

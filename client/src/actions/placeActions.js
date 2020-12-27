@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+    FILTER_PLACES,
     GET_PLACES,
     ADD_PLACE,
     UPDATE_PLACE,
@@ -18,22 +19,37 @@ const parseDates = ({createdAt, updatedAt}) => {
     }
 }
 
-export const getPlaces = () => (dispatch, getState) => {
+export const filterPlaces = (q) => (dispatch, getState) => {
+    if (q === getState().place.q) { return }
+    dispatch({
+        type: FILTER_PLACES,
+        payload: { q }
+    })
+    dispatch(getPlaces)
+}
+
+export const getPlaces = (dispatch, getState) => {
     dispatch(setPlacesLoading())
+    const { q, next } = getState().place
+    const config = tokenConfig(getState)
     axios
-        .get('/api/places',tokenConfig(getState))
+        .get(next,config)
         .then(res => {
+            if (q !== getState().place.q) { return }
+            const places = res.data.data.map((place) => {
+                return {
+                    ...place,
+                    ...parseDates(place)
+                }
+            })
+            const next = res.data.links.next
             dispatch({
                 type: GET_PLACES,
-                payload: res.data.map((place) => {
-                    return {
-                        ...place,
-                        ...parseDates(place)
-                    }
-                })
+                payload: { places, next }
             })
         })
     .catch(err => {
+        console.log('error')
         dispatch(returnErrors(err.response.data,err.response.status))
     });
 };

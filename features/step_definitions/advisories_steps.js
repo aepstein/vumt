@@ -2,10 +2,12 @@ const { Given, When, Then } = require ('@cucumber/cucumber')
 const {
     clickByXPath,
     create,
+    entitiesExist,
     fillByLabel,
     fillTypeaheadByLabel,
     formatDateForFill,
     relativeDate,
+    scope,
     shouldSeeText,
     updateAdvisory,
     waitFor
@@ -15,7 +17,7 @@ const advisoryRowSelector = (label) => {
 }
 
 Given('an advisory {string} exists', async (label) => {
-    await create('advisory',{label})
+    await entitiesExist(1,'advisory',{label})
 })
 
 Given('the advisory {string} has {string} prompt {string}', async (label, language, translation) => {
@@ -25,7 +27,9 @@ Given('the advisory {string} has {string} prompt {string}', async (label, langua
 Given('the advisory {string} has context {string}', async (label, context) => {
     await updateAdvisory(label,{$push: {contexts: context}})
 })
-
+Given('{int} advisories exist', async (n) => {
+    await entitiesExist(n,'advisory')
+})
 When(
     /^I click "([^"]+)" for advisory "([^"]+)"$/,
     async (button,label) => {
@@ -50,4 +54,7 @@ Then(/^I should( not)? see advisory "([^"]+)"$/, async (not,name) => {
 Then('I wait for advisory {string} to disappear', async (label) => {
     const selector = `//ul[contains(@class,'advisories-list') and not(.${advisoryRowSelector(label)})]`
     await waitFor(selector)
+})
+Then('I should see advisories {int} through {int}', async (first, last) => {
+    await waitFor(scope.context.advisory.slice(first-1,last).map(a => advisoryRowSelector(a.label)),{visible: true})
 })

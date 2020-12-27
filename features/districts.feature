@@ -12,6 +12,19 @@ Feature: Manage districts
         When I visit the "districts" page
         Then I should see district "McIntyre Range"
 
+    Scenario: Search districts with pagination
+        Given I logged in as "bmcmartin@example.com"
+        And 10 districts exist
+        And a district "special district" exists
+        When I visit the "districts" page
+        And I fill in "Search" with "district"
+        Then I should see districts 2 through 12
+        And I should not see district "special district"
+        When I click the "More" button
+        And there is no spinner
+        Then I should see districts 2 through 13
+        And I should not see district "McIntyre Range"
+
     Scenario: Edit a district
         Given I logged in as "bmcmartin@example.com"
         When I visit the "districts" page

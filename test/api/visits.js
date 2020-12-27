@@ -5,12 +5,16 @@ const {
 const {
     withAuth
 } = require("../support/patterns");
+const { 
+    times
+} = require('../support/util')
 const shouldDenyUnauthorizedUser = async (res) => {
     await res.should.have.status(401);
     await res.body.should.have.a.property('code').eql('UNAUTHORIZED')
 }
 const {
     errorNoToken,
+    errorMustHaveRoles,
     errorPathRequired
 } = require('../support/middlewareErrors')
 const Visit = require('../../models/Visit')
@@ -179,25 +183,76 @@ describe('/api/visits', () => {
         })
     });
     describe('GET /api/visits', () => {
-        const action = async () => {
-            const req = chai.request(server)
-                .get('/api/visits');
-            return req;
-        };
+        let action = async (path,auth=null) => {
+            const res = chai.request(server)
+                .get(path)
+            if (auth) { res.set('x-auth-token',auth.body.token) }
+            return res
+        }
+        const path = '/api/visits'
         it('should show all visits', async () => {
-            const auth = await withAuth();
+            const auth = await withAuth({roles:['admin']})
             const visit = await factory.create('visit',{user: auth.body.user._id});
-            res = await action();
+            res = await action(path,auth)
             res.should.have.status(200);
-            res.body.should.be.an('array');
-            res.body[0].should.be.a('object');
-            res.body[0].should.have.a.property('_id').eql(visit.id);
+            res.body.data.should.be.an('array');
+            res.body.data[0].should.be.a('object');
+            res.body.data[0].should.have.a.property('_id').eql(visit.id);
+        })
+        it('should paginate', async () => {
+            const auth = await withAuth({roles:['admin']})
+            var i = 0
+            var date = new Date()
+            const visits = await times(11,async () => {
+                date.setDate(date.getDate()+(i++))
+                return factory.create('visit',{startOn: new Date(date)})
+            })
+            const res = await action(path,auth)
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(v => v._id).should.have.members(visits.reverse().slice(0,10).map(v => v.id))
+            res2 = await action(res.body.links.next,auth)
+            res2.body.data.map(v => v._id).should.have.members(visits.slice(10,11).map(v => v.id))
+        })
+        it('should paginate with q=', async () => {
+            const auth = await withAuth({roles:['admin']})
+            var i = 0
+            var date = new Date()
+            const needleOrigin = await factory.create('originPlace',{name: 'needle'})
+            const needleDestination = await factory.create('destinationPlace',{name: 'Needle'})
+            const needleUserFirst = await factory.create('user',{firstName: 'needle'})
+            const needleUserLast = await factory.create('user',{lastName: 'needle'})
+            const needleDestinationVisit = await factory.create('visit',{destinations:[needleDestination.id]})
+            const needleUserFirstVisit = await factory.create('visit',{user: needleUserFirst.id})
+            const needleUserLastVisit = await factory.create('visit',{user: needleUserLast.id})
+            const visits = await times(11,async () => {
+                date.setDate(date.getDate()+(i++))
+                return factory.create('visit',{startOn: new Date(date), origin: needleOrigin.id})
+            })
+            const outVisit = await factory.create('visit')
+            const res = await action(`${path}?q=needle`,auth)
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(v => v._id).should.have.members(visits.reverse().slice(0,10).map(v => v.id))
+            res2 = await action(res.body.links.next,auth)
+            res2.body.data.map(v => v._id).should.have.members(visits.slice(10,11).map(v => v.id)
+                .concat([needleDestinationVisit.id,needleUserFirstVisit.id,needleUserLastVisit.id]))
+        })
+        it('should deny unprivileged user', async () => {
+            const auth = await withAuth()
+            res = await action(path,auth)
+            return errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny without authentication', async () => {
+            res = await action(path)
+            return errorNoToken(res)
         })
     });
     describe('GET /api/users/:userId/visits', () => {
-        const action = async (auth,userId) => {
+        const path = (userId) => {
+            return '/api/users/' + userId + '/visits'
+        }
+        const action = async (path,auth=null) => {
             const req = chai.request(server)
-                .get('/api/users/' + userId + '/visits');
+                .get(path);
             if ( auth ) { req.set('x-auth-token',auth.body.token); }
             return req;
         }
@@ -206,13 +261,60 @@ describe('/api/visits', () => {
             const visit = await factory.create('visit',{user: auth.body.user._id})
             const otherUser = await factory.create('user',{firstName: 'George', email: 'gmarshall@example.com'});
             await factory.create('visit',{user: otherUser.id});
-            res = await action(auth,auth.body.user._id);
+            res = await action(path(auth.body.user._id),auth);
             res.should.have.status(200);
-            res.body.should.be.an('array');
-            res.body.should.have.lengthOf(1);
-            res.body[0].should.be.a('object');
-            res.body[0].should.have.a.property('_id').eql(visit.id);
-        });
+            res.body.should.have.property('data').be.an('array');
+            res.body.data.should.have.lengthOf(1);
+            res.body.data[0].should.be.a('object');
+            res.body.data[0].should.have.a.property('_id').eql(visit.id);
+        })
+        it('should paginate', async () => {
+            const auth = await withAuth()
+            var i = 0
+            var date = new Date()
+            const visits = await times(11,async () => {
+                date.setDate(date.getDate()+(i++))
+                return factory.create('visit',{startOn: new Date(date),user: auth.body.user._id})
+            })
+            const res = await action(path(auth.body.user._id),auth)
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(v => v._id).should.have.members(visits.reverse().slice(0,10).map(v => v.id))
+            res2 = await action(res.body.links.next,auth)
+            res2.body.data.map(v => v._id).should.have.members(visits.slice(10,11).map(v => v.id))
+        })
+        it('should paginate with q=', async () => {
+            const auth = await withAuth()
+            const user = auth.body.user._id
+            var i = 0
+            var date = new Date()
+            const needleOrigin = await factory.create('originPlace',{name: 'needle'})
+            const needleDestination = await factory.create('destinationPlace',{name: 'Needle'})
+            const needleDestinationVisit = await factory.create('visit',{destinations:[needleDestination.id],user})
+            const visits = await times(11,async () => {
+                date.setDate(date.getDate()+(i++))
+                return factory.create('visit',{startOn: new Date(date), origin: needleOrigin.id,user})
+            })
+            // Create one more visit that should not appear because it's not associated with the user
+            await factory.create('visit',{origin: needleOrigin.id})
+            await factory.create('visit',{user})
+            const res = await action(`${path(user)}?q=needle`,auth)
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(v => v._id).should.have.members(visits.reverse().slice(0,10).map(v => v.id))
+            res2 = await action(res.body.links.next,auth)
+            res2.body.data.map(v => v._id).should.have.members(visits.slice(10,11).map(v => v.id)
+                .concat([needleDestinationVisit.id]))
+        })
+        it('should deny for unauthorized user', async () => {
+            const auth = await withAuth()
+            const otherUser = await factory.create('user')
+            const res = await action(path(otherUser.id),auth)
+            return shouldDenyUnauthorizedUser(res)
+        })
+        it('should deny unauthenticated user', async () => {
+            const auth = await withAuth()
+            const res = await action(path(auth.body.user._id))
+            return errorNoToken(res)
+        })
     });
     describe('GET /api/visits/:visitId', () => {
         const action = async (auth,user) => {

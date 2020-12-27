@@ -1,8 +1,10 @@
 const { Given, When, Then } = require ('@cucumber/cucumber')
+const { factory } = require('factory-bot')
 const {
     clickByXPath,
-    create,
+    entitiesExist,
     fillByLabel,
+    scope,
     shouldSeeText,
     waitFor
 } = require('../support/actions')
@@ -11,7 +13,11 @@ const districtRowSelector = (name) => {
 }
 
 Given('a district {string} exists', async (name) => {
-    await create('district',{name})
+    await entitiesExist(1,'district',{name})
+})
+
+Given('{int} districts exist', async (n) => {
+    await entitiesExist(n,'district')
 })
 
 When(
@@ -32,4 +38,8 @@ Then(/^I should( not)? see district "([^"]+)"$/, async (not,name) => {
 Then('I wait for district {string} to disappear', async (name) => {
     const selector = `//ul[contains(@class,'districts-list') and not(.${districtRowSelector(name)})]`
     await waitFor(selector)
+})
+
+Then('I should see districts {int} through {int}', async (first, last) => {
+    await waitFor(scope.context.district.slice(first-1,last-1).map(d => districtRowSelector(d.name)),{visible: true})
 })

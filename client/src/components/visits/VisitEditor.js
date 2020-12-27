@@ -49,14 +49,14 @@ export default function VisitEditor({visit,onSave,saving}) {
     const originRef = useRef()
     const [ originLoading, setOriginLoading ] = useState(false)
     const originSearch = useCallback((query) => {
-        const params = {}
+        const params = {type: 'origins'}
         if (latitude && longitude) params['location'] = `${latitude},${longitude}`
         if (startOn) params['startOn'] = startOn.toISOString()
         setOriginLoading(true)
         axios
-            .get('/api/places/origins',{params})
+            .get('/api/places',{params})
             .then((res) => {
-                setOriginOptions(res.data.map((place) => {
+                setOriginOptions(res.data.data.map((place) => {
                     return {id: place._id, label: place.name, timezone: place.timezone, location: place.location,
                         distance: place.distance, visits: place.visits, parkingCapacity: place.parkingCapacity}
                 }))
@@ -72,7 +72,6 @@ export default function VisitEditor({visit,onSave,saving}) {
         setTimezone(origin[0].timezone)
     },[origin,setTimezone])
     const renderOrigins = useCallback((option, props, index) => {
-        if (option.visits) console.log(option.visits[0])
         return [
             <Highlighter key="label" search={props.text}>
                 {option.label}
@@ -120,14 +119,14 @@ export default function VisitEditor({visit,onSave,saving}) {
     },[visit.parkedVehicles])
     const destinationSearch = useCallback((query) => {
         setDestinationLoading(true)
-        const params = {}
+        const params = {type: 'destinations'}
         if (origin && origin[0]) {
             params['location'] = `${origin[0].location.coordinates[1]},${origin[0].location.coordinates[0]}`
         }
         axios
-            .get('/api/places/destinations',{params})
+            .get('/api/places',{params})
             .then((res) => {
-                setDestinationOptions(res.data.map((place) => {
+                setDestinationOptions(res.data.data.map((place) => {
                     return {id: place._id, label: place.name, distance: place.distance}
                 }))
                 setDestinationLoading(false)

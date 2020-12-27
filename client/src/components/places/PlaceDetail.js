@@ -35,7 +35,6 @@ export default function PlaceDetail({place}) {
             <dd>{place.parkingCapacity}</dd>
             <dt>{t('timezone')}</dt>
             <dd>{place.timezone}</dd>
-            {console.log(`Timezone: ${place.timezone}`)}
             <dt>{t('translation:createdAt')}</dt>
             <dd>{`${Intl.DateTimeFormat(i18n.language,{timeZone: place.timezone}).format(place.createdAt)} `+
                 `${(new Date(place.createdAt)).toLocaleTimeString(i18n.language,{timeZone: place.timezone})}`}</dd>

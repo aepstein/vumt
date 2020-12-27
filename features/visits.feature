@@ -6,6 +6,7 @@ Feature: Manage visits
     Background:
         Given an origin "Adirondack Loj" exists at "44.183102,-73.963584"
         And a destination "Algonquin Summit" exists at "44.143669,-73.986525"
+        And a destination "Marcy Summit" exists at "44.11277,-73.9237"
 
     Scenario: See visits
         Given I am registered as "bmarshall@example.com"
@@ -22,9 +23,22 @@ Feature: Manage visits
         And I should see "Duration in nights" defined as "0"
         And I should see "Number of vehicles parked at starting point" defined as "1"
 
+    Scenario: Search visits with pagination
+        Given a user exists "Barbara" "McMartin" "bmcmartin@example.com"
+        And I logged in as "bmcmartin@example.com"
+        And I registered 11 visits from "Adirondack Loj" to "Algonquin Summit"
+        And I have registered a visit for tomorrow from "Adirondack Loj" to "Marcy Summit"
+        When I visit the "home" page
+        And I fill in "Search" with "algonquin"
+        Then I should see visits 1 through 10
+        And I click the "More" button
+        And there is no spinner
+        Then I should see visits 1 through 11
+        And I take a screenshot
+        And I should not see visit 12
+
     Scenario: Edit a visit
         Given an origin "Johns Brook Garden" exists
-        And a destination "Marcy Summit" exists
         And I am registered as "bmarshall@example.com"
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
@@ -80,7 +94,6 @@ Feature: Manage visits
 
     Scenario: Select destination relative to origin
         Given I am registered as "bmarshall@example.com"
-        And a destination "Marcy Summit" exists at "44.112744,-73.923267"
         And I logged in as "bmarshall@example.com"
         And I visit the "new visit" page
         And I fill in the "Starting point" typeahead with "Adirondack Loj"
@@ -159,8 +172,9 @@ Feature: Manage visits
 
     Scenario: Remove visit
         Given I am registered as "bmarshall@example.com"
+        And I have registered a visit for today from "Adirondack Loj" to "Marcy Summit"
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         And I click "Remove" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
-        Then I wait for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit" to disappear
+        Then I should not see visit 2

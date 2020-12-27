@@ -1,9 +1,10 @@
 const paths = require('./paths');
 const scope = require('./scope');
 const selectors = require('./selectors');
-const { toLocalDate, toLocalTime } = require('../../test/support/util')
+const { toLocalDate, toLocalTime, times } = require('../../test/support/util')
 const Advisory = require('../../models/Advisory')
-const User = require('../../models/User')
+const User = require('../../models/User');
+const { factory } = require('factory-bot');
 var sc = 1;
 
 const chooseFromSelectByLabel = async (label, choice) => {
@@ -52,6 +53,13 @@ const emailSubjectShouldBe = (subject) => {
 	const mail = scope.mail.lastMail()
 	mail.should.not.be.a('null')
 	mail.should.have.property('subject').eql(subject)
+}
+
+const entitiesExist = async (x,f,attr={},bucket=null) => {
+	const b = bucket ? bucket : f
+	if (!scope.context[b]) { scope.context[b] = [] }
+	const attrs = (typeof attr === 'function') ? attr() : attr
+	scope.context[b] = scope.context[b].concat(await times(x,() => factory.create(f,attrs)))
 }
 
 // credit: https://gist.github.com/tokland/d3bae3b6d3c1576d8700405829bbdb52
@@ -188,6 +196,11 @@ const relativeDate = (description) => {
 	relativeDate.setHours(8,0,0,0)
 	return relativeDate
 }
+const scrollToBottom = async () => {
+	await scope.context.currentPage.evaluate( () => {
+		window.scrollBy(0,window.innerHeight)
+	})
+}
 const selectFormGroupByLabel = async (label) => {
 	const escapedText = escapeXpathString(label);
 	const selector = `//div[contains(@class,'form-group') and contains(.//label,${escapedText})]`
@@ -231,10 +244,10 @@ const shouldSeeText = async (selector, not, expectedText) => {
     const containsText = elementText && elementText.replace(/\s+/,' ')
 	const shouldContainText = not ? false : true;
 	if (shouldContainText) {
-		containsText.should.have.string(expectedText)
+		return containsText.should.have.string(expectedText)
 	}
 	else {
-		containsText.should.not.have.string(expectedText)
+		return containsText.should.not.have.string(expectedText)
 	}
 }
 const startTypeaheadByLabel = async (label, fill) => {
@@ -259,10 +272,12 @@ const updateAdvisory = async (label,update) => {
 	await Advisory.updateOne({label},update)
 }
 const userExists = async (attr) => {
-	scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
+	await entitiesExist(1,'user',{password: "secret",...attr})
+	// scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
 }
 const visitExists = async (attr={}) => {
-    scope.context.visit = await scope.factory.create('visit',attr);
+	await entitiesExist(1,'visit',attr)
+    // scope.context.visit = await scope.factory.create('visit',attr);
 }
 const visitPage = async (page) => {
 	return await visitPath(paths[page])
@@ -279,12 +294,18 @@ const waitForText = async (text, context = "//a") => {
 	const selector = `${context}[contains(text(), ${escapedText})]`;
 	await scope.context.currentPage.waitForXPath(selector);
 }
-const waitFor = async (selector) => {
+const waitFor = async (selector,options={}) => {
+	if (Array.isArray(selector)) {
+		const tests = selector.map((s) => {
+			return waitFor(s,options)
+		})
+		return Promise.all(tests)
+	}
 	if (selector.match(/^\/\//)) {
-		await scope.context.currentPage.waitForXPath(selector)
+		return scope.context.currentPage.waitForXPath(selector,options)
 	}
 	else {
-		await scope.context.currentPage.waitForSelector(selector)
+		return scope.context.currentPage.waitForSelector(selector,options)
 	}
 }
 
@@ -296,6 +317,7 @@ module.exports = {
 	emailFollowLink,
 	emailShouldBeSentTo,
 	emailSubjectShouldBe,
+	entitiesExist,
 	fillByLabel,
 	fillByPlaceholder,
 	fillTypeaheadByLabel,
@@ -310,6 +332,8 @@ module.exports = {
 	visitPage,
 	visitPath,
 	relativeDate,
+	scope,
+	scrollToBottom,
 	setGeolocation,
 	shouldBeLoggedInAs,
 	shouldSee,

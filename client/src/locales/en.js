@@ -12,6 +12,10 @@ const locale = {
         "translations": "Translations",
         "updatedAt": "Updated"
     },
+    "search": {
+        "more": "More",
+        "search": "Search"
+    },
     "commonForms": {
         "cancel": "Cancel",
         "country": "Country of residence",

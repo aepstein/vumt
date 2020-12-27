@@ -1,4 +1,5 @@
-import { 
+import {
+    FILTER_USERS,
     GET_USERS,
     ADD_USER,
     UPDATE_USER,
@@ -10,9 +11,11 @@ import {
 } from '../actions/types';
 
 const initialState = {
+    q: '',
     users: [],
     usersLoading: false,
     usersLoaded: false,
+    next: '/api/users',
     userSaving: false
 }
 
@@ -33,10 +36,20 @@ export default function userReducer( state = initialState, action ) {
                 ...state,
                 ...initialState
             }
+        case FILTER_USERS:
+            return {
+                ...state,
+                q: action.payload.q,
+                next: `${initialState.next}?q=${action.payload.q}`,
+                users: [],
+                usersLoading: true,
+                usersLoaded: false
+            }
         case GET_USERS:
             return {
                 ...state,
-                users: action.payload,
+                next: action.payload.next,
+                users: state.users.concat(action.payload.users),
                 usersLoading: false,
                 usersLoaded: true
             };

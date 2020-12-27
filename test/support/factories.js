@@ -7,7 +7,7 @@ const {
 const moment = require('moment')
 
 factory.define('advisory', Advisory, {
-    label: factory.sequence('Advisory.label', (n) => `Advisory ${n}`),
+    label: factory.sequence('Advisory.label', (n) => `Advisory ${n.toString().padStart(3,'0')}`),
     prompt: 'Take note'
 })
 
@@ -182,7 +182,7 @@ factory.extend('district','farawayDistrict',{
 })
 
 factory.define('place', Place, {
-    name: factory.sequence('Place.name', (n) => `Place ${n}`),
+    name: factory.sequence('Place.name', (n) => `Place ${n.toString().padStart(3,'0')}`),
     location: {
         type: 'Point',
         coordinates: [-73.0,44.0]

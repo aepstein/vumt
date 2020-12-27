@@ -1,35 +1,32 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import {
     Button,
     Container,
+    Spinner,
     Table
 } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom';
-import { deleteUser } from '../../actions/userActions';
+import useScrollDown from '../../hooks/useScrollDown'
+import Search from '../search/Search'
 
-export default function UsersList({users}) {
-    const authUser = useSelector(state => state.auth.user)
-    const dispatch = useDispatch()
+export default function UsersList({authUser,users,next,loading,q,onSearch,onLoadMore,onDelete}) {
     const history = useHistory()
     
     const { t } = useTranslation('user')
 
-    const onDeleteClick = (id) => {
-        dispatch(deleteUser(id))
-    }
+    useScrollDown(onLoadMore)
 
     return <div>
         <Container>
+            <Search q={q} onSearch={onSearch} />
             <Link to="/users/new">
                 <Button color="dark" style={{marginBottom: '2rem'}}>{t('addUser')}</Button>
             </Link>
             <Table responsive={true} className="users-list">
                 <thead>
                     <tr>
-                        <th colspan="3"></th>
+                        <th colSpan="3"></th>
                         <th>{t('commonForms:firstName')}</th>
                         <th>{t('commonForms:lastName')}</th>
                         <th>{t('commonForms:email')}</th>
@@ -37,7 +34,7 @@ export default function UsersList({users}) {
                 </thead>
                 <tbody>
                     {users.map(({_id,firstName,lastName,email}) =>
-                        <tr>
+                        <tr key={_id}>
                             <td>
                                 <Button
                                     color="info"
@@ -57,7 +54,7 @@ export default function UsersList({users}) {
                                     <Button
                                         color="danger"
                                         size="sm"
-                                        onClick={() => onDeleteClick(_id)}
+                                        onClick={() => onDelete(_id)}
                                     >{t('commonForms:remove')}</Button>
                                 }
                             </td>
@@ -68,6 +65,8 @@ export default function UsersList({users}) {
                     )}
                 </tbody>
             </Table>
+            {!loading && next ? <Button color="secondary" onClick={onLoadMore}>{t('search:more')}</Button> : ''}
+            {loading ? <Spinner color="secondary"/> : ''}
         </Container>
     </div>
 }

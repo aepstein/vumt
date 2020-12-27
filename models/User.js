@@ -8,8 +8,6 @@ const crypto = require('crypto')
 const config = require('config')
 const jwtSecret = config.jwtSecret
 const jwt = require('jsonwebtoken')
-const passwordRequestMailer = require('../mailers/passwordResetMailer')
-
 
 const UserSchema = new Schema(
     {

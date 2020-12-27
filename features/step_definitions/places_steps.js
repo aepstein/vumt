@@ -5,8 +5,10 @@ const {
     fillByLabel,
     fillTypeaheadByLabel,
     markByLabel,
+    scope,
     shouldSeeText,
-    waitFor
+    waitFor,
+    entitiesExist
 } = require('../support/actions')
 const placeRowSelector = (name) => {
     return `//li[contains(.,'${name}')]`
@@ -21,7 +23,13 @@ Given(/^an? (origin|destination) "([^"]+)" exists(?: at "([^"]+)")?$/, async (ty
             coordinates: [longitude,latitude]
         }
     }
-    await create(`${type}Place`,params)
+    await entitiesExist(1,`${type}Place`,params,'place')
+})
+Given('{int} places exist', async (n) => {
+    await entitiesExist(n,'place')
+})
+Given('a place {string} exists', async (name) => {
+    await entitiesExist(1,'place',{name})
 })
 When(/^I fill in values for the place(?: except "([^"]+)")?$/,async (except) => {
     if (except !== "Name") await fillByLabel("Name","Upper Cascade Lake Launch")
@@ -46,4 +54,7 @@ Then(/^I should( not)? see place "([^"]+)"$/, async (not,name) => {
 Then('I wait for place {string} to disappear', async (name) => {
     const selector = `//ul[contains(@class,'places-list') and not(.${placeRowSelector(name)})]`
     await waitFor(selector)
+})
+Then('I should see places {int} through {int}', async (first, last) => {
+    await waitFor(scope.context.place.slice(first-1,last-1).map(d => placeRowSelector(d.name)))
 })

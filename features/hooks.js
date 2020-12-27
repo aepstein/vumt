@@ -6,7 +6,8 @@ const puppeteerOptions = {
     headless: true,
     devtools: true
 }
-const scope = require('./support/scope');  
+const scope = require('./support/scope');
+const {purgeDb} =  require('../test/support/setup')
   
 Before(async () => {
   scope.models = {}
@@ -17,6 +18,7 @@ BeforeAll(
       timeout: 30000
   },
   async () => {
+    await purgeDb()
     scope.driver = puppeteer;
     return scope.browser = await scope.driver.launch(puppeteerOptions);
   }
@@ -37,7 +39,7 @@ After(async () => {
     // wipe the context's currentPage value
     scope.context.currentPage = null;
     await scope.factory.cleanUp()
-    await scope.purgeDb()
+    await purgeDb()
   }
 });
 

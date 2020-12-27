@@ -12,6 +12,19 @@ Feature: Manage places
         When I visit the "places" page
         Then I should see place "Pitchoff Summit"
 
+    Scenario: Search places with pagination
+        Given I logged in as "bmcmartin@example.com"
+        And 10 places exist
+        And a place "special place" exists
+        When I visit the "places" page
+        And I fill in "Search" with "place"
+        Then I should see places 2 through 12
+        And I should not see place "special place"
+        When I click the "More" button
+        And there is no spinner
+        Then I should see places 2 through 13
+        And I should not see place "Pitchoff Summit"
+
     Scenario: Edit a place
         Given I logged in as "bmcmartin@example.com"
         When I visit the "places" page

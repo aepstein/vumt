@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const auth = require('../../middleware/auth')
 const user = require('../../middleware/user')
 const handleValidationError = require('../../lib/handleValidationError')
+const visits = require('../../lib/routes/visits')
+const paginate = require('../../lib/paginate')
 
 const User = require('../../models/User');
 
@@ -23,14 +25,7 @@ const attrAccessible = (req) => {
     return attrAccessible
 }
 // Use visits routes scoped to the user
-router.use(
-    '/:userId/visits',
-    function (req, res, next) {
-        req.userId = req.params.userId;
-        next();
-    },
-    require('./visits')
-);
+router.use('/:userId/visits', auth(), user({self: true, roles:['admin']}), visits)
 
 // @route POST api/users
 // @desc Register a new user
@@ -89,12 +84,23 @@ router.put('/:userId',auth(),user({self:true,roles:['admin']}),async (req,res) =
 // @route GET api/users
 // @desc Get listing of users
 // @access Private
-router.get('/',auth({roles:['admin']}),async (req,res) => {
-    let criteria = {}
-    const users = await User
-        .find(criteria)
-        .sort({lastName: 1, firstName: 1, middleName: 1, email: 1})
-    return res.json(users.map(u => u.pubProps()))
+router.get(['/','/after/:afterId'],auth({roles:['admin']}),async (req,res) => {
+    const {q} = req.query
+    try {
+        const qc = q ? new RegExp(q,'i') : null
+        const criteria = {}
+        if (qc) {
+            criteria.$or = []
+            criteria.$or.push({email: { $regex: qc }})
+            criteria.$or.push({firstName: { $regex: qc }})
+            criteria.$or.push({lastName: { $regex: qc }})
+        }
+        const select = {password: 0, resetPasswordTokens: 0}
+        return paginate({req,res,model: User,criteria,select})
+    }
+    catch (err) {
+        return res.status(500).json({code: 'ERROR'})
+    }
 })
 
 // @route DELETE api/users/:userId

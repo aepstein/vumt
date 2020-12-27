@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { getVisits, saveVisit } from '../../actions/visitActions';
-import { Spinner } from 'reactstrap'
+import { deleteVisit, filterVisits, getVisits, saveVisit } from '../../actions/visitActions';
 import VisitsList from '../../components/visits/VisitsList'
 import VisitDetail from '../../components/visits/VisitDetail'
 import VisitEditor from '../../components/visits/VisitEditor'
@@ -11,6 +10,9 @@ import VisitCheckOut from '../../components/visits/VisitCheckOut'
 
 export default function VisitsManager({action}) {
     const { defaultAction, visitId } = useParams()
+    const initNext = useSelector(state => state.visit.initNext)
+    const next = useSelector(state => state.visit.next)
+    const q = useSelector(state => state.visit.q)
     const visits = useSelector(state => state.visit.visits, shallowEqual)
     const loading = useSelector(state => state.visit.visitsLoading)
     const loaded = useSelector(state => state.visit.visitsLoaded)
@@ -32,16 +34,26 @@ export default function VisitsManager({action}) {
 
     const history = useHistory()
     
+    const onDelete = (id) => {
+        dispatch(deleteVisit(id))
+    }
+    const onLoadMore = () => {
+        if (loading || !next) { return }
+        dispatch(getVisits)
+    }
     const onSave = (newProps) => {
         if (saving) return
         dispatch(saveVisit(newProps,history))
     }
+    const onSearch = (q) => {
+        dispatch(filterVisits(q))
+    }
     
     useEffect(() => {
-        if (!loading && !loaded) {
-            dispatch(getVisits())
+        if (initNext && !loading && !loaded) {
+            dispatch(getVisits)
         }
-    },[loading,loaded,dispatch])
+    },[initNext,loading,loaded,dispatch])
 
     useEffect(() => {
         if (visit && visit._id === visitId) return
@@ -52,8 +64,6 @@ export default function VisitsManager({action}) {
             setVisit(loadedVisit)
         }
     },[visit,visitId,loaded,visits])
-
-    if (loading) return <Spinner color="secondary" />
 
     switch (action ? action : defaultAction) {
         case 'new':
@@ -66,6 +76,7 @@ export default function VisitsManager({action}) {
         case 'show':
             return <VisitDetail visit={visit} />
         default:
-            return <VisitsList visits={visits} />
+            return <VisitsList loading={loading} next={next} q={q} visits={visits}
+                onDelete={onDelete} onLoadMore={onLoadMore} onSearch={onSearch} />
     }
 }
