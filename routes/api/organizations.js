@@ -4,6 +4,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth')
 const organization = require('../../middleware/organization')
 const Organization = require('../../models/Organization');
+const users = require('../../lib/routes/users')
 const handleValidationError = require('../../lib/handleValidationError')
 const paginate = require('../../lib/paginate')
 
@@ -80,5 +81,8 @@ router.delete('/:organizationId', auth({roles: ['admin']}), organization(), asyn
             .json({success: false})
     }
 })
+
+// Use visits routes scoped to the user
+router.use('/:organizationId/users', auth({roles: ['admin']}), organization(), users)
 
 module.exports = router;

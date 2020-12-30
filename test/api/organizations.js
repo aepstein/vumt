@@ -54,6 +54,37 @@ describe('/api/organizations',() => {
                 .members(organizations.filter(d => d.name.match(/needle/i)).map(d => d.id))
         })
     })
+    describe('GET /api/organizations/:organizationId/users',() => {
+        const action = async (path,auth) => {
+            const res = chai.request(server).get(path)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        const path = (organization) => {
+            return `/api/organizations/${organization.id}/users`
+        }
+        it('should return members of the organization for an authorized user', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const organization = await factory.create('organization')
+            const member = await factory.create('user',{memberships:{organization,roles:['ranger']}})
+            await factory.create('user')
+            const res = await action(path(organization),auth)
+            res.should.have.status(200)
+            res.body.should.have.property('data').be.an('array')
+            res.body.data.map(u => u._id).should.have.members([member.id])
+        })
+        it('should not allow an unauthorized user', async() => {
+            const auth = await withAuth()
+            const organization = await factory.create('organization')
+            const res = await action(path(organization),auth)
+            errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny a user without authentication', async() => {
+            const organization = await factory.create('organization')
+            const res = await action(path(organization))
+            errorNoToken(res)
+        })
+    })
     describe('POST /api/organizations', () => {
         const action = async (organization,auth) => {
             const res = chai.request(server).post('/api/organizations').send(organization)
