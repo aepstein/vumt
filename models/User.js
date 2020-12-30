@@ -100,6 +100,10 @@ UserSchema.pre('save',async function() {
     }
 });
 
+UserSchema.post('save',async function (user) {
+    await user.populate('memberships.organization').execPopulate()
+})
+
 /* Issues a JSON web token in a server response for a user who has been authenticated
  */
 UserSchema.methods.genToken = async function() {
@@ -144,6 +148,7 @@ UserSchema.methods.pubProps = function() {
         email: this.email,
         enableGeolocation: this.enableGeolocation,
         country: this.country,
+        memberships: this.memberships,
         province: this.province,
         postalCode: this.postalCode,
         phone: this.phone,

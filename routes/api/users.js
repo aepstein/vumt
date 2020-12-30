@@ -16,7 +16,7 @@ const attrAccessible = (req) => {
     let allowed = ['firstName','lastName','email','enableGeolocation','password','country','province','postalCode','phone',
         'distanceUnitOfMeasure']
     if (req.authUser && req.authUser.roles.includes('admin')) {
-        allowed = allowed.concat(['roles'])
+        allowed = allowed.concat(['roles','memberships'])
     }
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
