@@ -94,6 +94,14 @@ const locale = {
         "districtDetail": "District detail",
         "updateDistrict": "Update district"
     },
+    "organization": {
+        "addOrganization": "Add organization",
+        "editOrganization": "Edit organization",
+        "name": "Name",
+        "newOrganization": "New organization",
+        "organizationDetail": "Organization detail",
+        "updateOrganization": "Update organization"
+    },
     "place": {
         "addPlace": "Add place",
         "editPlace": "Edit place",
@@ -176,6 +184,7 @@ const locale = {
         "logout": "Logout",
         "advisories": "Advisories",
         "districts": "Districts",
+        "organizations": "Organizations",
         "places": "Places",
         "register": "Register",
         "users": "Users",

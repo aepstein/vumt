@@ -13,6 +13,7 @@ import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
 import AdvisoriesManager from './containers/advisories/AdvisoriesManager'
 import DistrictsManager from './containers/districts/DistrictsManager'
+import OrganizationsManager from './containers/organizations/OrganizationsManager'
 import PlacesManager from './containers/places/PlacesManager'
 import UsersManager from './containers/users/UsersManager'
 import VisitsManager from './containers/visits/VisitsManager'
@@ -84,6 +85,18 @@ const Root = ({ store }) => (
               </AuthRoute>
               <AuthRoute path="/districts" roles={['admin']}>
                 <DistrictsManager action='list'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/new" roles={['admin']}>
+                <OrganizationsManager action='new'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/:organizationId/edit" roles={['admin']}>
+                <OrganizationsManager action='edit'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/:organizationId" roles={['admin']}>
+                <OrganizationsManager action='show'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations" roles={['admin']}>
+                <OrganizationsManager action='list'/>
               </AuthRoute>
               <AuthRoute path="/places/new" roles={['admin']}>
                 <PlacesManager action='new'/>
