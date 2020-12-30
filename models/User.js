@@ -8,6 +8,7 @@ const crypto = require('crypto')
 const config = require('config')
 const jwtSecret = config.jwtSecret
 const jwt = require('jsonwebtoken')
+const roles = require('./enums/roles')
 
 const UserSchema = new Schema(
     {
@@ -36,6 +37,17 @@ const UserSchema = new Schema(
             required: true,
             enum: Object.keys(countries.getAlpha2Codes())
         },
+        memberships: [{
+            organization: {
+                type: Schema.Types.ObjectId,
+                ref: 'organization',
+                required: true
+            },
+            roles: [{
+                type: String,
+                enum: roles
+            }]
+        }],
         province: {
             type: String
         },
@@ -56,7 +68,7 @@ const UserSchema = new Schema(
         },
         roles: [{
             type: String,
-            enum: ['ranger','planner','admin']
+            enum: roles
         }],
         resetPasswordTokens: [{
             token: {
