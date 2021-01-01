@@ -7,8 +7,10 @@ const {
     errorMustHaveRoles,
     errorNoToken,
     errorPathRequired,
+    errorPathUnique,
 } = require('../support/middlewareErrors')
 const { times } = require('../support/util')
+const User = require('../../models/User')
 
 describe('/api/organizations',() => {
     const genOrganizations = async () => {
@@ -82,6 +84,104 @@ describe('/api/organizations',() => {
         it('should deny a user without authentication', async() => {
             const organization = await factory.create('organization')
             const res = await action(path(organization))
+            errorNoToken(res)
+        })
+    })
+    describe('POST /api/organizations/:organizationId/users/:userId',() => {
+        const action = async (path,payload={},auth) => {
+            const res = chai.request(server).post(path).send(payload)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        const path = (organization,user) => {
+            return `/api/organizations/${organization.id}/users/${user.id}`
+        }
+        it('should create a membership for a valid submission',async () => {
+            const user = await factory.create('user')
+            const organization = await factory.create('organization')
+            const auth = await withAuth({roles:['admin']})
+            const res = await action(path(organization,user),{roles:['ranger']},auth)
+            res.should.have.status(201)
+            res.body.should.be.an('object')
+            res.body.should.have.property('organization').eql(organization.id)
+            res.body.should.have.property('roles').have.members(['ranger'])
+        })
+        it('should deny an unauthorized user',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.create('user')
+            const auth = await withAuth()
+            const res = await action(path(organization,user),{roles:['ranger']},auth)
+            errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny an unauthenticated user',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.create('user')
+            const res = await action(path(organization,user),{roles:['ranger']})
+            errorNoToken(res)
+        })
+    })
+    describe('PUT /api/organizations/:organizationId/users/:userId',() => {
+        const action = async (path,payload={},auth) => {
+            const res = chai.request(server).put(path).send(payload)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        const path = (organization,user) => {
+            return `/api/organizations/${organization.id}/users/${user.id}`
+        }
+        it('should update a membership for a valid submission',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.create('user',{memberships: [{organization: organization.id,roles:['admin']}]})
+            const auth = await withAuth({roles:['admin']})
+            const res = await action(path(organization,user),{roles:['ranger']},auth)
+            res.should.have.status(200)
+            res.body.should.be.an('object')
+            res.body.organization.should.have.property('_id').eql(organization.id)
+            res.body.should.have.property('roles').have.members(['ranger'])
+        })
+        it('should deny an unauthorized user',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.create('user')
+            const auth = await withAuth()
+            const res = await action(path(organization,user),{roles:['ranger']},auth)
+            errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny an unauthenticated user',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.create('user')
+            const res = await action(path(organization,user),{roles:['ranger']})
+            errorNoToken(res)
+        })
+    })
+    describe('DELETE /api/organizations/:organizationId/users/:userId',() => {
+        const action = async (path,auth) => {
+            const res = chai.request(server).delete(path)
+            if (auth) res.set('x-auth-token',auth.body.token)
+            return res
+        }
+        const path = (organization,user) => {
+            return `/api/organizations/${organization.id}/users/${user.id}`
+        }
+        it('should delete a membership for a valid submission',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.create('user',{memberships: [{organization: organization.id,roles:['admin']}]})
+            const auth = await withAuth({roles:['admin']})
+            const res = await action(path(organization,user),auth)
+            res.should.have.status(200)
+            const userAfter = await User.findOne({_id: user.id})
+            userAfter.memberships.map(m => m.organization).should.not.have.members([organization.id])
+        })
+        it('should deny an unauthorized user',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.create('user')
+            const auth = await withAuth()
+            const res = await action(path(organization,user),auth)
+            errorMustHaveRoles(res,['admin'])
+        })
+        it('should deny an unauthenticated user',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.create('user')
+            const res = await action(path(organization,user))
             errorNoToken(res)
         })
     })
