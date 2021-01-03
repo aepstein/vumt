@@ -94,12 +94,19 @@ const locale = {
         "districtDetail": "District detail",
         "updateDistrict": "Update district"
     },
+    "membership": {
+        "addMembership": "Add membership",
+        "membershipn": "Membership {{n}}",
+        "memberships": "Memberships"
+    },
     "organization": {
         "addOrganization": "Add organization",
         "editOrganization": "Edit organization",
         "name": "Name",
         "newOrganization": "New organization",
+        "organization": "Organization",
         "organizationDetail": "Organization detail",
+        "organizationPlaceholder": "Select organization",
         "updateOrganization": "Update organization"
     },
     "place": {

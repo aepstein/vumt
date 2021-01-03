@@ -100,8 +100,17 @@ UserSchema.pre('save',async function() {
     }
 });
 
+const autoPopulate = function (next) {
+    this.populate('memberships.organization','name')
+    next()
+}
+
+UserSchema.pre('find',autoPopulate)
+
+UserSchema.pre('findOne',autoPopulate)
+
 UserSchema.post('save',async function (user) {
-    await user.populate('memberships.organization').execPopulate()
+    await user.populate('memberships.organization','name').execPopulate()
 })
 
 /* Issues a JSON web token in a server response for a user who has been authenticated

@@ -11,7 +11,7 @@ const organizationRowSelector = (name) => {
     return `//li[contains(.,'${name}')]`
 }
 
-Given('a organization {string} exists', async (name) => {
+Given(/^an? organization "([^"]+)" exists$/, async (name) => {
     await entitiesExist(1,'organization',{name})
 })
 

@@ -24,6 +24,7 @@ import postalCodes from 'postal-codes-js'
 import phoneValidator from 'phone'
 import distanceUnitsOfMeasure from '../../lib/distanceUnitsOfMeasure'
 import roleOptions from '../../lib/roles'
+import MembershipsEditor from './MembershipsEditor'
 
 export default function UserEditor({action,user,onSave,saving}) {
     const authUser = useSelector(state => state.auth.user)
@@ -99,6 +100,19 @@ export default function UserEditor({action,user,onSave,saving}) {
     },[user.roles,setRoles])
     const rolesRef = useRef()
 
+    const [ memberships, setMemberships ] = useState([])
+    useEffect(() => {
+        setMemberships(user.memberships.map((membership) => {
+            return {
+                organization: [{id: membership.organization._id, label: membership.organization.name}],
+                roles: membership.roles
+            }
+        }))
+    },[user.memberships,setMemberships])
+    const onAddMembership = () => {
+        setMemberships(memberships.concat({organization: [], roles: []}))
+    }
+
     const [ saveButtonText, setSaveButtonText ] = useState('')
     useEffect(() => {
         switch(action) {
@@ -145,7 +159,16 @@ export default function UserEditor({action,user,onSave,saving}) {
             postalCode,
             phone
         }
-        if ( authUser && authUser.roles.includes('admin') ) newUser.roles = roles
+        if ( authUser && authUser.roles.includes('admin') ) {
+            newUser.memberships = memberships.map((membership) => {
+                const {organization,roles} = membership
+                return {
+                    organization: organization[0] ? organization[0].id : null,
+                    roles
+                }
+            })
+            newUser.roles = roles
+        }
         onSave(newUser)
     }
 
@@ -329,6 +352,9 @@ export default function UserEditor({action,user,onSave,saving}) {
                         clearButton={true}
                     />
                 </FormGroup> }
+                { !authUser || !authUser.roles.includes('admin') ? '' :
+                    <MembershipsEditor memberships={memberships} errors={errors}
+                        setMemberships={setMemberships} onAddMembership={onAddMembership} />}
                 <p>
                     This is a proof of concept application provided for evaluation and experimental purposes only.
                     By clicking the Register button below, you agree to the Terms of Service for the application,

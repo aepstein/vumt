@@ -12,6 +12,7 @@ const BLANK_USER = {
     email: '',
     password: '',
     country: '',
+    memberships: [],
     province: '',
     postalCode: '',
     phone: '',

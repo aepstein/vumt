@@ -90,10 +90,10 @@ const fillElement = async (el, fill, clear = false ) => {
 	await el.click()
 	await el.type(fill)
 }
-const fillTypeaheadByLabel = async (label, fill) => {
-	const closeButton = await selectTypeaheadCloseByLabel(label)
+const fillTypeaheadByLabel = async (label, fill, context) => {
+	const closeButton = await selectTypeaheadCloseByLabel(label, context)
 	if (closeButton) await closeButton.click()
-	const el = await selectTypeaheadInputByLabel(label)
+	const el = await selectTypeaheadInputByLabel(label, context)
     await fillElement(el,fill.substring(0,1))
     await new Promise(r => setTimeout(r, 200))
     await fillElement(el,fill.substring(1,2))
@@ -201,19 +201,19 @@ const scrollToBottom = async () => {
 		window.scrollBy(0,window.innerHeight)
 	})
 }
-const selectFormGroupByLabel = async (label) => {
+const selectFormGroupByLabel = async (label,context='') => {
 	const escapedText = escapeXpathString(label);
-	const selector = `//div[contains(@class,'form-group') and contains(.//label,${escapedText})]`
+	const selector = `${context}//div[contains(@class,'form-group') and contains(.//label,${escapedText})]`
 	const el = await scope.context.currentPage.$x(selector)
 	return el[0]
 }
-const selectTypeaheadCloseByLabel = async (label) => {
-	const formGroup = await selectFormGroupByLabel(label)
+const selectTypeaheadCloseByLabel = async (label,context) => {
+	const formGroup = await selectFormGroupByLabel(label,context)
 	const el = await formGroup.$x(`.//button[contains(@class,'rbt-close')]`)
 	return el[0]
 }
-const selectTypeaheadInputByLabel = async (label) => {
-	const formGroup = await selectFormGroupByLabel(label)
+const selectTypeaheadInputByLabel = async (label,context) => {
+	const formGroup = await selectFormGroupByLabel(label,context)
 	const el = await formGroup.$x(`.//input[contains(@class,'rbt-input-main')]`)
 	return el[0]
 }
