@@ -29,7 +29,7 @@ export default function VisitsList({loading,next,q,visits,onDelete,onLoadMore,on
             </Link>
             <ListGroup className="visits-list">
                 {visits.map(({ _id, startOn, origin, destinations, checkedIn, checkedOut }) => (
-                    <ListGroupItem>
+                    <ListGroupItem key={_id}>
                         <ButtonGroup>
                             <VisitCheckButton visitId={_id} checkedIn={checkedIn} checkedOut={checkedOut} />
                             <Button
