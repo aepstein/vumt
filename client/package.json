@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap-v4-rtl": "^4.4.1-1",
     "bootswatch": "^4.4.1",
     "i18n-iso-countries": "^4.3.1",
