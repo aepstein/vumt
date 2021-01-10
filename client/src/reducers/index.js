@@ -4,6 +4,7 @@ import errorReducer from './errorReducer';
 import geoReducer from './geoReducer'
 import advisoryReducer from './advisoryReducer';
 import districtReducer from './districtReducer'
+import membershipReducer from './membershipReducer'
 import organizationReducer from './organizationReducer'
 import placeReducer from './placeReducer'
 import userReducer from './userReducer'
@@ -15,6 +16,7 @@ export default combineReducers({
     geo: geoReducer,
     advisory: advisoryReducer,
     district: districtReducer,
+    membership: membershipReducer,
     organization: organizationReducer,
     place: placeReducer,
     user: userReducer,

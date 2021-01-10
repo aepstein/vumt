@@ -109,10 +109,6 @@ UserSchema.pre('find',autoPopulate)
 
 UserSchema.pre('findOne',autoPopulate)
 
-UserSchema.post('save',async function (user) {
-    await user.populate('memberships.organization','name').execPopulate()
-})
-
 /* Issues a JSON web token in a server response for a user who has been authenticated
  */
 UserSchema.methods.genToken = async function() {
@@ -170,6 +166,16 @@ UserSchema.methods.pubProps = function() {
 UserSchema.methods.comparePassword = async function(candidate) {
     return bcrypt.compare(candidate,this.password);
 }
+
+UserSchema.methods.membership = function(index) {
+    const {organization, roles} = this.memberships[index]
+    const {_id,firstName,lastName,email} = this
+    return {
+        organization: organization._id,
+        roles,
+        user: {_id,firstName,lastName,email}
+    }
+} 
 
 useHandleMongoError11000(UserSchema)
 

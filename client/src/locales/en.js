@@ -96,8 +96,11 @@ const locale = {
     },
     "membership": {
         "addMembership": "Add membership",
+        "addMembershipHeading": "Add membership to {{organization}}",
+        "editMembershipHeading": "Edit membership of {{user}} in {{organization}}",
         "membershipn": "Membership {{n}}",
-        "memberships": "Memberships"
+        "memberships": "Memberships",
+        "updateMembership": "Update membership"
     },
     "organization": {
         "addOrganization": "Add organization",
@@ -150,6 +153,8 @@ const locale = {
         "profile": "Profile",
         "roles": "Roles",
         "rolesPlaceholder": "Select privileged user roles",
+        "user": "User",
+        "userPlaceholder": "Select user",
         "yourProfile": "Your profile"
     },
     "visit": {

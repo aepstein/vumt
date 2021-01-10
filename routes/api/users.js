@@ -35,7 +35,8 @@ router.post('/',auth({isOptional: true, roles:['admin']}), async (req, res) => {
         ...attrAccessible(req)
     })
     try {
-        const savedUser = await newUser.save()
+        const {_id} = await newUser.save()
+        const savedUser = await User.findOne({_id})
         if (req.authUser) {
             return res.status(201).json(savedUser.pubProps())
         }
@@ -67,9 +68,9 @@ router.post('/',auth({isOptional: true, roles:['admin']}), async (req, res) => {
 router.put('/:userId',auth(),user({self:true,roles:['admin']}),async (req,res) => {
     attrAccessible(req)
     try {
-        const savedUser = await req.user.save()
-        delete savedUser.password
-        return res.status(200).json(savedUser)
+        const {_id} = await req.user.save()
+        const savedUser = await User.findOne({_id})
+        return res.status(200).json(savedUser.pubProps())
     }
     catch(err) {
         if (err.name === 'ValidationError') {

@@ -35,6 +35,11 @@ export default function OrganizationsList({organizations,loading,next,q,onDelete
                                 onClick={() => history.push('/organizations/' + _id)}
                             >{t('commonForms:detail')}</Button>
                             <Button
+                                color="info"
+                                size="sm"
+                                onClick={() => history.push('/organizations/' + _id + '/memberships')}
+                            >{t('membership:memberships')}</Button>
+                            <Button
                                 color="warn"
                                 size="sm"
                                 onClick={() => history.push('/organizations/' + _id + '/edit')}

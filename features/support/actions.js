@@ -308,6 +308,9 @@ const waitFor = async (selector,options={}) => {
 		return scope.context.currentPage.waitForSelector(selector,options)
 	}
 }
+const waitForXPath = async (selector,options={}) => {
+	return scope.context.currentPage.waitForXPath(selector,options)
+}
 
 module.exports = {
 	chooseFromSelectByLabel,
@@ -346,5 +349,6 @@ module.exports = {
 	updateAdvisory,
 	userExists,
 	waitFor,
-	waitForText
+	waitForText,
+	waitForXPath
 }

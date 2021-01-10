@@ -73,7 +73,33 @@ describe('/api/organizations',() => {
             const res = await action(path(organization),auth)
             res.should.have.status(200)
             res.body.should.have.property('data').be.an('array')
-            res.body.data.map(u => u._id).should.have.members([member.id])
+            res.body.data.map(u => u.user._id).should.have.members([member.id])
+        })
+        it('should paginate for more than 10 memberships', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const organization = await factory.create('organization')
+            const users = await times(11,async () => factory.create('user'))
+            let i = 0
+            const memberships = await times(11,async () => {
+                const membership = {
+                    organization: organization.id,
+                    roles: [ 'ranger' ]
+                }
+                const user = users[i++]
+                user.memberships.push(membership)
+                await user.save()
+                return {...membership, user}
+            })
+            const res = await action(path(organization),auth)
+            res.should.have.a.status(200)
+            res.body.data.should.be.an('array')
+            res.body.data.map(d => d.user._id).should.have.members(memberships.slice(0,10).map(d => d.user.id))
+            res.body.links.should.have.property('next').be.a('string')
+            const res2 = await action(res.body.links.next,auth)
+            res2.should.have.status(200)
+            res2.body.data.should.be.an('array')
+            res2.body.data.map(d => d.user._id).should.have.members(memberships.slice(10,11).map(d => d.user.id))
+            res2.body.links.should.have.property('next').null
         })
         it('should not allow an unauthorized user', async() => {
             const auth = await withAuth()
@@ -135,8 +161,7 @@ describe('/api/organizations',() => {
             const auth = await withAuth({roles:['admin']})
             const res = await action(path(organization,user),{roles:['ranger']},auth)
             res.should.have.status(200)
-            res.body.should.be.an('object')
-            res.body.organization.should.have.property('_id').eql(organization.id)
+            res.body.should.have.property('organization').eql(organization.id)
             res.body.should.have.property('roles').have.members(['ranger'])
         })
         it('should deny an unauthorized user',async () => {

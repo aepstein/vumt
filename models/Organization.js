@@ -29,16 +29,28 @@ OrganizationSchema.methods.usersPipeline = function ({q}) {
     c.push({$match: {'memberships.organization': mongoose.Types.ObjectId(this._id)}})
     if (q) {
         const qc = new RegExp(q,'i')
-        c.push({$match: {name: qc}})
+        c.push({$match: {$or: [
+            {firstName: qc},
+            {lastName: qc},
+            {email: qc},
+            {'memberships.roles': qc}
+        ]}})
     }
+    c.push({$sort: { lastName: 1, firstName: 1, _id: 1 }})
     c.push({$project: {
-        _id: 1,
-        firstName: 1,
-        lastName: 1,
-        email: 1,
+        // We need these attributes at root level for sorting/pagination to work
+        _id: "$_id",
+        firstName: "$firstName",
+        lastName: "$lastName",
+        organization: { $literal: this._id },
+        user: {
+            _id: "$_id",
+            firstName: "$firstName",
+            lastName: "$lastName",
+            email: "$email"
+        },
         roles: "$memberships.roles"
     }})
-    c.push({$sort: { lastName: 1, firstName: 1, _id: 1 }})
     return c
 }
 

@@ -6,7 +6,7 @@ import OrganizationsList from '../../components/organizations/OrganizationsList'
 import OrganizationDetail from '../../components/organizations/OrganizationDetail'
 import OrganizationEditor from '../../components/organizations/OrganizationEditor'
 
-const BLANK_DISTRICT = {
+const BLANK_ORGANIZATION = {
     name: ''
 }
 
@@ -19,7 +19,7 @@ export default function OrganizationsManager({action}) {
     const q = useSelector(state => state.organization.q)
     const saving = useSelector(state => state.organization.organizationSaving)
 
-    const [organization,setOrganization] = useState(BLANK_DISTRICT)
+    const [organization,setOrganization] = useState(BLANK_ORGANIZATION)
 
     const dispatch = useDispatch()
 
@@ -55,7 +55,7 @@ export default function OrganizationsManager({action}) {
             setOrganization(loadedOrganization)
         }
         else {
-            setOrganization(BLANK_DISTRICT)
+            setOrganization(BLANK_ORGANIZATION)
         }
     },[organization,organizationId,loaded,organizations])
 
