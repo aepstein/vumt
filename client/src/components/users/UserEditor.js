@@ -23,8 +23,8 @@ import provinces from 'provinces'
 import postalCodes from 'postal-codes-js'
 import phoneValidator from 'phone'
 import distanceUnitsOfMeasure from '../../lib/distanceUnitsOfMeasure'
-import roleOptions from '../../lib/roles'
 import MembershipsEditor from './MembershipsEditor'
+import RolesSelect from '../roles/RolesSelect'
 
 export default function UserEditor({action,user,onSave,saving}) {
     const authUser = useSelector(state => state.auth.user)
@@ -98,7 +98,6 @@ export default function UserEditor({action,user,onSave,saving}) {
     useEffect(() => {
         setRoles(user.roles)
     },[user.roles,setRoles])
-    const rolesRef = useRef()
 
     const [ memberships, setMemberships ] = useState([])
     useEffect(() => {
@@ -338,20 +337,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         onChange={onChange(setEnableGeolocation)}
                     />
                 </FormGroup>
-                { !authUser || !authUser.roles.includes('admin') ? '' : <FormGroup>
-                    <Label for="roles">{t('user:roles')}</Label>
-                    <Typeahead
-                        id="roles"
-                        name="roles"
-                        multiple
-                        selected={roles}
-                        placeholder={t('user:rolesPlaceholder')}
-                        options={roleOptions}
-                        onChange={(selected) => setRoles(selected)}
-                        ref={rolesRef}
-                        clearButton={true}
-                    />
-                </FormGroup> }
+                { !authUser || !authUser.roles.includes('admin') ? '' : <RolesSelect roles={roles} setRoles={setRoles} /> }
                 { !authUser || !authUser.roles.includes('admin') ? '' :
                     <MembershipsEditor memberships={memberships} errors={errors}
                         setMemberships={setMemberships} onAddMembership={onAddMembership} />}
