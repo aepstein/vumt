@@ -1,4 +1,5 @@
 module.exports = {
+    indentation: 4,
     locales: [
         'en-US',
         'es',
