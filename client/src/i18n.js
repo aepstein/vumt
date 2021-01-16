@@ -15,12 +15,6 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     fallbackLng: 'en-US',
-    // resources: {
-    //     en: require('./locales/en').default,
-    //     es: require('./locales/es').default,
-    //     fr: require('./locales/fr').default,
-    //     he: require('./locales/he').default
-    // },
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     }
