@@ -11,7 +11,7 @@ import locales from '../locales'
 function LanguageSelector() {
     const [ dropdownOpen, setDropdownOpen ] = useState(false)
     const [ lang, setLang ] = useState(null)
-    const { t, i18n } = useTranslation('AppNavbar')
+    const { t, i18n } = useTranslation()
 
     const toggle = () => setDropdownOpen(prevState => !prevState)
     const setLanguage = (newLang) => () => {

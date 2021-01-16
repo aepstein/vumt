@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 export default function UserDetail({user}) {
     const authUser = useSelector(state => state.auth.user)
-    const { t, i18n } = useTranslation('commonForms')
+    const { t, i18n } = useTranslation(['translation','membership','organization','user'])
     const history = useHistory()
 
     const [country,setCountry] = useState('')
@@ -48,7 +48,7 @@ export default function UserDetail({user}) {
             <dt>{t('phone')}</dt>
             <dd>{user.phone}</dd>
             <dt>{t('user:enableGeolocation')}</dt>
-            <dd>{user.enableGeolocation ? t('commonForms:yes') : t('commonForms:no')}</dd>
+            <dd>{user.enableGeolocation ? t('translation:yes') : t('translation:no')}</dd>
             <dt>{t('user:distanceUnitOfMeasure')}</dt>
             <dd>{t(`uom:${user.distanceUnitOfMeasure}`)}</dd>
             <dt>{t('user:roles')}</dt>

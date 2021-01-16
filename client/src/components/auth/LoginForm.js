@@ -23,7 +23,7 @@ function LoginForm({saving,error}) {
     const dispatch = useDispatch()
     const history = useHistory()
     
-    const { t } = useTranslation('AppNavbar')
+    const { t } = useTranslation()
 
     const onChange = (setter) => (e) => {
         setter(e.target.value)
@@ -63,23 +63,23 @@ function LoginForm({saving,error}) {
         {msg ? <Alert color="danger">{msg}</Alert> : null }
         <Form onSubmit={onSubmit}>
             <FormGroup>
-                <Label for="email">{t('commonForms:email')}</Label>
+                <Label for="email">{t('translation:email')}</Label>
                 <Input
                     type="email"
                     name="email"
                     id="email"
                     value={email}
-                    placeholder={t('commonForms:emailPlaceholder')}
+                    placeholder={t('translation:emailPlaceholder')}
                     onChange={onChange(setEmail)}
                     className="mb-3"
                 />
-                <Label for="password">{t('commonForms:password')}</Label>
+                <Label for="password">{t('translation:password')}</Label>
                 <Input
                     type="password"
                     name="password"
                     id="password"
                     value={password}
-                    placeholder={t('commonForms:password')}
+                    placeholder={t('translation:password')}
                     onChange={onChange(setPassword)}
                     className="mb-3"
                 />
@@ -88,7 +88,7 @@ function LoginForm({saving,error}) {
                     style={{marginTop: '2rem'}}
                     block
                 >{t('login')}</Button>
-                <Button color="link" onClick={onCancel}>{t('commonForms:cancel')}</Button>
+                <Button color="link" onClick={onCancel}>{t('translation:cancel')}</Button>
             </FormGroup>
         </Form>
         <p>{t('forgotPassword')} <Link to="/resetPassword">{t('resetPassword')}</Link></p>

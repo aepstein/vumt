@@ -15,7 +15,7 @@ import Search from '../search/Search'
 export default function OrganizationsList({organizations,loading,next,q,onDelete,onLoadMore,onSearch}) {
     const history = useHistory()
     
-    const { t } = useTranslation('organization')
+    const { t } = useTranslation(['organization','membership','search','translation'])
 
     useScrollDown(onLoadMore)
 
@@ -33,7 +33,7 @@ export default function OrganizationsList({organizations,loading,next,q,onDelete
                                 color="info"
                                 size="sm"
                                 onClick={() => history.push('/organizations/' + _id)}
-                            >{t('commonForms:detail')}</Button>
+                            >{t('translation:detail')}</Button>
                             <Button
                                 color="info"
                                 size="sm"
@@ -43,12 +43,12 @@ export default function OrganizationsList({organizations,loading,next,q,onDelete
                                 color="warn"
                                 size="sm"
                                 onClick={() => history.push('/organizations/' + _id + '/edit')}
-                            >{t('commonForms:edit')}</Button>
+                            >{t('translation:edit')}</Button>
                             <Button
                                 color="danger"
                                 size="sm"
                                 onClick={() => onDelete(_id)}
-                            >{t('commonForms:remove')}</Button>
+                            >{t('translation:remove')}</Button>
                         </ButtonGroup>
                         <span className="organization-name">{name}</span>
                     </ListGroupItem>

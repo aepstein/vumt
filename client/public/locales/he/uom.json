@@ -1,0 +1,9 @@
+{
+    "km": "קילומטר",
+    "kmWithCount": "{{count}} ק\"מ",
+    "km_plural": "קילומטרים",
+    "mi": "מייל",
+    "miWithCount": "{{count}} מייל",
+    "miWithCount_plural": "{{count}} מיילים",
+    "mi_plural": "מיילים"
+}

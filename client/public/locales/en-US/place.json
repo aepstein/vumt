@@ -1,0 +1,22 @@
+{
+    "addPlace": "Add place",
+    "editPlace": "Edit place",
+    "isDestination": "Is a destination",
+    "isOrigin": "Is a starting point",
+    "latitude": "Latitude",
+    "location": "Location",
+    "longitude": "Longitude",
+    "name": "Name",
+    "newPlace": "New place",
+    "parkedVehicleWithCount": "{{count}} parked vehicle ({{capacity}} spaces)",
+    "parkedVehicleWithCount_plural": "{{count}} parked vehicles ({{capacity}} spaces)",
+    "parkingCapacity": "Number of public parking spots",
+    "partyWithCount": "{{count}} party",
+    "partyWithCount_plural": "{{count}} parties",
+    "personWithCount": "{{count}} person",
+    "personWithCount_plural": "{{count}} people",
+    "placeDetail": "Place detail",
+    "timezone": "Timezone",
+    "timezonePlaceholder": "Choose IANA timezone",
+    "updatePlace": "Update place"
+}

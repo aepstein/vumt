@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import useValidationErrors from '../../hooks/useValidationErrors'
 
 export default function DistrictEditor({district,onSave,saving}) {
-    const { t } = useTranslation('district')
+    const { t } = useTranslation(['district','translation'])
     const history = useHistory()
 
     const [ name, setName ] = useState('')
@@ -68,7 +68,7 @@ export default function DistrictEditor({district,onSave,saving}) {
         if (saving) return
         clearError()
         if (!boundaries) {
-            setError('boundaries','required',t('commonForms:invalidRequired'))
+            setError('boundaries','required',t('translation:invalidRequired'))
             return
         }
         const newDistrict = {
@@ -100,7 +100,7 @@ export default function DistrictEditor({district,onSave,saving}) {
                         invalid={errors.name ? true : false}
                     />
                     {errors.name && errors.name.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="boundaries">{t('boundaries')}</Label>
@@ -133,7 +133,7 @@ export default function DistrictEditor({district,onSave,saving}) {
                         </FeatureGroup>
                     </Map>
                     {errors.boundaries && errors.boundaries.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>
                     <Button
@@ -142,7 +142,7 @@ export default function DistrictEditor({district,onSave,saving}) {
                     >{district._id ? t('updateDistrict') : t('addDistrict')}</Button>
                     <Button color="secondary"
                         onClick={() => history.goBack()}
-                    >{t('commonForms:cancel')}</Button>
+                    >{t('translation:cancel')}</Button>
                 </ButtonGroup>
             </Form>
         </Container>

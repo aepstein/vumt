@@ -2,6 +2,7 @@ const { Given, When, Then } = require('@cucumber/cucumber');
 const {
     chooseFromSelectByLabel,
     clickByText,
+    clickByXPath,
     emailShouldBeSentTo,
     emailSubjectShouldBe,
     fillByLabel,
@@ -10,6 +11,7 @@ const {
     formatTimeForFill,
     loginAs,
     markByLabel,
+    noSpinner,
     parseInput,
     setGeolocation,
     relativeDate,
@@ -21,8 +23,7 @@ const {
     takeScreenshot,
     visitPage,
     waitFor,
-    waitForText,
-    clickByXPath,
+    waitForText
 } = require('../support/actions');
 
 Given(/my location is "(?<lat>(-?(90|(\d|[1-8]\d)(\.\d{1,6}){0,1})))\,{1}(?<long>(-?(180|(\d|\d\d|1[0-7]\d)(\.\d{1,6}){0,1})))"/,
@@ -47,6 +48,7 @@ Given('I logged in as {string}', async (email) => {
 When('I change the language to {string}', async (language) => {
     await clickByXPath('//button[contains(../@class,"language-selector")]')
     await clickByXPath(`//button[contains(.,'${language}')]`)
+    await noSpinner()
 })
 
 When(/^I fill in "([^"]+)" with ("[^"]+"|today|tomorrow)$/, async (label, value) => {
@@ -85,10 +87,12 @@ When('I fill in {string} with nothing', async (label) => {
 
 When('I click the {string} button', async (label) => {
     await clickByText(label,"//button");
+    await noSpinner()
 })
 
 When('I click the {string} link', async (label) => {
     await clickByText(label,"//a");
+    await noSpinner()
 })
 
 When(/^I (un)?mark the "([^"]+)" checkbox$/, async (un,label) => {
@@ -100,7 +104,7 @@ When('I scroll down', async () => {
 })
 
 When('there is no spinner', async () => {
-    await waitFor('.spinner-border',{hidden: true})
+    await noSpinner()
 })
 
 Then('the {string} field should have an error {string}', async (label, error) => {

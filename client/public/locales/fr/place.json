@@ -1,0 +1,22 @@
+{
+    "addPlace": "Ajouter un emplacement",
+    "editPlace": "Modifier l'emplacement",
+    "isDestination": "Est une destination",
+    "isOrigin": "Est un point de départ",
+    "latitude": "Latitude",
+    "location": "Emplacement",
+    "longitude": "Longitude",
+    "name": "Nom",
+    "newPlace": "Nouveau emplacement",
+    "parkedVehicleWithCount": "{{count}} véhicule en stationnement ({{capacity}} places)",
+    "parkedVehicleWithCount_plural": "{{count}} véhicules en stationnement ({{capacity}} places)",
+    "parkingCapacity": "Nombre de places de stationnement publiques",
+    "partyWithCount": "{{count}} groupe",
+    "partyWithCount_plural": "{{count}} groupes",
+    "personWithCount": "{{count}} personne",
+    "personWithCount_plural": "{{count}} personnes",
+    "placeDetail": "Détail d'emplacement",
+    "timezone": "Fuseau horaire",
+    "timezonePlaceholder": "Choisissez le fuseau horaire IANA",
+    "updatePlace": "Modifier l'emplacement"
+}

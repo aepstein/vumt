@@ -13,7 +13,7 @@ import Search from '../search/Search'
 export default function UsersList({authUser,users,next,loading,q,onSearch,onLoadMore,onDelete}) {
     const history = useHistory()
     
-    const { t } = useTranslation('user')
+    const { t } = useTranslation(['translation','user','search'])
 
     useScrollDown(onLoadMore)
 
@@ -21,15 +21,15 @@ export default function UsersList({authUser,users,next,loading,q,onSearch,onLoad
         <Container>
             <Search q={q} onSearch={onSearch} />
             <Link to="/users/new">
-                <Button color="dark" style={{marginBottom: '2rem'}}>{t('addUser')}</Button>
+                <Button color="dark" style={{marginBottom: '2rem'}}>{t('user:addUser')}</Button>
             </Link>
             <Table responsive={true} className="users-list">
                 <thead>
                     <tr>
                         <th colSpan="3"></th>
-                        <th>{t('commonForms:firstName')}</th>
-                        <th>{t('commonForms:lastName')}</th>
-                        <th>{t('commonForms:email')}</th>
+                        <th>{t('firstName')}</th>
+                        <th>{t('lastName')}</th>
+                        <th>{t('email')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,14 +40,14 @@ export default function UsersList({authUser,users,next,loading,q,onSearch,onLoad
                                     color="info"
                                     size="sm"
                                     onClick={() => history.push('/users/' + _id)}
-                                >{t('commonForms:detail')}</Button>
+                                >{t('detail')}</Button>
                             </td>
                             <td>
                                 <Button
                                     color="warn"
                                     size="sm"
                                     onClick={() => history.push('/users/' + _id + '/edit')}
-                                >{t('commonForms:edit')}</Button>
+                                >{t('edit')}</Button>
                             </td>
                             <td>
                                 { authUser._id === _id ? '' : 
@@ -55,7 +55,7 @@ export default function UsersList({authUser,users,next,loading,q,onSearch,onLoad
                                         color="danger"
                                         size="sm"
                                         onClick={() => onDelete(_id)}
-                                    >{t('commonForms:remove')}</Button>
+                                    >{t('remove')}</Button>
                                 }
                             </td>
                             <td>{firstName}</td>

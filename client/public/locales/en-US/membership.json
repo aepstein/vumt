@@ -1,0 +1,8 @@
+{
+    "addMembership": "Add membership",
+    "addMembershipHeading": "Add membership to {{organization}}",
+    "editMembershipHeading": "Edit membership of {{user}} in {{organization}}",
+    "membershipn": "Membership {{n}}",
+    "memberships": "Memberships",
+    "updateMembership": "Update membership"
+}

@@ -22,7 +22,7 @@ function ResetPasswordForm({saving,email,token}) {
     const dispatch = useDispatch()
     const history = useHistory()
     
-    const { t } = useTranslation('AppNavbar')
+    const { t } = useTranslation()
 
     const { register, errors } = useForm()
 
@@ -49,7 +49,7 @@ function ResetPasswordForm({saving,email,token}) {
         <p>{t('resetPasswordConfirmInstructions')}</p>
         <Form onSubmit={onSubmit}>
             <FormGroup>
-                <Label for="password">{t('commonForms:password')}</Label>
+                <Label for="password">{t('translation:password')}</Label>
                 <Input
                     type="password"
                     name="password"
@@ -61,7 +61,7 @@ function ResetPasswordForm({saving,email,token}) {
                     invalid={errors.password ? true : false}
                 />
                 {errors.password && errors.password.type === 'required' &&
-                    <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                    <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
             </FormGroup>
             <Button
                 disabled={saving}
@@ -69,7 +69,7 @@ function ResetPasswordForm({saving,email,token}) {
                 style={{marginTop: '2rem'}}
                 block
             >{t('resetPassword')}</Button>
-            <Button color="link" disabled={saving} onClick={onCancel}>{t('commonForms:cancel')}</Button>
+            <Button color="link" disabled={saving} onClick={onCancel}>{t('translation:cancel')}</Button>
         </Form>
     </Container>
 }

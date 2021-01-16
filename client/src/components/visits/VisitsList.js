@@ -17,7 +17,7 @@ import useScrollDown from '../../hooks/useScrollDown'
 export default function VisitsList({loading,next,q,visits,onDelete,onLoadMore,onSearch}) {
     const history = useHistory()
     
-    const { t, i18n } = useTranslation('visit')
+    const { t, i18n } = useTranslation(['visit','search','translation'])
 
     useScrollDown(onLoadMore)
 
@@ -36,17 +36,17 @@ export default function VisitsList({loading,next,q,visits,onDelete,onLoadMore,on
                                 color="info"
                                 size="sm"
                                 onClick={() => history.push('/visits/' + _id)}
-                            >{t('commonForms:detail')}</Button>
+                            >{t('translation:detail')}</Button>
                             <Button
                                 color="warn"
                                 size="sm"
                                 onClick={() => history.push('/visits/' + _id + '/edit')}
-                            >{t('commonForms:edit')}</Button>
+                            >{t('translation:edit')}</Button>
                             <Button
                                 color="danger"
                                 size="sm"
                                 onClick={() => onDelete(_id)}
-                            >{t('commonForms:remove')}</Button>
+                            >{t('translation:remove')}</Button>
                         </ButtonGroup>
                         <span className="visit-label">
                         <strong>{i18n.language && startOn ? Intl.DateTimeFormat(i18n.language,{timeZone: origin.timezone}).format(startOn) : ''}</strong>:&nbsp;<em>{t('From')}</em> <strong>{origin.name}</strong> <em>{t('To')}</em> <strong>{destinations.map(d => d.name).join(', ')}</strong>

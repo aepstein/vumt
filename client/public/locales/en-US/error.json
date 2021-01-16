@@ -1,0 +1,15 @@
+{
+    "AUTH_EXPENDED_PASSWORD_RESET_TOKEN": "This password reset request was already used to reset the password.  Please submit a new password reset request.",
+    "AUTH_EXPIRED_PASSWORD_RESET_TOKEN": "The password reset request is too old to be processed.  Please submit a new password reset request.",
+    "AUTH_INVALID_PASSWORD": "Supplied password is not valid.",
+    "AUTH_INVALID_USER_TOKEN": "Invalid user token.",
+    "AUTH_MISSING_EMAIL": "Email is missing.",
+    "AUTH_MISSING_PASSWORD": "Password is missing.",
+    "AUTH_NEED_ROLE": "You must have one of the following roles to access this resource: {{roles}}.",
+    "AUTH_NO_PASSWORD_RESET_TOKEN": "The specified password reset request token does not exist for the specified user",
+    "AUTH_NO_USER": "No user is registered with the specified email",
+    "AUTH_NO_USER_TOKEN": "No user token provided",
+    "AUTH_REQUIRED": "You must log in to perform this action.",
+    "UNAUTHORIZED": "You may not perform the requested action.",
+    "duplicateKey": "Must be unique and `{{value}}` is already used"
+}

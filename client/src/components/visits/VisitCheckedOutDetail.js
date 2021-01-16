@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export default function VisitCheckedOutDetail({visit}) {
-    const { t, i18n } = useTranslation('visit')
+    const { t, i18n } = useTranslation(['visit'])
 
     if (visit.checkedOut) return <Fragment>
         <dt>{t('checkedOutDate')}</dt>

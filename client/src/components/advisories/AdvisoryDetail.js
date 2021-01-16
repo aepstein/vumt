@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import locales from '../../locales'
 
 export default function AdvisoryDetail({advisory}) {
-    const { t, i18n } = useTranslation('advisory')
+    const { t, i18n } = useTranslation(['advisory','translation'])
     const history = useHistory()
     const [ timezone ] = useState('America/New_York')
 
@@ -26,7 +26,7 @@ export default function AdvisoryDetail({advisory}) {
         <p>{t('translation:timesAreLocal',{timezone: timezone})}</p>
         <div>
             <Button color="primary" onClick={() => history.push('/advisories/' + advisory.id + '/edit')}
-            >{t('commonForms:edit')}</Button>
+            >{t('translation:edit')}</Button>
         </div>
         <dl>
             <dt>{t('label')}</dt>

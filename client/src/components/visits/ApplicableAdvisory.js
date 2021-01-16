@@ -12,7 +12,7 @@ export default function ApplicableAdvisory({advisory}) {
     const [prompts,setPrompts] = useState([])
     const [prompt,setPrompt] = useState('')
     const [promptLanguage,setPromptLanguage] = useState('')
-    const {i18n} = useTranslation('advisory')
+    const {i18n} = useTranslation(['advisory'])
     useEffect(() => {
         if (advisory.prompts) {
             setPrompts(advisory.prompts)

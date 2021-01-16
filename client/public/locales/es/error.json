@@ -1,0 +1,15 @@
+{
+    "AUTH_EXPENDED_PASSWORD_RESET_TOKEN": "Esta solicitud de restablecimiento de contraseña ya se utilizó para restablecer la contraseña. Por favor, envíe una nueva solicitud de restablecimiento de contraseña.",
+    "AUTH_EXPIRED_PASSWORD_RESET_TOKEN": "La solicitud de restablecimiento de contraseña es demasiado antigua para ser procesada. Por favor, envíe una nueva solicitud de restablecimiento de contraseña.",
+    "AUTH_INVALID_PASSWORD": "La contraseña proporcionada no es válida.",
+    "AUTH_INVALID_USER_TOKEN": "Token de usuario no válido.",
+    "AUTH_MISSING_EMAIL": "Falta correo electrónico.",
+    "AUTH_MISSING_PASSWORD": "Falta la contraseña.",
+    "AUTH_NEED_ROLE": "Debe tener uno de los siguientes roles para acceder a este recurso: {{roles}}.",
+    "AUTH_NO_PASSWORD_RESET_TOKEN": "El token de solicitud de restablecimiento de contraseña especificado no existe para el usuario especificado",
+    "AUTH_NO_USER": "Ningún usuario está registrado con el correo electrónico especificado",
+    "AUTH_NO_USER_TOKEN": "No se proporciona ningún token de usuario",
+    "AUTH_REQUIRED": "Debe iniciar sesión para realizar esta acción.",
+    "UNAUTHORIZED": "No puede realizar la acción solicitada.",
+    "duplicateKey": "Debe ser único y `{{value}}` is ya se utiliza"
+}

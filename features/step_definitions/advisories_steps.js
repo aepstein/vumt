@@ -1,16 +1,16 @@
 const { Given, When, Then } = require ('@cucumber/cucumber')
 const {
     clickByXPath,
-    create,
     entitiesExist,
     fillByLabel,
     fillTypeaheadByLabel,
     formatDateForFill,
+    noSpinner,
     relativeDate,
     scope,
     shouldSeeText,
     updateAdvisory,
-    waitFor
+    waitFor,
 } = require('../support/actions')
 const advisoryRowSelector = (label) => {
     return `//li[contains(.,'${label}')]`
@@ -35,6 +35,7 @@ When(
     async (button,label) => {
         await waitFor('.advisories-list')
         await clickByXPath(advisoryRowSelector(label)+`//button[contains(.,'${button}')]`)
+        await noSpinner()
     }
 )
 When(/^I fill in values for the advisory(?: except "([^"]+)")?$/,async (except) => {

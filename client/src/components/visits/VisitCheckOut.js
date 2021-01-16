@@ -16,7 +16,7 @@ import useZonedDateTime from '../../hooks/useZonedDateTime'
 import tz from 'timezone/loaded'
 
 export default function VisitCheckOut({visit,onSave,saving}) {
-    const { t } = useTranslation('visit')
+    const { t } = useTranslation(['visit','translation'])
 
     const [ checkedOut, setCheckedOut ] = useState('')
     const [ timezone, setTimezone ] = useTimezone()
@@ -85,7 +85,7 @@ export default function VisitCheckOut({visit,onSave,saving}) {
                         invalid={errors.checkedOutDate ? true : false}
                     />
                     {errors.checkedOutDate && errors.checkedOutDate.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.checkedOutDate && errors.checkedOutDate.type === 'afterCheckin' &&
                         <FormFeedback>{t('afterCheckIn')}</FormFeedback>}
                     {errors.checkedOutDate && errors.checkedOutDate.type === 'beforeFuture' &&
@@ -103,7 +103,7 @@ export default function VisitCheckOut({visit,onSave,saving}) {
                         invalid={errors.checkedOutTime ? true : false}
                     />
                     {errors.checkedOutTime && errors.checkedOutTime.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>
                     <Button

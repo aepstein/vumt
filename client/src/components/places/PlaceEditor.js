@@ -20,7 +20,7 @@ import { mustBeAtLeast, mustBeWholeNumber } from '../../lib/validators'
 import timezones from '../../lib/timezones.json'
 
 export default function PlaceEditor({place,onSave,saving}) {
-    const { t } = useTranslation('place')
+    const { t } = useTranslation(['place','translation'])
     const history = useHistory()
 
     const [ name, setName ] = useState('')
@@ -101,7 +101,7 @@ export default function PlaceEditor({place,onSave,saving}) {
                         invalid={errors.name ? true : false}
                     />
                     {errors.name && errors.name.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.name && errors.name.type === 'duplicateKey' &&
                         <FormFeedback>{errors.name.message}</FormFeedback>}
                 </FormGroup>
@@ -120,11 +120,11 @@ export default function PlaceEditor({place,onSave,saving}) {
                         invalid={errors.latitude ? true : false}
                     />
                     {errors.latitude && errors.latitude.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.latitude && errors.latitude.type === 'min' &&
-                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 0})}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeAtLeast',{min: 0})}</FormFeedback>}
                     {errors.latitude && errors.latitude.type === 'max' &&
-                        <FormFeedback>{t('commonForms:mustBeAtMost',{max: 90})}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeAtMost',{max: 90})}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="longitude">{t('longitude')}</Label>
@@ -139,11 +139,11 @@ export default function PlaceEditor({place,onSave,saving}) {
                         invalid={errors.longitude ? true : false}
                     />
                     {errors.longitude && errors.longitude.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.longitude && errors.longitude.type === 'min' &&
-                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: -180})}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeAtLeast',{min: -180})}</FormFeedback>}
                     {errors.longitude && errors.longitude.type === 'max' &&
-                        <FormFeedback>{t('commonForms:mustBeAtMost',{max: 180})}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeAtMost',{max: 180})}</FormFeedback>}
                 </FormGroup>
                 <FormGroup check>
                     <Label check>
@@ -183,11 +183,11 @@ export default function PlaceEditor({place,onSave,saving}) {
                         invalid={errors.parkingCapacity ? true : false}
                     />
                     {errors.parkingCapacity && errors.parkingCapacity.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.parkingCapacity && errors.parkingCapacity.type === 'min' &&
-                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 0})}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeAtLeast',{min: 0})}</FormFeedback>}
                     {errors.parkingCapacity && errors.parkingCapacity.type === 'mustBeWholeNumber' &&
-                        <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeWholeNumber')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="timezone">{t('timezone')}</Label>
@@ -203,7 +203,7 @@ export default function PlaceEditor({place,onSave,saving}) {
                     />
                     {errors.timezone && <Input type="hidden" invalid />}
                     {errors.timezone && errors.timezone.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>
                     <Button
@@ -212,7 +212,7 @@ export default function PlaceEditor({place,onSave,saving}) {
                     >{place._id ? t('updatePlace') : t('addPlace')}</Button>
                     <Button color="secondary"
                         onClick={() => history.goBack()}
-                    >{t('commonForms:cancel')}</Button>
+                    >{t('translation:cancel')}</Button>
                 </ButtonGroup>
             </Form>
         </Container>

@@ -6,7 +6,7 @@ import MembershipEditor from './MembershipEditor'
 import {useTranslation} from 'react-i18next'
 
 export default function MembershipsEditor({memberships,setMemberships,onAddMembership,errors}) {
-    const {t} = useTranslation('user')
+    const {t} = useTranslation(['user','membership'])
 
     const setMembership = (index) => ({organization,roles}) => {
         const newMemberships = [...memberships]

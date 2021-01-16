@@ -7,7 +7,7 @@ import VisitCheckedInDetail from './VisitCheckedInDetail';
 import VisitCheckedOutDetail from './VisitCheckedOutDetail';
 
 export default function VisitDetail({visit}) {
-    const { t, i18n } = useTranslation('visit')
+    const { t, i18n } = useTranslation(['visit','translation'])
 
     return <Container>
         <h1>{t('detailHeading')}</h1>

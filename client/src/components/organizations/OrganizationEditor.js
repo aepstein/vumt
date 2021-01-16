@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import useValidationErrors from '../../hooks/useValidationErrors'
 
 export default function OrganizationEditor({organization,onSave,saving}) {
-    const { t } = useTranslation('organization')
+    const { t } = useTranslation(['organization','translation'])
     const history = useHistory()
 
     const [ name, setName ] = useState('')
@@ -60,7 +60,7 @@ export default function OrganizationEditor({organization,onSave,saving}) {
                         invalid={errors.name ? true : false}
                     />
                     {errors.name && errors.name.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>
                     <Button
@@ -69,7 +69,7 @@ export default function OrganizationEditor({organization,onSave,saving}) {
                     >{organization._id ? t('updateOrganization') : t('addOrganization')}</Button>
                     <Button color="secondary"
                         onClick={() => history.goBack()}
-                    >{t('commonForms:cancel')}</Button>
+                    >{t('translation:cancel')}</Button>
                 </ButtonGroup>
             </Form>
         </Container>

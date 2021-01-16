@@ -28,7 +28,7 @@ function ResetPasswordRequest() {
     const dispatch = useDispatch()
     const history = useHistory()
     
-    const { t, i18n } = useTranslation('AppNavbar')
+    const { t, i18n } = useTranslation(['translation'])
 
     const saving = useSelector((state) => state.auth.saving)
     const resetPasswordEmail = useSelector((state) => state.auth.resetPasswordEmail)
@@ -65,13 +65,13 @@ function ResetPasswordRequest() {
         <p>{t('resetPasswordInstructions')}</p>
         <Form onSubmit={onSubmit}>
             <FormGroup>
-                <Label for="email">{t('commonForms:email')}</Label>
+                <Label for="email">{t('email')}</Label>
                 <Input
                     type="email"
                     name="email"
                     id="email"
                     value={email}
-                    placeholder={t('commonForms:emailPlaceholder')}
+                    placeholder={t('emailPlaceholder')}
                     onChange={onChange(setEmail)}
                     className="mb-3"
                 />
@@ -81,7 +81,7 @@ function ResetPasswordRequest() {
                     style={{marginTop: '2rem'}}
                     block
                 >{t('resetPassword')}</Button>
-                <Button color="link" disabled={saving} onClick={onCancel}>{t('commonForms:cancel')}</Button>
+                <Button color="link" disabled={saving} onClick={onCancel}>{t('cancel')}</Button>
             </FormGroup>
         </Form>
         <Modal isOpen={resetPasswordEmail !== null}>

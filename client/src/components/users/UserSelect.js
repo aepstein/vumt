@@ -44,15 +44,15 @@ export default function UserSelect({user,setUser,errors}) {
         usersSearch()
     },[userOptions,usersSearch])
 
-    const {t} = useTranslation('user')
+    const {t} = useTranslation(['user','translation'])
 
     return <FormGroup>
-        <Label for={'user'}>{t('user:user')}</Label>
+        <Label for={'user'}>{t('user')}</Label>
         <AsyncTypeahead
             id="user"
             name="user"
             selected={selectedUser()}
-            placeholder={t('user:userPlaceholder')}
+            placeholder={t('userPlaceholder')}
             options={userOptions}
             isLoading={usersLoading}
             delay={200}
@@ -65,6 +65,6 @@ export default function UserSelect({user,setUser,errors}) {
         />
         {errors && <Input type="hidden" invalid />}
         {errors && errors.type === 'required' &&
-            <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+            <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
     </FormGroup>
 }

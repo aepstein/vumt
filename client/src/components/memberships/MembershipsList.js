@@ -11,7 +11,7 @@ import useScrollDown from '../../hooks/useScrollDown'
 import Search from '../search/Search'
 
 export default function MembershipsList({organization,memberships,loading,next,q,onDelete,onEdit,onLoadMore,onSearch}) {
-    const { t } = useTranslation('membership')
+    const { t } = useTranslation(['membership','search','translation','user'])
 
     useScrollDown(onLoadMore)
 
@@ -32,7 +32,7 @@ export default function MembershipsList({organization,memberships,loading,next,q
                     <tr>
                         <th colSpan="2"></th>
                         <th>{t('user:user')}</th>
-                        <th>{t('commonForms:email')}</th>
+                        <th>{t('translation:email')}</th>
                         <th>{t('user:roles')}</th>
                     </tr>
                 </thead>
@@ -44,14 +44,14 @@ export default function MembershipsList({organization,memberships,loading,next,q
                                 color="warn"
                                 size="sm"
                                 onClick={() => onEdit({user, roles})}
-                            >{t('commonForms:edit')}</Button>
+                            >{t('translation:edit')}</Button>
                         </td>
                         <td>
                             <Button
                                 color="danger"
                                 size="sm"
                                 onClick={onDelete(user._id)}
-                            >{t('commonForms:remove')}</Button>
+                            >{t('translation:remove')}</Button>
                         </td>
                         <td>{`${user.firstName} ${user.lastName}`}</td>
                         <td>{user.email}</td>

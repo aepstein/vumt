@@ -25,7 +25,7 @@ function AppNavbar() {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
     const user = useSelector(state => state.auth.user)
 
-    const { t } = useTranslation('AppNavbar')
+    const { t } = useTranslation(['translation','user'])
 
     const toggle = () => {
         setIsOpen(!isOpen)

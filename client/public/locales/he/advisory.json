@@ -1,0 +1,20 @@
+{
+  "addAdvisory": "",
+  "advisoryDetail": "",
+  "label": "",
+  "startOnDate": "",
+  "startOnTime": "",
+  "endOnDate": "",
+  "endOnTime": "",
+  "districts": "",
+  "contexts": "",
+  "prompts": "",
+  "mustBeBeforeEndOn": "",
+  "editAdvisory": "",
+  "newAdvisory": "",
+  "districtsPlaceholder": "",
+  "contextsPlaceholder": "",
+  "removePrompt": "",
+  "addPrompt": "",
+  "updateAdvisory": ""
+}

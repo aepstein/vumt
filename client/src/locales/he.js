@@ -146,4 +146,4 @@ const locale = {
     }
 }
 
-export default locale
+module.exports = locale

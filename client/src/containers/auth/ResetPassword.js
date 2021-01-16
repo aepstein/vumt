@@ -21,7 +21,7 @@ function ResetPassword() {
     const dispatch = useDispatch()
     const history = useHistory()
     
-    const { t } = useTranslation('AppNavbar')
+    const { t } = useTranslation(['translation'])
 
     const saving = useSelector((state) => state.auth.saving)
 
