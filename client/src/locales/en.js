@@ -94,6 +94,24 @@ const locale = {
         "districtDetail": "District detail",
         "updateDistrict": "Update district"
     },
+    "membership": {
+        "addMembership": "Add membership",
+        "addMembershipHeading": "Add membership to {{organization}}",
+        "editMembershipHeading": "Edit membership of {{user}} in {{organization}}",
+        "membershipn": "Membership {{n}}",
+        "memberships": "Memberships",
+        "updateMembership": "Update membership"
+    },
+    "organization": {
+        "addOrganization": "Add organization",
+        "editOrganization": "Edit organization",
+        "name": "Name",
+        "newOrganization": "New organization",
+        "organization": "Organization",
+        "organizationDetail": "Organization detail",
+        "organizationPlaceholder": "Select organization",
+        "updateOrganization": "Update organization"
+    },
     "place": {
         "addPlace": "Add place",
         "editPlace": "Edit place",
@@ -135,6 +153,8 @@ const locale = {
         "profile": "Profile",
         "roles": "Roles",
         "rolesPlaceholder": "Select privileged user roles",
+        "user": "User",
+        "userPlaceholder": "Select user",
         "yourProfile": "Your profile"
     },
     "visit": {
@@ -176,6 +196,7 @@ const locale = {
         "logout": "Logout",
         "advisories": "Advisories",
         "districts": "Districts",
+        "organizations": "Organizations",
         "places": "Places",
         "register": "Register",
         "users": "Users",

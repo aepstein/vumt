@@ -2,6 +2,7 @@ const { Given, When, Then } = require('@cucumber/cucumber')
 const {
     clickByXPath,
     entitiesExist,
+    fillTypeaheadByLabel,
     scope,
     shouldSeeText,
     userExists,
@@ -48,6 +49,13 @@ When('I click {string} for user {string}', async (button, email) => {
     await clickByXPath(context+`//button[contains(text(),'${button}')]`)
 })
 
+When(/^I fill in the "([^"]+)" typeahead with "([^"]+)" within the (\d)+(?:st|nd|rd|th) membership$/,
+    async (label, value, n) => {
+        const context = `//div[contains(@class,"membership") and contains(.//div/text(),'Membership ${n}')]`
+        await fillTypeaheadByLabel(label,value,context)
+    }
+)
+
 Then('I should see user {string}', async (email) => {
     await waitFor(await userRowSelector(email))
 })
@@ -58,4 +66,8 @@ Then('I should not see user {string}', async (email) => {
 
 Then('I wait for user {string} to disappear', async (email) => {
     await waitFor(`//table[contains(@class,'users-list') and not(contains(text(),'${email}'))]`)
+})
+
+Then('I should see the user has role {string} in organization {string}', async (role, organization) => {
+    await waitFor(`//table[contains(@class,'memberships')]/tbody/tr[contains(./td[1],'${organization}') and contains(./td[2],'${role}')]`)
 })

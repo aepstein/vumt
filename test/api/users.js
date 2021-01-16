@@ -13,6 +13,7 @@ const {
 const {
     times
 } = require('../support/util')
+
 describe('/api/users', () => {
     beforeEach( async () => {
         await User.deleteMany({});        
@@ -173,17 +174,27 @@ describe('/api/users', () => {
             await res.body.should.be.an('object')
         })
         it('should not allow a new user to set roles', async () => {
-            res = await action(validUser({roles: ['admin']}))
-            await res.should.have.status(201)
-            await res.body.user.should.be.an('object')
-            await res.body.user.should.have.a.property('roles').an('array').empty
+            res = await action(validUser({roles: ['admin'],memberships:[{}]}))
+            res.should.have.status(201)
+            res.body.user.should.be.an('object')
+            res.body.user.should.have.a.property('roles').an('array').empty
+            res.body.user.should.have.a.property('memberships').an('array').empty
         })
-        it('should allow an admin user to set roles', async () => {
+        it('should allow an admin user to set restricted attributes: roles, memberships', async () => {
             const auth = await withAuth({roles:['admin']})
-            res = await action(validUser({roles: ['admin']}),auth)
-            await res.should.have.status(201)
-            await res.body.should.be.an('object')
-            await res.body.should.have.a.property('roles').members(['admin'])
+            const organization = await factory.create('organization')
+            res = await action(validUser({
+                roles: ['admin'],
+                memberships: [{
+                    organization: organization.id,
+                    roles: ['ranger']
+                }]}),auth)
+            res.should.have.status(201)
+            res.body.should.be.an('object')
+            res.body.should.have.a.property('roles').members(['admin'])
+            res.body.should.have.a.property('memberships').be.an('array')
+            res.body.memberships.map(m => m.organization._id).should.have.members([organization.id])
+            res.body.memberships[0].should.have.property('roles').have.members(['ranger'])
         })
     });
     describe('PUT /api/users/:userId',() => {

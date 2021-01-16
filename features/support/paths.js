@@ -4,6 +4,7 @@ const paths = {
     "new visit": '/visits/new',
     "advisories": '/advisories',
     "districts": "/districts",
+    "organizations": "/organizations",
     "places": "/places",
     "profile": '/profile',
     "registration": '/register',

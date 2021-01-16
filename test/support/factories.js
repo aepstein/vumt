@@ -1,5 +1,5 @@
 const { factory } = require('./setup')
-const { Advisory, District, Place, User, Visit } = require('../../models')
+const { Advisory, District, Organization, Place, User, Visit } = require('../../models')
 const { 
     toLocalDate,
     fromLocalDateTimeToDate
@@ -181,6 +181,10 @@ factory.extend('district','farawayDistrict',{
     }
 })
 
+factory.define('organization', Organization, {
+  name: factory.sequence('Organization.name', (n) => `Organization ${n.toString().padStart(3,'0')}`)
+})
+
 factory.define('place', Place, {
     name: factory.sequence('Place.name', (n) => `Place ${n.toString().padStart(3,'0')}`),
     location: {
@@ -211,7 +215,7 @@ factory.extend('place','destinationPlace',{
 
 factory.define('user', User, {
     firstName: 'Bob',
-    lastName: 'Marshall',
+    lastName: factory.sequence('User.lastName', (n) => `Marshall ${n.toString().padStart(3,'0')}`),
     email: factory.sequence('User.email', (n) => `bmarshall${n}@example.com`),
     password: 'noneofyourbusiness',
     country: 'US',

@@ -65,6 +65,25 @@ describe('User', () => {
         const user = await factory.build('user',{distanceUnitOfMeasure: 'paces'})
         await user.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    describe('User.memberships',() => {
+        it('should save a valid membership',async () => {
+            const organization = await factory.create('organization')
+            return factory.create('user',{memberships: [{organization: organization.id, roles: ['admin']}]})
+        })
+        it('should fail with missing organization',async () => {
+            const user = await factory.build('user',{memberships: [{roles: ['admin']}]})
+            return user.save().should.eventually.be.rejectedWith(ValidationError)
+        })
+        it('should fail with invalid organization',async () => {
+            const user = await factory.build('user',{memberships: [{organization: 'blah', roles: ['admin']}]})
+            return user.save().should.eventually.be.rejectedWith(ValidationError)
+        })
+        it('should fail with invalid role',async () => {
+            const organization = await factory.create('organization')
+            const user = await factory.build('user',{memberships: [{organization: organization.id, roles: ['pontifex']}]})
+            return user.save().should.eventually.be.rejectedWith(ValidationError)
+        })
+    })
     describe('User.createResetPasswordToken',() => {
         it('should set token and expiration',async () => {
             const user = await factory.create('user')

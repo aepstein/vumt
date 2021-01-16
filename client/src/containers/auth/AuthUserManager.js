@@ -22,6 +22,7 @@ export default function AuthUserManager({action}) {
         email: '',
         password: '',
         country: '',
+        memberships: [],
         provice: '',
         postalCode: '',
         phone: '',

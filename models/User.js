@@ -8,6 +8,7 @@ const crypto = require('crypto')
 const config = require('config')
 const jwtSecret = config.jwtSecret
 const jwt = require('jsonwebtoken')
+const roles = require('./enums/roles')
 
 const UserSchema = new Schema(
     {
@@ -36,6 +37,17 @@ const UserSchema = new Schema(
             required: true,
             enum: Object.keys(countries.getAlpha2Codes())
         },
+        memberships: [{
+            organization: {
+                type: Schema.Types.ObjectId,
+                ref: 'organization',
+                required: true
+            },
+            roles: [{
+                type: String,
+                enum: roles
+            }]
+        }],
         province: {
             type: String
         },
@@ -56,7 +68,7 @@ const UserSchema = new Schema(
         },
         roles: [{
             type: String,
-            enum: ['ranger','planner','admin']
+            enum: roles
         }],
         resetPasswordTokens: [{
             token: {
@@ -87,6 +99,15 @@ UserSchema.pre('save',async function() {
         user.phone = phone(user.phone,'',true)[0]
     }
 });
+
+const autoPopulate = function (next) {
+    this.populate('memberships.organization','name')
+    next()
+}
+
+UserSchema.pre('find',autoPopulate)
+
+UserSchema.pre('findOne',autoPopulate)
 
 /* Issues a JSON web token in a server response for a user who has been authenticated
  */
@@ -132,6 +153,7 @@ UserSchema.methods.pubProps = function() {
         email: this.email,
         enableGeolocation: this.enableGeolocation,
         country: this.country,
+        memberships: this.memberships,
         province: this.province,
         postalCode: this.postalCode,
         phone: this.phone,
@@ -144,6 +166,16 @@ UserSchema.methods.pubProps = function() {
 UserSchema.methods.comparePassword = async function(candidate) {
     return bcrypt.compare(candidate,this.password);
 }
+
+UserSchema.methods.membership = function(index) {
+    const {organization, roles} = this.memberships[index]
+    const {_id,firstName,lastName,email} = this
+    return {
+        organization: organization._id,
+        roles,
+        user: {_id,firstName,lastName,email}
+    }
+} 
 
 useHandleMongoError11000(UserSchema)
 

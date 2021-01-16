@@ -13,11 +13,13 @@ import AuthRoute from './components/AuthRoute'
 import UnAuthRoute from './components/UnAuthRoute'
 import AdvisoriesManager from './containers/advisories/AdvisoriesManager'
 import DistrictsManager from './containers/districts/DistrictsManager'
+import OrganizationsManager from './containers/organizations/OrganizationsManager'
 import PlacesManager from './containers/places/PlacesManager'
 import UsersManager from './containers/users/UsersManager'
 import VisitsManager from './containers/visits/VisitsManager'
 import AuthUserManager from './containers/auth/AuthUserManager'
 import LoginManager from './containers/auth/LoginManager'
+import MembershipsManager from './containers/memberships/MembershipsManager'
 import ResetPassword from './containers/auth/ResetPassword'
 import ResetPasswordRequest from './containers/auth/ResetPasswordRequest'
 import ResetPasswordComplete from './containers/auth/ResetPasswordComplete'
@@ -84,6 +86,27 @@ const Root = ({ store }) => (
               </AuthRoute>
               <AuthRoute path="/districts" roles={['admin']}>
                 <DistrictsManager action='list'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/new" roles={['admin']}>
+                <OrganizationsManager action='new'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/:organizationId/memberships/new" roles={['admin']}>
+                <MembershipsManager action='new'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/:organizationId/memberships/:userId/edit" roles={['admin']}>
+                <MembershipsManager action='edit'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/:organizationId/memberships" roles={['admin']}>
+                <MembershipsManager action='list'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/:organizationId/edit" roles={['admin']}>
+                <OrganizationsManager action='edit'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations/:organizationId" roles={['admin']}>
+                <OrganizationsManager action='show'/>
+              </AuthRoute>
+              <AuthRoute path="/organizations" roles={['admin']}>
+                <OrganizationsManager action='list'/>
               </AuthRoute>
               <AuthRoute path="/places/new" roles={['admin']}>
                 <PlacesManager action='new'/>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -23,7 +23,8 @@ import provinces from 'provinces'
 import postalCodes from 'postal-codes-js'
 import phoneValidator from 'phone'
 import distanceUnitsOfMeasure from '../../lib/distanceUnitsOfMeasure'
-import roleOptions from '../../lib/roles'
+import MembershipsEditor from './MembershipsEditor'
+import RolesSelect from '../roles/RolesSelect'
 
 export default function UserEditor({action,user,onSave,saving}) {
     const authUser = useSelector(state => state.auth.user)
@@ -97,7 +98,19 @@ export default function UserEditor({action,user,onSave,saving}) {
     useEffect(() => {
         setRoles(user.roles)
     },[user.roles,setRoles])
-    const rolesRef = useRef()
+
+    const [ memberships, setMemberships ] = useState([])
+    useEffect(() => {
+        setMemberships(user.memberships.map((membership) => {
+            return {
+                organization: [{id: membership.organization._id, label: membership.organization.name}],
+                roles: membership.roles
+            }
+        }))
+    },[user.memberships,setMemberships])
+    const onAddMembership = () => {
+        setMemberships(memberships.concat({organization: [], roles: []}))
+    }
 
     const [ saveButtonText, setSaveButtonText ] = useState('')
     useEffect(() => {
@@ -145,7 +158,16 @@ export default function UserEditor({action,user,onSave,saving}) {
             postalCode,
             phone
         }
-        if ( authUser && authUser.roles.includes('admin') ) newUser.roles = roles
+        if ( authUser && authUser.roles.includes('admin') ) {
+            newUser.memberships = memberships.map((membership) => {
+                const {organization,roles} = membership
+                return {
+                    organization: organization[0] ? organization[0].id : null,
+                    roles
+                }
+            })
+            newUser.roles = roles
+        }
         onSave(newUser)
     }
 
@@ -315,20 +337,10 @@ export default function UserEditor({action,user,onSave,saving}) {
                         onChange={onChange(setEnableGeolocation)}
                     />
                 </FormGroup>
-                { !authUser || !authUser.roles.includes('admin') ? '' : <FormGroup>
-                    <Label for="roles">{t('user:roles')}</Label>
-                    <Typeahead
-                        id="roles"
-                        name="roles"
-                        multiple
-                        selected={roles}
-                        placeholder={t('user:rolesPlaceholder')}
-                        options={roleOptions}
-                        onChange={(selected) => setRoles(selected)}
-                        ref={rolesRef}
-                        clearButton={true}
-                    />
-                </FormGroup> }
+                { !authUser || !authUser.roles.includes('admin') ? '' : <RolesSelect roles={roles} setRoles={setRoles} /> }
+                { !authUser || !authUser.roles.includes('admin') ? '' :
+                    <MembershipsEditor memberships={memberships} errors={errors}
+                        setMemberships={setMemberships} onAddMembership={onAddMembership} />}
                 <p>
                     This is a proof of concept application provided for evaluation and experimental purposes only.
                     By clicking the Register button below, you agree to the Terms of Service for the application,

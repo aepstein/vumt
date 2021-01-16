@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import {
     Button,
     Container,
-    Spinner
+    Spinner,
+    Table
 } from 'reactstrap'
 import {
     useHistory
@@ -58,6 +59,22 @@ export default function UserDetail({user}) {
             <dt>{t('translation:updatedAt')}</dt>
             <dd>{`${Intl.DateTimeFormat(i18n.language).format(user.updatedAt)} `+
                 `${(new Date(user.updatedAt)).toLocaleTimeString(i18n.language)}`}</dd>
+            <dt>{t('membership:memberships')}</dt>
+            <dd>
+                <Table className="memberships">
+                    <thead>
+                        <tr><th>{t('organization:organization')}</th><th>{t('roles')}</th></tr>
+                    </thead>
+                    <tbody>
+                        {user.memberships.map((membership,index) => {
+                            return <tr key={index}>
+                                <td>{membership.organization.name}</td>
+                                <td>{membership.roles.join(',')}</td>
+                            </tr>
+                        })}
+                    </tbody>
+                </Table>
+            </dd>
         </dl>
     </Container>
 }

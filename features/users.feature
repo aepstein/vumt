@@ -35,7 +35,8 @@ Feature: Manage users
         And I should not see user "bmcmartin@example.com"
     
     Scenario: Edit a user
-        Given I logged in as "bmcmartin@example.com"
+        Given an organization "Adirondack Wilderness Advocates" exists
+        And I logged in as "bmcmartin@example.com"
         When I visit the "users" page
         And I click "Edit" for user "pschaefer@example.com"
         And I fill in a modified profile
@@ -54,11 +55,15 @@ Feature: Manage users
         And I should see "Roles" defined as "ranger"
 
     Scenario: Add a new user
-        Given I logged in as "bmcmartin@example.com"
+        Given an organization "Adirondack Wilderness Advocates" exists
+        And I logged in as "bmcmartin@example.com"
         When I visit the "users" page
         And I click the "Add user" button
         And I fill in a new registration for "bmarshall@example.com"
         And I fill in the "Roles" typeahead with "planner"
+        And I click the "Add membership" button
+        And I fill in the "Organization" typeahead with "Adirondack Wilderness Advocates" within the 1st membership
+        And I fill in the "Roles" typeahead with "ranger" within the 1st membership
         And I click the "Add user" button
         And I click "Detail" for user "bmarshall@example.com"
         Then I should see "First name" defined as "Bob"
@@ -71,6 +76,7 @@ Feature: Manage users
         And I should see "Preferred unit of measure for distances" defined as "mile"
         And I should see "Use device location" defined as "Yes"
         And I should see "Roles" defined as "planner"
+        And I should see the user has role "ranger" in organization "Adirondack Wilderness Advocates"
 
     Scenario: Remove a user
         Given I logged in as "bmcmartin@example.com"

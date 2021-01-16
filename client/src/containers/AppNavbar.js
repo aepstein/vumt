@@ -43,6 +43,9 @@ function AppNavbar() {
                         <NavLink to="/districts" activeClassName="active">{t('districts')}</NavLink>
                     </DropdownItem>
                     <DropdownItem>
+                        <NavLink to="/organizations" activeClassName="active">{t('organizations')}</NavLink>
+                    </DropdownItem>
+                    <DropdownItem>
                         <NavLink to="/places" activeClassName="active">{t('places')}</NavLink>
                     </DropdownItem>
                     <DropdownItem>
