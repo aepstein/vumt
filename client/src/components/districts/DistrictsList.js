@@ -15,7 +15,7 @@ import Search from '../search/Search'
 export default function DistrictsList({districts,loading,next,q,onDelete,onLoadMore,onSearch}) {
     const history = useHistory()
     
-    const { t } = useTranslation('district')
+    const { t } = useTranslation(['district','search','translation'])
 
     useScrollDown(onLoadMore)
 
@@ -33,17 +33,17 @@ export default function DistrictsList({districts,loading,next,q,onDelete,onLoadM
                                 color="info"
                                 size="sm"
                                 onClick={() => history.push('/districts/' + _id)}
-                            >{t('commonForms:detail')}</Button>
+                            >{t('translation:detail')}</Button>
                             <Button
                                 color="warn"
                                 size="sm"
                                 onClick={() => history.push('/districts/' + _id + '/edit')}
-                            >{t('commonForms:edit')}</Button>
+                            >{t('translation:edit')}</Button>
                             <Button
                                 color="danger"
                                 size="sm"
                                 onClick={() => onDelete(_id)}
-                            >{t('commonForms:remove')}</Button>
+                            >{t('translation:remove')}</Button>
                         </ButtonGroup>
                         <span className="district-name">{name}</span>
                     </ListGroupItem>

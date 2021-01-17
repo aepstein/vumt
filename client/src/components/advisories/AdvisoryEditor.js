@@ -25,7 +25,7 @@ import locales from '../../locales'
 import advisoryContexts from '../../lib/advisoryContexts'
 
 export default function AdvisoryEditor({advisory,onSave,saving}) {
-    const { t } = useTranslation('advisory')
+    const { t } = useTranslation(['advisory','advisoryContext','translation'])
     const history = useHistory()
 
     const [ label, setLabel ] = useState('')
@@ -176,7 +176,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         invalid={errors.label ? true : false}
                     />
                     {errors.label && errors.label.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="startOnDate">{t('startOnDate')}</Label>
@@ -286,7 +286,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                             errors.prompts[index] &&
                             errors.prompts[index].translation &&
                             errors.prompts[index].translation.type === 'required' &&
-                            <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                            <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     </FormGroup>
                 })}
                 {missingLocales.length > 0 ? <FormGroup>
@@ -310,7 +310,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                     >{advisory._id ? t('updateAdvisory') : t('addAdvisory')}</Button>
                     <Button color="secondary"
                         onClick={() => history.goBack()}
-                    >{t('commonForms:cancel')}</Button>
+                    >{t('translation:cancel')}</Button>
                 </ButtonGroup>
             </Form>
         </Container>

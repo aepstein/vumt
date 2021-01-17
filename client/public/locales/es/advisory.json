@@ -1,0 +1,21 @@
+{
+    "addAdvisory": "Añadir aviso",
+    "addPrompt": "Añadir solicitud",
+    "advisoryDetail": "Detalles de asesoramiento",
+    "contexts": "Contextos",
+    "contextsPlaceholder": "Especifique los contextos en los que se debe mostrar el aviso",
+    "districts": "Distritos",
+    "districtsPlaceholder": "Especificar los distritos a los que se restringe el asesoramiento",
+    "editAdvisory": "Editar asesoramiento",
+    "endOnDate": "La fecha de finalización",
+    "endOnTime": "Hora de finalización",
+    "label": "Etiqueta",
+    "mustBeBeforeEndOn": "Debe ser antes de la fecha de finalización",
+    "newAdvisory": "Nuevo asesoramiento",
+    "prompt": "Mensaje",
+    "prompts": "Mensajes",
+    "removePrompt": "Eliminar el aviso",
+    "startOnDate": "Fecha de inicio",
+    "startOnTime": "Hora de comienzo",
+    "updateAdvisory": "Asesoramiento de actualización"
+}

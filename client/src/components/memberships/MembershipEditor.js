@@ -18,7 +18,7 @@ const BLANK_MEMBERSHIP = {
 }
 
 export default function MembershipEditor({organization,memberships,onSave,saving}) {
-    const { t } = useTranslation('membership')
+    const { t } = useTranslation(['membership','translation'])
     const history = useHistory()
     const {userId} = useParams()
 
@@ -69,7 +69,7 @@ export default function MembershipEditor({organization,memberships,onSave,saving
                     >{userId ?  t('updateMembership') : t('addMembership')}</Button>
                     <Button color="secondary"
                         onClick={() => history.goBack()}
-                    >{t('commonForms:cancel')}</Button>
+                    >{t('translation:cancel')}</Button>
                 </ButtonGroup>
             </Form>
         </Container>

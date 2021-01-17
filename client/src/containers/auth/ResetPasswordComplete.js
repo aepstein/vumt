@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 function ResetPasswordComplete() {
     const resetPasswordComplete = useSelector((state) => state.auth.resetPasswordComplete)
     const dispatch = useDispatch()
-    const { t } = useTranslation('AppNavbar')
+    const { t } = useTranslation(['translation'])
 
     const onComplete = (e) => {
         e.preventDefault()

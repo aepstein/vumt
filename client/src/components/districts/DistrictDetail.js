@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 export default function DistrictDetail({district}) {
-    const { t } = useTranslation('district')
+    const { t } = useTranslation(['district','translation'])
     const history = useHistory()
 
     const mapRef = useRef()
@@ -32,7 +32,7 @@ export default function DistrictDetail({district}) {
         <h1>{t('districtDetail')}</h1>
         <div>
             <Button color="primary" onClick={() => history.push('/districts/' + district.id + '/edit')}
-            >{t('commonForms:edit')}</Button>
+            >{t('translation:edit')}</Button>
         </div>
         <dl>
             <dt>{t('name')}</dt>

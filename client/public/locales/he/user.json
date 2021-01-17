@@ -1,0 +1,14 @@
+{
+    "addUser": "הוסף משתמש",
+    "distanceUnitOfMeasure": "יחידת מידה מועדפת למרחק",
+    "editUser": "ערוך את הפרופיל שלך",
+    "enableGeolocation": "השתמש במיקום המכשיר",
+    "newUser": "משתמש חדש",
+    "profile": "פרופיל",
+    "roles": "תפקידים",
+    "rolesPlaceholder": "בחר בתפקידי משתמש הרשאים",
+    "updateUser": "עדכן את הפרופיל שלך",
+    "user": "User",
+    "userPlaceholder": "Select user",
+    "yourProfile": "הפרופיל שלך"
+}

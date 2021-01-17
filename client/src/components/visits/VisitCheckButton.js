@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 export default function VisitCheckButton({visitId, checkedIn, checkedOut}) {
-    const { t } = useTranslation('visit')
+    const { t } = useTranslation(['visit'])
     const history = useHistory()
 
     if (!checkedIn) return <Button

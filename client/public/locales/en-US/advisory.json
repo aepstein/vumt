@@ -1,0 +1,21 @@
+{
+    "addAdvisory": "Add advisory",
+    "addPrompt": "Add prompt",
+    "advisoryDetail": "Advisory detail",
+    "contexts": "Contexts",
+    "contextsPlaceholder": "Specify contexts in which advisory should be displayed",
+    "districts": "Districts",
+    "districtsPlaceholder": "Specify districts to which advisory is restricted",
+    "editAdvisory": "Edit advisory",
+    "endOnDate": "End date",
+    "endOnTime": "End time",
+    "label": "Label",
+    "mustBeBeforeEndOn": "Must be before end date",
+    "newAdvisory": "New advisory",
+    "prompt": "Prompt",
+    "prompts": "Prompts",
+    "removePrompt": "Remove prompt",
+    "startOnDate": "Start date",
+    "startOnTime": "Start time",
+    "updateAdvisory": "Update advisory"
+}

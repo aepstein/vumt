@@ -17,7 +17,7 @@ import roleOptions from '../../lib/roles'
 import { useTranslation } from 'react-i18next'
 
 export default function MembershipEditor({membership,removeMembership,setMembership,index,errors}) {
-    const { t } = useTranslation('user')
+    const { t } = useTranslation(['user','membership','organization','translation'])
 
     const setOrganization = (organization) => {
         setMembership({
@@ -58,7 +58,7 @@ export default function MembershipEditor({membership,removeMembership,setMembers
     return <div className="membership">
         <div className="clearfix">
             <div className="text-muted float-left">{t('membership:membershipn',{n: index + 1})}</div>
-            <Button className="float-right" color="danger" onClick={removeMembership}>{t('commonForms:remove')}</Button>
+            <Button className="float-right" color="danger" onClick={removeMembership}>{t('translation:remove')}</Button>
         </div>
         <Row form>
             <Col>
@@ -81,7 +81,7 @@ export default function MembershipEditor({membership,removeMembership,setMembers
                     />
                     {errors.organization && <Input type="hidden" invalid />}
                     {errors.organization && errors.organization.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
             </Col>
             <Col>

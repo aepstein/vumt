@@ -1,0 +1,10 @@
+{
+    "addOrganization": "Ajouter une organisation",
+    "editOrganization": "Modifier l'organisation",
+    "name": "Nom",
+    "newOrganization": "Nouvelle organisation",
+    "organization": "Organisation",
+    "organizationDetail": "Détail de l'organisation",
+    "organizationPlaceholder": "Choisissez l'organisation",
+    "updateOrganization": "Modifier l'organisation"
+}

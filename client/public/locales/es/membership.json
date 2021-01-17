@@ -1,0 +1,8 @@
+{
+    "addMembership": "Agregar membresíap",
+    "addMembershipHeading": "Agregar membresía a {{organization}}",
+    "editMembershipHeading": "Editar membresía de {{user}} en {{organization}}",
+    "membershipn": "Membresía {{n}}",
+    "memberships": "Membresías",
+    "updateMembership": "Actualizar membresía"
+}

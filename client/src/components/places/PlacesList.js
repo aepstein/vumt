@@ -16,7 +16,7 @@ import Search from '../search/Search'
 export default function PlacesList({places,loading,next,q,onDelete,onLoadMore,onSearch}) {
     const history = useHistory()
     
-    const { t } = useTranslation('place')
+    const { t } = useTranslation(['place','search','translation'])
 
     useScrollDown(onLoadMore)
 
@@ -34,17 +34,17 @@ export default function PlacesList({places,loading,next,q,onDelete,onLoadMore,on
                                 color="info"
                                 size="sm"
                                 onClick={() => history.push('/places/' + _id)}
-                            >{t('commonForms:detail')}</Button>
+                            >{t('translation:detail')}</Button>
                             <Button
                                 color="warn"
                                 size="sm"
                                 onClick={() => history.push('/places/' + _id + '/edit')}
-                            >{t('commonForms:edit')}</Button>
+                            >{t('translation:edit')}</Button>
                             <Button
                                 color="danger"
                                 size="sm"
                                 onClick={() => onDelete(_id)}
-                            >{t('commonForms:remove')}</Button>
+                            >{t('translation:remove')}</Button>
                         </ButtonGroup>
                         <span className="place-label">{name}</span>
                     </ListGroupItem>

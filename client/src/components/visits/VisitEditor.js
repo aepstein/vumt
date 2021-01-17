@@ -24,7 +24,7 @@ import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
 
 export default function VisitEditor({visit,onSave,saving}) {
     const { distanceUOM, latitude, longitude, position } = useGeoPosition()
-    const { t } = useTranslation('visit')
+    const { t } = useTranslation(['visit','place','translation','uom'])
 
     const [ startOn, setStartOn ] = useState('')
     useEffect(() => {
@@ -209,7 +209,7 @@ export default function VisitEditor({visit,onSave,saving}) {
                         invalid={errors.startOnDate ? true : false}
                     />
                     {errors.startOnDate && errors.startOnDate.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="startOnTime">{t('startOnTime')}</Label>
@@ -223,7 +223,7 @@ export default function VisitEditor({visit,onSave,saving}) {
                         invalid={errors.startOnTime ? true : false}
                     />
                     {errors.startOnTime && errors.startOnTime.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="origin">{t('origin')}</Label>
@@ -246,7 +246,7 @@ export default function VisitEditor({visit,onSave,saving}) {
                     />
                     {errors.origin && <Input type="hidden" invalid />}
                     {errors.origin && errors.origin.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="destinations">{t('destinations')}</Label>
@@ -282,11 +282,11 @@ export default function VisitEditor({visit,onSave,saving}) {
                         invalid={errors.groupSize ? true : false}
                     />
                     {errors.groupSize && errors.groupSize.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.groupSize && errors.groupSize.type === 'min' &&
-                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 1})}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeAtLeast',{min: 1})}</FormFeedback>}
                     {errors.groupSize && errors.groupSize.type === 'mustBeWholeNumber' &&
-                        <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeWholeNumber')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="parkedVehicles">{t('parkedVehicles')}</Label>
@@ -303,11 +303,11 @@ export default function VisitEditor({visit,onSave,saving}) {
                         invalid={errors.parkedVehicles ? true : false}
                     />
                     {errors.parkedVehicles && errors.parkedVehicles.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.parkedVehicles && errors.parkedVehicles.type === 'min' &&
-                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 0})}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeAtLeast',{min: 0})}</FormFeedback>}
                     {errors.parkedVehicles && errors.parkedVehicles.type === 'mustBeWholeNumber' &&
-                        <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeWholeNumber')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="durationNights">{t('durationNights')}</Label>
@@ -324,11 +324,11 @@ export default function VisitEditor({visit,onSave,saving}) {
                         invalid={errors.durationNights ? true : false}
                     />
                     {errors.durationNights && errors.durationNights.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.durationNights && errors.durationNights.type === 'min' &&
-                        <FormFeedback>{t('commonForms:mustBeAtLeast',{min: 0})}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeAtLeast',{min: 0})}</FormFeedback>}
                     {errors.durationNights && errors.durationNights.type === 'mustBeWholeNumber' &&
-                        <FormFeedback>{t('commonForms:mustBeWholeNumber')}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBeWholeNumber')}</FormFeedback>}
                 </FormGroup>
                 <ButtonGroup>
                     <Button

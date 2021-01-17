@@ -8,7 +8,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 export default function Search({q,onSearch}) {
-    const { t } = useTranslation('search')
+    const { t } = useTranslation(['search'])
 
     const onChange = (e) => {
         if (q !== e.target.value)

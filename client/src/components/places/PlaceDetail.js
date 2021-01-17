@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 export default function PlaceDetail({place}) {
-    const { t, i18n } = useTranslation('place')
+    const { t, i18n } = useTranslation(['place','translation'])
     const history = useHistory()
 
     if (!place._id) return <Spinner color="primary"/>
@@ -20,7 +20,7 @@ export default function PlaceDetail({place}) {
         <p>{t('translation:timesAreLocal',{timezone: place.timezone})}</p>
         <div>
             <Button color="primary" onClick={() => history.push('/places/' + place.id + '/edit')}
-            >{t('commonForms:edit')}</Button>
+            >{t('translation:edit')}</Button>
         </div>
         <dl>
             <dt>{t('name')}</dt>
@@ -28,9 +28,9 @@ export default function PlaceDetail({place}) {
             <dt>{t('location')}</dt>
             <dd>{place.location ? `${place.location.coordinates[1]},${place.location.coordinates[0]}` : ''}</dd>
             <dt>{t('isOrigin')}</dt>
-            <dd>{place.isOrigin ? t('commonForms:yes') : t('commonForms:no')}</dd>
+            <dd>{place.isOrigin ? t('translation:yes') : t('translation:no')}</dd>
             <dt>{t('isDestination')}</dt>
-            <dd>{place.isDestination ? t('commonForms:yes') : t('commonForms:no')}</dd>
+            <dd>{place.isDestination ? t('translation:yes') : t('translation:no')}</dd>
             <dt>{t('parkingCapacity')}</dt>
             <dd>{place.parkingCapacity}</dd>
             <dt>{t('timezone')}</dt>

@@ -8,7 +8,7 @@ import { logout } from '../../actions/authActions';
 
 function Logout() {
     const dispatch = useDispatch()
-    const { t } = useTranslation('AppNavbar')
+    const { t } = useTranslation(['translation'])
 
     return <div>
         <NavLink onClick={() => dispatch(logout)} href="#">

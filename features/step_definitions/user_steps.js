@@ -3,6 +3,7 @@ const {
     clickByXPath,
     entitiesExist,
     fillTypeaheadByLabel,
+    noSpinner,
     scope,
     shouldSeeText,
     userExists,
@@ -47,6 +48,7 @@ When('I click {string} for user {string}', async (button, email) => {
     await waitFor('.users-list')
     const context = await userRowSelector(email)
     await clickByXPath(context+`//button[contains(text(),'${button}')]`)
+    await noSpinner()
 })
 
 When(/^I fill in the "([^"]+)" typeahead with "([^"]+)" within the (\d)+(?:st|nd|rd|th) membership$/,

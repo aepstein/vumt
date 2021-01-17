@@ -1,0 +1,21 @@
+{
+    "addAdvisory": "Ajouter un avis",
+    "addPrompt": "Ajouter une invite",
+    "advisoryDetail": "Détail d'avis",
+    "contexts": "Contextes",
+    "contextsPlaceholder": "Précisez les contextes dans lesquels l'avis doit être affiché",
+    "districts": "Les quartiers",
+    "districtsPlaceholder": "Précisez les districts auxquels l'avis est limité",
+    "editAdvisory": "Modifier l'avis",
+    "endOnDate": "Date de fin",
+    "endOnTime": "Heure de fin",
+    "label": "Étiquette",
+    "mustBeBeforeEndOn": "Doit être avant la date de fin",
+    "newAdvisory": "Nouvel avis",
+    "prompt": "Invite",
+    "prompts": "Invites",
+    "removePrompt": "Supprimer l'invite",
+    "startOnDate": "Date de début",
+    "startOnTime": "Heure de début",
+    "updateAdvisory": "Modifier l'avis"
+}

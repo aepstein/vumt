@@ -29,7 +29,7 @@ import RolesSelect from '../roles/RolesSelect'
 export default function UserEditor({action,user,onSave,saving}) {
     const authUser = useSelector(state => state.auth.user)
 
-    const { t, i18n } = useTranslation('commonForms')
+    const { t, i18n } = useTranslation(['translation','uom','user'])
     const history = useHistory()
 
     const [ firstName, setFirstName ] = useState('')
@@ -122,7 +122,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                 setSaveButtonText(t('user:addUser'))
                 break
             default:
-                setSaveButtonText(t('AppNavbar:register'))
+                setSaveButtonText(t('translation:register'))
         }
     },[action,setSaveButtonText,t])
 
@@ -175,7 +175,7 @@ export default function UserEditor({action,user,onSave,saving}) {
 
     return <div>
         <Container>
-            <h2>{action ? t(`user:${action}User`) : t('AppNavbar:register')}</h2>
+            <h2>{action ? t(`user:${action}User`) : t('translation:register')}</h2>
             <Form
                 onSubmit={handleSubmit(onSubmit)}
             >
@@ -192,7 +192,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         invalid={errors.firstName ? true : false}
                     />
                     {errors.firstName && errors.firstName.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="lastName">{t('lastName')}</Label>
@@ -207,7 +207,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         invalid={errors.lastName ? true : false}
                     />
                     {errors.lastName && errors.lastName.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label for="email">{t('email')}</Label>
@@ -222,7 +222,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         invalid={errors.email ? true : false}
                     />
                     {errors.email && errors.email.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.email && errors.email.type === 'duplicateKey' &&
                         <FormFeedback>{errors.email.message}</FormFeedback>}
                 </FormGroup>
@@ -238,7 +238,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         invalid={errors.password ? true : false}
                     />
                     {errors.password && errors.password.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup> }
                 <FormGroup>
                     <Label for="country">{t('country')}</Label>
@@ -254,7 +254,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                     />
                     {errors.country && <Input type="hidden" invalid />}
                     {errors.country && errors.country.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 { (provinceOptions.length > 0) ?
                     <FormGroup>
@@ -271,7 +271,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         />
                         {errors.province && <Input type="hidden" invalid />}
                         {errors.province && errors.province.type === 'required' &&
-                            <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                            <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     </FormGroup>
                 : '' }
                 { country[0] ?
@@ -294,9 +294,9 @@ export default function UserEditor({action,user,onSave,saving}) {
                             invalid={errors.postalCode ? true : false}
                         />
                         {errors.postalCode && errors.postalCode.type === 'required' &&
-                            <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                            <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                         {errors.postalCode && errors.postalCode.type === 'validate' &&
-                            <FormFeedback>{t('commonForms:postalCodeInvalid',{country: country[0].label})}</FormFeedback>}
+                            <FormFeedback>{t('translation:postalCodeInvalid',{country: country[0].label})}</FormFeedback>}
                     </FormGroup>
                     : '' }
                 <FormGroup>
@@ -311,7 +311,7 @@ export default function UserEditor({action,user,onSave,saving}) {
                         invalid={errors.phone ? true : false}
                     />
                     {errors.phone &&
-                        <FormFeedback>{t('commonForms:mustBePhone')}</FormFeedback>}
+                        <FormFeedback>{t('translation:mustBePhone')}</FormFeedback>}
                 </FormGroup>
                 <FormGroup>
                     <Label>{t('user:distanceUnitOfMeasure')}</Label>

@@ -1,0 +1,22 @@
+{
+    "addPlace": "Añadir lugar",
+    "editPlace": "Editar lugar",
+    "isDestination": "Es un destino",
+    "isOrigin": "Es un punto de partida",
+    "latitude": "Latitud",
+    "location": "Ubicación",
+    "longitude": "Longitud",
+    "name": "Nombre",
+    "newPlace": "Nuevo lugar",
+    "parkedVehicleWithCount": "{{count}} vehículo estacionado ({{capacity}} espacios)",
+    "parkedVehicleWithCount_plural": "{{count}} vehículos estacionados ({{capacity}} espacios)",
+    "parkingCapacity": "Número de plazas de aparcamiento público",
+    "partyWithCount": "{{count}} grupo",
+    "partyWithCount_plural": "{{count}} grupos",
+    "personWithCount": "{{count}} persona",
+    "personWithCount_plural": "{{count}} gente",
+    "placeDetail": "Detalle del lugar",
+    "timezone": "Zona horaria",
+    "timezonePlaceholder": "Elegir la zona horaria de IANA",
+    "updatePlace": "Actualizar lugar"
+}

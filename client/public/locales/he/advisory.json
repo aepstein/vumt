@@ -1,0 +1,21 @@
+{
+    "addAdvisory": "הוסף ייעוץ",
+    "addPrompt": "הוסף הנחיה",
+    "advisoryDetail": "פרט הייעוץ",
+    "contexts": "הקשרים",
+    "contextsPlaceholder": "ציין הקשרים שבהם יש להציג את הייעוץ",
+    "districts": "מחוזות",
+    "districtsPlaceholder": "ציין מחוזות שאליהם מוגבל הייעוץ",
+    "editAdvisory": "ערוך את הייעוץ",
+    "endOnDate": "תאריך סיום",
+    "endOnTime": "שעת סיום",
+    "label": "תווית",
+    "mustBeBeforeEndOn": "חייב להיות לפני תאריך הסיום",
+    "newAdvisory": "ייעוץ חדש",
+    "prompt": "הצהרה",
+    "prompts": "הצהרות",
+    "removePrompt": "הסר את ההצהרה",
+    "startOnDate": "תאריך התחלה",
+    "startOnTime": "שעת התחלה",
+    "updateAdvisory": "עדכן ייעוץ"
+}

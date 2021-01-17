@@ -22,6 +22,7 @@ const clearInput = async (el) => {
 const clickByText = async (text, context = "//a") => {
 	const escapedText = escapeXpathString(text);
 	const selector = `${context}[contains(text(), ${escapedText})]`;
+	await waitForXPath(selector)
 	await clickByXPath(selector)
 }
 const clickByXPath = async (selector) => {
@@ -130,10 +131,12 @@ const initPage = async () => {
 	});
 }
 const loginAs = async (email) => {
-    await clickByText("Login");
+	await clickByText("Login");
+	await noSpinner()
     await fillByLabel("Email",email);
     await fillByLabel("Password","secret");
-    await clickByText("Login","//button");
+	await clickByText("Login","//button");
+	await noSpinner()
 }
 const markByLabel = async (label, un) => {
 	const escapedText = escapeXpathString(label);
@@ -146,6 +149,9 @@ const markByLabel = async (label, un) => {
 	if ((un && checked) || (!un && !checked)) {
 		await handle.click()
 	}
+}
+const noSpinner = () => {
+	return waitFor('.spinner-border',{hidden: true})
 }
 const parseInput = (input,display=false) => {
 	switch (input) {
@@ -280,7 +286,8 @@ const visitExists = async (attr={}) => {
     // scope.context.visit = await scope.factory.create('visit',attr);
 }
 const visitPage = async (page) => {
-	return await visitPath(paths[page])
+	await visitPath(paths[page])
+	await noSpinner()
 }
 const visitPath = async (path) => {
 	await initPage()
@@ -330,6 +337,7 @@ module.exports = {
 	formatTimeForFill,
 	loginAs,
 	markByLabel,
+	noSpinner,
 	parseInput,
 	visitExists,
 	visitPage,

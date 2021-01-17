@@ -1,0 +1,8 @@
+{
+    "checkin": "check in",
+    "checkout": "check out",
+    "editVisit": "edit visit",
+    "newVisit": "new visit",
+    "register": "register user",
+    "unauthenticated": "unauthenticated user"
+}

@@ -17,7 +17,7 @@ import tz from 'timezone/loaded'
 import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
 
 export default function VisitCheckIn({visit,onSave,saving}) {
-    const { t } = useTranslation('visit')
+    const { t } = useTranslation(['visit','translation'])
 
     const [ checkedIn, setCheckedIn ] = useState('')
     const [ timezone, setTimezone ] = useTimezone()
@@ -96,7 +96,7 @@ export default function VisitCheckIn({visit,onSave,saving}) {
                         invalid={errors.checkedInDate ? true : false}
                     />
                     {errors.checkedInDate && errors.checkedInDate.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                     {errors.checkedInDate && errors.checkedInDate.type === 'afterLeft' &&
                         <FormFeedback>{t('afterLeft')}</FormFeedback>}
                     {errors.checkedInDate && errors.checkedInDate.type === 'beforeRight' &&
@@ -114,7 +114,7 @@ export default function VisitCheckIn({visit,onSave,saving}) {
                         invalid={errors.checkedInTime ? true : false}
                     />
                     {errors.checkedInTime && errors.checkedInTime.type === 'required' &&
-                        <FormFeedback>{t('commonForms:invalidRequired')}</FormFeedback>}
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
                 <ApplicableAdvisories visit={visit} context="checkin" />
                 <ButtonGroup>
