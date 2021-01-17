@@ -1,8 +1,8 @@
 {
-  "editMembershipHeading": "",
-  "addMembershipHeading": "",
-  "updateMembership": "",
-  "addMembership": "",
-  "memberships": "",
-  "membershipn": ""
+    "addMembership": "הוסף חברות",
+    "addMembershipHeading": "הוסף חברות ל{{organization}}",
+    "editMembershipHeading": "ערוך חברות של {{user}} ב {{organization}}",
+    "membershipn": "חברות {{n}}",
+    "memberships": "חברות",
+    "updateMembership": "עדכן חברות"
 }

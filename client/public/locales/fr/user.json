@@ -8,5 +8,7 @@
     "roles": "Rôles",
     "rolesPlaceholder": "Sélectionnez des rôles d'utilisateur privilégiés",
     "updateUser": "Modifiez votre profil",
+    "user": "Utilisateur",
+    "userPlaceholder": "Choisissez un utilisateur",
     "yourProfile": "Votre profil"
 }

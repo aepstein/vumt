@@ -1,9 +1,9 @@
 {
-  "districtDetail": "",
-  "name": "",
-  "boundaries": "",
-  "editDistrict": "",
-  "newDistrict": "",
-  "updateDistrict": "",
-  "addDistrict": ""
+    "addDistrict": "הוסף מחוז",
+    "boundaries": "גבולות",
+    "districtDetail": "פרט מחוזי",
+    "editDistrict": "עריכת מחוז",
+    "name": "שם",
+    "newDistrict": "מחוז חדש",
+    "updateDistrict": "עדכן מחוז"
 }

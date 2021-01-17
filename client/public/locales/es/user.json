@@ -8,5 +8,7 @@
     "roles": "Funcicones",
     "rolesPlaceholder": "Seleccionar roles de usuario con privilegios",
     "updateUser": "Actualizar perfil",
+    "user": "Usuario",
+    "userPlaceholder": "Elige usuario",
     "yourProfile": "Tu perfil"
 }

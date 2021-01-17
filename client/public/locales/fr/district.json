@@ -1,9 +1,9 @@
 {
-  "districtDetail": "",
-  "name": "",
-  "boundaries": "",
-  "editDistrict": "",
-  "newDistrict": "",
-  "updateDistrict": "",
-  "addDistrict": ""
+    "addDistrict": "Ajouter un district",
+    "boundaries": "Limites",
+    "districtDetail": "Détail du district",
+    "editDistrict": "Modifier le district",
+    "name": "Nom",
+    "newDistrict": "Nouveau district",
+    "updateDistrict": "Modifier le district"
 }

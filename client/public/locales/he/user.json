@@ -8,5 +8,7 @@
     "roles": "תפקידים",
     "rolesPlaceholder": "בחר בתפקידי משתמש הרשאים",
     "updateUser": "עדכן את הפרופיל שלך",
+    "user": "User",
+    "userPlaceholder": "Select user",
     "yourProfile": "הפרופיל שלך"
 }

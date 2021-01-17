@@ -3,7 +3,6 @@ const fs = require('fs')
 const f = (folder) => {
     fs.readdir(folder,(err,files) => {
         if (err) return
-        let i = files.length
         files.forEach((lang) => {
             const langDir = path.join(__dirname,'..','/client/public/locales/',lang)
             const newTranslation = {}

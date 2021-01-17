@@ -30,6 +30,7 @@
     "mustBePhone": "Debe tener el número de teléfono correctamente formateado",
     "mustBeWholeNumber": "Debe ser un número entero",
     "no": "No",
+    "organizations": "Organizaciones",
     "password": "Contraseña",
     "phone": "Teléfono",
     "places": "Lugares",
