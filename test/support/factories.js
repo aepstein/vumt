@@ -41,9 +41,9 @@ factory.extend('advisory','farawayAdvisory', {
 factory.define('district', District, {
     name: factory.sequence('District.label', (n) => `District ${n}`),
     boundaries: {
-        "type": "Polygon",
+        "type": "MultiPolygon",
         // These approximate the McIntyre Range in the Adirondacks
-        "coordinates": [[
+        "coordinates": [[[
             [
             -73.97506713867186,
             44.171123644193784
@@ -72,15 +72,15 @@ factory.define('district', District, {
             -73.97506713867186,
             44.171123644193784
             ]
-        ]]
+        ]]]
     }
 })
 
 factory.extend('district','originDistrict',{
     // These boundaries approximate the vicinity of the Adirondak Loj
     boundaries: {
-        type: 'Polygon',
-        coordinates: [
+        type: 'MultiPolygon',
+        coordinates: [[
             [
               [
                 -73.9623212814331,
@@ -103,15 +103,15 @@ factory.extend('district','originDistrict',{
                 44.187958743354216
               ]
             ]
-          ]
+          ]]
     }
 })
 
 factory.extend('district','destinationDistrict',{
     // These boundaries approximate the vicinity of the Great Range summits
     boundaries: {
-        type: 'Polygon',
-        coordinates: [
+        type: 'MultiPolygon',
+        coordinates: [[
             [
               [
                 -73.93524169921875,
@@ -146,15 +146,15 @@ factory.extend('district','destinationDistrict',{
                 44.112239974004645
               ]
             ]
-          ]
+          ]]
     }
 })
 
 factory.extend('district','farawayDistrict',{
     // These boundaries approximate the vicinity of the Kelly Adirondack Center
     boundaries: {
-        type: 'Polygon',
-        coordinates: [
+        type: 'MultiPolygon',
+        coordinates: [[
             [
               [
                 -73.88199716806412,
@@ -177,7 +177,7 @@ factory.extend('district','farawayDistrict',{
                 42.7896297296502
               ]
             ]
-          ]
+          ]]
     }
 })
 
