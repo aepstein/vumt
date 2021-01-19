@@ -34,7 +34,6 @@ Feature: Manage visits
         And I click the "More" button
         And there is no spinner
         Then I should see visits 1 through 11
-        And I take a screenshot
         And I should not see visit 12
 
     Scenario: Edit a visit
