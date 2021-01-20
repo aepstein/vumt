@@ -1,4 +1,5 @@
 const mongoose = require('../../db/mongoose');
+const convertAdoc = require('../../lib/convertAdoc')
 
 const TranslationSchema = new mongoose.Schema({
     language: {
@@ -9,6 +10,16 @@ const TranslationSchema = new mongoose.Schema({
     translation: {
         type: String,
         required: true
+    },
+    translationHTML: {
+        type: String,
+        required: false
+    }
+})
+
+TranslationSchema.pre('validate',async function () {
+    if (this.translation) {
+        this.translationHTML = await convertAdoc(this.translation)
     }
 })
 

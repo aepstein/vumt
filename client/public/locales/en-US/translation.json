@@ -2,6 +2,7 @@
     "addTranslation": "Add translation",
     "admin": "Administration",
     "advisories": "Advisories",
+    "asciidocHint": "You can use <1>Asciidoctor</1> markup to format your text.",
     "brand": "Visitor Use Management Tool",
     "cancel": "Cancel",
     "checkingCredentials": "Checking credentials",

@@ -21,11 +21,15 @@ Given('an advisory {string} exists', async (label) => {
 })
 
 Given('the advisory {string} has {string} prompt {string}', async (label, language, translation) => {
-    await updateAdvisory(label,{$push: {prompts: {language, translation}}})
+    await updateAdvisory(label,(advisory) => {
+        advisory.prompts.push({language, translation})
+    })
 })
 
 Given('the advisory {string} has context {string}', async (label, context) => {
-    await updateAdvisory(label,{$push: {contexts: context}})
+    await updateAdvisory(label,(advisory) => {
+        advisory.contexts.push(context)
+    })
 })
 Given('{int} advisories exist', async (n) => {
     await entitiesExist(n,'advisory')

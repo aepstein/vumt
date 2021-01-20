@@ -1,6 +1,7 @@
 import axios from 'axios'
 import prepareTokenConfig from '../../lib/prepareTokenConfig'
 import React, { useState, useEffect } from 'react';
+import { Spinner } from 'reactstrap'
 import { useSelector } from 'react-redux';
 import ApplicableAdvisory from '../../components/visits/ApplicableAdvisory'
 
@@ -38,6 +39,8 @@ export default function ApplicableAdvisories({visit,context}) {
         }
     },[url, applicableAdvisories, applicableAdvisoriesLoading, applicableAdvisoriesLoaded,
     setApplicableAdvisories, setApplicableAdvisoriesLoading, setApplicableAdvisoriesLoaded, token])
+
+    if (applicableAdvisoriesLoading) { return <Spinner color="secondary"/> }
 
     return <div className="applicable-advisories">{applicableAdvisories}</div>
 }

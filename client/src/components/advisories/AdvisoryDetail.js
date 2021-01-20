@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
     Button,
     Container,
@@ -14,10 +14,6 @@ export default function AdvisoryDetail({advisory}) {
     const { t, i18n } = useTranslation(['advisory','translation'])
     const history = useHistory()
     const [ timezone ] = useState('America/New_York')
-
-    useEffect(() => {
-        console.log(advisory.startOn)
-    },[advisory.startOn])
 
     if (!advisory._id) return <Spinner color="primary"/>
 
@@ -46,10 +42,10 @@ export default function AdvisoryDetail({advisory}) {
         </dl>
         <h2>{t('prompts')}</h2>
         <dl>
-        {advisory.prompts && advisory.prompts.map(({language,translation},index) => {
+        {advisory.prompts && advisory.prompts.map(({language,translationHTML},index) => {
             return <div key={index}>
                 <dt>{locales.filter(t => t.code === language)[0].name}</dt>
-                <dd>{translation}</dd>
+                <dd dangerouslySetInnerHTML={{__html: translationHTML}}></dd>
             </div>
         })}
         </dl>

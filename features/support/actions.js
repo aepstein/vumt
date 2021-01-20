@@ -238,7 +238,7 @@ const shouldSee = async (selector,context) => {
 	await scope.context.currentPage.waitForXPath(selectors[context][selector]);
 } 
 const shouldSeeDefinition = async (dt,dd) => {
-	const q = `//dt[contains(text(),'${dt}')]/following-sibling::dd[contains(text(),'${dd}')]`
+	const q = `//dt[contains(text(),'${dt}')]/following-sibling::*//text()[contains(.,'${dd}')]`
 	await waitFor(q)
 }
 const shouldSeeErrorWithLabel = async (error,label) => {
@@ -275,7 +275,9 @@ const takeScreenshot = async () => {
 	await scope.context.currentPage.screenshot({path: `sc${sc++}.png`});
 }
 const updateAdvisory = async (label,update) => {
-	await Advisory.updateOne({label},update)
+	const advisory = await Advisory.findOne({label})
+	update(advisory)
+	await advisory.save()
 }
 const userExists = async (attr) => {
 	await entitiesExist(1,'user',{password: "secret",...attr})

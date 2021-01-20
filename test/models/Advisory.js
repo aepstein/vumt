@@ -31,11 +31,12 @@ describe("Advisory", () => {
         })
     })
     it('should save with a valid prompt', async () => {
-        await factory.create('advisory',{
+        const advisory = await factory.create('advisory',{
             prompts: [
-                {language: 'en-US', translation: 'The English version.'}
+                {language: 'en-US', translation: 'The *English* version.'}
             ]
         })
+        advisory.prompts[0].should.have.property('translationHTML').contain("The <strong>English</strong> version.")
     })
     it('should not save with a prompt missing translation', async () => {
         const advisory = await factory.build('advisory',{
