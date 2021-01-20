@@ -1,5 +1,5 @@
 const mongoose = require('../../db/mongoose');
-const adoc = require('asciidoctor')()
+const convertAdoc = require('../../lib/convertAdoc')
 
 const TranslationSchema = new mongoose.Schema({
     language: {
@@ -19,7 +19,7 @@ const TranslationSchema = new mongoose.Schema({
 
 TranslationSchema.pre('validate',async function () {
     if (this.translation) {
-        this.translationHTML = await adoc.convert(this.translation)
+        this.translationHTML = await convertAdoc(this.translation)
     }
 })
 
