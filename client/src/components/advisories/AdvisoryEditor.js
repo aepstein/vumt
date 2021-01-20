@@ -7,6 +7,7 @@ import {
     Form,
     FormFeedback,
     FormGroup,
+    FormText,
     Label
 } from 'reactstrap';
 import {
@@ -16,7 +17,7 @@ import {
 } from 'react-bootstrap-typeahead'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import axios from 'axios'
 import useValidationErrors from '../../hooks/useValidationErrors'
 import useTimezone from '../../hooks/useTimezone'
@@ -277,6 +278,11 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                                 errors.prompts[index] &&
                                 errors.prompts[index].translation ? true : false}
                         />
+                        <FormText>
+                            <Trans i18nKey="translation:asciidocHint">You can use <a target="_blank" rel="noreferrer"
+                            href="https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/">Asciidoctor</a>
+                            markup to format your text.</Trans>
+                        </FormText>
                         <Button
                             color="danger"
                             onClick={removePrompt(index)}

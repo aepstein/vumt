@@ -46,10 +46,10 @@ export default function AdvisoryDetail({advisory}) {
         </dl>
         <h2>{t('prompts')}</h2>
         <dl>
-        {advisory.prompts && advisory.prompts.map(({language,translation},index) => {
+        {advisory.prompts && advisory.prompts.map(({language,translationHTML},index) => {
             return <div key={index}>
                 <dt>{locales.filter(t => t.code === language)[0].name}</dt>
-                <dd>{translation}</dd>
+                <dd dangerouslySetInnerHTML={{__html: translationHTML}}></dd>
             </div>
         })}
         </dl>

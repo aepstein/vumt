@@ -2,6 +2,7 @@
     "addTranslation": "Ajouter une traduction",
     "admin": "Administration",
     "advisories": "Avis",
+    "asciidocHint": "Vous pouvez utiliser le balisage <1>Asciidoctor</1> pour formater votre texte.",
     "brand": "Outil de Gestion de l'Utilisation des Visiteurs",
     "cancel": "Cancel",
     "checkingCredentials": "Vérification des informations d'identification",

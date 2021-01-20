@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import {
     Card,
     CardBody,
-    CardText,
     CardTitle
 } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
@@ -10,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 
 export default function ApplicableAdvisory({advisory}) {
     const [prompts,setPrompts] = useState([])
-    const [prompt,setPrompt] = useState('')
+    const [prompt,setPrompt] = useState({__html: ''})
     const [promptLanguage,setPromptLanguage] = useState('')
     const {i18n} = useTranslation(['advisory'])
     useEffect(() => {
@@ -34,13 +33,13 @@ export default function ApplicableAdvisory({advisory}) {
     },[i18n.languages,prompts,promptLanguage])
     useEffect(() => {
         const newPrompt = prompts.find((prompt) => { return prompt.language === promptLanguage})
-        setPrompt(newPrompt ? newPrompt.translation : '')
+        setPrompt(newPrompt ? {__html: newPrompt.translationHTML } : {__html: ''})
     },[promptLanguage,setPrompt,prompts])
 
     return <Card>
         <CardBody>
             <CardTitle>{advisory.label}</CardTitle>
-            <CardText>{prompt}</CardText>
+            <div dangerouslySetInnerHTML={prompt}></div>
         </CardBody>
     </Card>
 }
