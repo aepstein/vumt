@@ -8,7 +8,7 @@ Feature: Manage advisories
         And a district "McIntyre Range" exists
         And an advisory "Leave No Trace" exists
         And the advisory "Leave No Trace" has "en-US" prompt "Respect your surroundings."
-   
+
     Scenario: Unauthenticated context advisories
         Given an advisory "Welcome" exists
         And the advisory "Welcome" has "en-US" prompt "This is something you see when you have not logged in."

@@ -39,7 +39,7 @@ export default function ApplicableAdvisory({advisory}) {
     return <Card>
         <CardBody>
             <CardTitle>{advisory.label}</CardTitle>
-            <div dangerouslySetInnerHTML={prompt}></div>
+            <div className="card-text" dangerouslySetInnerHTML={prompt}></div>
         </CardBody>
     </Card>
 }
