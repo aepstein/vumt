@@ -97,8 +97,8 @@ describe('/api/districts',() => {
             attr = {
                 name: 'Different District',
                 boundaries: {
-                    "type": "Polygon",
-                    "coordinates": [[
+                    "type": "MultiPolygon",
+                    "coordinates": [[[
                         [
                         -73.97506713867186,
                         44.171123644193784
@@ -115,14 +115,14 @@ describe('/api/districts',() => {
                         -73.97506713867186,
                         44.171123644193784
                         ]
-                    ]]
+                    ]]]
                 }
             }
             const res = await action(district,attr,auth)
             res.should.have.status(200)
             res.body.should.be.an('object')
             res.body.should.have.a.property('name').eql(attr.name)
-            res.body.boundaries.coordinates[0][0].should.have.deep.members(attr.boundaries.coordinates[0][0])
+            res.body.boundaries.coordinates[0][0][0].should.have.deep.members(attr.boundaries.coordinates[0][0][0])
         })
         it('should return an error for an invalid submission', async () => {
             const district = await factory.create('district')

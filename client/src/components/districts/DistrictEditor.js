@@ -37,7 +37,10 @@ export default function DistrictEditor({district,onSave,saving}) {
         setBoundariesSaving(true)
         const geoJSON = boundariesFeatureGroup.current.leafletElement.toGeoJSON()
         if (geoJSON.features.length > 0) {
-            setBoundaries(geoJSON.features[0].geometry)
+            setBoundaries({
+                type: 'MultiPolygon',
+                coordinates: geoJSON.features.map((feature) => feature.geometry.coordinates)
+            })
         }
         else {
             setBoundaries('')
@@ -47,7 +50,11 @@ export default function DistrictEditor({district,onSave,saving}) {
     // Update editable feature group when boundaries property is updated
     useEffect(() => {
         if (boundariesSaving || !boundaries || !boundariesFeatureGroup.current) { return }
-        const geoJSON = new L.GeoJSON(boundaries)
+        const polygons = boundaries.type !== 'MultiPolygon' ? boundaries : 
+            boundaries.coordinates.map((coordinates) => { 
+                return {type: 'Polygon', coordinates}
+            })
+        const geoJSON = new L.GeoJSON(polygons)
         const fg = boundariesFeatureGroup.current.leafletElement
         geoJSON.eachLayer( (layer) => {
             fg.addLayer(layer)

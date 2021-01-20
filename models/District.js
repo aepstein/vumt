@@ -1,6 +1,6 @@
 const mongoose = require('../db/mongoose')
 const Schema = mongoose.Schema
-const PolygonSchema = require('./schemas/PolygonSchema')
+const MultiPolygonSchema = require('./schemas/MultiPolygonSchema')
 const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
 
 const DistrictSchema = new Schema(
@@ -10,7 +10,7 @@ const DistrictSchema = new Schema(
             required: true
         },
         boundaries: {
-            type: PolygonSchema,
+            type: MultiPolygonSchema,
             required: true
         },
     },
