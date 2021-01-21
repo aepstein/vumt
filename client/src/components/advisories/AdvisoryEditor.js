@@ -267,7 +267,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                             return locale.code === prompt.language
                         }).name}</Label>
                         <Input
-                            type="text"
+                            type="textarea"
                             name={`prompts[${index}].translation`}
                             placeholder={t('translation:translation')}
                             innerRef={register({required: true})}

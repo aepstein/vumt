@@ -91,6 +91,15 @@ const fillElement = async (el, fill, clear = false ) => {
 	await el.click()
 	await el.type(fill)
 }
+const fillTextAreaByLabel = async (label, fill ) => {
+	const escapedText = escapeXpathString(label);
+	const selector = `//textarea[@name=(//label[contains(text(),${escapedText})][1]/@for)]`;
+	const page = scope.context.currentPage
+	const el = await page.$x(selector)
+	clearInput(el[0])
+	await el[0].click();
+	await el[0].type(fill);
+}
 const fillTypeaheadByLabel = async (label, fill, context) => {
 	const closeButton = await selectTypeaheadCloseByLabel(label, context)
 	if (closeButton) await closeButton.click()
@@ -332,6 +341,7 @@ module.exports = {
 	entitiesExist,
 	fillByLabel,
 	fillByPlaceholder,
+	fillTextAreaByLabel,
 	fillTypeaheadByLabel,
 	formatDateForFill,
 	formatDateForDisplay,

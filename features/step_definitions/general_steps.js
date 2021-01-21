@@ -6,6 +6,7 @@ const {
     emailShouldBeSentTo,
     emailSubjectShouldBe,
     fillByLabel,
+    fillTextAreaByLabel,
     fillTypeaheadByLabel,
     formatTimeForDisplay,
     formatTimeForFill,
@@ -53,6 +54,10 @@ When('I change the language to {string}', async (language) => {
 
 When(/^I fill in "([^"]+)" with ("[^"]+"|today|tomorrow)$/, async (label, value) => {
     await fillByLabel(label,parseInput(value))
+})
+
+When('I fill in the {string} textarea with {string}', async (label,value) => {
+    await fillTextAreaByLabel(label,value)
 })
 
 When('I choose {string} for {string}', async (choice,label) => {
