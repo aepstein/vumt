@@ -43,6 +43,9 @@ const VisitSchema = new Schema({
     },
     checkedOut: {
         type: Date
+    },
+    cancelled: {
+        type: Date
     }
 },
 {

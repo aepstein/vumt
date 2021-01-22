@@ -69,6 +69,22 @@ router.post('/', auth(), async (req, res) => {
     }
 });
 
+// @route DELETE api/visits/cancel/:visitId
+// @desc Cancel a not-yet-cancelled visit
+// @access Private
+router.delete('/cancel/:visitId', auth(), visit(), async (req,res) => {
+    if (req.visit.cancelled) {
+        return res.status(404).json({})
+    }
+    try {
+        req.visit.cancelled = Date.now()
+        return res.status(200).json(await req.visit.save())
+    }
+    catch(err) {
+        throw err
+    }
+})
+
 // @route DELETE api/visits
 // @desc Delete an existing visit
 // @access Private

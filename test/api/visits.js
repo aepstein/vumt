@@ -156,6 +156,38 @@ describe('/api/visits', () => {
             return errorNoToken(res)
         })
     })
+    describe('DELETE /api/visits/cancel/:visitId', () => {
+        const action = async (visit,auth) => {
+            const req = chai.request(server).delete(`/api/visits/cancel/${visit._id}`)
+            if (auth) { req.set('x-auth-token',auth.body.token) }
+            return req
+        }
+        it('should cancel with an authorized user', async () => {
+            const auth = await withAuth()
+            const visit = await factory.create('visit',{user: auth.body.user._id})
+            res = await action(visit,auth)
+            res.should.have.status(200)
+            const rVisit = await Visit.findOne({_id: visit.id})
+            rVisit.should.have.property('cancelled').not.null
+        })
+        it('should not cancel an already cancelled visit', async () => {
+            const auth = await withAuth()
+            const visit = await factory.create('visit',{user: auth.body.user._id, cancelled: Date.now()})
+            res = await action(visit,auth)
+            res.should.have.status(404)
+        })
+        it('should deny with nonowner credentials', async () => {
+            const auth = await withAuth()
+            const visit = await factory.create('visit')
+            res = await action(visit,auth)
+            return shouldDenyUnauthorizedUser(res)
+        })
+        it('should deny without authentication',async () => {
+            const visit = await factory.create('visit')
+            const res = await chai.request(server).delete(`/api/visits/cancel/${visit._id}`)
+            return errorNoToken(res)
+        })
+    })
     describe('DELETE /api/visits', () => {
         const action = async (auth,visit) => {
             const req = chai.request(server)
