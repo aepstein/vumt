@@ -70,8 +70,10 @@ PlaceSchema.statics.searchPipeline = ({location,q,startOn,type}) => {
                 // Originating at place
                 { $eq: ['$$originId','$origin'] },
                 // Intersecting with arrival
-               {$lte:["$startOn",startOn]},
-               {$lte:[startOn,"$endOn"]}
+                {$lte:["$startOn",startOn]},
+                {$lte:[startOn,"$endOn"]},
+                // Only include uncancelled
+                {$eq: [{$ifNull:['$cancelled',null]},null]}
             ]}}},
             // Count up visits, vehicles, and people
             {$group: {_id: null, parties: {$sum: 1}, parkedVehicles: {$sum: "$parkedVehicles"},

@@ -50,6 +50,14 @@ describe('/api/places',() => {
                 groupSize: 4,
                 startOn: justBefore
             })
+            await factory.create('visit',{
+                origin: places.origin._id,
+                durationNights: 0,
+                parkedVehicles: 2,
+                groupSize: 4,
+                startOn: justBefore,
+                cancelled: Date.now()
+            })
             justAfter = new Date(startOn)
             justAfter.setHours(justAfter.getHours()+1)
             await factory.create('visit',{
