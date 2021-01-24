@@ -25,7 +25,8 @@ const attrAccessible = (req) => {
     return attrAccessible
 }
 // Use visits routes scoped to the user
-router.use('/:userId/visits', auth(), user({self: true, roles:['admin']}), visits)
+router.use('/:userId/visits/cancelled', auth(), user({self: true, roles:['admin']}), visits(true))
+router.use('/:userId/visits', auth(), user({self: true, roles:['admin']}), visits(false))
 
 // @route POST api/users
 // @desc Register a new user

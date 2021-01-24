@@ -9,7 +9,7 @@ const {
     times
 } = require('../support/util')
 const shouldDenyUnauthorizedUser = async (res) => {
-    await res.should.have.status(401);
+    await res.should.have.status(403);
     await res.body.should.have.a.property('code').eql('UNAUTHORIZED')
 }
 const {
@@ -222,14 +222,19 @@ describe('/api/visits', () => {
             return res
         }
         const path = '/api/visits'
-        it('should show all visits', async () => {
+        it('should show all uncancelled visits or cancelled', async () => {
             const auth = await withAuth({roles:['admin']})
             const visit = await factory.create('visit',{user: auth.body.user._id});
+            const cVisit = await factory.create('visit',{cancelled: Date.now(), user: auth.body.user._id});
             res = await action(path,auth)
             res.should.have.status(200);
             res.body.data.should.be.an('array');
             res.body.data[0].should.be.a('object');
             res.body.data[0].should.have.a.property('_id').eql(visit.id);
+            res2 = await action(`${path}/cancelled`,auth)
+            res2.should.have.status(200)
+            res2.body.data.should.be.an('array')
+            res2.body.data.map(v => v._id).should.have.members([cVisit.id])
         })
         it('should paginate', async () => {
             const auth = await withAuth({roles:['admin']})
