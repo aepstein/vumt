@@ -156,9 +156,9 @@ describe('/api/visits', () => {
             return errorNoToken(res)
         })
     })
-    describe('DELETE /api/visits/cancel/:visitId', () => {
+    describe('POST /api/visits/cancelled/:visitId', () => {
         const action = async (visit,auth) => {
-            const req = chai.request(server).delete(`/api/visits/cancel/${visit._id}`)
+            const req = chai.request(server).post(`/api/visits/cancelled/${visit._id}`)
             if (auth) { req.set('x-auth-token',auth.body.token) }
             return req
         }
@@ -174,7 +174,7 @@ describe('/api/visits', () => {
             const auth = await withAuth()
             const visit = await factory.create('visit',{user: auth.body.user._id, cancelled: Date.now()})
             res = await action(visit,auth)
-            res.should.have.status(404)
+            res.should.have.status(409)
         })
         it('should deny with nonowner credentials', async () => {
             const auth = await withAuth()
