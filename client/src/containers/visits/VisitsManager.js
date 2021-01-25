@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { deleteVisit, filterVisits, getVisits, saveVisit } from '../../actions/visitActions';
+import { cancelVisit, deleteVisit, filterVisits, getVisits, saveVisit } from '../../actions/visitActions';
 import VisitsList from '../../components/visits/VisitsList'
 import VisitDetail from '../../components/visits/VisitDetail'
 import VisitEditor from '../../components/visits/VisitEditor'
@@ -34,6 +34,9 @@ export default function VisitsManager({action}) {
 
     const history = useHistory()
     
+    const onCancel = (id) => {
+        dispatch(cancelVisit(id))
+    }
     const onDelete = (id) => {
         dispatch(deleteVisit(id))
     }
@@ -76,7 +79,6 @@ export default function VisitsManager({action}) {
         case 'show':
             return <VisitDetail visit={visit} />
         default:
-            return <VisitsList loading={loading} next={next} q={q} visits={visits}
-                onDelete={onDelete} onLoadMore={onLoadMore} onSearch={onSearch} />
+            return new VisitsList({loading,next,q,visits,onCancel,onDelete,onLoadMore,onSearch})
     }
 }

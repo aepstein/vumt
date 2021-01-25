@@ -169,11 +169,15 @@ Feature: Manage visits
         When I change the language to "Français"
         Then I should see an applicable advisory for "Leave No Trace" prompting "Respectez votre environnement"
 
-    Scenario: Remove visit
-        Given I am registered as "bmarshall@example.com"
+    Scenario Outline: Remove/Cancel visit
+        Given an admin user exists "Bob" "Marshall" "bmarshall@example.com"
+        And I logged in as "bmarshall@example.com"
         And I have registered a visit for today from "Adirondack Loj" to "Marcy Summit"
         And I have registered a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
-        And I logged in as "bmarshall@example.com"
         When I visit the "home" page
-        And I click "Remove" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
-        Then I should not see visit 2
+        And I click "<action>" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
+        Then I wait for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit" to disappear
+        Examples:
+            |action|
+            |Remove|
+            |Cancel|

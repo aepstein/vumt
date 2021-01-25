@@ -55,6 +55,7 @@ export const USERS_LOADING = 'USERS_LOADING'
 export const FILTER_VISITS = 'FILTER_VISITS'
 export const GET_VISITS = 'GET_VISITS';
 export const INIT_VISITS = 'INIT_VISITS'
+export const CANCEL_VISIT = 'CANCEL_VISIT'
 export const DELETE_VISIT = 'DELETE_VISIT';
 export const ADD_VISIT = 'ADD_VISIT'
 export const UPDATE_VISIT = 'UPDATE_VISIT'

@@ -5,6 +5,7 @@ import {
     ADD_VISIT,
     UPDATE_VISIT,
     SAVING_VISIT,
+    CANCEL_VISIT,
     DELETE_VISIT,
     VISITS_LOADING,
     LOGOUT_SUCCESS,
@@ -61,6 +62,7 @@ export default function visitReducer( state = initialState, action ) {
                 initNext: action.payload,
                 next: action.payload
             }
+        case CANCEL_VISIT:
         case DELETE_VISIT:
             return {
                 ...state,

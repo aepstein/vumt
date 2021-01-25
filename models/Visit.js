@@ -43,6 +43,9 @@ const VisitSchema = new Schema({
     },
     checkedOut: {
         type: Date
+    },
+    cancelled: {
+        type: Date
     }
 },
 {
@@ -91,9 +94,20 @@ VisitSchema.post('save', async function(visit) {
     await visit.populate('origin').populate('destinations').execPopulate()
 })
 
-VisitSchema.statics.searchPipeline = ({q,user}) => {
+VisitSchema.statics.searchPipeline = ({q,user,cancelled}) => {
     const c = []
     if (user) { c.push({$match: {user: ObjectId(user.id)}}) }
+    // If cancellation flag not specified, return cancelled and uncancelled
+    if (typeof cancelled !== 'undefined') {
+        // Return only cancelled
+        if (cancelled) {
+            c.push({$match:{cancelled:{$ne:null}}})
+        }
+        // Return only uncancelled
+        else {
+            c.push({$match:{cancelled: null}})
+        }
+    }
     c.push(
         {$lookup: {from: 'places',localField:'origin',foreignField:'_id',as:'origin'}},
         {$lookup: {from: 'places',localField:'destinations',foreignField:'_id',as:'destinations'}},

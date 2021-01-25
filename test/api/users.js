@@ -251,7 +251,7 @@ describe('/api/users', () => {
             const auth = await withAuth()
             const user = await factory.create('user')
             const res = await action(auth,{},user)
-            res.should.have.status(401)
+            res.should.have.status(403)
             res.body.should.have.a.property('code').eql('UNAUTHORIZED')
         })
         it('should allow an admin user who is not the owner', async () => {
@@ -288,7 +288,7 @@ describe('/api/users', () => {
             const auth = await withAuth()
             const user = await factory.create('user')
             const res = await action(user,auth)
-            res.should.have.status(401)
+            res.should.have.status(403)
         })
         it('should deny for unauthenticated user', async () => {
             const user = await factory.create('user')

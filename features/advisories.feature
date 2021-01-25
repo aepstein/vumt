@@ -48,7 +48,7 @@ Feature: Manage advisories
         And I fill in "End time" with "1000A"
         And I fill in the "Districts" typeahead with "Other Range"
         And I fill in the "Contexts" typeahead with "check in"
-        And I fill in "English" with "Respect your environment please."
+        And I fill in the "English" textarea with "Respect your environment please."
         And I click the "Update advisory" button
         And I click "Detail" for advisory "Leave Only Footprints, Take Only Pictures"
         Then I should see "Label" defined as "Leave Only Footprints, Take Only Pictures"

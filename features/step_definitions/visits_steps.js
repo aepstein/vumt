@@ -79,7 +79,7 @@ When(
     /^I wait for my visit for (today|tomorrow) from "([^"]+)" to "([^"]+)" to disappear$/,
     async (when,from,to) => {
         const selector = `//div[contains(@class,'visits-list') and not(.${visitRowSelector(when,from,to)})]`
-        await waitFor(selector)
+        await waitFor(selector,{hidden: true})
     }
 )
 

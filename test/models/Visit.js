@@ -1,5 +1,6 @@
 const { factory } = require('../setup')
 const ValidationError = require('mongoose/lib/error/validation')
+const Visit = require('../../models/Visit')
 
 describe('Visit', () => {
     it('creates a valid visit', async () => {
@@ -70,6 +71,21 @@ describe('Visit', () => {
         const visit = await factory.create('visit')
         visit.checkedOut = new Date()
         await visit.save().should.eventually.be.rejectedWith(ValidationError)
+    })
+    describe('searchPipeline', () => {
+        const getVisits = async (params) => {
+            return Visit.aggregate(Visit.searchPipeline(params))
+        }
+        it('should return all cancelled and uncancelled visits with cancelled=null',async () => {
+            cancelled = await factory.create('visit',{cancelled: Date.now()})
+            uncancelled = await factory.create('visit')
+            const visits = await getVisits({})
+            visits.map(v => v._id.toString()).should.have.members([cancelled,uncancelled].map(v => v.id))
+            const cVisits = await getVisits({cancelled: true})
+            cVisits.map(v => v._id.toString()).should.have.members([cancelled].map(v => v.id))
+            const uVisits = await getVisits({cancelled: false})
+            uVisits.map(v => v._id.toString()).should.have.members([uncancelled].map(v => v.id))
+        })
     })
     describe('applicableAdvisories', () => {
         it('should return applicable advisories', async() => {
