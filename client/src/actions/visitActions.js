@@ -7,6 +7,7 @@ import {
     UPDATE_VISIT,
     SAVING_VISIT,
     SAVING_VISIT_CANCEL,
+    CANCEL_VISIT,
     DELETE_VISIT,
     VISITS_LOADING
  } from './types';
@@ -64,6 +65,20 @@ export const initVisits = (dispatch, getState) => {
         type: INIT_VISITS,
         payload: user ? '/api/users/' + user + '/visits' : null
     })
+}
+
+export const cancelVisit = id => (dispatch, getState) => {
+    axios
+        .post(`/api/visits/cancelled/${id}`,{},tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type: CANCEL_VISIT,
+                payload: id
+            })
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data,err.response.status));
+        })
 }
 
 export const deleteVisit = id => (dispatch, getState) => {
