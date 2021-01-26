@@ -13,6 +13,7 @@ import {
 import {
     Typeahead
 } from 'react-bootstrap-typeahead'
+import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
 import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
@@ -341,11 +342,8 @@ export default function UserEditor({action,user,onSave,saving}) {
                 { !authUser || !authUser.roles.includes('admin') ? '' :
                     <MembershipsEditor memberships={memberships} errors={errors}
                         setMemberships={setMemberships} onAddMembership={onAddMembership} />}
+                { !authUser ? <ApplicableAdvisories context="register"/> : '' }
                 <p>
-                    This is a proof of concept application provided for evaluation and experimental purposes only.
-                    By clicking the Register button below, you agree to the Terms of Service for the application,
-                    provided <a href="https://github.com/aepstein/vumt/blob/master/TERMS_OF_SERVICE.adoc">here</a>.
-                    Our privacy policy is available <a href="https://github.com/aepstein/vumt/blob/master/PRIVACY_POLICY">here</a>
                 </p>
                 <ButtonGroup>
                     <Button
