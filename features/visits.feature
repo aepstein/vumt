@@ -137,11 +137,19 @@ Feature: Manage visits
 
     Scenario: Check in/out of a visit
         Given I am registered as "bmarshall@example.com"
+        And an advisory "Leave No Trace" exists
+        And the advisory "Leave No Trace" has context "checkin"
+        And the advisory "Leave No Trace" has "en-US" prompt "Leave only footprints, take only pictures"
+        And an advisory "Complete Survey" exists
+        And the advisory "Complete Survey" has context "checkout"
+        And the advisory "Complete Survey" has "en-US" prompt "Please complete this survey to tell us how it went."
         And I have registered a visit for 10 minutes ago from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         And I click "Check in" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
-        And I fill in "Check in date" with today
+        Then I should see an applicable advisory for "Leave No Trace" prompting "Leave only footprints, take only pictures"
+        And I should not see an applicable advisory for "Complete Survey" prompting "Please complete this survey to tell us how it went."
+        When I fill in "Check in date" with today
         And I fill in "Check in time" with 5 minutes ago
         And I click the "Check in" button
         And I click "Detail" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
@@ -149,7 +157,9 @@ Feature: Manage visits
         And I should see "Check in time" defined as 5 minutes ago
         When I visit the "home" page
         And I click "Check out" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
-        And I fill in "Check out date" with today
+        Then I should not see an applicable advisory for "Leave No Trace" prompting "Leave only footprints, take only pictures"
+        And I should see an applicable advisory for "Complete Survey" prompting "Please complete this survey to tell us how it went."
+        When I fill in "Check out date" with today
         And I fill in "Check out time" with 1 minute ago
         And I click the "Check out" button
         And I click "Detail" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
