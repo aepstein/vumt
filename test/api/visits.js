@@ -17,6 +17,7 @@ const {
     errorMustHaveRoles,
     errorPathRequired
 } = require('../support/middlewareErrors')
+const applicableAdvisories = require('../support/applicableAdvisories')
 const Visit = require('../../models/Visit')
 
 describe('/api/visits', () => {
@@ -382,29 +383,29 @@ describe('/api/visits', () => {
     })
     describe('GET /api/visits/:visitId/applicableAdvisories/:advisoryContext', () => {
         const action = async (auth,user,context='checkin') => {
-            const visit = await factory.create('visit',{ user: (user ? user.id : auth.body.user._id) })
+            const {visit,advisories} = await applicableAdvisories(user ? user.id : (auth ? auth.body.user._id : null))
+            const contextual = await factory.create('advisory',{contexts:['checkin']})
+            await factory.create('advisory',{contexts:['checkout']})
+            advisories.push(contextual.id)
             const res = chai.request(server)
                 .get('/api/visits/' + visit._id + '/applicableAdvisories/' + context)
             if ( auth ) { res.set('x-auth-token',auth.body.token) }
-            return Promise.all([res, visit])
+            return {res: await res, visit, advisories}
         }
-        it('should return advisories applicable to all visits', async () => {
-            const advisory = await factory.create('advisory')
+        it('should return advisories applicable to visit', async () => {
             const auth = await withAuth()
-            const [res] = await action(auth)
+            const {res,advisories} = await action(auth)
             res.should.have.status(200)
             res.body.should.be.an('array')
-            res.body.map((v) => v._id).should.have.members([advisory.id])
+            res.body.map((v) => v._id).should.have.members(advisories)
         })
         it('should deny with nonowner credentials', async () => {
             const auth = await withAuth()
-            const [ res, visit ] = await action(auth,await factory.create('user'))
+            const {res} = await action(auth,await factory.create('user'))
             return shouldDenyUnauthorizedUser(res)
         })
         it('should deny without authentication',async () => {
-            const visit = await factory.create('visit')
-            const res = await chai.request(server)
-                .get('/api/visits/' + visit._id)
+            const {res} = await action()
             return errorNoToken(res)
         })
     })

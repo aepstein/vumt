@@ -21,6 +21,7 @@ import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
+import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
 
 export default function VisitEditor({visit,onSave,saving}) {
     const { distanceUOM, latitude, longitude, position } = useGeoPosition()
@@ -162,6 +163,10 @@ export default function VisitEditor({visit,onSave,saving}) {
             </div> : ''
         ]
     },[origin,t,distanceUOM])
+    const [places, setPlaces] = useState([])
+    useEffect(() => {
+        setPlaces(origin.map(o => o.id).concat(destinations.map(d => d.id)))
+    },[origin,destinations,setPlaces])
 
     const { register, handleSubmit, setError, errors } = useForm()
 
@@ -338,6 +343,7 @@ export default function VisitEditor({visit,onSave,saving}) {
                     >{visit._id ? t('editVisit') : t('addVisit')}</Button>
                 </ButtonGroup>
             </Form>
+            <ApplicableAdvisories context={visit._id ? 'editVisit' : 'newVisit'} startOn={startOn} places={places} />
         </Container>
     </div>
 }

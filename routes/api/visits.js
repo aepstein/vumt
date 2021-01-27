@@ -103,7 +103,7 @@ router.get('/:visitId', auth(), visit({roles:['admin'],self:true}), async (req, 
 // @desc Load advisories applicable to a visit
 // @access Private
 router.get('/:visitId/applicableAdvisories/:advisoryContext', auth(), visit({roles:['admin'],self:true}), advisoryContext(true), async (req, res) => {
-    return res.status(200).json(await req.visit.applicableAdvisories(req.advisoryContext))
+    return res.status(200).json(await req.visit.applicableAdvisories(req.advisoryContext.context))
 })
 // @route GET api/visits
 // @desc Get all visits

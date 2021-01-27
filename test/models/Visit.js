@@ -1,6 +1,7 @@
 const { factory } = require('../setup')
 const ValidationError = require('mongoose/lib/error/validation')
 const Visit = require('../../models/Visit')
+const Advisory = require('../../models/Advisory')
 
 describe('Visit', () => {
     it('creates a valid visit', async () => {
@@ -85,27 +86,6 @@ describe('Visit', () => {
             cVisits.map(v => v._id.toString()).should.have.members([cancelled].map(v => v.id))
             const uVisits = await getVisits({cancelled: false})
             uVisits.map(v => v._id.toString()).should.have.members([uncancelled].map(v => v.id))
-        })
-    })
-    describe('applicableAdvisories', () => {
-        it('should return applicable advisories', async() => {
-            const advisory = await factory.create('advisory')
-            const currentAdvisory = await factory.create('currentAdvisory')
-            await factory.create('pastAdvisory')
-            await factory.create('futureAdvisory')
-            const originAdvisory = await factory.create('originAdvisory')
-            const destinationAdvisory = await factory.create('destinationAdvisory')
-            await factory.create('farawayAdvisory')
-            const visit = await factory.create('visit',{
-                destinations: [await factory.create('destinationPlace')]
-            })
-            advisories = await visit.applicableAdvisories()
-            advisories.map((v) => v._id.toString()).should.have.members([
-                advisory.id,
-                currentAdvisory.id,
-                originAdvisory.id,
-                destinationAdvisory.id
-            ])
         })
     })
 })
