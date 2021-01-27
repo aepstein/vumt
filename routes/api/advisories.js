@@ -22,7 +22,7 @@ const paginate = require('../../lib/paginate')
 // @access Public
 router.get('/applicable/:advisoryContext',advisoryContext(true),async (req, res) => {
     try {
-        const advisories = await Advisory.applicable({context: req.advisoryContext})
+        const advisories = await Advisory.applicable(req.advisoryContext)
         return res.json(advisories)
     }
     catch(err) {

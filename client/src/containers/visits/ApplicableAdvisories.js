@@ -5,7 +5,7 @@ import { Spinner } from 'reactstrap'
 import { useSelector } from 'react-redux';
 import ApplicableAdvisory from '../../components/visits/ApplicableAdvisory'
 
-export default function ApplicableAdvisories({visit,context}) {
+export default function ApplicableAdvisories({visit,context,startOn,places}) {
     const token = useSelector((state) => state.auth.token)
     const [ applicableAdvisories, setApplicableAdvisories ] = useState([])
     const [ applicableAdvisoriesLoading, setApplicableAdvisoriesLoading ] = useState(false)
@@ -26,9 +26,16 @@ export default function ApplicableAdvisories({visit,context}) {
     },[url,visit,context,setUrl,setApplicableAdvisoriesLoaded])
     useEffect( () => {
         if (url && !applicableAdvisoriesLoading && !applicableAdvisoriesLoaded) {
+            const params = {}
+            if (startOn) { params.startOn = startOn.valueOf() }
+            if (places) { params.places = JSON.stringify(places) }
+            const options = {
+                ...prepareTokenConfig(token),
+                params
+            }
             setApplicableAdvisoriesLoading(true)
             axios
-            .get(url,prepareTokenConfig(token))
+            .get(url,options)
             .then((res) => {
                 setApplicableAdvisories(res.data.map(
                     advisory => <ApplicableAdvisory  key={advisory._id} advisory={advisory}/>
@@ -37,8 +44,11 @@ export default function ApplicableAdvisories({visit,context}) {
                 setApplicableAdvisoriesLoading(false)
             })
         }
-    },[url, applicableAdvisories, applicableAdvisoriesLoading, applicableAdvisoriesLoaded,
+    },[url, startOn, places, applicableAdvisories, applicableAdvisoriesLoading, applicableAdvisoriesLoaded,
     setApplicableAdvisories, setApplicableAdvisoriesLoading, setApplicableAdvisoriesLoaded, token])
+    useEffect(() => {
+        setApplicableAdvisoriesLoaded(false)
+    },[context,startOn,places])
 
     if (applicableAdvisoriesLoading) { return <Spinner color="secondary"/> }
 

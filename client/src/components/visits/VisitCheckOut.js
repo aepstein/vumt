@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import tz from 'timezone/loaded'
+import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
 
 export default function VisitCheckOut({visit,onSave,saving}) {
     const { t } = useTranslation(['visit','translation'])
@@ -105,6 +106,7 @@ export default function VisitCheckOut({visit,onSave,saving}) {
                     {errors.checkedOutTime && errors.checkedOutTime.type === 'required' &&
                         <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
+                <ApplicableAdvisories visit={visit} context="checkout" />
                 <ButtonGroup>
                     <Button
                         color="dark"

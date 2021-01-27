@@ -2,6 +2,7 @@ const mongoose = require('../db/mongoose')
 const Schema = mongoose.Schema
 const TranslationSchema = require('./schemas/TranslationSchema')
 const advisoryContexts = require('../lib/advisoryContexts')
+const Place = require('./Place')
 
 const AdvisorySchema = new Schema(
     {
@@ -57,7 +58,7 @@ AdvisorySchema.post('save', async function(advisory) {
 })
 
 // Retrieve advisories that are applicable to a context
-AdvisorySchema.statics.applicable = async function ({context,visit,startOn,endOn}) {
+AdvisorySchema.statics.applicable = async function ({context,visit,startOn,endOn,places}) {
     const contextConditions = [{contexts: {$size: 0}}]
     const startOnConditions = [{startOn: {$eq: null}}]
     const endOnConditions = [{endOn: {$eq: null}}]
@@ -83,7 +84,16 @@ AdvisorySchema.statics.applicable = async function ({context,visit,startOn,endOn
     if (endOn) {
         endOnConditions.push({endOn: { $gte: endOn }})
     }
-    return mongoose.model('advisory').aggregate([
+    if (places) {
+        const placeRecords = await Place.find({_id: {$in: places}},['location'])
+        placeRecords.forEach((place) => {
+            const {coordinates,type} = place.location
+            geoConditions.push({
+                "districts.boundaries": { $geoIntersects: { $geometry: {coordinates,type} } }
+            })
+        })
+    }
+    const pipeline = [
         {$lookup: {from: 'districts', localField: 'districts', foreignField: '_id', as: 'districts'}},
         {$unwind: {path: '$districts', preserveNullAndEmptyArrays: true}},
         {$match: {$and: [
@@ -97,7 +107,9 @@ AdvisorySchema.statics.applicable = async function ({context,visit,startOn,endOn
             label: {$first: '$label'},
             prompts: {$first: '$prompts'}
         }}
-    ])
+    ]
+    // console.log(JSON.stringify(pipeline,null,4))
+    return mongoose.model('advisory').aggregate(pipeline)
 }
 
 module.exports = Advisory = mongoose.model('advisory',AdvisorySchema)
