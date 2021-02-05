@@ -10,6 +10,10 @@
     "AUTH_NO_USER": "No user is registered with the specified email",
     "AUTH_NO_USER_TOKEN": "No user token provided",
     "AUTH_REQUIRED": "You must log in to perform this action.",
+    "MODEL_RESTRICTED_KEY": "Cannot remove the {{model}} because it is part of {{key}} in a dependent {{dependent}}",
     "UNAUTHORIZED": "You may not perform the requested action.",
+    "advisory": "advisory",
+    "district": "district",
+    "districts": "districts",
     "duplicateKey": "Must be unique and `{{value}}` is already used"
 }

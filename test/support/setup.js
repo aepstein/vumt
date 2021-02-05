@@ -5,6 +5,7 @@ const server = require('../../server');
 
 const chai = require('chai');
 const should = chai.should()
+const expect = chai.expect
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const chaiAsPromised = require('chai-as-promised')
@@ -31,6 +32,7 @@ const purgeDb = async () => {
 
 module.exports = {
     chai,
+    expect,
     factory,
     interactsWithMail,
     mongoose,

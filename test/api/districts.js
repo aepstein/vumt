@@ -155,6 +155,17 @@ describe('/api/districts',() => {
             const res = await action(district,auth)
             res.should.have.status('200')
         })
+        it('should fail if there is a restricted dependency', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const district = await factory.create('district')
+            await factory.create('advisory',{districts: [district.id]})
+            const res = await action(district,auth)
+            res.should.have.status('409')
+            res.body.should.be.an('object')
+            res.body.should.have.property('key').eq('districts')
+            res.body.should.have.property('model').eq('district')
+            res.body.should.have.property('dependent').eq('advisory')
+        })
         it('should deny an unprivileged user', async () => {
             const district = await factory.create('district')
             const auth = await withAuth()
