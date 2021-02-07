@@ -233,6 +233,17 @@ describe('/api/places',() => {
             const res = await action(place,auth)
             res.should.have.status('200')
         })
+        it('should fail if there is a restricted dependency', async () => {
+            const auth = await withAuth({roles:['admin']})
+            const place = await factory.create('place')
+            await factory.create('visit',{origin: place.id})
+            const res = await action(place,auth)
+            res.should.have.status('409')
+            res.body.should.be.an('object')
+            res.body.should.have.property('key').eq('origin')
+            res.body.should.have.property('model').eq('place')
+            res.body.should.have.property('dependent').eq('visit')
+        })
         it('should deny an unprivileged user', async () => {
             const place = await factory.create('place')
             const auth = await withAuth()

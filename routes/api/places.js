@@ -6,6 +6,8 @@ const place = require('../../middleware/place')
 const Place = require('../../models/Place');
 const handleValidationError = require('../../lib/handleValidationError')
 const paginate = require('../../lib/paginate')
+const { RestrictedKeyError } = require('../../lib/errors/models')
+const { E_MODEL_RESTRICTED_KEY } = require('../../lib/errorCodes')
 
 const attrAccessible = (req) => {
     const attrAccessible = req.place ? req.place : {}
@@ -75,6 +77,11 @@ router.delete('/:placeId', auth({roles: ['admin']}), place(), async (req, res) =
         return res.json({success: true})
     }
     catch(err) {
+        if (err instanceof RestrictedKeyError) {
+            return res
+                .status(409)
+                .json({code: E_MODEL_RESTRICTED_KEY, ...err})
+        }
         return res
             .status(404)
             .json({success: false});

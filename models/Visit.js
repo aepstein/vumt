@@ -86,6 +86,7 @@ VisitSchema.post('find', async function(visits) {
 
 // Populate origin, destinations on load
 VisitSchema.post('findOne', async function(visit) {
+    if (!visit) return visit
     await visit.populate('origin').populate('destinations').execPopulate()
 })
 
