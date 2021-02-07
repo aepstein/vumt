@@ -1,6 +1,7 @@
 const mongoose = require('../db/mongoose')
 const Schema = mongoose.Schema
 const PointSchema = require('./schemas/PointSchema')
+const { RestrictedKeyError } = require('../lib/errors/models')
 const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
 
 const PlaceSchema = new Schema({
@@ -94,6 +95,18 @@ PlaceSchema.statics.searchPipeline = ({location,q,startOn,type}) => {
     }
     return c
 }
+
+PlaceSchema.pre('deleteOne',{document: true},async function() {
+    const visit = await Visit.findOne({$or: [
+        {origin: this.id},
+        {destinations: this.id}
+    ]})
+    if (visit) {
+        const key = visit.origin._id.toString() === this.id ? 'origin' : 'destinations'
+        throw new RestrictedKeyError(this, visit, key)
+    }
+    return true
+})
 
 useHandleMongoError11000(PlaceSchema)
 

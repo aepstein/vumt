@@ -10,7 +10,7 @@ import {
     USERS_LOADING
  } from './types';
 import { tokenConfig } from './authActions'
-import { returnErrors, clearErrors } from './errorActions'
+import { returnNotices, clearNotices } from './noticeActions'
 
 const parseDates = ({createdAt,updatedAt}) => {
     return {
@@ -51,7 +51,7 @@ export const getUsers = (dispatch, getState) => {
             })
         })
         .catch((err) => {
-            dispatch(returnErrors(err.response.data,err.response.status))
+            dispatch(returnNotices(err.response.data,err.response.status))
         })
 };
 
@@ -65,13 +65,13 @@ export const deleteUser = id => (dispatch, getState) => {
             });
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data,err.response.status))
+            dispatch(returnNotices(err.response.data,err.response.status))
         })
 };
 
 export const saveUser = (user, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_USER })
-    dispatch(clearErrors())
+    dispatch(clearNotices())
     try {
         const res = user._id ? await axios
         .put('/api/users/' + user._id, user, tokenConfig(getState)) : 
@@ -88,7 +88,7 @@ export const saveUser = (user, history) => async (dispatch, getState) => {
     }
     catch(err) {
         dispatch({type: SAVING_USER_CANCEL})
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     }
 }
 

@@ -99,3 +99,14 @@ Feature: Manage places
         When I visit the "places" page
         And I click "Remove" for place "Pitchoff Summit"
         Then I wait for place "Pitchoff Summit" to disappear
+
+    Scenario: Try to remove a place associated with a visit
+        Given a destination "Marcy Summit" exists
+        And an origin "Adirondak Loj" exists
+        And I have registered a visit for tomorrow from "Adirondak Loj" to "Marcy Summit"
+        And I logged in as "bmcmartin@example.com"
+        When I visit the "places" page
+        And I click "Remove" for place "Marcy Summit"
+        Then I should see a notice "Cannot remove the place because it is part of destinations in a dependent visit"
+        And I should see places 1 through 3
+

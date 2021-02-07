@@ -65,7 +65,7 @@ export default function DistrictEditor({district,onSave,saving}) {
         setBoundaries(district.boundaries)
     },[district.boundaries,setBoundaries])
 
-    const { register, handleSubmit, setError, clearError, errors } = useForm()
+    const { register, handleSubmit, setError, clearErrors, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value
@@ -73,9 +73,9 @@ export default function DistrictEditor({district,onSave,saving}) {
     }
     const onSubmit = () => {
         if (saving) return
-        clearError()
+        clearErrors()
         if (!boundaries) {
-            setError('boundaries','required',t('translation:invalidRequired'))
+            setError('boundaries',{type: 'required', message: t('translation:invalidRequired')})
             return
         }
         const newDistrict = {

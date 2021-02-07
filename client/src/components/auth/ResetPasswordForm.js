@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { cancelLogin, resetPassword } from '../../actions/authActions'
-import { clearErrors } from '../../actions/errorActions'
+import { clearNotices } from '../../actions/noticeActions'
 
 function ResetPasswordForm({saving,email,token}) {
     const [password, setPassword] = useState('')
@@ -31,12 +31,12 @@ function ResetPasswordForm({saving,email,token}) {
     }
     const onSubmit = (e) => {
         e.preventDefault()
-        dispatch(clearErrors())
+        dispatch(clearNotices())
         dispatch(resetPassword({email,token,password}))
     }
     const onCancel = (e) => {
         e.preventDefault()
-        dispatch(clearErrors())
+        dispatch(clearNotices())
         dispatch(cancelLogin(history))
     }
 

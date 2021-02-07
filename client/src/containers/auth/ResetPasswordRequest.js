@@ -16,14 +16,14 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
 import { cancelLogin, requestResetPassword, requestResetPasswordContinue } from '../../actions/authActions';
-import { clearErrors } from '../../actions/errorActions';
+import { clearNotices } from '../../actions/noticeActions';
 
 function ResetPasswordRequest() {
     const {initEmail} = useParams()
     const [email, setEmail] = useState(initEmail ? decodeURIComponent(initEmail) : '')
     const [msg, setMsg] = useState(null)
 
-    const error = useSelector(state => state.error)
+    const notice = useSelector(state => state.notice)
  
     const dispatch = useDispatch()
     const history = useHistory()
@@ -38,12 +38,12 @@ function ResetPasswordRequest() {
     }
     const onSubmit = (e) => {
         e.preventDefault()
-        dispatch(clearErrors())
+        dispatch(clearNotices())
         dispatch(requestResetPassword(email,i18n.language))
     }
     const onCancel = (e) => {
         e.preventDefault()
-        dispatch(clearErrors())
+        dispatch(clearNotices())
         dispatch(cancelLogin(history))
     }
     const onComplete = (e) => {
@@ -52,12 +52,12 @@ function ResetPasswordRequest() {
     }
 
     useEffect(() => {
-        if (error.id === 'LOGIN_FAIL') {
-            setMsg(error.msg.msg)
+        if (notice.id === 'LOGIN_FAIL') {
+            setMsg(notice.msg.msg)
         } else {
             setMsg(null)
         }
-    },[error])
+    },[notice])
 
     return <Container>
         <h1>{t('resetPassword')}</h1>

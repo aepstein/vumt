@@ -10,6 +10,10 @@
     "AUTH_NO_USER": "Ningún usuario está registrado con el correo electrónico especificado",
     "AUTH_NO_USER_TOKEN": "No se proporciona ningún token de usuario",
     "AUTH_REQUIRED": "Debe iniciar sesión para realizar esta acción.",
+    "MODEL_RESTRICTED_KEY": "No se puede eliminar el {{model}} porque es parte de {{key}} en un {{dependent}}",
     "UNAUTHORIZED": "No puede realizar la acción solicitada.",
+    "advisory": "aviso",
+    "district": "distrito",
+    "districts": "distritos",
     "duplicateKey": "Debe ser único y `{{value}}` is ya se utiliza"
 }

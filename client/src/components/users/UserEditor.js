@@ -136,15 +136,15 @@ export default function UserEditor({action,user,onSave,saving}) {
     const onSubmit = () => {
         if (saving) return
         if (country.length === 0) {
-            setError("country","required",t('invalidRequired'))
+            setError("country",{type: "required", message: t('invalidRequired')})
             return
         }
         if (provinceOptions.length > 0 && province.length === 0) {
-            setError("province","required",t('invalidRequired'))
+            setError("province",{type: "required", message: t('invalidRequired')})
             return
         }
         if (phone && phoneValidator(phone,'',true).length === 0) {
-            setError("phone","format",t('mustBePhone'))
+            setError("phone",{type: "format", message: t('mustBePhone')})
         }
         const newUser = {
             _id: user._id,

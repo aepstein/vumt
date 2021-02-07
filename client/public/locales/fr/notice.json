@@ -10,6 +10,10 @@
     "AUTH_NO_USER": "Aucun utilisateur n'est enregistré avec l'e-mail spécifié.",
     "AUTH_NO_USER_TOKEN": "Aucun jeton utilisateur n'a pas été fourni.",
     "AUTH_REQUIRED": "Vous devez vous connecter pour effectuer cette action.",
+    "MODEL_RESTRICTED_KEY": "Impossible de supprimer le {{model}} car il fait partie de {{key}} dans une {{dependent}}",
     "UNAUTHORIZED": "Vous ne pouvez pas effectuer l'action demandée.",
+    "advisory": "avis",
+    "district": "district",
+    "districts": "districts",
     "duplicateKey": "Doit être unique et `{{value}}` est déjà utilisé"
 }

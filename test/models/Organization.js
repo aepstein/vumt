@@ -23,7 +23,7 @@ describe("Organization",() => {
                 {organization,roles:['admin']},
                 {organization: other,roles:['ranger']}
             ]})
-            await organization.remove()
+            await organization.deleteOne()
             userAfter = await User.findOne({_id: user.id})
             userAfter.memberships.map(m => m.organization._id.toString()).should.have.members([other.id])
         })

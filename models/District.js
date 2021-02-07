@@ -1,7 +1,9 @@
 const mongoose = require('../db/mongoose')
 const Schema = mongoose.Schema
+const Advisory = require('./Advisory')
 const MultiPolygonSchema = require('./schemas/MultiPolygonSchema')
 const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
+const { RestrictedKeyError } = require('../lib/errors/models')
 
 const DistrictSchema = new Schema(
     {
@@ -18,6 +20,14 @@ const DistrictSchema = new Schema(
         timestamps: true
     }
 )
+
+DistrictSchema.pre('deleteOne',{document: true},async function() {
+    const advisory = await Advisory.findOne({districts: this.id})
+    if (advisory) {
+        throw new RestrictedKeyError(this, advisory, 'districts')
+    }
+    return true
+})
 
 useHandleMongoError11000(DistrictSchema)
 

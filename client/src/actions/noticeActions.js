@@ -1,18 +1,18 @@
 import {
-    GET_ERRORS,
-    CLEAR_ERRORS
+    GET_NOTICES,
+    CLEAR_NOTICES
 } from './types';
 
-export const returnErrors = (msg, status, id = null) => {
+export const returnNotices = (msg, status, id = null) => {
     const validationErrors = msg.validationErrors ? msg.validationErrors : []
     return {
-        type: GET_ERRORS,
+        type: GET_NOTICES,
         payload: { msg, status, id, validationErrors }
     };
 };
 
-export const clearErrors = () => {
+export const clearNotices = () => {
     return {
-        type: CLEAR_ERRORS
+        type: CLEAR_NOTICES
     };
 };

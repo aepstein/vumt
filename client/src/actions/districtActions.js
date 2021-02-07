@@ -10,7 +10,7 @@ import {
     DISTRICTS_LOADING
  } from './types';
 import { tokenConfig } from './authActions'
-import { returnErrors, clearErrors } from './errorActions'
+import { returnNotices, clearNotices } from './noticeActions'
 
 const parseDates = ({createdAt, updatedAt}) => {
     return {
@@ -50,7 +50,7 @@ export const getDistricts = (dispatch, getState) => {
             })
         })
     .catch(err => {
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     });
 };
 
@@ -64,13 +64,13 @@ export const deleteDistrict = id => (dispatch, getState) => {
             });
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data,err.response.status))
+            dispatch(returnNotices(err.response.data,err.response.status))
         })
 };
 
 export const saveDistrict = (district, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_DISTRICT })
-    dispatch(clearErrors())
+    dispatch(clearNotices())
     try {
         const res = district._id ? await axios
             .put('/api/districts/' + district._id, district, tokenConfig(getState)) : 
@@ -87,7 +87,7 @@ export const saveDistrict = (district, history) => async (dispatch, getState) =>
     }
     catch(err) {
         dispatch({type: SAVING_DISTRICT_CANCEL})
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     }
 }
 

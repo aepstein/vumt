@@ -1,8 +1,8 @@
 import axios from 'axios';
 import prepareTokenConfig from '../lib/prepareTokenConfig'
 import { 
-    returnErrors
-} from './errorActions';
+    returnNotices
+} from './noticeActions';
 import {
     initLocation
 } from './geoActions'
@@ -81,7 +81,7 @@ export const register = (attrs,history) => async (dispatch) => {
     }
     catch(err) {
         dispatch(
-            returnErrors(err.response.data,err.response.status,'REGISTER_FAIL')
+            returnNotices(err.response.data,err.response.status,'REGISTER_FAIL')
         )
         dispatch({
             type: REGISTER_FAIL
@@ -102,7 +102,7 @@ export const update = (user,attrs,history) => async (dispatch,getState) => {
     }
     catch(err) {
         dispatch(
-            returnErrors(err.response.data,err.response.status,'UPDATE_AUTHUSER_FAIL')
+            returnNotices(err.response.data,err.response.status,'UPDATE_AUTHUSER_FAIL')
         )
         dispatch({
             type: UPDATE_AUTHUSER_FAIL
@@ -130,7 +130,7 @@ export const login = (attrs,history) => async (dispatch) => {
     }
     catch(err) {
         dispatch(
-            returnErrors(err.response.data,err.response.status,'LOGIN_FAIL')
+            returnNotices(err.response.data,err.response.status,'LOGIN_FAIL')
         )
         dispatch({
             type: LOGIN_FAIL
@@ -145,7 +145,7 @@ export const requestResetPassword = (email,lng) => async (dispatch) => {
         dispatch({type: RESET_PASSWORD_REQUEST_SUCCESS, payload: {email}})
     }
     catch(err) {
-        dispatch(returnErrors(err.response.data,err.response.status,RESET_PASSWORD_REQUEST_FAIL))
+        dispatch(returnNotices(err.response.data,err.response.status,RESET_PASSWORD_REQUEST_FAIL))
         dispatch({type: RESET_PASSWORD_REQUEST_FAIL})
     }
 }
@@ -178,7 +178,7 @@ export const resetPassword = ({email,token,password}) => async (dispatch) => {
         dispatch({type: RESET_PASSWORD_SUCCESS})
     }
     catch(err) {
-        dispatch(returnErrors(err.response.data,err.response.status,RESET_PASSWORD_FAIL))
+        dispatch(returnNotices(err.response.data,err.response.status,RESET_PASSWORD_FAIL))
         dispatch({type: RESET_PASSWORD_FAIL})
     } 
 }

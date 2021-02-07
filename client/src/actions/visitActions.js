@@ -12,7 +12,7 @@ import {
     VISITS_LOADING
  } from './types';
 import { tokenConfig } from './authActions';
-import { clearErrors, returnErrors } from './errorActions'
+import { clearNotices, returnNotices } from './noticeActions'
 
 const parseDates = ({checkedIn,checkedOut,startOn,createdAt,updatedAt}) => {
     return {
@@ -55,7 +55,7 @@ export const getVisits = (dispatch, getState) => {
         })
     .catch(err => {
         console.log(err)
-        dispatch(returnErrors(err.response.data,err.response.status));
+        dispatch(returnNotices(err.response.data,err.response.status));
     });
 };
 
@@ -77,7 +77,7 @@ export const cancelVisit = id => (dispatch, getState) => {
             })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data,err.response.status));
+            dispatch(returnNotices(err.response.data,err.response.status));
         })
 }
 
@@ -91,13 +91,13 @@ export const deleteVisit = id => (dispatch, getState) => {
             });
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data,err.response.status));
+            dispatch(returnNotices(err.response.data,err.response.status));
         });
 };
 
 export const saveVisit = (visit, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_VISIT })
-    dispatch(clearErrors())
+    dispatch(clearNotices())
     try {
         const res = visit._id ? await axios
         .put('/api/visits/' + visit._id, visit, tokenConfig(getState)) : 
@@ -114,7 +114,7 @@ export const saveVisit = (visit, history) => async (dispatch, getState) => {
     }
     catch(err) {
         dispatch({type: SAVING_VISIT_CANCEL})
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     }
 }
 

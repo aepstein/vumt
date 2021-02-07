@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useHistory, Route } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Spinner } from 'reactstrap'
-import { returnErrors } from '../actions/errorActions'
+import { returnNotices } from '../actions/noticeActions'
 
 function AuthRoute({ roles, children, ...rest }) {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
@@ -20,7 +20,7 @@ function AuthRoute({ roles, children, ...rest }) {
     },[isAuthenticated,isLoading,token,history])
 
     if (isAuthenticated && roles && roles.filter(r => user.roles.includes(r)).length === 0) {
-        dispatch(returnErrors('Insufficient permissions'))
+        dispatch(returnNotices('Insufficient permissions'))
         history.push('/')
     }
 

@@ -8,7 +8,7 @@ import ResetPasswordForm from '../../components/auth/ResetPasswordForm'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next'
-import { clearErrors, returnErrors } from '../../actions/errorActions';
+import { clearNotices, returnNotices } from '../../actions/noticeActions';
 import axios from 'axios'
 
 function ResetPassword() {
@@ -34,7 +34,7 @@ function ResetPassword() {
         })
         .catch((err) => {
             if (err.response && err.response.data) {
-                dispatch(returnErrors(err.response.data,err.response.status))
+                dispatch(returnNotices(err.response.data,err.response.status))
             }
         })
         .finally(() => {
@@ -45,7 +45,7 @@ function ResetPassword() {
 
     const onResetAgain = (e) => {
         e.preventDefault()
-        dispatch(clearErrors())
+        dispatch(clearNotices())
         history.push('/resetPassword/' + email)
     }
 

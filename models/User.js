@@ -9,6 +9,7 @@ const config = require('config')
 const jwtSecret = config.jwtSecret
 const jwt = require('jsonwebtoken')
 const roles = require('./enums/roles')
+const Visit = require('./Visit')
 
 const UserSchema = new Schema(
     {
@@ -108,6 +109,10 @@ const autoPopulate = function (next) {
 UserSchema.pre('find',autoPopulate)
 
 UserSchema.pre('findOne',autoPopulate)
+
+UserSchema.pre('deleteOne',{document: true}, async function () {
+    await Visit.deleteMany({user: this.id})
+})
 
 /* Issues a JSON web token in a server response for a user who has been authenticated
  */

@@ -15,10 +15,10 @@ const OrganizationSchema = new Schema(
     }
 )
 
-OrganizationSchema.pre('remove',async function () {
+OrganizationSchema.pre('deleteOne',{document: true}, async function () {
     await User.updateMany(
         {'memberships.organization': this.id},
-        {$pull: {'memberships': { organization: this.id }}},
+        {$pull: {memberships: { organization: this.id }}},
         {multi: true}
     )
 })

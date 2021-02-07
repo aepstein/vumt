@@ -124,7 +124,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
         }))
     },[prompts,setMissingLocales])
 
-    const { register, handleSubmit, setError, clearError, errors } = useForm()
+    const { register, handleSubmit, setError, clearErrors, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value
@@ -132,9 +132,9 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
     }
     const onSubmit = () => {
         if (saving) return
-        clearError()
+        clearErrors()
         if (startOn && endOn && startOn > endOn) {
-            setError("startOnDate","afterEndOn",t('mustBeBeforeEndOn'))
+            setError("startOnDate",{type: "afterEndOn", message: t('mustBeBeforeEndOn')})
             return
         }
         const newAdvisory = {

@@ -24,7 +24,8 @@ const {
     takeScreenshot,
     visitPage,
     waitFor,
-    waitForText
+    waitForText,
+    waitForXPath
 } = require('../support/actions');
 
 Given(/my location is "(?<lat>(-?(90|(\d|[1-8]\d)(\.\d{1,6}){0,1})))\,{1}(?<long>(-?(180|(\d|\d\d|1[0-7]\d)(\.\d{1,6}){0,1})))"/,
@@ -147,4 +148,8 @@ Then('an email should be sent to {string}', (email) => {
 
 Then('the email subject should be {string}', (subject) => {
     emailSubjectShouldBe(subject)
+})
+
+Then('I should see a notice {string}', async (notice) => {
+    await waitForXPath(`//div[contains(@class,'alert') and contains(.,'${notice}')]`)
 })

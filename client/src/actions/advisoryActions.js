@@ -10,7 +10,7 @@ import {
     ADVISORIES_LOADING
  } from './types';
 import { tokenConfig } from './authActions'
-import { returnErrors, clearErrors } from './errorActions'
+import { returnNotices, clearNotices } from './noticeActions'
 
 const parseDates = ({createdAt, endOn, startOn, updatedAt}) => {
     return {
@@ -51,7 +51,7 @@ export const getAdvisories = (dispatch, getState) => {
             })
         })
     .catch(err => {
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     });
 };
 
@@ -65,13 +65,13 @@ export const deleteAdvisory = id => (dispatch, getState) => {
             });
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data,err.response.status))
+            dispatch(returnNotices(err.response.data,err.response.status))
         })
 };
 
 export const saveAdvisory = (advisory, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_ADVISORY })
-    dispatch(clearErrors())
+    dispatch(clearNotices())
     try {
         const res = advisory._id ? await axios
             .put('/api/advisories/' + advisory._id, advisory, tokenConfig(getState)) : 
@@ -88,7 +88,7 @@ export const saveAdvisory = (advisory, history) => async (dispatch, getState) =>
     }
     catch(err) {
         dispatch({type: SAVING_ADVISORY_CANCEL})
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     }
 }
 

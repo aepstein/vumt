@@ -147,6 +147,7 @@ Feature: Manage visits
         And I logged in as "bmarshall@example.com"
         When I visit the "home" page
         And I click "Check in" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
+        And there is no spinner
         Then I should see an applicable advisory for "Leave No Trace" prompting "Leave only footprints, take only pictures"
         And I should not see an applicable advisory for "Complete Survey" prompting "Please complete this survey to tell us how it went."
         When I fill in "Check in date" with today
@@ -157,6 +158,7 @@ Feature: Manage visits
         And I should see "Check in time" defined as 5 minutes ago
         When I visit the "home" page
         And I click "Check out" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
+        And there is no spinner
         Then I should not see an applicable advisory for "Leave No Trace" prompting "Leave only footprints, take only pictures"
         And I should see an applicable advisory for "Complete Survey" prompting "Please complete this survey to tell us how it went."
         When I fill in "Check out date" with today

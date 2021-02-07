@@ -10,6 +10,10 @@
     "AUTH_NO_USER": "אף משתמש לא רשום בדוא\"ל שצוין.",
     "AUTH_NO_USER_TOKEN": "לא סופק אסימון משתמש",
     "AUTH_REQUIRED": "עליך להיכנס כדי לבצע פעולה זו.",
+    "MODEL_RESTRICTED_KEY": "לא ניתן להסיר את {{model}} מכיוון שהוא חלק מ {{key}} בתלות {{dependent}} תלוי",
     "UNAUTHORIZED": "אינך רשאי לבצע את הפעולה המבוקשת.",
+    "advisory": "ייעוץ",
+    "district": "מחוז",
+    "districts": "מחוזות",
     "duplicateKey": "חייב להיות ייחודי וכבר משתמשים ב`{{value}}`"
 }

@@ -38,11 +38,11 @@ export default function MembershipEditor({organization,memberships,onSave,saving
         setRoles(membership.roles)
     },[membership.roles,setRoles])
 
-    const { handleSubmit, setError, clearError, errors } = useForm()
+    const { handleSubmit, setError, clearErrors, errors } = useForm()
 
     const onSubmit = () => {
         if (saving) return
-        clearError()
+        clearErrors()
         const newMembership = {
             user: user._id,
             roles
