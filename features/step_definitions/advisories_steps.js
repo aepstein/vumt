@@ -26,6 +26,12 @@ Given('the advisory {string} has {string} prompt {string}', async (label, langua
     })
 })
 
+Given('the advisory {string} covers district {string}', async (label,district) => {
+    await updateAdvisory(label,(advisory) => {
+        advisory.districts.push(scope.context.district.find(d => d.name === district).id)
+    })
+})
+
 Given('the advisory {string} has context {string}', async (label, context) => {
     await updateAdvisory(label,(advisory) => {
         advisory.contexts.push(context)

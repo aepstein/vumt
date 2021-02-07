@@ -50,3 +50,12 @@ Feature: Manage districts
         When I visit the "districts" page
         And I click "Remove" for district "McIntyre Range"
         Then I wait for district "Stay Safe" to disappear
+
+    Scenario: Try to remove a district associated with an advisory
+        Given I logged in as "bmcmartin@example.com"
+        And an advisory "Local" exists
+        And the advisory "Local" covers district "McIntyre Range"
+        When I visit the "districts" page
+        And I click "Remove" for district "McIntyre Range"
+        Then I should see a notice "Cannot remove the district because it is part of districts in a dependent advisory"
+        And I should see district "McIntyre Range"
