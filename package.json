@@ -27,6 +27,7 @@
   "author": "Ari Epstein",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@hookform/error-message": "^0.0.5",
     "asciidoctor": "^2.2.1",
     "bcryptjs": "^2.4.3",
     "chai-as-promised": "^7.1.1",

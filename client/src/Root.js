@@ -25,7 +25,7 @@ import ResetPasswordRequest from './containers/auth/ResetPasswordRequest'
 import ResetPasswordComplete from './containers/auth/ResetPasswordComplete'
 import UserDashboard from './containers/UserDashboard'
 import AppNavbar from './containers/AppNavbar';
-import AlertsManager from './containers/AlertsManager'
+import NoticesManager from './containers/NoticesManager'
 import './i18n'
 import DirectionProvider from './components/DirectionProvider'
 import { Spinner } from 'reactstrap'
@@ -36,7 +36,7 @@ const Root = ({ store }) => (
           <DirectionProvider>
             <Router>
             <AppNavbar />
-            <AlertsManager />
+            <NoticesManager />
             <ResetPasswordComplete />
             <Switch>
               <UnAuthRoute path="/need-auth">

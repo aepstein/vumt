@@ -10,7 +10,7 @@ import {
     PLACES_LOADING
  } from './types';
 import { tokenConfig } from './authActions'
-import { returnErrors, clearErrors } from './errorActions'
+import { returnNotices, clearNotices } from './noticeActions'
 
 const parseDates = ({createdAt, updatedAt}) => {
     return {
@@ -50,7 +50,7 @@ export const getPlaces = (dispatch, getState) => {
         })
     .catch(err => {
         console.log('error')
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     });
 };
 
@@ -64,13 +64,13 @@ export const deletePlace = id => (dispatch, getState) => {
             });
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data,err.response.status))
+            dispatch(returnNotices(err.response.data,err.response.status))
         })
 };
 
 export const savePlace = (place, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_PLACE })
-    dispatch(clearErrors())
+    dispatch(clearNotices())
     try {
         const res = place._id ? await axios
             .put('/api/places/' + place._id, place, tokenConfig(getState)) : 
@@ -87,7 +87,7 @@ export const savePlace = (place, history) => async (dispatch, getState) => {
     }
     catch(err) {
         dispatch({type: SAVING_PLACE_CANCEL})
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     }
 }
 

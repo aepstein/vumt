@@ -11,7 +11,7 @@ import {
     MEMBERSHIPS_LOADING
  } from './types'
 import { tokenConfig } from './authActions'
-import { clearErrors, returnErrors } from './errorActions'
+import { clearNotices, returnNotices } from './noticeActions'
 
 const initNext = (organization) => {
     return '/api/organizations/' + organization._id + '/users'
@@ -46,7 +46,7 @@ export const getMemberships = (dispatch, getState) => {
             })
         })
     .catch(err => {
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     })
 }
 
@@ -74,13 +74,13 @@ export const deleteMembership = userId => (dispatch, getState) => {
             })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data,err.response.status))
+            dispatch(returnNotices(err.response.data,err.response.status))
         })
 }
 
 export const saveMembership = (create, membership, afterSave) => async (dispatch, getState) => {
     dispatch({ type: SAVING_MEMBERSHIP })
-    dispatch(clearErrors())
+    dispatch(clearNotices())
     try {
         const res = await axios[create ? 'post' : 'put']
             (`${getState().membership.initNext}/${membership.user}`, membership, tokenConfig(getState))
@@ -95,7 +95,7 @@ export const saveMembership = (create, membership, afterSave) => async (dispatch
     catch(err) {
         console.log(err)
         dispatch({type: SAVING_MEMBERSHIP_CANCEL})
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     }
 }
 

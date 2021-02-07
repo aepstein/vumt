@@ -12,10 +12,10 @@ import {
 import { Link, useHistory } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { login, cancelLogin } from '../../actions/authActions';
-import { clearErrors } from '../../actions/errorActions';
+import { clearNotices } from '../../actions/noticeActions';
 import { useDispatch } from 'react-redux'
 
-function LoginForm({saving,error}) {
+function LoginForm({saving,notice}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [msg, setMsg] = useState(null)
@@ -34,22 +34,22 @@ function LoginForm({saving,error}) {
             email,
             password
         }
-        dispatch(clearErrors())
+        dispatch(clearNotices())
         dispatch(login(user,history))
     }
     const onCancel = (e) => {
         e.preventDefault()
-        dispatch(clearErrors())
+        dispatch(clearNotices())
         dispatch(cancelLogin(history))
     }
 
     useEffect(() => {
-        if (error.id === 'LOGIN_FAIL') {
-            setMsg(error.msg.msg)
+        if (notice.id === 'LOGIN_FAIL') {
+            setMsg(notice.msg.msg)
         } else {
             setMsg(null)
         }
-    },[error])
+    },[notice])
 
     if (saving) {
         return <Container>

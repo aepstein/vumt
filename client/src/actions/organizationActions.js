@@ -10,7 +10,7 @@ import {
     ORGANIZATIONS_LOADING
  } from './types';
 import { tokenConfig } from './authActions'
-import { returnErrors, clearErrors } from './errorActions'
+import { returnNotices, clearNotices } from './noticeActions'
 
 const parseDates = ({createdAt, updatedAt}) => {
     return {
@@ -50,7 +50,7 @@ export const getOrganizations = (dispatch, getState) => {
             })
         })
     .catch(err => {
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     });
 };
 
@@ -64,13 +64,13 @@ export const deleteOrganization = id => (dispatch, getState) => {
             });
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data,err.response.status))
+            dispatch(returnNotices(err.response.data,err.response.status))
         })
 };
 
 export const saveOrganization = (organization, history) => async (dispatch, getState) => {
     dispatch({ type: SAVING_ORGANIZATION })
-    dispatch(clearErrors())
+    dispatch(clearNotices())
     try {
         const res = organization._id ? await axios
             .put('/api/organizations/' + organization._id, organization, tokenConfig(getState)) : 
@@ -87,7 +87,7 @@ export const saveOrganization = (organization, history) => async (dispatch, getS
     }
     catch(err) {
         dispatch({type: SAVING_ORGANIZATION_CANCEL})
-        dispatch(returnErrors(err.response.data,err.response.status))
+        dispatch(returnNotices(err.response.data,err.response.status))
     }
 }
 

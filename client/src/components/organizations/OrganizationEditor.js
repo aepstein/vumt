@@ -23,7 +23,7 @@ export default function OrganizationEditor({organization,onSave,saving}) {
         setName(organization.name)
     },[organization.name,setName])
 
-    const { register, handleSubmit, setError, clearError, errors } = useForm()
+    const { register, handleSubmit, setError, clearErrors, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value
@@ -31,7 +31,7 @@ export default function OrganizationEditor({organization,onSave,saving}) {
     }
     const onSubmit = () => {
         if (saving) return
-        clearError()
+        clearErrors()
         const newOrganization = {
             _id: organization._id,
             name

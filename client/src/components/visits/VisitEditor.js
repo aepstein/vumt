@@ -176,7 +176,7 @@ export default function VisitEditor({visit,onSave,saving}) {
     const onSubmit = async (e) => {
         if (saving) return
         if (origin.length === 0) {
-            setError("origin","required",t('invalidRequired'))
+            setError("origin",{type: "required", message: t('invalidRequired')})
             return
         }
         const newVisit = {

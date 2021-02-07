@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import authReducer from './authReducer';
-import errorReducer from './errorReducer';
+import noticeReducer from './noticeReducer'
 import geoReducer from './geoReducer'
 import advisoryReducer from './advisoryReducer';
 import districtReducer from './districtReducer'
@@ -12,7 +12,7 @@ import visitReducer from './visitReducer';
 
 export default combineReducers({
     auth: authReducer,
-    error: errorReducer,
+    notice: noticeReducer,
     geo: geoReducer,
     advisory: advisoryReducer,
     district: districtReducer,

@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { register as registerUser, update as updateUser } from '../../actions/authActions';
-import { clearErrors } from '../../actions/errorActions';
+import { clearNotices } from '../../actions/noticeActions';
 import UserEditor from '../../components/users/UserEditor'
 import UserDetail from '../../components/users/UserDetail'
 
@@ -37,7 +37,7 @@ export default function AuthUserManager({action}) {
 
     const onSave = (newProps) => {
         if (saving) return
-        dispatch(clearErrors())
+        dispatch(clearNotices())
         if (user._id) {
             dispatch(updateUser(user,newProps,history))
         }

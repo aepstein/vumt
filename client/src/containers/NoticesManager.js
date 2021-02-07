@@ -6,18 +6,18 @@ import {
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-export default function AlertsManager() {
-    const msg = useSelector(state => state.error.msg)
-    const {t} = useTranslation('error')
+export default function NoticesManager() {
+    const msg = useSelector(state => state.notice.msg)
+    const {t} = useTranslation('notice')
 
-    const [alert,setAlert] = useState(null)
+    const [notice,setNotice] = useState(null)
 
     useEffect(() => {
         if (!msg.code) {
-            setAlert(msg.msg)
+            setNotice(msg.msg)
             return
         }
-        setAlert((() => {
+        setNotice((() => {
             switch(msg.code) {
                 case 'AUTH_NEED_ROLE':
                     return t(msg.code,{roles: msg.roles})
@@ -27,10 +27,10 @@ export default function AlertsManager() {
                     return t(msg.code)
             }
         })())
-    },[msg,setAlert,t])
+    },[msg,setNotice,t])
     
-    if (alert) return <Container>
-        <Alert color="danger">{alert}</Alert>
+    if (notice) return <Container>
+        <Alert color="danger">{notice}</Alert>
     </Container>
 
     return null

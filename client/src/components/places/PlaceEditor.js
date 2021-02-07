@@ -52,7 +52,7 @@ export default function PlaceEditor({place,onSave,saving}) {
         if (place.timezone) setTimezone([place.timezone])
     },[place.timezone,setTimezone])
 
-    const { register, handleSubmit, setError, clearError, errors } = useForm()
+    const { register, handleSubmit, setError, clearErrors, errors } = useForm()
 
     const onChange = (setter) => (e) => {
         const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value
@@ -60,9 +60,9 @@ export default function PlaceEditor({place,onSave,saving}) {
     }
     const onSubmit = () => {
         if (saving) return
-        clearError()
+        clearErrors()
         if (timezone.length === 0) {
-            setError("timezone","required",t('invalidRequired'))
+            setError("timezone",{type: "required",message: t('invalidRequired')})
             return
         }
         const newPlace = {
