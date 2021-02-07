@@ -72,7 +72,7 @@ router.put('/:organizationId', auth({roles:['admin']}), organization(), async (r
 // @access Private
 router.delete('/:organizationId', auth({roles: ['admin']}), organization(), async (req, res) => {
     try {
-        await req.organization.remove()
+        await req.organization.deleteOne()
         return res.json({success: true})
     }
     catch(err) {
