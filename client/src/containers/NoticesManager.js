@@ -22,7 +22,7 @@ export default function NoticesManager() {
                 case 'AUTH_NEED_ROLE':
                     return t(msg.code,{roles: msg.roles})
                 case 'MODEL_RESTRICTED_KEY':
-                    return t(msg.code,{key: msg.key, dependent: msg.dependent, model: msg.model})
+                    return t(msg.code,{key: t(msg.key), dependent: t(msg.dependent), model: t(msg.model)})
                 default:
                     return t(msg.code)
             }
