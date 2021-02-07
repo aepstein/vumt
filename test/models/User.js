@@ -1,4 +1,4 @@
-const { factory, interactsWithMail } = require('../setup')
+const { factory, expect } = require('../setup')
 const ValidationError = require('mongoose/lib/error/validation')
 
 describe('User', () => {
@@ -100,6 +100,15 @@ describe('User', () => {
             await user.resetPasswordWithToken(user.resetPasswordTokens[0].token,'swordfish')
             user.comparePassword('swordfish').should.not.eql(false)
             user.resetPasswordTokens[0].expended.should.not.eql(null)
+        })
+    })
+    describe('deleteOne()',() => {
+        it('should delete related visits',async () => {
+            const user = await factory.create('user')
+            const visit = await factory.create('visit',{user: user.id})
+            await user.deleteOne()
+            dVisit = Visit.findOne({_id: visit.id})
+            expect(dVisit).to.eventually.be.null
         })
     })
 })
