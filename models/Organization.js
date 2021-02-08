@@ -8,7 +8,11 @@ const OrganizationSchema = new Schema(
         name: {
             type: String,
             required: true
-        }
+        },
+        districts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'district'
+        }]
     },
     {
         timestamps: true
@@ -21,6 +25,14 @@ OrganizationSchema.pre('deleteOne',{document: true}, async function () {
         {$pull: {memberships: { organization: this.id }}},
         {multi: true}
     )
+})
+
+OrganizationSchema.pre('find',function () {
+    this.populate('districts','name')
+})
+
+OrganizationSchema.pre('findOne', function () {
+    this.populate('districts','name')
 })
 
 OrganizationSchema.methods.usersPipeline = function ({q}) {
