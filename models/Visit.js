@@ -77,22 +77,21 @@ VisitSchema.pre('validate', function(next) {
     next()
 })
 
-// Populate origin, destinations on load
-VisitSchema.post('find', async function(visits) {
-    for (let visit of visits) {
-        await visit.populate('origin').populate('destinations').execPopulate()
-    }
+const populate = (visit) => {
+    return visit.populate('origin').populate('destinations')
+}
+
+VisitSchema.pre('find', function() {
+    populate(this)
 })
 
-// Populate origin, destinations on load
-VisitSchema.post('findOne', async function(visit) {
-    if (!visit) return visit
-    await visit.populate('origin').populate('destinations').execPopulate()
+VisitSchema.pre('findOne', function () {
+    populate(this)
 })
 
 // After save, populate
 VisitSchema.post('save', async function(visit) {
-    await visit.populate('origin').populate('destinations').execPopulate()
+    await populate(visit).execPopulate()
 })
 
 VisitSchema.statics.searchPipeline = ({q,user,cancelled}) => {
