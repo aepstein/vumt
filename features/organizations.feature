@@ -6,6 +6,7 @@ Feature: Manage organizations
     Background:
         Given an admin user exists "Barbara" "McMartin" "bmcmartin@example.com"
         And a organization "Adirondack Trail Improvement Society" exists
+        And a district "McIntyre Range" exists
 
     Scenario: Search memberships with pagination
         Given user "bmcmartin@example.com" has role "planner" in organization "Adirondack Trail Improvement Society"
@@ -48,6 +49,16 @@ Feature: Manage organizations
         When I visit the "organizations" page
         Then I should see organization "Adirondack Trail Improvement Society"
 
+    Scenario: Add a new organization
+        Given I logged in as "bmcmartin@example.com"
+        When I visit the "organizations" page
+        And I click the "Add organization" button
+        And I fill in values for the organization
+        And I click the "Add organization" button
+        And I click "Detail" for organization "Adirondack Wilderness Advocates"
+        Then I should see "Name" defined as "Adirondack Wilderness Advocates"
+        And I should see "Districts" defined as "McIntyre Range"
+
     Scenario: Search organizations with pagination
         Given I logged in as "bmcmartin@example.com"
         And 10 organizations exist
@@ -62,13 +73,16 @@ Feature: Manage organizations
         And I should not see organization "Adirondack Trail Improvement Society"
 
     Scenario: Edit a organization
-        Given I logged in as "bmcmartin@example.com"
+        Given a district "McIntyre Range" exists
+        And I logged in as "bmcmartin@example.com"
         When I visit the "organizations" page
         And I click "Edit" for organization "Adirondack Trail Improvement Society"
-        And I fill in "Name" with "Great Range"
+        And I fill in "Name" with "Adirondack Mountain Club"
+        And I fill in the "Districts" typeahead with "McIntyre Range"
         And I click the "Update organization" button
-        And I click "Detail" for organization "Great Range"
-        Then I should see "Name" defined as "Great Range"
+        And I click "Detail" for organization "Adirondack Mountain Club"
+        Then I should see "Name" defined as "Adirondack Mountain Club"
+        And I should see "Districts" defined as "McIntyre Range"
 
     Scenario Outline: Try to add invalid organization
         Given I logged in as "bmcmartin@example.com"
