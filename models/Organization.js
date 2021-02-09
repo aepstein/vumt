@@ -27,12 +27,20 @@ OrganizationSchema.pre('deleteOne',{document: true}, async function () {
     )
 })
 
+const populate = (organization) => {
+    return organization.populate('districts','name')
+}
+
 OrganizationSchema.pre('find',function () {
-    this.populate('districts','name')
+    populate(this)
 })
 
 OrganizationSchema.pre('findOne', function () {
-    this.populate('districts','name')
+    populate(this)
+})
+
+OrganizationSchema.post('save', async function (organization) {
+    await populate(organization).execPopulate()
 })
 
 OrganizationSchema.methods.usersPipeline = function ({q}) {
