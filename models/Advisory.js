@@ -45,16 +45,20 @@ AdvisorySchema.pre('save', function (next) {
     next()
 })
 
-// Populate districts on load
-AdvisorySchema.post('find', async function(advisories) {
-    for (let advisory of advisories) {
-        await advisory.populate('districts').execPopulate()
-    }
+const populate = (advisory) => {
+    return advisory.populate('districts','name')
+}
+
+AdvisorySchema.pre('find',function () {
+    populate(this)
 })
 
-// After save, populate
+AdvisorySchema.pre('findOne',function () {
+    populate(this)
+})
+
 AdvisorySchema.post('save', async function(advisory) {
-    await advisory.populate('districts').execPopulate()
+    await populate(advisory).execPopulate()
 })
 
 // Retrieve advisories that are applicable to a context
