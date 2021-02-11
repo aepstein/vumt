@@ -45,9 +45,10 @@ describe('/api/advisories', () => {
         })
         it('should filter and paginate with q=', async () => {
             var i = 0
-            const advisories = await times(11,() => { 
+            const advisories = await times(10,() => { 
                 return factory.create('advisory',{label: `needle ${i.toString().padStart(2,'0')}`})
             })
+            advisories.push(await factory.create('advisory',{label: `needle ${i.toString().padStart(2,'0')}`}))
             advisories.push(await factory.create('advisory',{prompts: [{language: 'en-US', translation: 'Needle'}]}))
             advisories.push(await factory.create('advisory',{label: 'haystack'}))
             const res = await action('/api/advisories?q=needle')

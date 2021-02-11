@@ -20,11 +20,16 @@ import useZonedDateTime from '../../hooks/useZonedDateTime'
 import locales from '../../locales'
 import advisoryContexts from '../../lib/advisoryContexts'
 import DistrictsSelect from '../districts/DistrictsSelect'
+import ThemeSelect from '../themes/ThemeSelect'
 
 export default function AdvisoryEditor({advisory,onSave,saving}) {
     const { t } = useTranslation(['advisory','advisoryContext','translation'])
     const history = useHistory()
 
+    const [ theme, setTheme ] = useState('')
+    useEffect(() => {
+        setTheme(advisory.theme)
+    },[advisory.theme,setTheme])
     const [ label, setLabel ] = useState('')
     useEffect(() => {
         setLabel(advisory.label)
@@ -130,6 +135,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
             >
                 <p>{t('translation:timesAreLocal',{timezone})}</p>
                 <FormGroup>
+                    <ThemeSelect theme={theme} setTheme={setTheme} />
                     <Label for="label">{t('label')}</Label>
                     <Input
                         type="text"

@@ -6,6 +6,11 @@ const Place = require('./Place')
 
 const AdvisorySchema = new Schema(
     {
+        theme: {
+            type: Schema.Types.ObjectId,
+            ref: 'theme',
+            required: true
+        },
         label: {
             type: String,
             required: true
@@ -46,7 +51,7 @@ AdvisorySchema.pre('save', function (next) {
 })
 
 const populate = (advisory) => {
-    return advisory.populate('districts','name')
+    return advisory.populate('districts','name').populate('theme')
 }
 
 AdvisorySchema.pre('find',function () {

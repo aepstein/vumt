@@ -11,6 +11,10 @@ describe("Advisory", () => {
         let advisory = await factory.build('advisory',{label: null})
         await advisory.save().should.eventually.be.rejectedWith(ValidationError)
     })
+    it('should not save without a theme', async () => {
+        let advisory = await factory.build('advisory',{theme: null})
+        await advisory.save().should.eventually.be.rejectedWith(ValidationError)
+    })
     it('should not save with startOn after endOn', async () => {
         let advisory = await factory.build('advisory',{
             startOn: moment().add(1,'days'),

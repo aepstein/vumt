@@ -3,6 +3,7 @@ module.exports = {
     District: require('./District'),
     Organization: require('./Organization'),
     Place: require('./Place'),
+    Theme: require('./Theme'),
     User: require('./User'),
     Visit: require('./Visit')
 }
