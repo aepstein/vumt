@@ -3,6 +3,7 @@ const {
     clickByXPath,
     entitiesExist,
     fillByLabel,
+    fillTypeaheadByLabel,
     scope,
     shouldSeeText,
     waitFor
@@ -67,7 +68,8 @@ When('I click {string} for the membership of {string}', async (button,email) => 
     await clickByXPath(membershipRowSelector(email)+`//button[contains(.,'${button}')]`)
 })
 When(/^I fill in values for the organization(?: except "([^"]+)")?$/,async (except) => {
-    if (except !== "Name") await fillByLabel("Name","Adirondack Trail Improvement Society")
+    if (except !== "Name") await fillByLabel("Name","Adirondack Wilderness Advocates")
+    if ( except !== "Districts" ) await fillTypeaheadByLabel("Districts","McIntyre Range")
 })
 Then(/^I should( not)? see organization "([^"]+)"$/, async (not,name) => {
     await waitFor('.organizations-list')

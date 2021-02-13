@@ -7,7 +7,8 @@ import OrganizationDetail from '../../components/organizations/OrganizationDetai
 import OrganizationEditor from '../../components/organizations/OrganizationEditor'
 
 const BLANK_ORGANIZATION = {
-    name: ''
+    name: '',
+    districts: []
 }
 
 export default function OrganizationsManager({action}) {

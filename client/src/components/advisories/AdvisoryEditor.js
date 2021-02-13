@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -10,20 +10,16 @@ import {
     FormText,
     Label
 } from 'reactstrap';
-import {
-    AsyncTypeahead,
-    Highlighter,
-    Typeahead
-} from 'react-bootstrap-typeahead'
+import { Typeahead } from 'react-bootstrap-typeahead'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
-import axios from 'axios'
 import useValidationErrors from '../../hooks/useValidationErrors'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import locales from '../../locales'
 import advisoryContexts from '../../lib/advisoryContexts'
+import DistrictsSelect from '../districts/DistrictsSelect'
 
 export default function AdvisoryEditor({advisory,onSave,saving}) {
     const { t } = useTranslation(['advisory','advisoryContext','translation'])
@@ -43,37 +39,8 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
     const [ districts, setDistricts ] = useState([])
     useEffect(() => {
         if (!advisory.districts) {return}
-        const vDistricts = advisory.districts.map((d) => {
-            return {id: d._id, label: d.name}
-        })
-        setDistrictOptions(vDistricts)
-        setDistricts(vDistricts)
-    },[advisory.districts])
-    const districtsRef = useRef()
-    const [ districtOptions, setDistrictOptions ] = useState([])
-    const [ districtLoading, setDistrictLoading ] = useState(false)
-    const districtSearch = useCallback((q) => {
-        setDistrictLoading(true)
-        axios
-            .get('/api/districts',{params: {q}})
-            .then((res) => {
-                setDistrictOptions(res.data.data.map((district) => {
-                    return {id: district._id, label: district.name}
-                }))
-                setDistrictLoading(false)
-            })
-    },[setDistrictLoading,setDistrictOptions])
-    const initDistrictSearch = useCallback(() => {
-        if (districtOptions.length > 0) return
-        districtSearch()
-    },[districtOptions,districtSearch])
-    const renderDistricts = (option, props, index) => {
-        return [
-            <Highlighter key="label" search={props.text}>
-                {option.label}
-            </Highlighter>
-        ]
-    }
+        setDistricts(advisory.districts)
+    },[advisory.districts,setDistricts])
     const [ contexts, setContexts ] = useState([])
     useEffect(() => {
         if (!advisory.contexts) { return }
@@ -143,10 +110,8 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
             prompts,
             startOn,
             endOn,
-            districts: districts.map((d) => {
-                return {
-                    "_id": d.id
-                }
+            districts: districts.map(({_id}) => {
+                return _id
             }),
             contexts: contexts.map((c) => {
                 return c.id
@@ -227,26 +192,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                         invalid={errors.endOnTime ? true : false}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <Label for="districts">{t('districts')}</Label>
-                    <AsyncTypeahead
-                        id="districts"
-                        name="districts"
-                        multiple
-                        selected={districts}
-                        placeholder={t('districtsPlaceholder')}
-                        options={districtOptions}
-                        isLoading={districtLoading}
-                        onSearch={districtSearch}
-                        onChange={(selected) => setDistricts(selected)}
-                        onFocus={initDistrictSearch}
-                        renderMenuItemChildren={renderDistricts}
-                        ref={districtsRef}
-                        delay={200}
-                        minLength={0}
-                        clearButton={true}
-                    />
-                </FormGroup>
+                <DistrictsSelect districts={districts} setDistricts={setDistricts} />
                 <FormGroup>
                     <Label for="contexts">{t('contexts')}</Label>
                     <Typeahead

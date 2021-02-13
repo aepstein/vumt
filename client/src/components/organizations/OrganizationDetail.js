@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 export default function OrganizationDetail({organization}) {
-    const { t } = useTranslation(['organization','translation'])
+    const { t } = useTranslation(['organization','advisory','translation'])
     const history = useHistory()
 
     if (!organization._id) return <Spinner color="primary"/>
@@ -24,6 +24,8 @@ export default function OrganizationDetail({organization}) {
         <dl>
             <dt>{t('name')}</dt>
             <dd>{organization.name}</dd>
+            <dt>{t('advisory:districts')}</dt>
+            <dd>{organization.districts.map(d => d.name).join(', ')}</dd>
         </dl>
     </Container>
 }

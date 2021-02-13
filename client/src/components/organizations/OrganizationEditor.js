@@ -13,15 +13,21 @@ import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import useValidationErrors from '../../hooks/useValidationErrors'
+import DistrictsSelect from '../districts/DistrictsSelect'
 
 export default function OrganizationEditor({organization,onSave,saving}) {
     const { t } = useTranslation(['organization','translation'])
     const history = useHistory()
 
-    const [ name, setName ] = useState('')
+    const [ name, setName ] = useState(organization.name)
     useEffect(() => {
         setName(organization.name)
     },[organization.name,setName])
+    const [ districts, setDistricts ] = useState(organization.districts)
+    useEffect(() => {
+        setDistricts(organization.districts)
+    },[organization.districts,setDistricts])
+
 
     const { register, handleSubmit, setError, clearErrors, errors } = useForm()
 
@@ -34,7 +40,8 @@ export default function OrganizationEditor({organization,onSave,saving}) {
         clearErrors()
         const newOrganization = {
             _id: organization._id,
-            name
+            name,
+            districts: districts.map(({_id}) => { return _id })
         }
         onSave(newOrganization)
     }
@@ -62,6 +69,7 @@ export default function OrganizationEditor({organization,onSave,saving}) {
                     {errors.name && errors.name.type === 'required' &&
                         <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
+                <DistrictsSelect districts={districts} setDistricts={setDistricts} />
                 <ButtonGroup>
                     <Button
                         color="primary"

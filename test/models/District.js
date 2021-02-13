@@ -27,5 +27,12 @@ describe("District", () => {
             await factory.create('advisory',{districts: [district]})
             await district.deleteOne().should.be.rejectedWith(RestrictedKeyError)
         })
+        it('should remove from districts in organizations', async () => {
+            const district = await factory.create('district')
+            const organization = await factory.create('organization',{districts: [district.id]})
+            await district.deleteOne()
+            const o = await Organization.findOne({_id: organization.id})
+            o.districts.should.be.empty
+        })
     })
 })

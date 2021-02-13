@@ -218,11 +218,14 @@ describe('/api/organizations',() => {
         }
         it('should save an organization for authorized user with valid attributes', async () => {
             const auth = await withAuth({roles:['admin']})
-            const organization = await validOrganization()
+            const district = await factory.create('district')
+            const organization = await validOrganization({districts:[district.id]})
             const res = await action(organization,auth)
             res.should.have.status(201)
             res.body.should.be.an('object')
             res.body.name.should.be.a('string').eql(organization.name)
+            res.body.districts.should.be.an('array')
+            res.body.districts.map(d => d._id).should.have.members([district.id])
         })
         it('should return an error for an invalid submission', async () => {
             const auth = await withAuth({roles:['admin']})

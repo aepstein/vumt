@@ -10,7 +10,7 @@ const paginate = require('../../lib/paginate')
 
 const attrAccessible = (req) => {
     const attrAccessible = req.organization ? req.organization : {}
-    const allowed = ['name']
+    const allowed = ['name','districts']
     allowed.filter((key) => Object.keys(req.body).includes(key)).
         forEach((key) => {
             attrAccessible[key] = req.body[key]
