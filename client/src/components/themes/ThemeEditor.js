@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import useValidationErrors from '../../hooks/useValidationErrors'
 import TranslationsEditor from '../translations/TranslationsEditor'
+import colors from '../../lib/colors'
 
 export default function ThemeEditor({theme,onSave,saving}) {
     const { t } = useTranslation(['theme','translation'])
@@ -76,7 +77,7 @@ export default function ThemeEditor({theme,onSave,saving}) {
                 <FormGroup>
                     <Label for="color">{t('color')}</Label>
                     <Input
-                        type="text"
+                        type="select"
                         name="color"
                         id="color"
                         placeholder={t('color')}
@@ -84,7 +85,11 @@ export default function ThemeEditor({theme,onSave,saving}) {
                         value={color}
                         onChange={onChange(setColor)}
                         invalid={errors.color ? true : false}
-                    />
+                    >
+                        {colors.map((color) => {
+                            return <option key={color}>{color}</option>
+                        })}
+                    </Input>
                     {errors.color && errors.color.type === 'required' &&
                         <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>

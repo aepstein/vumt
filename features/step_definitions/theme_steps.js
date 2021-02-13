@@ -1,5 +1,6 @@
 const { Given, When, Then } = require ('@cucumber/cucumber')
 const {
+    chooseFromSelectByLabel,
     clickByXPath,
     entitiesExist,
     fillByLabel,
@@ -28,7 +29,7 @@ When(
 )
 When(/^I fill in values for the theme(?: except "([^"]+)")?$/,async (except) => {
     if (except !== "Name") await fillByLabel("Name","Enjoyment")
-    if (except !== "Color") await fillByLabel("Color","info")
+    if (except !== "Color") await chooseFromSelectByLabel("Color","info")
 })
 Then(/^I should( not)? see theme "([^"]+)"$/, async (not,name) => {
     await waitFor('.themes-list')

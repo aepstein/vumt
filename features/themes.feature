@@ -30,7 +30,7 @@ Feature: Manage themes
         When I visit the "themes" page
         And I click "Edit" for theme "Safety"
         And I fill in "Name" with "Knowledge"
-        And I fill in "Color" with "warning"
+        And I choose "warning" for "Color"
         And I click the "Update theme" button
         And I click "Detail" for theme "Knowledge"
         Then I should see "Name" defined as "Knowledge"
@@ -46,7 +46,6 @@ Feature: Manage themes
         Examples:
             | field |
             | Name  |
-            | Color |
 
     Scenario: Remove a theme
         Given I logged in as "bmcmartin@example.com"

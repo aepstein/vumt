@@ -4,6 +4,7 @@ const TranslationSchema = require('./schemas/TranslationSchema')
 const { useHandleMongoError11000 } = require('./middleware/errorMiddleware')
 const Advisory = require('./Advisory')
 const { RestrictedKeyError } =  require('../lib/errors/models')
+const colors = require('./enums/colors')
 
 const ThemeSchema = new Schema(
     {
@@ -14,7 +15,7 @@ const ThemeSchema = new Schema(
         labels: [TranslationSchema],
         color: {
             type: String,
-            enum: ['primary','secondary','success','danger','warning','info','light','dark'],
+            enum: colors,
             required: true
         }
     },
