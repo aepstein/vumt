@@ -6,6 +6,7 @@ Feature: Manage advisories
     Background:
         Given an admin user exists "Barbara" "McMartin" "bmcmartin@example.com"
         And a district "McIntyre Range" exists
+        And a theme "Information" exists
         And an advisory "Leave No Trace" exists
         And the advisory "Leave No Trace" has "en-US" prompt "Respect your surroundings."
 
@@ -39,8 +40,10 @@ Feature: Manage advisories
     Scenario: Edit an advisory
         Given I logged in as "bmcmartin@example.com"
         And a district "Other Range" exists
+        And a theme "Safety" exists
         When I visit the "advisories" page
         And I click "Edit" for advisory "Leave No Trace"
+        And I fill in the "Theme" typeahead with "Safety"
         And I fill in "Label" with "Leave Only Footprints, Take Only Pictures"
         And I fill in "Start date" with tomorrow
         And I fill in "Start time" with "900A"
@@ -51,7 +54,8 @@ Feature: Manage advisories
         And I fill in the "English" textarea with "Respect your environment please."
         And I click the "Update advisory" button
         And I click "Detail" for advisory "Leave Only Footprints, Take Only Pictures"
-        Then I should see "Label" defined as "Leave Only Footprints, Take Only Pictures"
+        Then I should see "Theme" defined as "Safety"
+        And I should see "Label" defined as "Leave Only Footprints, Take Only Pictures"
         And I should see "Start date" defined as tomorrow
         And I should see "Start time" defined as "9:00:00 AM"
         And I should see "End date" defined as tomorrow
@@ -67,7 +71,8 @@ Feature: Manage advisories
         And I fill in values for the advisory
         And I click the "Add advisory" button
         And I click "Detail" for advisory "Stay Safe"
-        Then I should see "Label" defined as "Stay Safe"
+        Then I should see "Theme" defined as "Information"
+        And I should see "Label" defined as "Stay Safe"
         And I should see "Start date" defined as today
         And I should see "Start time" defined as "8:00:00 AM"
         And I should see "End date" defined as today
@@ -84,6 +89,7 @@ Feature: Manage advisories
         Then the "<field>" field should have an error "Cannot be blank"
         Examples:
             | field                          |
+            | Theme                          |
             | Label                          |
 
     Scenario: Try to add invalid advisory

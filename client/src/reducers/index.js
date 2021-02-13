@@ -7,6 +7,7 @@ import districtReducer from './districtReducer'
 import membershipReducer from './membershipReducer'
 import organizationReducer from './organizationReducer'
 import placeReducer from './placeReducer'
+import themeReducer from './themeReducer'
 import userReducer from './userReducer'
 import visitReducer from './visitReducer';
 
@@ -19,6 +20,7 @@ export default combineReducers({
     membership: membershipReducer,
     organization: organizationReducer,
     place: placeReducer,
+    theme: themeReducer,
     user: userReducer,
     visit: visitReducer
 })

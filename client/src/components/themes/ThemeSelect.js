@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useRef } from 'react'
 import {
+    FormFeedback,
     FormGroup,
+    Input,
     Label
 } from 'reactstrap'
 import {
@@ -26,8 +28,8 @@ const selectionsToTheme = (selections) => {
     return {_id: id, name: label}
 }
 
-export default function ThemeSelect({theme,setTheme}) {
-    const { t } = useTranslation('theme')
+export default function ThemeSelect({name,register,errors,theme,setTheme}) {
+    const { t } = useTranslation('theme','translation')
     const themeRef = useRef()
     const [ themeOptions, setThemeOptions ] = useState([])
     const [ themesLoading, setThemesLoading ] = useState(false)
@@ -56,7 +58,7 @@ export default function ThemeSelect({theme,setTheme}) {
         <Label for="theme">{t('theme')}</Label>
         <AsyncTypeahead
             id="theme"
-            name="theme"
+            name={name ? name : "theme"}
             selected={themeToSelections(theme)}
             placeholder={t('themePlaceholder')}
             options={themeOptions}
@@ -69,6 +71,9 @@ export default function ThemeSelect({theme,setTheme}) {
             delay={200}
             minLength={0}
             clearButton={true}
+            isInvalid={errors ? true : false}
         />
+        <Input type="hidden" name={`${name ? name : 'theme'}Hidden`} invalid={errors ? true : false} />
+        {(errors && errors.type === 'required') ? <FormFeedback>{t('translation:invalidRequired')}</FormFeedback> : ''}
     </FormGroup>
 }
