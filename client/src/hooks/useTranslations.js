@@ -25,6 +25,6 @@ export default function useTranslations({translations,fallback,html}) {
             }
         }
         setTranslation(fallback)
-    },[translation,i18n.languages,fallback,translations,setTranslation])
+    },[translation,i18n.languages,fallback,translations,html,setTranslation])
     return translation
 }
