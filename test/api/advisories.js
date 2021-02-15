@@ -35,7 +35,8 @@ describe('/api/advisories', () => {
             res.body.data.map(advisory => advisory._id).should.have.members( Object.values(advisories).map(v => v.id) )
         })
         it('should paginate for more than 10 advisories', async () => {
-            const advisories = await times(11,() => factory.create('advisory'))
+            const advisories = await times(10,() => factory.create('advisory'))
+            advisories.push(await factory.create('advisory'))
             const res = await action('/api/advisories')
             res.should.have.status(200)
             res.body.data.should.be.an('array')
