@@ -6,6 +6,7 @@ const {
     fillByLabel,
     scope,
     shouldSeeText,
+    updateTheme,
     waitFor
 } = require('../support/actions')
 const themeRowSelector = (name) => {
@@ -18,6 +19,12 @@ Given('a theme {string} exists', async (name) => {
 
 Given('{int} themes exist', async (n) => {
     await entitiesExist(n,'theme')
+})
+
+Given('the theme {string} has {string} label {string}', async (name, language, translation) => {
+    await updateTheme(name,(theme) => {
+        theme.labels.push({language, translation})
+    })
 })
 
 When(

@@ -2,6 +2,7 @@ const { factory } = require('../setup')
 const ValidationError = require('mongoose/lib/error/validation')
 const moment = require('moment')
 const Advisory = require('../../models/Advisory')
+const { applicableAdvisories } = require('../support/applicableAdvisories')
 
 describe("Advisory", () => {
     it('creates a valid advisory', async () => {
@@ -80,9 +81,12 @@ describe("Advisory", () => {
     })
     describe('Advisory.applicable()', () => {
         it('should return applicable advisories with visit attributes', async() => {
-            const { advisories, visit } = await require('../support/applicableAdvisories')()
+            const collectAdvisories = (advisories,theme) => advisories
+                .concat(theme.advisories.map(a => a._id.toString()))
+            const { advisories, visit } = await applicableAdvisories()
             advisoriesControl = await visit.applicableAdvisories()
-            advisoriesControl.map((v) => v._id.toString()).should.have.members(advisories)
+            const advisoriesControlIds = advisoriesControl.reduce(collectAdvisories,[])
+            advisoriesControlIds.should.have.members(advisories)
             advisoriesTest = await Advisory.applicable({
                 startOn: visit.startOn,
                 endOn: visit.startOn,
@@ -91,6 +95,7 @@ describe("Advisory", () => {
             advisoriesTest.map(a => a._id.toString()).should.have.members(
                 advisoriesControl.map(a => a._id.toString())
             )
+            advisoriesTest.reduce(collectAdvisories,[]).should.have.members(advisoriesControlIds)
         })
     })
 })

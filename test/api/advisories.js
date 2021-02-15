@@ -9,7 +9,10 @@ const {
     errorPathRequired,
 } = require('../support/middlewareErrors')
 const { times } = require('../support/util')
-const applicableAdvisories = require('../support/applicableAdvisories')
+const {
+    applicableAdvisories,
+    applicableAdvisoriesToAdvisoryIds
+} = require('../support/applicableAdvisories')
 
 describe('/api/advisories', () => {
     const genAdvisories = async () => {
@@ -68,7 +71,7 @@ describe('/api/advisories', () => {
         it('should return advisories scoped to a context', async () => {
             const advisories = await genAdvisories()
             const res = await action(`/api/advisories/applicable/checkin`)
-            res.body.map(a => a._id).should.have.members([advisories.global.id,advisories.checkin.id])
+            applicableAdvisoriesToAdvisoryIds(res.body).should.have.members([advisories.global.id,advisories.checkin.id])
         })
         it('should return advisories scoped to places and times, if supplied', async () => {
             const { visit, advisories } = await applicableAdvisories()
@@ -77,7 +80,7 @@ describe('/api/advisories', () => {
                 places: JSON.stringify([visit.origin._id.toString()].concat(visit.destinations.map(d => d._id.toString())))
             })
             res.should.have.status(200)
-            res.body.map(a => a._id).should.have.members(advisories)
+            applicableAdvisoriesToAdvisoryIds(res.body).should.have.members(advisories)
         })
     })
     describe('POST /api/advisories', () => {

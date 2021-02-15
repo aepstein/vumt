@@ -103,6 +103,8 @@ AdvisorySchema.statics.applicable = async function ({context,visit,startOn,endOn
         })
     }
     const pipeline = [
+        {$lookup: {from: 'themes', localField: 'theme', foreignField: '_id', as: 'theme'}},
+        {$unwind: {path: '$theme'}},
         {$lookup: {from: 'districts', localField: 'districts', foreignField: '_id', as: 'districts'}},
         {$unwind: {path: '$districts', preserveNullAndEmptyArrays: true}},
         {$match: {$and: [
@@ -111,13 +113,28 @@ AdvisorySchema.statics.applicable = async function ({context,visit,startOn,endOn
             {$or: endOnConditions},
             {$or: geoConditions}
         ]}},
+        {$sort: {
+            "theme.name": 1,
+            label: 1
+        }},
         {$group: {
             _id: '$_id',
+            theme: {$first: '$theme'},
             label: {$first: '$label'},
             prompts: {$first: '$prompts'}
+        }},
+        {$replaceRoot: {newRoot: {$mergeObjects: [
+            {advisory: {_id: '$_id', label: '$label', prompts: '$prompts'}},
+            '$theme'
+        ]}}},
+        {$group: {
+            _id: '$_id',
+            name: {$first: '$name'},
+            color: {$first: '$color'},
+            labels: {$first: '$labels'},
+            advisories: {$push: '$advisory'}
         }}
     ]
-    // console.log(JSON.stringify(pipeline,null,4))
     return mongoose.model('advisory').aggregate(pipeline)
 }
 

@@ -17,7 +17,10 @@ const {
     errorMustHaveRoles,
     errorPathRequired
 } = require('../support/middlewareErrors')
-const applicableAdvisories = require('../support/applicableAdvisories')
+const {
+    applicableAdvisories,
+    applicableAdvisoriesToAdvisoryIds
+} = require('../support/applicableAdvisories')
 const Visit = require('../../models/Visit')
 
 describe('/api/visits', () => {
@@ -397,7 +400,7 @@ describe('/api/visits', () => {
             const {res,advisories} = await action(auth)
             res.should.have.status(200)
             res.body.should.be.an('array')
-            res.body.map((v) => v._id).should.have.members(advisories)
+            applicableAdvisoriesToAdvisoryIds(res.body).should.have.members(advisories)
         })
         it('should deny with nonowner credentials', async () => {
             const auth = await withAuth()

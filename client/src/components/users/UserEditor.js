@@ -13,7 +13,7 @@ import {
 import {
     Typeahead
 } from 'react-bootstrap-typeahead'
-import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
+import ApplicableAdvisories from '../../containers/advisories/ApplicableAdvisories'
 import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
