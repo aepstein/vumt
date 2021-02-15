@@ -295,11 +295,9 @@ const updateTheme = async (name,update) => {
 }
 const userExists = async (attr) => {
 	await entitiesExist(1,'user',{password: "secret",...attr})
-	// scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
 }
 const visitExists = async (attr={}) => {
 	await entitiesExist(1,'visit',attr)
-    // scope.context.visit = await scope.factory.create('visit',attr);
 }
 const visitPage = async (page) => {
 	await visitPath(paths[page])
