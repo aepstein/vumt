@@ -11,7 +11,9 @@ export default function useTranslations({translations,fallback,html}) {
     const {i18n} = useTranslation()
     useEffect(() => {
         for (const language of i18n.languages) {
-            const newTranslation = translations.find(translation => translation.language === language)
+            const preciseTranslation = translations.find(translation => translation.language === language)
+            const newTranslation = preciseTranslation ? preciseTranslation :
+                translations.find(translation => translation.language.slice(0,2) === language.slice(0,2))
             if (newTranslation) {
                 if (html) {
                     if (newTranslation.translationHTML === translation) { return }
