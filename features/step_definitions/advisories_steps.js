@@ -32,6 +32,12 @@ Given('the advisory {string} covers district {string}', async (label,district) =
     })
 })
 
+Given('the advisory {string} has theme {string}', async (label, theme) => {
+    await updateAdvisory(label,(advisory) => {
+        advisory.theme = scope.context.theme.find(t => t.name === theme).id
+    })
+})
+
 Given('the advisory {string} has context {string}', async (label, context) => {
     await updateAdvisory(label,(advisory) => {
         advisory.contexts.push(context)
@@ -49,7 +55,8 @@ When(
     }
 )
 When(/^I fill in values for the advisory(?: except "([^"]+)")?$/,async (except) => {
-    if (except !== "Label") await fillByLabel("Label","Stay Safe")
+    if ( except !== "Theme" ) await fillTypeaheadByLabel("Theme","Information")
+    if ( except !== "Label") await fillByLabel("Label","Stay Safe")
     if ( except !== "Start date" ) await fillByLabel("Start date",formatDateForFill(relativeDate('today')))
     if ( except !== "Start time" ) await fillByLabel("Start time",'08:00AM')
     if ( except !== "End date" ) await fillByLabel("End date",formatDateForFill(relativeDate('today')))

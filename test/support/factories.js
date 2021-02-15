@@ -1,5 +1,5 @@
 const { factory } = require('./setup')
-const { Advisory, District, Organization, Place, User, Visit } = require('../../models')
+const { Advisory, Theme, District, Organization, Place, User, Visit } = require('../../models')
 const { 
     toLocalDate,
     fromLocalDateTimeToDate
@@ -8,7 +8,7 @@ const moment = require('moment')
 
 factory.define('advisory', Advisory, {
     label: factory.sequence('Advisory.label', (n) => `Advisory ${n.toString().padStart(3,'0')}`),
-    prompt: 'Take note'
+    theme: factory.assoc('theme','_id')
 })
 
 factory.extend('advisory','currentAdvisory', {
@@ -211,6 +211,11 @@ factory.extend('place','destinationPlace',{
     },
     isDestination: true,
     parkingCapacity: 0
+})
+
+factory.define('theme', Theme, {
+  name: factory.sequence('Theme.label', (n) => `Theme ${n.toString().padStart(3,'0')}`),
+  color: 'info'
 })
 
 factory.define('user', User, {

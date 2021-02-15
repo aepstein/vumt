@@ -288,13 +288,16 @@ const updateAdvisory = async (label,update) => {
 	update(advisory)
 	await advisory.save()
 }
+const updateTheme = async (name,update) => {
+	const theme = await Theme.findOne({name})
+	update(theme)
+	await theme.save()
+}
 const userExists = async (attr) => {
 	await entitiesExist(1,'user',{password: "secret",...attr})
-	// scope.context.user = await scope.factory.create('user',{password: "secret", ...attr});
 }
 const visitExists = async (attr={}) => {
 	await entitiesExist(1,'visit',attr)
-    // scope.context.visit = await scope.factory.create('visit',attr);
 }
 const visitPage = async (page) => {
 	await visitPath(paths[page])
@@ -367,6 +370,7 @@ module.exports = {
 	switchByLabel,
 	takeScreenshot,
 	updateAdvisory,
+	updateTheme,
 	userExists,
 	waitFor,
 	waitForText,

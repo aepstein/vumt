@@ -49,6 +49,9 @@ function AppNavbar() {
                         <NavLink to="/places" activeClassName="active">{t('places')}</NavLink>
                     </DropdownItem>
                     <DropdownItem>
+                        <NavLink to="/themes" activeClassName="active">{t('themes')}</NavLink>
+                    </DropdownItem>
+                    <DropdownItem>
                         <NavLink to="/users" activeClassName="active">{t('users')}</NavLink>
                     </DropdownItem>
                 </DropdownMenu>

@@ -4,12 +4,15 @@ Feature: Authentication
     I want to be able to register, login, and logout
 
     Scenario: Register new user
-        Given an advisory "Registration Advisory" exists
+        Given a theme "Information" exists
+        And the theme "Information" has "en-US" label "Information" 
+        And an advisory "Registration Advisory" exists
         And the advisory "Registration Advisory" has "en-US" prompt "Welcome to our app."
         And the advisory "Registration Advisory" has context "register"
+        And the advisory "Registration Advisory" has theme "Information"
         When I visit the "home" page
         And I click the "Register" link
-        Then I should see an applicable advisory for "Registration Advisory" prompting "Welcome to our app."
+        Then I should see an applicable advisory for "Information" prompting "Welcome to our app."
         And I fill in a new registration for "bmarshall@example.com"
         And I click the "Register" button
         Then I should be logged in as "bmarshall@example.com"

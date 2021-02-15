@@ -137,10 +137,14 @@ Feature: Manage visits
 
     Scenario: Check in/out of a visit
         Given I am registered as "bmarshall@example.com"
-        And an advisory "Leave No Trace" exists
-        And the advisory "Leave No Trace" has context "checkin"
-        And the advisory "Leave No Trace" has "en-US" prompt "Leave only footprints, take only pictures"
+        And a theme "LNT" exists
+        And the theme "LNT" has "en-US" label "Leave No Trace"
+        And an advisory "footprints" exists
+        And the advisory "footprints" has theme "LNT"
+        And the advisory "footprints" has context "checkin"
+        And the advisory "footprints" has "en-US" prompt "Leave only footprints, take only pictures"
         And an advisory "Complete Survey" exists
+        And the advisory "Complete Survey" has theme "LNT"
         And the advisory "Complete Survey" has context "checkout"
         And the advisory "Complete Survey" has "en-US" prompt "Please complete this survey to tell us how it went."
         And I have registered a visit for 10 minutes ago from "Adirondack Loj" to "Algonquin Summit"
@@ -149,7 +153,7 @@ Feature: Manage visits
         And I click "Check in" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
         And there is no spinner
         Then I should see an applicable advisory for "Leave No Trace" prompting "Leave only footprints, take only pictures"
-        And I should not see an applicable advisory for "Complete Survey" prompting "Please complete this survey to tell us how it went."
+        And I should not see an applicable advisory for "Leave No Trace" prompting "Please complete this survey to tell us how it went."
         When I fill in "Check in date" with today
         And I fill in "Check in time" with 5 minutes ago
         And I click the "Check in" button
@@ -160,7 +164,7 @@ Feature: Manage visits
         And I click "Check out" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
         And there is no spinner
         Then I should not see an applicable advisory for "Leave No Trace" prompting "Leave only footprints, take only pictures"
-        And I should see an applicable advisory for "Complete Survey" prompting "Please complete this survey to tell us how it went."
+        And I should see an applicable advisory for "Leave No Trace" prompting "Please complete this survey to tell us how it went."
         When I fill in "Check out date" with today
         And I fill in "Check out time" with 1 minute ago
         And I click the "Check out" button
@@ -168,10 +172,14 @@ Feature: Manage visits
         Then I should see "Check out date" defined as today
         And I should see "Check out time" defined as 1 minute ago
 
-    Scenario: See applicable advisory on check in
-        Given an advisory "Leave No Trace" exists
+    Scenario: See applicable advisory on check in different languages
+        Given a theme "Leave No Trace" exists
+        And the theme "Leave No Trace" has "en-US" label "Leave No Trace"
+        And the theme "Leave No Trace" has "fr" label "Ne laisse aucune trace"
+        And an advisory "Leave No Trace" exists
         And the advisory "Leave No Trace" has "en-US" prompt "Respect your surroundings"
         And the advisory "Leave No Trace" has "fr" prompt "Respectez votre environnement"
+        And the advisory "Leave No Trace" has theme "Leave No Trace"
         And I am registered as "bmarshall@example.com"
         And I have registered a visit for today from "Adirondack Loj" to "Algonquin Summit"
         And I logged in as "bmarshall@example.com"
@@ -179,7 +187,7 @@ Feature: Manage visits
         And I click "Check in" for my visit for today from "Adirondack Loj" to "Algonquin Summit"
         Then I should see an applicable advisory for "Leave No Trace" prompting "Respect your surroundings"
         When I change the language to "Français"
-        Then I should see an applicable advisory for "Leave No Trace" prompting "Respectez votre environnement"
+        Then I should see an applicable advisory for "Ne laisse aucune trace" prompting "Respectez votre environnement"
 
     Scenario Outline: Remove/Cancel visit
         Given an admin user exists "Bob" "Marshall" "bmarshall@example.com"

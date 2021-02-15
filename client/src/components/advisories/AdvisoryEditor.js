@@ -7,24 +7,28 @@ import {
     Form,
     FormFeedback,
     FormGroup,
-    FormText,
     Label
 } from 'reactstrap';
 import { Typeahead } from 'react-bootstrap-typeahead'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import useValidationErrors from '../../hooks/useValidationErrors'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
-import locales from '../../locales'
 import advisoryContexts from '../../lib/advisoryContexts'
 import DistrictsSelect from '../districts/DistrictsSelect'
+import ThemeSelect from '../themes/ThemeSelect'
+import TranslationsEditor from '../translations/TranslationsEditor'
 
 export default function AdvisoryEditor({advisory,onSave,saving}) {
     const { t } = useTranslation(['advisory','advisoryContext','translation'])
     const history = useHistory()
 
+    const [ theme, setTheme ] = useState('')
+    useEffect(() => {
+        setTheme(advisory.theme)
+    },[advisory.theme,setTheme])
     const [ label, setLabel ] = useState('')
     useEffect(() => {
         setLabel(advisory.label)
@@ -62,34 +66,6 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
         if (!advisory.prompts) {return}
         setPrompts(advisory.prompts)
     },[advisory.prompts])
-    const updatePrompt = (index,field) => {
-        return (e) => {
-            const newVal = {...prompts[index]}
-            newVal[field] = e.target.value
-            setPrompts([
-                ...prompts.slice(0,index),
-                newVal,
-                ...prompts.slice(index+1)
-            ])
-        }
-    }
-    const appendPrompt = (e) => {
-        setPrompts([...prompts, {language: e.target.value, translation: ''}])
-    }
-    const removePrompt = (index) => {
-        return () => {
-            setPrompts(prompts.filter((prompt,i) => {return i !== index}))
-        }
-    }
-    const [missingLocales,setMissingLocales] = useState([])
-    useEffect(() => {
-        const presentLocales = prompts.map((prompt) => {
-            return prompt.language
-        })
-        setMissingLocales(locales.filter(({code}) => {
-            return !presentLocales.includes(code)
-        }))
-    },[prompts,setMissingLocales])
 
     const { register, handleSubmit, setError, clearErrors, errors } = useForm()
 
@@ -104,8 +80,13 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
             setError("startOnDate",{type: "afterEndOn", message: t('mustBeBeforeEndOn')})
             return
         }
+        if (!theme) {
+            setError("theme",{type: "required"})
+            return
+        }
         const newAdvisory = {
             _id: advisory._id,
+            theme,
             label,
             prompts,
             startOn,
@@ -129,6 +110,7 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <p>{t('translation:timesAreLocal',{timezone})}</p>
+                <ThemeSelect theme={theme} setTheme={setTheme} register={register} errors={errors.theme} name="theme" />
                 <FormGroup>
                     <Label for="label">{t('label')}</Label>
                     <Input
@@ -207,54 +189,8 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
                     />
                 </FormGroup>
                 <h2>{t('prompts')}</h2>
-                {prompts.map((prompt,index) => {
-                    return <FormGroup key={index}>
-                        <Label for={`prompts[${index}].translation`}>{locales.find((locale) => {
-                            return locale.code === prompt.language
-                        }).name}</Label>
-                        <Input
-                            type="textarea"
-                            name={`prompts[${index}].translation`}
-                            placeholder={t('translation:translation')}
-                            innerRef={register({required: true})}
-                            value={prompt.translation}
-                            onChange={updatePrompt(index,'translation')}
-                            invalid={
-                                errors.prompts && 
-                                errors.prompts[index] &&
-                                errors.prompts[index].translation ? true : false}
-                        />
-                        <FormText>
-                            <Trans i18nKey="translation:asciidocHint">You can use <a target="_blank" rel="noreferrer"
-                            href="https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/">Asciidoctor</a>
-                            markup to format your text.</Trans>
-                        </FormText>
-                        <Button
-                            color="danger"
-                            onClick={removePrompt(index)}
-                        >{t('removePrompt')}</Button>
-                        {
-                            errors.prompts &&
-                            errors.prompts[index] &&
-                            errors.prompts[index].translation &&
-                            errors.prompts[index].translation.type === 'required' &&
-                            <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
-                    </FormGroup>
-                })}
-                {missingLocales.length > 0 ? <FormGroup>
-                    <Label for="addPrompt">{t('addPrompt')}</Label>
-                    <Input
-                        type="select"
-                        name="addPrompt"
-                        value=""
-                        onChange={appendPrompt}
-                    >
-                        <option value="">{t('translation:selectLanguage')}</option>
-                        {missingLocales.map(({code,name},index) => {
-                            return <option key={index} value={code}>{name}</option>
-                        })}
-                    </Input>
-                </FormGroup> : ''}
+                <TranslationsEditor register={register} errors={errors} name="prompts"
+                    translations={prompts} setTranslations={setPrompts} />
                 <ButtonGroup>
                     <Button
                         color="primary"

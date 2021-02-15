@@ -9,7 +9,10 @@ const {
     errorPathRequired,
 } = require('../support/middlewareErrors')
 const { times } = require('../support/util')
-const applicableAdvisories = require('../support/applicableAdvisories')
+const {
+    applicableAdvisories,
+    applicableAdvisoriesToAdvisoryIds
+} = require('../support/applicableAdvisories')
 
 describe('/api/advisories', () => {
     const genAdvisories = async () => {
@@ -32,7 +35,8 @@ describe('/api/advisories', () => {
             res.body.data.map(advisory => advisory._id).should.have.members( Object.values(advisories).map(v => v.id) )
         })
         it('should paginate for more than 10 advisories', async () => {
-            const advisories = await times(11,() => factory.create('advisory'))
+            const advisories = await times(10,() => factory.create('advisory'))
+            advisories.push(await factory.create('advisory'))
             const res = await action('/api/advisories')
             res.should.have.status(200)
             res.body.data.should.be.an('array')
@@ -45,9 +49,10 @@ describe('/api/advisories', () => {
         })
         it('should filter and paginate with q=', async () => {
             var i = 0
-            const advisories = await times(11,() => { 
+            const advisories = await times(10,() => { 
                 return factory.create('advisory',{label: `needle ${i.toString().padStart(2,'0')}`})
             })
+            advisories.push(await factory.create('advisory',{label: `needle ${i.toString().padStart(2,'0')}`}))
             advisories.push(await factory.create('advisory',{prompts: [{language: 'en-US', translation: 'Needle'}]}))
             advisories.push(await factory.create('advisory',{label: 'haystack'}))
             const res = await action('/api/advisories?q=needle')
@@ -67,7 +72,7 @@ describe('/api/advisories', () => {
         it('should return advisories scoped to a context', async () => {
             const advisories = await genAdvisories()
             const res = await action(`/api/advisories/applicable/checkin`)
-            res.body.map(a => a._id).should.have.members([advisories.global.id,advisories.checkin.id])
+            applicableAdvisoriesToAdvisoryIds(res.body).should.have.members([advisories.global.id,advisories.checkin.id])
         })
         it('should return advisories scoped to places and times, if supplied', async () => {
             const { visit, advisories } = await applicableAdvisories()
@@ -76,7 +81,7 @@ describe('/api/advisories', () => {
                 places: JSON.stringify([visit.origin._id.toString()].concat(visit.destinations.map(d => d._id.toString())))
             })
             res.should.have.status(200)
-            res.body.map(a => a._id).should.have.members(advisories)
+            applicableAdvisoriesToAdvisoryIds(res.body).should.have.members(advisories)
         })
     })
     describe('POST /api/advisories', () => {

@@ -15,17 +15,21 @@ const FactoryBot = require('factory-bot');
 const factory = FactoryBot.factory;
 factory.setAdapter(new FactoryBot.MongooseAdapter());
 
-const Place = require('../../models/Place')
-const User = require('../../models/User')
-const Visit = require('../../models/Visit');
-const Advisory = require('../../models/Advisory');
-const District = require('../../models/District');
-const Organization = require('../../models/Organization')
+const {
+    Advisory,
+    District,
+    Organization,
+    Place,
+    Theme,
+    User,
+    Visit
+} = require('../../models')
 const purgeDb = async () => {
     await Advisory.deleteMany({})
     await District.deleteMany({})
     await Organization.deleteMany({})
     await Place.deleteMany({})
+    await Theme.deleteMany({})
     await User.deleteMany({})
     await Visit.deleteMany({})
 }

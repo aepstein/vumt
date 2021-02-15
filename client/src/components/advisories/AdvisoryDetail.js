@@ -8,10 +8,10 @@ import {
     useHistory
 } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import locales from '../../locales'
+import TranslationDefinitions from '../translations/TranslationDefinitions'
 
 export default function AdvisoryDetail({advisory}) {
-    const { t, i18n } = useTranslation(['advisory','translation'])
+    const { t, i18n } = useTranslation(['advisory','theme','translation'])
     const history = useHistory()
     const [ timezone ] = useState('America/New_York')
 
@@ -25,6 +25,8 @@ export default function AdvisoryDetail({advisory}) {
             >{t('translation:edit')}</Button>
         </div>
         <dl>
+            <dt>{t('theme:theme')}</dt>
+            <dd>{advisory.theme.name}</dd>
             <dt>{t('label')}</dt>
             <dd>{advisory.label}</dd>
             <dt>{t('startOnDate')}</dt>
@@ -41,13 +43,6 @@ export default function AdvisoryDetail({advisory}) {
             <dd>{advisory.contexts.map(c => t(`advisoryContext:${c}`)).join(', ')}</dd>
         </dl>
         <h2>{t('prompts')}</h2>
-        <dl>
-        {advisory.prompts && advisory.prompts.map(({language,translationHTML},index) => {
-            return <div key={index}>
-                <dt>{locales.filter(t => t.code === language)[0].name}</dt>
-                <dd dangerouslySetInnerHTML={{__html: translationHTML}}></dd>
-            </div>
-        })}
-        </dl>
+        <TranslationDefinitions translations={advisory.prompts} />
     </Container>
 }

@@ -8,6 +8,7 @@ const paths = {
     "places": "/places",
     "profile": '/profile',
     "registration": '/register',
+    "themes": "/themes",
     "users": '/users'
 }
 

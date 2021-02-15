@@ -114,7 +114,7 @@ When('there is no spinner', async () => {
 })
 
 Then('the {string} field should have an error {string}', async (label, error) => {
-    await new Promise(r => setTimeout(r, 200))
+    // await new Promise(r => setTimeout(r, 200))
     await shouldSeeErrorWithLabel(error,label)
 })
 

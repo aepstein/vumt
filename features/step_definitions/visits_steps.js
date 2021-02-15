@@ -129,7 +129,7 @@ Then(
 
 Then(/^I should( not)? see an applicable advisory for "([^"]+)" prompting "([^"]+)"$/, async (not,label,prompt) => {
     await waitFor('.applicable-advisories')
-    if (!not) { await waitFor('.card-title') }
-    await shouldSeeText(".card-title", not, label)
-    await shouldSeeText(".card-text", not, prompt)
+    const test = `//div[contains(@class,'card-title') and contains(.,'${label}')]/` +
+        `following-sibling::div[contains(@class,'card-text') and contains(.,'${prompt}')]`
+    await waitFor(test,{ hidden: not })
 })

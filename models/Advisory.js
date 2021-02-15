@@ -6,6 +6,11 @@ const Place = require('./Place')
 
 const AdvisorySchema = new Schema(
     {
+        theme: {
+            type: Schema.Types.ObjectId,
+            ref: 'theme',
+            required: true
+        },
         label: {
             type: String,
             required: true
@@ -45,16 +50,20 @@ AdvisorySchema.pre('save', function (next) {
     next()
 })
 
-// Populate districts on load
-AdvisorySchema.post('find', async function(advisories) {
-    for (let advisory of advisories) {
-        await advisory.populate('districts').execPopulate()
-    }
+const populate = (advisory) => {
+    return advisory.populate('districts','name').populate('theme')
+}
+
+AdvisorySchema.pre('find',function () {
+    populate(this)
 })
 
-// After save, populate
+AdvisorySchema.pre('findOne',function () {
+    populate(this)
+})
+
 AdvisorySchema.post('save', async function(advisory) {
-    await advisory.populate('districts').execPopulate()
+    await populate(advisory).execPopulate()
 })
 
 // Retrieve advisories that are applicable to a context
@@ -94,6 +103,8 @@ AdvisorySchema.statics.applicable = async function ({context,visit,startOn,endOn
         })
     }
     const pipeline = [
+        {$lookup: {from: 'themes', localField: 'theme', foreignField: '_id', as: 'theme'}},
+        {$unwind: {path: '$theme'}},
         {$lookup: {from: 'districts', localField: 'districts', foreignField: '_id', as: 'districts'}},
         {$unwind: {path: '$districts', preserveNullAndEmptyArrays: true}},
         {$match: {$and: [
@@ -102,13 +113,28 @@ AdvisorySchema.statics.applicable = async function ({context,visit,startOn,endOn
             {$or: endOnConditions},
             {$or: geoConditions}
         ]}},
+        {$sort: {
+            "theme.name": 1,
+            label: 1
+        }},
         {$group: {
             _id: '$_id',
+            theme: {$first: '$theme'},
             label: {$first: '$label'},
             prompts: {$first: '$prompts'}
+        }},
+        {$replaceRoot: {newRoot: {$mergeObjects: [
+            {advisory: {_id: '$_id', label: '$label', prompts: '$prompts'}},
+            '$theme'
+        ]}}},
+        {$group: {
+            _id: '$_id',
+            name: {$first: '$name'},
+            color: {$first: '$color'},
+            labels: {$first: '$labels'},
+            advisories: {$push: '$advisory'}
         }}
     ]
-    // console.log(JSON.stringify(pipeline,null,4))
     return mongoose.model('advisory').aggregate(pipeline)
 }
 

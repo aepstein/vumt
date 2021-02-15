@@ -24,4 +24,16 @@ async function applicableAdvisories (user) {
     }
 }
 
-module.exports = applicableAdvisories
+const applicableAdvisoriesToAdvisories = (themes) => {
+    return themes.reduce((advisories,theme) => advisories.concat(theme.advisories),[])
+}
+
+const applicableAdvisoriesToAdvisoryIds = (themes) => { 
+    return applicableAdvisoriesToAdvisories(themes).map((advisory) => advisory._id)
+}
+
+
+module.exports = {
+    applicableAdvisories,
+    applicableAdvisoriesToAdvisoryIds
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container } from 'reactstrap';
 import { useTranslation } from 'react-i18next'
-import ApplicableAdvisories from '../containers/visits/ApplicableAdvisories'
+import ApplicableAdvisories from '../containers/advisories/ApplicableAdvisories'
 
 function NeedAuth() {
   const { t } = useTranslation()

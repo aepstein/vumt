@@ -3,7 +3,7 @@ import prepareTokenConfig from '../../lib/prepareTokenConfig'
 import React, { useState, useEffect } from 'react';
 import { Spinner } from 'reactstrap'
 import { useSelector } from 'react-redux';
-import ApplicableAdvisory from '../../components/visits/ApplicableAdvisory'
+import ApplicableTheme from '../../components/advisories/ApplicableTheme'
 
 export default function ApplicableAdvisories({visit,context,startOn,places}) {
     const token = useSelector((state) => state.auth.token)
@@ -38,7 +38,7 @@ export default function ApplicableAdvisories({visit,context,startOn,places}) {
             .get(url,options)
             .then((res) => {
                 setApplicableAdvisories(res.data.map(
-                    advisory => <ApplicableAdvisory  key={advisory._id} advisory={advisory}/>
+                    theme => <ApplicableTheme  key={theme._id} theme={theme}/>
                 ))
                 setApplicableAdvisoriesLoaded(true)
                 setApplicableAdvisoriesLoading(false)

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import tz from 'timezone/loaded'
-import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
+import ApplicableAdvisories from '../../containers/advisories/ApplicableAdvisories'
 
 export default function VisitCheckIn({visit,onSave,saving}) {
     const { t } = useTranslation(['visit','translation'])

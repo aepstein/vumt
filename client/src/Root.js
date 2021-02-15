@@ -15,6 +15,7 @@ import AdvisoriesManager from './containers/advisories/AdvisoriesManager'
 import DistrictsManager from './containers/districts/DistrictsManager'
 import OrganizationsManager from './containers/organizations/OrganizationsManager'
 import PlacesManager from './containers/places/PlacesManager'
+import ThemesManager from './containers/themes/ThemesManager'
 import UsersManager from './containers/users/UsersManager'
 import VisitsManager from './containers/visits/VisitsManager'
 import AuthUserManager from './containers/auth/AuthUserManager'
@@ -119,6 +120,18 @@ const Root = ({ store }) => (
               </AuthRoute>
               <AuthRoute path="/places" roles={['admin']}>
                 <PlacesManager action='list'/>
+              </AuthRoute>
+              <AuthRoute path="/themes/new" roles={['admin']}>
+                <ThemesManager action='new'/>
+              </AuthRoute>
+              <AuthRoute path="/themes/:themeId/edit" roles={['admin']}>
+                <ThemesManager action='edit'/>
+              </AuthRoute>
+              <AuthRoute path="/themes/:themeId" roles={['admin']}>
+                <ThemesManager action='show'/>
+              </AuthRoute>
+              <AuthRoute path="/themes" roles={['admin']}>
+                <ThemesManager action='list'/>
               </AuthRoute>
               <AuthRoute path="/users/new" roles={['admin']}>
                 <UsersManager action='new'/>

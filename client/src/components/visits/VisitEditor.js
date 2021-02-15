@@ -21,7 +21,7 @@ import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
 import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
-import ApplicableAdvisories from '../../containers/visits/ApplicableAdvisories'
+import ApplicableAdvisories from '../../containers/advisories/ApplicableAdvisories'
 
 export default function VisitEditor({visit,onSave,saving}) {
     const { distanceUOM, latitude, longitude, position } = useGeoPosition()
