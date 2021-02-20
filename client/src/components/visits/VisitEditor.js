@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -6,26 +6,20 @@ import {
     Form,
     FormFeedback,
     FormGroup,
-    Label,
-    Input
-} from 'reactstrap';
-import {
-    AsyncTypeahead,
-    Highlighter
-} from 'react-bootstrap-typeahead'
+    Input,
+    Label
+} from 'reactstrap'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import axios from 'axios'
-import useGeoPosition from '../../hooks/useGeoPosition'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
 import { mustBeWholeNumber, mustBeAtLeast } from '../../lib/validators'
-import distanceUsOM from '../../lib/distanceUnitsOfMeasure'
+import OriginSelect from '../places/OriginSelect'
+import DestinationsSelect from '../places/DestinationsSelect'
 import ApplicableAdvisories from '../../containers/advisories/ApplicableAdvisories'
 
 export default function VisitEditor({visit,onSave,saving}) {
-    const { distanceUOM, latitude, longitude, position } = useGeoPosition()
-    const { t } = useTranslation(['visit','place','translation','uom'])
+    const { t } = useTranslation(['visit','place','translation','uom','error'])
 
     const [ startOn, setStartOn ] = useState('')
     useEffect(() => {
@@ -38,74 +32,12 @@ export default function VisitEditor({visit,onSave,saving}) {
         if (!visit.origin || !visit.origin.timezone) return setTimezone('America/New_York')
         setTimezone(visit.origin.timezone)
     },[visit.origin,setTimezone])
-    const [ origin, setOrigin ] = useState([])
-    const [ originOptions, setOriginOptions ] = useState([])
+    const [ origin, setOrigin ] = useState(visit.origin)
     useEffect(() => {
-        const vOrigin = visit.origin._id ?
-            [{id: visit.origin._id, label: visit.origin.name, timezone: visit.origin.timezone,
-                location: visit.origin.location}] : []
-        setOriginOptions(vOrigin)
-        setOrigin(vOrigin)
-    },[visit.origin,setOrigin,setOriginOptions])
-    const originRef = useRef()
-    const [ originLoading, setOriginLoading ] = useState(false)
-    const originSearch = useCallback((query) => {
-        const params = {type: 'origins'}
-        if (latitude && longitude) params['location'] = `${latitude},${longitude}`
-        if (startOn) params['startOn'] = startOn.toISOString()
-        setOriginLoading(true)
-        axios
-            .get('/api/places',{params})
-            .then((res) => {
-                setOriginOptions(res.data.data.map((place) => {
-                    return {id: place._id, label: place.name, timezone: place.timezone, location: place.location,
-                        distance: place.distance, visits: place.visits, parkingCapacity: place.parkingCapacity}
-                }))
-                setOriginLoading(false)
-            })
-    },[latitude,longitude,startOn,setOriginLoading,setOriginOptions])
-    const initOriginSearch = useCallback(() => {
-        if (!position || originOptions.length > 0) return
-        originSearch()
-    },[position,originOptions,originSearch])
-    useEffect(() => {
-        if (origin.length === 0 || !origin[0].timezone) return
-        setTimezone(origin[0].timezone)
+        if (!origin || !origin.timezone) return
+        setTimezone(origin.timezone)
     },[origin,setTimezone])
-    const renderOrigins = useCallback((option, props, index) => {
-        return [
-            <Highlighter key="label" search={props.text}>
-                {option.label}
-            </Highlighter>,
-            typeof option.distance !== 'undefined' ? <div key="distance">
-                {t(
-                    'translation:distanceAway',
-                    {
-                        distance: t(
-                            `uom:${distanceUOM}WithCount`,
-                            {count: Math.round(option.distance/distanceUsOM[distanceUOM].m)}
-                        )
-                    }
-                )}
-            </div> : '',
-            (option.visits && option.visits.length > 0) ? <div key="visits">
-                {t('place:partyWithCount',{count: option.visits[0].parties})},&nbsp;
-                {t('place:personWithCount',{count: option.visits[0].people})},&nbsp;
-                {t('place:parkedVehicleWithCount',{count: option.visits[0].parkedVehicles, capacity: option.parkingCapacity})}
-            </div> : ''
-        ]
-    },[t,distanceUOM])
-    const [ destinations, setDestinations ] = useState([])
-    useEffect(() => {
-        const vDestinations = visit.destinations.map((d) => {
-            return {id: d._id, label: d.name}
-        })
-        setDestinationOptions(vDestinations)
-        setDestinations(vDestinations)
-    },[visit.destinations])
-    const destinationsRef = useRef()
-    const [ destinationOptions, setDestinationOptions ] = useState([])
-    const [ destinationLoading, setDestinationLoading ] = useState(false)
+    const [ destinations, setDestinations ] = useState(visit.destinations)
     const [ durationNights, setDurationNights ] = useState('')
     useEffect(() => {
         setDurationNights(visit.durationNights)
@@ -118,54 +50,10 @@ export default function VisitEditor({visit,onSave,saving}) {
     useEffect(() => {
         setParkedVehicles(visit.parkedVehicles)
     },[visit.parkedVehicles])
-    const destinationSearch = useCallback((query) => {
-        setDestinationLoading(true)
-        const params = {type: 'destinations'}
-        if (origin && origin[0]) {
-            params['location'] = `${origin[0].location.coordinates[1]},${origin[0].location.coordinates[0]}`
-        }
-        axios
-            .get('/api/places',{params})
-            .then((res) => {
-                setDestinationOptions(res.data.data.map((place) => {
-                    return {id: place._id, label: place.name, distance: place.distance}
-                }))
-                setDestinationLoading(false)
-            })
-    },[setDestinationLoading,setDestinationOptions,origin])
-    const initDestinationSearch = useCallback(() => {
-        if (!origin || destinationOptions.length > 0) return
-        destinationSearch()
-    },[origin,destinationOptions,destinationSearch])
-    const doSetOrigin = useCallback((selected) => {
-        setOrigin(selected)
-        if (destinationLoading) return
-        setDestinationLoading(true)
-        setDestinationOptions([])
-        setDestinationLoading(false)
-    },[setOrigin,destinationLoading,setDestinationLoading,setDestinationOptions])
-    const renderDestinations = useCallback((option, props, index) => {
-        return [
-            <Highlighter key="label" search={props.text}>
-                {option.label}
-            </Highlighter>,
-            option.distance && origin[0] ? <div key="distance">
-                {t(
-                    'translation:distanceFromPlace',
-                    {
-                        distance: t(
-                            `uom:${distanceUOM}WithCount`,
-                            {count: Math.round(option.distance/distanceUsOM[distanceUOM].m)}
-                        ),
-                        place: origin[0] ? origin[0].label : t('origin')
-                    }
-                )}
-            </div> : ''
-        ]
-    },[origin,t,distanceUOM])
     const [places, setPlaces] = useState([])
     useEffect(() => {
-        setPlaces(origin.map(o => o.id).concat(destinations.map(d => d.id)))
+        const origins = origin ? [origin._id] : []
+        setPlaces(origins.concat(destinations.map(d => d._id)))
     },[origin,destinations,setPlaces])
 
     const { register, handleSubmit, setError, errors } = useForm()
@@ -175,19 +63,15 @@ export default function VisitEditor({visit,onSave,saving}) {
     }
     const onSubmit = async (e) => {
         if (saving) return
-        if (origin.length === 0) {
-            setError("origin",{type: "required", message: t('invalidRequired')})
+        if (!origin) {
+            setError("origin",{type: "required", message: t('translation:invalidRequired')})
             return
         }
         const newVisit = {
             _id: visit._id,
             startOn,
-            origin: (origin && origin[0] ? origin[0].id : ''),
-            destinations: destinations.map((d) => {
-                return {
-                    "_id": d.id
-                }
-            }),
+            origin: (origin ? origin._id : ''),
+            destinations: destinations.map((d) => d._id),
             durationNights,
             groupSize,
             parkedVehicles
@@ -230,49 +114,22 @@ export default function VisitEditor({visit,onSave,saving}) {
                     {errors.startOnTime && errors.startOnTime.type === 'required' &&
                         <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
                 </FormGroup>
-                <FormGroup>
-                    <Label for="origin">{t('origin')}</Label>
-                    <AsyncTypeahead 
-                        id="origin"
-                        name="origin"
-                        selected={origin}
-                        placeholder={t('originPlaceholder')}
-                        options={originOptions}
-                        isLoading={originLoading}
-                        delay={200}
-                        onSearch={originSearch}
-                        onFocus={initOriginSearch}
-                        onChange={doSetOrigin}
-                        isInvalid={errors.origin}
-                        minLength={0}
-                        renderMenuItemChildren={renderOrigins}
-                        ref={originRef}
-                        clearButton={true}
-                    />
-                    {errors.origin && <Input type="hidden" invalid />}
-                    {errors.origin && errors.origin.type === 'required' &&
-                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
-                </FormGroup>
-                <FormGroup>
-                    <Label for="destinations">{t('destinations')}</Label>
-                    <AsyncTypeahead 
-                        id="destinations"
-                        name="destinations"
-                        multiple
-                        selected={destinations}
-                        placeholder={t('destinationsPlaceholder')}
-                        options={destinationOptions}
-                        isLoading={destinationLoading}
-                        onSearch={destinationSearch}
-                        onChange={(selected) => setDestinations(selected)}
-                        onFocus={initDestinationSearch}
-                        renderMenuItemChildren={renderDestinations}
-                        ref={destinationsRef}
-                        delay={200}
-                        minLength={0}
-                        clearButton={true}
-                    />
-                </FormGroup>
+                <OriginSelect
+                    errors={errors.origin}
+                    origin={origin}
+                    label={t('origin')}
+                    name="origin"
+                    setOrigin={setOrigin}
+                    startOn={startOn}
+                />
+                <DestinationsSelect
+                    destinations={destinations}
+                    label={t('destinations')}
+                    name="destinations"
+                    origin={origin}
+                    startOn={startOn}
+                    setDestinations={setDestinations}
+                />
                 <FormGroup>
                     <Label for="groupSize">{t('groupSize')}</Label>
                     <Input
