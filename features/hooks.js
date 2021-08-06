@@ -7,7 +7,7 @@ const puppeteerOptions = {
     devtools: true
 }
 const scope = require('./support/scope');
-const {purgeDb} =  require('../test/support/setup')
+const {purgeDb,server,mongoose} =  require('../test/support/setup')
   
 Before(async () => {
   scope.models = {}
@@ -20,6 +20,8 @@ BeforeAll(
   async () => {
     await purgeDb()
     scope.driver = puppeteer;
+    scope.server = server
+    scope.mongoose = mongoose
     return scope.browser = await scope.driver.launch(puppeteerOptions);
   }
 );
@@ -46,6 +48,6 @@ After(async () => {
 AfterAll(async () => {
   // If there is a browser window open, then close it
   if (scope.browser) await scope.browser.close();
-  scope.server.shutdown(() => console.log('\nServer is shut down'));
-  scope.mongoose.disconnect()
+  await scope.server.shutdown(() => console.log('\nServer is shut down'));
+  await scope.mongoose.disconnect()
 });
