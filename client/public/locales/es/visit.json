@@ -12,6 +12,9 @@
     "checkedInTime": "Hora de llegada",
     "checkedOutDate": "Fecha de salida",
     "checkedOutTime": "Hora de salida",
+    "departLater": "No, quiero planificar una visita futura",
+    "departNow": "Sí - estoy lista para partir de {{origin}}",
+    "departureDetail": "Detalle de inicio",
     "destinations": "Destinos",
     "destinationsPlaceholder": "Seleccionar sus destinos(s)",
     "detailHeading": "Detalle de la visita",
@@ -21,8 +24,11 @@
     "origin": "Punto inicial",
     "originPlaceholder": "Seleccione su punto de partida",
     "parkedVehicles": "Número de vehículos estacionados en el punto de partida",
+    "saveVisit": "Guardar visita",
+    "selectNowOrLater": "¿Está en el punto de partida y listo para embarcarse en su visita?",
     "startOnDate": "Fecha de visita",
     "startOnTime": "Hora de comienzo",
     "visit": "Visita",
+    "visitDetails": "Detalles de la visita",
     "visitPlaceholder": "Nombre de visita"
 }
