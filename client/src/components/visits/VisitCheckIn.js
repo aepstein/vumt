@@ -13,20 +13,22 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
-import tz from 'timezone/loaded'
 import ApplicableAdvisories from '../../containers/advisories/ApplicableAdvisories'
 
 export default function VisitCheckIn({visit,onSave,saving}) {
     const { t } = useTranslation(['visit','translation'])
 
-    const [ checkedIn, setCheckedIn ] = useState('')
-    const [ timezone, setTimezone ] = useTimezone()
+    const defaultCheckIn = (startOn) => {
+        const intended = new Date(startOn)
+        const lateAfter = new Date(intended)
+        lateAfter.setHours(intended.getHours()+24)
+        return (new Date()) > lateAfter ? intended : new Date()
+    }
+
+    const [ checkedIn, setCheckedIn ] = useState(defaultCheckIn(visit.startOn))
+    const [ timezone ] = useTimezone(visit.origin.timezone)
     const [ checkedInDate, setCheckedInDate, checkedInTime, setCheckedInTime
-    ] = useZonedDateTime(timezone,visit.checkedIn,setCheckedIn)
-    useEffect(() => {
-        if (!visit.origin || !visit.origin.timezone) return
-        setTimezone(visit.origin.timezone)
-    },[visit.origin,setTimezone])
+    ] = useZonedDateTime(timezone,checkedIn,setCheckedIn)
     const [ startOnLeft, setStartOnLeft ] = useState('')
     useEffect(() => {
         if (!visit.startOn) setStartOnLeft('')
@@ -41,17 +43,7 @@ export default function VisitCheckIn({visit,onSave,saving}) {
         newVal.setDate(newVal.getDate() + visit.durationNights + 1)
         setStartOnRight(newVal)
     },[setStartOnRight,visit.startOn,visit.durationNights])
-    useEffect(() => {
-        if (!visit.startOn || !timezone || !tz) return
-        const currentDate = new Date()
-        if (currentDate > startOnLeft && currentDate < startOnRight) {
-            setCheckedInDate(tz(currentDate,timezone,'%Y-%m-%d'))
-            setCheckedInTime(tz(currentDate,timezone,'%H:%M'))
-        }
-        else {
-            setCheckedInDate(tz(visit.startOn,timezone,'%Y-%m-%d'))
-        }
-    },[visit.startOn,timezone,setCheckedInDate,setCheckedInTime,startOnLeft,startOnRight])
+
 
     const { register, handleSubmit, errors } = useForm()
     
@@ -95,12 +87,12 @@ export default function VisitCheckIn({visit,onSave,saving}) {
                         })}
                         invalid={errors.checkedInDate ? true : false}
                     />
-                    {errors.checkedInDate && errors.checkedInDate.type === 'required' &&
-                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
-                    {errors.checkedInDate && errors.checkedInDate.type === 'afterLeft' &&
-                        <FormFeedback>{t('afterLeft')}</FormFeedback>}
-                    {errors.checkedInDate && errors.checkedInDate.type === 'beforeRight' &&
-                        <FormFeedback>{t('beforeRight')}</FormFeedback>}
+                    {errors.checkedInDate && errors.checkedInDate.type === 'required' ?
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback> : ""}
+                    {errors.checkedInDate && errors.checkedInDate.type === 'afterLeft' ?
+                        <FormFeedback>{t('afterLeft')}</FormFeedback> : ""}
+                    {errors.checkedInDate && errors.checkedInDate.type === 'beforeRight' ?
+                        <FormFeedback>{t('beforeRight')}</FormFeedback> : ""}
                 </FormGroup>
                 <FormGroup>
                     <Label for="checkedInTime">{t('checkedInTime')}</Label>

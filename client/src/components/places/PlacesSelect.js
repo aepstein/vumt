@@ -55,7 +55,6 @@ export default function PlacesSelect({multiple,label,name,places,setPlaces,place
             setPlaces(choicesToPlace(choices))
         }
     },[multiple,setPlaces])
-    console.log(errors)
 
     return <FormGroup>
         <Label for={name}>{label}</Label>

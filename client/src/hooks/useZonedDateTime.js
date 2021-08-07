@@ -1,24 +1,26 @@
-import {useState, useEffect} from 'react'
+import {useState,useCallback} from 'react'
 import tz from 'timezone/loaded'
 
+/* Splits a zoned date time into date and time elements for user front-end
+ * After invocation, changes must be made via returned modifyDate/modifyTime functions
+ * until the component is destroyed
+ */
 export default function useZonedDateTime(timezone,dt,setDt) {
-    const [ date, setDate ] = useState('')
-    useEffect(() => {
-        if (!dt) return
-        setDate(tz(dt,timezone,'%Y-%m-%d'))
-    },[dt,timezone,setDate])
-    const [ time, setTime ] = useState('')
-    useEffect(() => {
-        if (!dt) return
-        setTime(tz(dt,timezone,'%H:%M'))
-    },[dt,timezone,setTime])
-    useEffect(() => {
-        if (date && time) {
-            setDt(new Date(tz(`${date} ${time}`,timezone)))
+    const [ date, setDate ] = useState(dt ? tz(dt,timezone,'%Y-%m-%d') : '' )
+    const [ time, setTime ] = useState(dt ? tz(dt,timezone,'%H:%M') : '')
+
+    const modifyDate = useCallback((newDate) => {
+        if (date !== newDate) {
+            setDate(newDate)
+            if (newDate && time) setDt(new Date(tz(`${newDate} ${time}`,timezone)))
         }
-        else {
-            setDt('')
+    },[time,date,setDate,timezone,setDt])
+    const modifyTime = useCallback((newTime) => {
+        if (time !== newTime) {
+            setTime(newTime)
+            if (date && newTime) setDt(new Date(tz(`${date} ${newTime}`,timezone)))
         }
-    },[date,time,timezone,setDt])
-    return [date,setDate,time,setTime]
+    },[time,date,setTime,timezone,setDt])
+
+    return [date,modifyDate,time,modifyTime]
 }

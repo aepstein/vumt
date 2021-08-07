@@ -33,7 +33,7 @@ export default function DestinationsSelect({name,label,origin,destinations,setDe
                             `uom:${distanceUOM}WithCount`,
                             {count: Math.round(option.distance/distanceUsOM[distanceUOM].m)}
                         ),
-                        place: origin ? origin.label : t('origin')
+                        place: origin ? origin.name : t('origin')
                     }
                 )}
             </div> : ''

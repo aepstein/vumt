@@ -44,7 +44,11 @@ Feature: Manage visits
         When I visit the "home" page
         And I click "Edit" for my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         When I fill in a visit for today from "Johns Brook Garden" to "Marcy Summit"
+        And I click the "Previous" button
+        And I click the "Previous" button
         And I fill in "Start time" with "09:00AM"
+        And I click the "Next" button
+        And I click the "Next" button
         And I fill in "Number of vehicles parked at starting point" with "0"
         And I click the "Edit visit" button
         Then I should see my visit for today from "Johns Brook Garden" to "Marcy Summit"
@@ -55,25 +59,37 @@ Feature: Manage visits
         And I should see "Destinations" defined as "Marcy Summit"
         And I should see "Number of vehicles parked at starting point" defined as "0"
 
-    Scenario: Add visit
+    Scenario: Add visit for later date
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
+        And my location is "40.699291,-73.994035"
         And I visit the "new visit" page
         When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
         And I click the "Add visit" button
         Then I should see my visit for tomorrow from "Adirondack Loj" to "Algonquin Summit"
 
-    Scenario: Select origin with geolocation
+    Scenario: Select origin with geolocation for later departure
         Given I am registered as "bmarshall@example.com"
         And an origin "Johns Brook Garden" exists at "44.189006,-73.816306"
         And I logged in as "bmarshall@example.com"
         And my location is "44.189006,-73.816306"
         And I visit the "new visit" page
+        And I click the "No - I want to plan a trip for later" button
         And I click on the "Starting point" typeahead
         Then the 1st option in the typeahead should contain "Johns Brook Garden"
         And the 1st option in the typeahead should contain "0 miles away"
         And the 2nd option in the typeahead should contain "Adirondack Loj"
         And the 2nd option in the typeahead should contain "7 miles away"
+
+    Scenario: Select origin with geolocation for immediate departure
+        Given I am registered as "bmarshall@example.com"
+        And an origin "Johns Brook Garden" exists at "44.189006,-73.816306"
+        And I logged in as "bmarshall@example.com"
+        And my location is "44.189006,-73.816306"
+        And I visit the "new visit" page
+        And I click the "Yes - ready to depart from Johns Brook Garden" button
+        And I click the "Previous" button
+        And I should see "Starting point" typeahead filled in with "Johns Brook Garden"
 
     Scenario: Select origin with utilization stats
         Given I am registered as "bmarshall@example.com"
@@ -83,6 +99,7 @@ Feature: Manage visits
         And I logged in as "bmarshall@example.com"
         And my location is "44.183102,-73.963584"
         And I visit the "new visit" page
+        And I click the "No - I want to plan a trip for later" button
         And I fill in "Date of visit" with today
         And I fill in "Start time" with 0 minutes ago
         And I click on the "Starting point" typeahead
@@ -94,29 +111,45 @@ Feature: Manage visits
     Scenario: Select destination relative to origin
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
+        And my location is "40.699291,-73.994035"
         And I visit the "new visit" page
+        And I fill in "Date of visit" with today
+        And I fill in "Start time" with 0 minutes ago
         And I fill in the "Starting point" typeahead with "Adirondack Loj"
+        And I click the "Next" button
         And I click on the "Destinations" typeahead
         Then the 1st option in the typeahead should contain "Algonquin Summit"
         And the 1st option in the typeahead should contain "3 miles from Adirondack Loj"
         And the 2nd option in the typeahead should contain "Marcy Summit"
         And the 2nd option in the typeahead should contain "5 miles from Adirondack Loj"
 
-    Scenario Outline: Try to add invalid visit
+    Scenario Outline: Try to add invalid visit - details page
         Given I am registered as "bmarshall@example.com"
         And I logged in as "bmarshall@example.com"
-        When I visit the "new visit" page
+        And my location is "40.699291,-73.994035"
+        When I click the "Add visit" button
         When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit" except "<field>"
         And I click the "Add visit" button
+        Then the "<field>" field should have an error "Cannot be blank"
+        Examples:
+            | field                                       |
+            | Number of people in group                   |
+            | Duration in nights                          |
+            | Number of vehicles parked at starting point |
+
+    Scenario Outline: Try to add invalid visit - departure page
+        Given I am registered as "bmarshall@example.com"
+        And I logged in as "bmarshall@example.com"
+        And my location is "40.699291,-73.994035"
+        When I visit the "new visit" page
+        When I fill in a visit for tomorrow from "Adirondack Loj" to "Algonquin Summit" except "<field>"
+        And I click the "Next" button
         Then the "<field>" field should have an error "Cannot be blank"
         Examples:
             | field                                       |
             | Date of visit                               |
             | Start time                                  |
             | Starting point                              |
-            | Number of people in group                   |
-            | Duration in nights                          |
-            | Number of vehicles parked at starting point |
 
     Scenario Outline: Try to add visit with invalid values
         Given I am registered as "bmarshall@example.com"

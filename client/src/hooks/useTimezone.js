@@ -1,5 +1,5 @@
 import {useState} from 'react'
 
-export default function useTimezone() {
-    return useState('America/New_York')
+export default function useTimezone(timezone) {
+    return useState(timezone ? timezone : 'America/New_York')
 }
