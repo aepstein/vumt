@@ -49,7 +49,10 @@ export default function VisitsList({loading,next,q,visits,onCancel,onDelete,onLo
                             {mayModify(user) ? <Button
                                 color="warn"
                                 size="sm"
-                                onClick={() => history.push('/visits/' + _id + '/edit')}
+                                onClick={() => {
+                                    console.log(_id)
+                                    history.push('/visits/' + _id + '/edit')
+                                }}
                             >{t('translation:edit')}</Button> : ''}
                             {!cancelled && mayModify(user) ? <Button
                                 color="danger"

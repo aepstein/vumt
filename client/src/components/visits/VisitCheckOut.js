@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import {
     Button,
     ButtonGroup,
@@ -13,46 +13,33 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import useTimezone from '../../hooks/useTimezone'
 import useZonedDateTime from '../../hooks/useZonedDateTime'
-import tz from 'timezone/loaded'
 import ApplicableAdvisories from '../../containers/advisories/ApplicableAdvisories'
 
 export default function VisitCheckOut({visit,onSave,saving}) {
     const { t } = useTranslation(['visit','translation'])
 
-    const [ checkedOut, setCheckedOut ] = useState('')
-    const [ timezone, setTimezone ] = useTimezone()
+    const defaultCheckOut = useMemo(() => {
+        const intended = new Date(visit.startOn)
+        const lateAfter = new Date(intended)
+        lateAfter.setHours(intended.getHours()+24*(1+visit.durationNights))
+        return (new Date()) > lateAfter ? intended : new Date()
+    },[visit.startOn,visit.durationNights])
+
+    const [ checkedOut, setCheckedOut ] = useState(defaultCheckOut)
+    const [ timezone ] = useTimezone(visit.origin.timezone)
     const [ checkedOutDate, setCheckedOutDate, checkedOutTime, setCheckedOutTime
-    ] = useZonedDateTime(timezone,visit.checkedOut,setCheckedOut)
-    useEffect(() => {
-        if (!visit.origin || !visit.origin.timezone) return
-        setTimezone(visit.origin.timezone)
-    },[visit.origin,setTimezone])
-    const [ startOnRight, setStartOnRight ] = useState('')
-    useEffect(() => {
-        if (!visit.startOn || !visit.durationNights) setStartOnRight('')
-        const newVal = new Date(visit.startOn)
-        newVal.setDate(newVal.getDate() + visit.durationNights + 1)
-        setStartOnRight(newVal)
-    },[setStartOnRight,visit.startOn,visit.durationNights])
-    useEffect(() => {
-        if (!visit.checkedIn || !timezone || !tz) return
-        const currentDate = new Date()
-        if (currentDate > visit.checkedIn && currentDate < startOnRight) {
-            setCheckedOutDate(tz(currentDate,timezone,'%Y-%m-%d'))
-            setCheckedOutTime(tz(currentDate,timezone,'%H:%M'))
-        }
-    },[visit.startOn,timezone,setCheckedOutDate,setCheckedOutTime,visit.checkedIn,startOnRight])
+    ] = useZonedDateTime(timezone,checkedOut,setCheckedOut)
 
     const { register, handleSubmit, errors } = useForm()
     
-    const afterCheckIn = () => {
+    const afterCheckIn = useCallback(() => {
         if (!checkedOut || !visit.checkedIn) return true
         return checkedOut > visit.checkedIn
-    }
-    const beforeFuture = () => {
+    },[checkedOut,visit.checkedIn])
+    const beforeFuture = useCallback(() => {
         if (!checkedOut) return true
         return checkedOut < Date.now()
-    }
+    },[checkedOut])
     const onChange = (setter) => (e) => {
         setter(e.target.value)
     }
@@ -85,12 +72,12 @@ export default function VisitCheckOut({visit,onSave,saving}) {
                         })}
                         invalid={errors.checkedOutDate ? true : false}
                     />
-                    {errors.checkedOutDate && errors.checkedOutDate.type === 'required' &&
-                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback>}
-                    {errors.checkedOutDate && errors.checkedOutDate.type === 'afterCheckin' &&
-                        <FormFeedback>{t('afterCheckIn')}</FormFeedback>}
-                    {errors.checkedOutDate && errors.checkedOutDate.type === 'beforeFuture' &&
-                        <FormFeedback>{t('beforeFuture')}</FormFeedback>}
+                    {errors.checkedOutDate && errors.checkedOutDate.type === 'required' ?
+                        <FormFeedback>{t('translation:invalidRequired')}</FormFeedback> : ""}
+                    {errors.checkedOutDate && errors.checkedOutDate.type === 'afterCheckIn' ?
+                        <FormFeedback>{t('afterCheckIn')}</FormFeedback> : ""}
+                    {errors.checkedOutDate && errors.checkedOutDate.type === 'beforeFuture' ?
+                        <FormFeedback>{t('beforeFuture')}</FormFeedback> : ""}
                 </FormGroup>
                 <FormGroup>
                     <Label for="checkedOutTime">{t('checkedOutTime')}</Label>

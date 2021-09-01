@@ -3,6 +3,7 @@ const {
     chooseFromSelectByLabel,
     clickByText,
     clickByXPath,
+    denyGeolocation,
     emailShouldBeSentTo,
     emailSubjectShouldBe,
     fillByLabel,
@@ -20,6 +21,7 @@ const {
     shouldBeLoggedInAs,
     shouldSeeErrorWithLabel,
     shouldSeeDefinition,
+    shouldSeeTypeaheadFilledByLabel,
     startTypeaheadByLabel,
     takeScreenshot,
     visitPage,
@@ -33,6 +35,10 @@ Given(/my location is "(?<lat>(-?(90|(\d|[1-8]\d)(\.\d{1,6}){0,1})))\,{1}(?<long
         await setGeolocation(parseFloat(latitude),parseFloat(longitude))
     }
 );
+
+Given('I declined to share my location',async () => {
+    await denyGeolocation()
+})
 
 When(/^I visit the "([^"]+)" page$/, visitPage);
 
@@ -92,7 +98,7 @@ When('I fill in {string} with nothing', async (label) => {
 })
 
 When('I click the {string} button', async (label) => {
-    await clickByText(label,"//button");
+    await clickByText(label,"//button")
     await noSpinner()
 })
 
@@ -136,6 +142,10 @@ Then(/I should see "([^"]+)" defined as (\d+) (hour|minute)s? (later|ago)/,
 
 Then(/^I should see "([^"]+)" in a modal$/, async (text) => {
     await waitForText(text,"//div[contains(@class,'modal-body')]")
+})
+
+Then('I should see {string} typeahead filled in with {string}', async (label, value) => {
+    await shouldSeeTypeaheadFilledByLabel(label,value)
 })
 
 Then(/^the (\d+)(?:st|nd|rd|th) option in the typeahead should contain "([^"]+)"$/, async (n,text) => {

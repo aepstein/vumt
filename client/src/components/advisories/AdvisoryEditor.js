@@ -33,13 +33,13 @@ export default function AdvisoryEditor({advisory,onSave,saving}) {
     useEffect(() => {
         setLabel(advisory.label)
     },[advisory.label,setLabel])
-    const [ startOn, setStartOn ] = useState('')
+    const [ startOn, setStartOn ] = useState(advisory.startOn)
     const [ timezone ] = useTimezone()
     const [ startOnDate, setStartOnDate, startOnTime, setStartOnTime
-    ] = useZonedDateTime(timezone,advisory.startOn,setStartOn)
-    const [ endOn, setEndOn ] = useState('')
+    ] = useZonedDateTime(timezone,startOn,setStartOn)
+    const [ endOn, setEndOn ] = useState(advisory.endOn)
     const [ endOnDate, setEndOnDate, endOnTime, setEndOnTime
-    ] = useZonedDateTime(timezone,advisory.endOn,setEndOn)
+    ] = useZonedDateTime(timezone,endOn,setEndOn)
     const [ districts, setDistricts ] = useState([])
     useEffect(() => {
         if (!advisory.districts) {return}

@@ -37,6 +37,10 @@ const create = async (template, attrs={}) => {
 	scope.models[template].push(created)
 	return created
 }
+const denyGeolocation = async () => {
+	const context = scope.browser.defaultBrowserContext()
+	await context.overridePermissions('http://localhost:3000')
+}
 
 const emailFollowLink = async (regex) => {
 	const mail = scope.mail.lastMail()
@@ -265,6 +269,11 @@ const shouldSeeText = async (selector, not, expectedText) => {
 		return containsText.should.not.have.string(expectedText)
 	}
 }
+const shouldSeeTypeaheadFilledByLabel = async (label, value) => {
+	const element = await selectTypeaheadInputByLabel(label)
+	const valueText = await scope.context.currentPage.evaluate(el => el.value,element)
+	return valueText.should.have.string(value)
+}
 const startTypeaheadByLabel = async (label, fill) => {
 	const closeButton = await selectTypeaheadCloseByLabel(label)
 	if (closeButton) await closeButton.click()
@@ -338,6 +347,7 @@ module.exports = {
 	clickByText,
 	clickByXPath,
 	create,
+	denyGeolocation,
 	emailFollowLink,
 	emailShouldBeSentTo,
 	emailSubjectShouldBe,
@@ -366,6 +376,7 @@ module.exports = {
 	shouldSeeDefinition,
 	shouldSeeErrorWithLabel,
 	shouldSeeText,
+    shouldSeeTypeaheadFilledByLabel,
 	startTypeaheadByLabel,
 	switchByLabel,
 	takeScreenshot,

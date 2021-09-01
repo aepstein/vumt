@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Spinner } from 'reactstrap'
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { cancelVisit, deleteVisit, filterVisits, getVisits, saveVisit } from '../../actions/visitActions';
@@ -7,6 +8,18 @@ import VisitDetail from '../../components/visits/VisitDetail'
 import VisitEditor from '../../components/visits/VisitEditor'
 import VisitCheckIn from '../../components/visits/VisitCheckIn'
 import VisitCheckOut from '../../components/visits/VisitCheckOut'
+
+const NEW_VISIT = {
+    startOnDate: '',
+    startOnTime: '',
+    origin: null,
+    destinations: [],
+    groupSize: '',
+    durationNights: '',
+    checkedIn: '',
+    checkedOut: '',
+    parkedVehicles: ''
+}
 
 export default function VisitsManager({action}) {
     const { defaultAction, visitId } = useParams()
@@ -18,17 +31,7 @@ export default function VisitsManager({action}) {
     const loaded = useSelector(state => state.visit.visitsLoaded)
     const saving = useSelector(state => state.visit.visitSaving)
 
-    const [visit,setVisit] = useState({
-        startOnDate: '',
-        startOnTime: '',
-        origin: {},
-        destinations: [],
-        groupSize: '',
-        durationNights: '',
-        checkedIn: '',
-        checkedOut: '',
-        parkedVehicles: ''
-    })
+    const [visit,setVisit] = useState(null)
 
     const dispatch = useDispatch()
 
@@ -51,7 +54,7 @@ export default function VisitsManager({action}) {
     const onSearch = (q) => {
         dispatch(filterVisits(q))
     }
-    
+
     useEffect(() => {
         if (initNext && !loading && !loaded) {
             dispatch(getVisits)
@@ -65,18 +68,24 @@ export default function VisitsManager({action}) {
             // TODO -- how to handle a visit that does not match loaded visits?
             if (!loadedVisit) return
             setVisit(loadedVisit)
+            return
         }
     },[visit,visitId,loaded,visits])
 
     switch (action ? action : defaultAction) {
         case 'new':
+            return <VisitEditor visit={NEW_VISIT} onSave={onSave} saving={saving}/>
         case 'edit':
+            if (!visit) return <Spinner color="primary"/>
             return <VisitEditor visit={visit} onSave={onSave} saving={saving} />
         case 'checkIn':
+            if (!visit) return <Spinner color="primary"/>
             return <VisitCheckIn visit={visit} onSave={onSave} saving={saving} />
         case 'checkOut':
+            if (!visit) return <Spinner color="primary"/>
             return <VisitCheckOut visit={visit} onSave={onSave} saving={saving} />
         case 'show':
+            if (!visit) return <Spinner color="primary"/>
             return <VisitDetail visit={visit} />
         default:
             return new VisitsList({loading,next,q,visits,onCancel,onDelete,onLoadMore,onSearch})

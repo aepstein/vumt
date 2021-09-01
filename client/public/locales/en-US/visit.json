@@ -12,6 +12,9 @@
     "checkedInTime": "Check in time",
     "checkedOutDate": "Check out date",
     "checkedOutTime": "Check out time",
+    "departLater": "No - I want to plan a trip for later",
+    "departNow": "Yes - ready to depart from {{origin}}",
+    "departureDetail": "Departure detail",
     "destinations": "Destinations",
     "destinationsPlaceholder": "Select your destination(s)",
     "detailHeading": "Visit detail",
@@ -21,8 +24,11 @@
     "origin": "Starting point",
     "originPlaceholder": "Select your starting point",
     "parkedVehicles": "Number of vehicles parked at starting point",
+    "saveVisit": "Save visit",
+    "selectNowOrLater": "Are at the starting point and ready to depart on your visit?",
     "startOnDate": "Date of visit",
     "startOnTime": "Start time",
     "visit": "Visit",
+    "visitDetails": "Visit details",
     "visitPlaceholder": "Visit name"
 }
