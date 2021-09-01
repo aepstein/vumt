@@ -12,7 +12,7 @@ import DestinationsSelect from '../places/DestinationsSelect'
 export default function VisitEditor({origin,startOn,destinations,setDestinations}) {
     const { t } = useTranslation(['visit','place','translation','uom','error'])
 
-    const { register, handleSubmit, setError, errors } = useForm()
+    const { handleSubmit, setError } = useForm()
 
     const navigateToPeer = useNavigateToPeer('destinations')
 
