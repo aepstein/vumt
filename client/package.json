@@ -10,7 +10,7 @@
     "i18next": "^19.8.7",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.1.0",
-    "immer": "^8.0.1",
+    "immer": "^9.0.6",
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
     "phone": "^2.4.20",
